@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const data = await resend.emails.send({
       from: 'onboarding@resend.dev', // Resend 기본 도메인
       to: ['bgg8988@gmail.com'], // 받는 이메일
-      reply_to: email, // 문의자 이메일로 답장 가능
+      replyTo: email, // 문의자 이메일로 답장 가능
       subject: `[쟁승메이드] 새로운 문의: ${service || '문의'}`,
       html: `
         <h2>새로운 프로젝트 문의가 도착했습니다</h2>
