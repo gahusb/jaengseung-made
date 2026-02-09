@@ -164,7 +164,7 @@ contact@jaengseung.com → 실제 이메일
 
 ## 📞 문의
 
-프로젝트 관련 문의: contact@jaengseung.com
+프로젝트 관련 문의: bgg8988@gmail.com
 
 ---
 
