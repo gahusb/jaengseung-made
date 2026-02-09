@@ -180,24 +180,32 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Portfolio Item 1 */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition">
+            {/* Portfolio Item 1 - Excel Merger RPA */}
+            <a
+              href="https://gitea.gahusb.synology.me/gahusb/excel-merge-rpa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition block"
+            >
               <div className="bg-gradient-to-br from-blue-500 to-blue-700 h-48 flex items-center justify-center">
                 <div className="text-white text-6xl">📊</div>
               </div>
               <div className="p-6">
                 <div className="text-sm text-blue-700 font-semibold mb-2">RPA 자동화</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">엑셀 데이터 자동 처리</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">엑셀 데이터 통합 자동화</h3>
                 <p className="text-gray-600 mb-4">
-                  매일 반복되는 엑셀 작업을 자동화하여 5시간 → 10분으로 단축
+                  여러 엑셀 파일을 클릭 한 번으로 자동 통합. 5시간 → 10초로 단축
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-3">
                   <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Python</span>
                   <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Pandas</span>
                   <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Openpyxl</span>
                 </div>
+                <div className="text-blue-600 text-sm font-semibold flex items-center">
+                  <span className="mr-1">→</span> GitHub에서 보기
+                </div>
               </div>
-            </div>
+            </a>
 
             {/* Portfolio Item 2 */}
             <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition">
