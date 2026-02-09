@@ -226,24 +226,32 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Portfolio Item 3 */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition">
+            {/* Portfolio Item 3 - Gmail Automation */}
+            <a
+              href="https://gitea.gahusb.synology.me/gahusb/gmail-automation-rpa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition block"
+            >
               <div className="bg-gradient-to-br from-purple-500 to-purple-700 h-48 flex items-center justify-center">
-                <div className="text-white text-6xl">🤖</div>
+                <div className="text-white text-6xl">📧</div>
               </div>
               <div className="p-6">
                 <div className="text-sm text-purple-700 font-semibold mb-2">RPA 자동화</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">웹 스크래핑 봇</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Gmail 이메일 자동화</h3>
                 <p className="text-gray-600 mb-4">
-                  실시간 데이터 수집 및 분석 자동화 시스템 구축
+                  Gmail API로 이메일 자동 분류/답장. 업무 효율 150% 증가
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-3">
                   <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">Python</span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">Selenium</span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">BeautifulSoup</span>
+                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">Gmail API</span>
+                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">OAuth</span>
+                </div>
+                <div className="text-purple-600 text-sm font-semibold flex items-center">
+                  <span className="mr-1">→</span> GitHub에서 보기
                 </div>
               </div>
-            </div>
+            </a>
           </div>
 
           <div className="text-center mt-12">
