@@ -1,3 +1,5 @@
+import ContactForm from './components/ContactForm';
+
 export default function Home() {
   return (
     <div className="min-h-screen">
@@ -331,77 +333,7 @@ export default function Home() {
             <p className="text-xl text-gray-600">무엇이든 편하게 상담해주세요. 24시간 이내 답변드립니다.</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-            <form className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">이름</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                    placeholder="홍길동"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">연락처</label>
-                  <input
-                    type="tel"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                    placeholder="010-0000-0000"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">이메일</label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  placeholder="example@email.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">서비스 선택</label>
-                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
-                  <option>RPA 자동화</option>
-                  <option>웹 개발</option>
-                  <option>앱 개발</option>
-                  <option>맞춤형 솔루션</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">프로젝트 설명</label>
-                <textarea
-                  rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
-                  placeholder="프로젝트에 대해 자세히 설명해주세요. 목적, 예상 기간, 예산 등을 포함하면 더 정확한 상담이 가능합니다."
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-blue-700 text-white py-4 rounded-lg text-lg font-bold hover:bg-blue-800 transition shadow-lg"
-              >
-                무료 상담 신청하기
-              </button>
-            </form>
-
-            <div className="mt-8 pt-8 border-t border-gray-200">
-              <div className="text-center text-gray-600">
-                <p className="mb-4">또는 아래 연락처로 직접 문의주세요</p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a href="mailto:bgg8988@gmail.com" className="flex items-center justify-center text-blue-700 hover:text-blue-800">
-                    <span className="mr-2">📧</span> bgg8988@gmail.com
-                  </a>
-                  <a href="tel:010-3907-1392" className="flex items-center justify-center text-blue-700 hover:text-blue-800">
-                    <span className="mr-2">📱</span> 010-3907-1392
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ContactForm />
         </div>
       </section>
 
