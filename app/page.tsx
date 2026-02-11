@@ -493,7 +493,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="border-t border-blue-600 pt-4">
-                <div className="text-3xl font-bold mb-2">50만원~</div>
+                <div className="text-3xl font-bold mb-2">5만원~</div>
                 <div className="text-blue-200 text-sm">프로젝트 규모에 따라 상이</div>
               </div>
             </div>
@@ -520,7 +520,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="border-t border-gray-200 pt-4">
-                <div className="text-3xl font-bold text-gray-900 mb-2">200만원~</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">50만원~</div>
                 <div className="text-gray-500 text-sm">기능에 따라 상이</div>
               </div>
             </div>
@@ -547,7 +547,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="border-t border-gray-200 pt-4">
-                <div className="text-3xl font-bold text-gray-900 mb-2">300만원~</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">200만원~</div>
                 <div className="text-gray-500 text-sm">복잡도에 따라 상이</div>
               </div>
             </div>
@@ -581,7 +581,7 @@ export default function Home() {
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition">
               <div className="text-center mb-6">
                 <div className="text-blue-700 font-bold mb-2">RPA BASIC</div>
-                <div className="text-5xl font-bold text-gray-900 mb-2">50만원~</div>
+                <div className="text-5xl font-bold text-gray-900 mb-2">5만원~</div>
                 <div className="text-gray-600">간단한 자동화</div>
               </div>
               <ul className="space-y-3 mb-8">
@@ -614,7 +614,7 @@ export default function Home() {
               </div>
               <div className="text-center mb-6 text-white">
                 <div className="text-blue-200 font-bold mb-2">RPA PRO</div>
-                <div className="text-5xl font-bold mb-2">200만원~</div>
+                <div className="text-5xl font-bold mb-2">50만원~</div>
                 <div className="text-blue-200">중급 자동화</div>
               </div>
               <ul className="space-y-3 mb-8 text-white">
@@ -648,7 +648,7 @@ export default function Home() {
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition">
               <div className="text-center mb-6">
                 <div className="text-blue-700 font-bold mb-2">RPA ENTERPRISE</div>
-                <div className="text-5xl font-bold text-gray-900 mb-2">500만원~</div>
+                <div className="text-5xl font-bold text-gray-900 mb-2">200만원~</div>
                 <div className="text-gray-600">대규모 자동화</div>
               </div>
               <ul className="space-y-3 mb-8">
