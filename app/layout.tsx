@@ -1,29 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import DashboardShell from "./components/DashboardShell";
 
 export const metadata: Metadata = {
-  title: "쟁승메이드 | RPA 자동화 & 비즈니스 솔루션 전문",
-  description: "RPA 자동화, 웹 개발, 앱 개발까지. 대기업 출신 개발자가 제공하는 전문 비즈니스 솔루션",
-  keywords: ["RPA", "자동화", "웹개발", "앱개발", "외주개발", "비즈니스솔루션"],
+  title: "쟁승메이드 | 쟁토리의 프리미엄 개발 서비스",
+  description:
+    "로또 번호 추천, 주식 자동 매매, 프롬프트 엔지니어링, 업무 자동화. 쟁토리가 제공하는 신뢰할 수 있는 개발 서비스.",
+  keywords: [
+    "로또 번호 추천",
+    "주식 자동 매매",
+    "프롬프트 엔지니어링",
+    "업무 자동화",
+    "RPA",
+    "외주 개발",
+    "텔레그램 봇",
+  ],
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="ko">
       <head>
@@ -40,10 +39,8 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className="antialiased">
+        <DashboardShell>{children}</DashboardShell>
       </body>
     </html>
   );
