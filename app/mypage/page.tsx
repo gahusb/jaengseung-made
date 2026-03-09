@@ -1,0 +1,390 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
+
+function buildSajuResultUrl(rec: SajuRecord) {
+  const { birth_year, birth_month, birth_day, birth_hour, gender } = rec.saju_data;
+  if (!birth_year || !birth_month || !birth_day) return '/saju/input';
+  let url = `/saju/result?year=${birth_year}&month=${birth_month}&day=${birth_day}&gender=${gender}&calendarType=solar`;
+  if (birth_hour != null) url += `&hour=${birth_hour}`;
+  return url;
+}
+
+type Tab = 'profile' | 'saju' | 'payments' | 'orders';
+
+interface SajuRecord {
+  id: number;
+  created_at: string;
+  saju_data: {
+    birth_year: number;
+    birth_month: number;
+    birth_day: number;
+    birth_hour?: number;
+    gender: string;
+  };
+  interpretation: string | null;
+  is_paid: boolean;
+}
+
+interface Payment {
+  id: string;
+  created_at: string;
+  amount: number;
+  status: string;
+  product_name: string;
+}
+
+interface Order {
+  id: string;
+  created_at: string;
+  service: string;
+  message: string;
+  status: string;
+}
+
+export default function MyPage() {
+  const router = useRouter();
+  const supabase = createClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<Tab>('profile');
+  const [sajuRecords, setSajuRecords] = useState<SajuRecord[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  useEffect(() => {
+    async function init() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push('/login');
+        return;
+      }
+      setUser(user);
+
+      // 사주 기록 조회 (테이블 있을 때 동작)
+      const { data: saju } = await supabase
+        .from('saju_records')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      setSajuRecords(saju || []);
+
+      // 결제 내역 조회
+      const { data: pay } = await supabase
+        .from('payments')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      setPayments(pay || []);
+
+      // 의뢰 내역 조회
+      const { data: ord } = await supabase
+        .from('contact_requests')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      setOrders(ord || []);
+
+      setLoading(false);
+    }
+    init();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+    router.refresh();
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-full flex items-center justify-center bg-[#f0f5ff]">
+        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) return null;
+
+  const tabs: { key: Tab; label: string; count?: number }[] = [
+    { key: 'profile', label: '내 정보' },
+    { key: 'saju', label: '사주 기록', count: sajuRecords.length },
+    { key: 'payments', label: '결제 내역', count: payments.length },
+    { key: 'orders', label: '의뢰 내역', count: orders.length },
+  ];
+
+  return (
+    <div className="min-h-full bg-[#f0f5ff]">
+      {/* 헤더 */}
+      <div className="bg-gradient-to-br from-[#04102b] via-[#0a1f5c] to-[#04102b] px-6 py-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-white text-xl font-bold shadow-lg flex-shrink-0">
+              {user.email?.[0].toUpperCase()}
+            </div>
+            <div>
+              <div className="text-white font-bold text-lg leading-tight">{user.email}</div>
+              <div className="text-blue-300/60 text-sm mt-0.5">
+                가입일: {new Date(user.created_at).toLocaleDateString('ko-KR')}
+              </div>
+            </div>
+            <div className="ml-auto">
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-white/5 border border-white/10 text-slate-300 text-sm rounded-xl hover:bg-white/10 transition"
+              >
+                로그아웃
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-6 py-8 max-w-4xl mx-auto">
+        {/* 탭 */}
+        <div className="flex gap-1 bg-white border border-[#dbe8ff] rounded-xl p-1 mb-6">
+          {tabs.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                tab === t.key
+                  ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              {t.label}
+              {t.count !== undefined && t.count > 0 && (
+                <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${
+                  tab === t.key ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                }`}>
+                  {t.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* 탭 콘텐츠 */}
+
+        {/* 내 정보 */}
+        {tab === 'profile' && (
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
+              <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
+                <div className="w-1 h-5 bg-gradient-to-b from-blue-600 to-violet-600 rounded-full" />
+                계정 정보
+              </h2>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between py-3 border-b border-slate-100">
+                  <span className="text-sm text-slate-500">이메일</span>
+                  <span className="text-sm font-semibold text-[#04102b]">{user.email}</span>
+                </div>
+                <div className="flex items-center justify-between py-3 border-b border-slate-100">
+                  <span className="text-sm text-slate-500">로그인 방법</span>
+                  <span className="text-sm font-semibold text-[#04102b] capitalize">
+                    {user.app_metadata?.provider === 'google' ? 'Google' : '이메일'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-3">
+                  <span className="text-sm text-slate-500">가입일</span>
+                  <span className="text-sm font-semibold text-[#04102b]">
+                    {new Date(user.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
+              <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
+                <div className="w-1 h-5 bg-gradient-to-b from-blue-600 to-violet-600 rounded-full" />
+                빠른 메뉴
+              </h2>
+              <div className="grid grid-cols-2 gap-3">
+                <Link href="/saju/input" className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-blue-300 hover:bg-blue-50/50 transition group">
+                  <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-[#04102b]">사주 분석</div>
+                    <div className="text-xs text-slate-500">새 사주 보기</div>
+                  </div>
+                </Link>
+                <Link href="/freelance" className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-blue-300 hover:bg-blue-50/50 transition group">
+                  <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-[#04102b]">외주 의뢰</div>
+                    <div className="text-xs text-slate-500">프로젝트 문의</div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 사주 기록 */}
+        {tab === 'saju' && (
+          <div>
+            {sajuRecords.length === 0 ? (
+              <EmptyState
+                icon="✨"
+                title="저장된 사주 기록이 없습니다"
+                desc="사주 분석 후 결과를 저장하면 여기서 다시 확인할 수 있습니다"
+                linkHref="/saju/input"
+                linkLabel="사주 분석 시작"
+              />
+            ) : (
+              <div className="grid md:grid-cols-2 gap-4">
+                {sajuRecords.map((rec) => (
+                  <div key={rec.id} className="bg-white rounded-2xl border border-[#dbe8ff] p-5">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="text-xs text-slate-400 mb-1">{new Date(rec.created_at).toLocaleDateString('ko-KR')}</div>
+                        <div className="font-bold text-[#04102b]">
+                          {rec.saju_data?.birth_year ?? '?'}년{' '}
+                          {rec.saju_data?.birth_month ?? '?'}월{' '}
+                          {rec.saju_data?.birth_day ?? '?'}일생
+                        </div>
+                        <div className="text-sm text-slate-500 mt-0.5">
+                          {rec.saju_data?.gender === 'male' ? '남성' : '여성'}
+                          {rec.saju_data?.birth_hour != null ? ` · ${rec.saju_data.birth_hour}시생` : ''}
+                        </div>
+                      </div>
+                      <span className={`text-xs font-bold px-2 py-1 rounded-lg ${rec.is_paid ? 'bg-amber-50 text-amber-600 border border-amber-200' : 'bg-slate-100 text-slate-500'}`}>
+                        {rec.is_paid ? '유료' : '무료'}
+                      </span>
+                    </div>
+                    {rec.interpretation && (
+                      <p className="text-xs text-slate-500 line-clamp-2 bg-slate-50 rounded-lg px-3 py-2 mb-3">
+                        {rec.interpretation.replace(/[#*]/g, '').substring(0, 80)}...
+                      </p>
+                    )}
+                    <Link
+                      href={buildSajuResultUrl(rec)}
+                      className="block w-full text-center py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#04102b] to-[#0a2060] text-white hover:from-[#0a1f5c] hover:to-[#1a3a7a] transition"
+                    >
+                      {rec.is_paid && rec.interpretation ? 'AI 해석 다시 보기 →' : '결과 보기 →'}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 결제 내역 */}
+        {tab === 'payments' && (
+          <div>
+            {payments.length === 0 ? (
+              <EmptyState
+                icon="💳"
+                title="결제 내역이 없습니다"
+                desc="서비스 구매 후 결제 내역이 여기에 표시됩니다"
+                linkHref="/saju"
+                linkLabel="서비스 보기"
+              />
+            ) : (
+              <div className="bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="bg-[#f0f5ff] border-b border-[#dbe8ff]">
+                    <tr>
+                      <th className="px-5 py-3 text-left font-semibold text-slate-600">서비스</th>
+                      <th className="px-5 py-3 text-left font-semibold text-slate-600">금액</th>
+                      <th className="px-5 py-3 text-left font-semibold text-slate-600">상태</th>
+                      <th className="px-5 py-3 text-left font-semibold text-slate-600">일시</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {payments.map((p, i) => (
+                      <tr key={p.id} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
+                        <td className="px-5 py-3 font-medium text-[#04102b]">{p.product_name}</td>
+                        <td className="px-5 py-3 text-[#04102b]">₩{p.amount?.toLocaleString()}</td>
+                        <td className="px-5 py-3">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                            p.status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'
+                          }`}>
+                            {p.status === 'paid' ? '결제완료' : p.status}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3 text-slate-500 text-xs">
+                          {new Date(p.created_at).toLocaleDateString('ko-KR')}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 의뢰 내역 */}
+        {tab === 'orders' && (
+          <div>
+            {orders.length === 0 ? (
+              <EmptyState
+                icon="📋"
+                title="의뢰 내역이 없습니다"
+                desc="외주 개발, 서비스 문의 내역이 여기에 표시됩니다"
+                linkHref="/freelance"
+                linkLabel="외주 의뢰하기"
+              />
+            ) : (
+              <div className="space-y-3">
+                {orders.map((o) => (
+                  <div key={o.id} className="bg-white rounded-2xl border border-[#dbe8ff] p-5">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="font-bold text-[#04102b]">{o.service}</div>
+                      <span className={`text-xs font-bold px-2 py-1 rounded-lg ${
+                        o.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
+                        o.status === 'in_progress' ? 'bg-blue-50 text-blue-600 border border-blue-200' :
+                        'bg-slate-100 text-slate-500'
+                      }`}>
+                        {o.status === 'completed' ? '완료' : o.status === 'in_progress' ? '진행중' : '대기중'}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-600 line-clamp-2">{o.message}</p>
+                    <div className="text-xs text-slate-400 mt-2">{new Date(o.created_at).toLocaleDateString('ko-KR')}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function EmptyState({
+  icon, title, desc, linkHref, linkLabel,
+}: {
+  icon: string; title: string; desc: string; linkHref: string; linkLabel: string;
+}) {
+  return (
+    <div className="text-center py-16 bg-white rounded-2xl border border-[#dbe8ff]">
+      <div className="text-5xl mb-4">{icon}</div>
+      <div className="font-bold text-[#04102b] text-lg mb-2">{title}</div>
+      <div className="text-slate-500 text-sm mb-6">{desc}</div>
+      <Link
+        href={linkHref}
+        className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-violet-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-lg shadow-blue-600/20"
+      >
+        {linkLabel} →
+      </Link>
+    </div>
+  );
+}

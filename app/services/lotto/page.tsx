@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+import PaymentButton from '../../components/PaymentButton';
 
 const CHECKLIST = [
   '구독 플랜 선택 (기본 / 프리미엄 / 연간)',
@@ -24,6 +25,7 @@ const plans = [
       '이메일 발송',
     ],
     highlight: false,
+    productId: 'lotto_basic',
   },
   {
     name: '프리미엄 플랜',
@@ -38,6 +40,7 @@ const plans = [
       '이메일 + 텔레그램 알림',
     ],
     highlight: true,
+    productId: 'lotto_premium',
   },
   {
     name: '연간 플랜',
@@ -51,6 +54,7 @@ const plans = [
       '2개월 무료 혜택',
     ],
     highlight: false,
+    productId: 'lotto_annual',
   },
 ];
 
@@ -210,14 +214,14 @@ export default function LottoPage() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  onClick={() => openModal(`로또 번호 추천 - ${plan.name}`)}
+                <PaymentButton
+                  productId={plan.productId}
                   className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
                     plan.highlight ? 'bg-amber-400 text-[#04102b] hover:bg-amber-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
                   }`}
                 >
                   신청하기
-                </button>
+                </PaymentButton>
               </div>
             ))}
           </div>

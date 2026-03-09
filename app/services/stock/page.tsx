@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+import PaymentButton from '../../components/PaymentButton';
 
 const CHECKLIST = [
   '사용 중인 증권사 확인 (키움증권 / 한국투자증권 권장)',
@@ -29,6 +30,7 @@ const plans = [
     desc: '1개 종목 자동 매매',
     features: ['1개 종목 모니터링', '텔레그램 매매 알림', '기본 기술적 분석 전략', '손절/익절 자동 설정', '월간 손익 리포트'],
     highlight: false,
+    installProductId: 'stock_starter_install',
   },
   {
     name: '프로',
@@ -37,6 +39,7 @@ const plans = [
     desc: '최대 5개 종목 + 전략 커스터마이징',
     features: ['최대 5개 종목 동시 운영', '전략 파라미터 커스터마이징', '다중 기술적 지표 조합', '실시간 포트폴리오 현황', '주간 성과 분석 리포트', '1개월 무상 기술 지원'],
     highlight: true,
+    installProductId: 'stock_pro_install',
   },
   {
     name: '엔터프라이즈',
@@ -45,6 +48,7 @@ const plans = [
     desc: '무제한 종목 + 맞춤 전략 개발',
     features: ['종목 제한 없음', '완전 맞춤 전략 개발', '백테스팅 리포트 제공', '전용 서버 구성 가능', '24시간 모니터링', '전담 유지보수 계약'],
     highlight: false,
+    installProductId: null,
   },
 ];
 
@@ -206,14 +210,23 @@ export default function StockPage() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  onClick={() => openModal(`주식 자동 매매 - ${plan.name}`)}
-                  className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
-                    plan.highlight ? 'bg-emerald-400 text-[#011225] hover:bg-emerald-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
-                  }`}
-                >
-                  도입 문의
-                </button>
+                {plan.installProductId ? (
+                  <PaymentButton
+                    productId={plan.installProductId}
+                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
+                      plan.highlight ? 'bg-emerald-400 text-[#011225] hover:bg-emerald-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
+                    }`}
+                  >
+                    설치 결제하기
+                  </PaymentButton>
+                ) : (
+                  <button
+                    onClick={() => openModal(`주식 자동 매매 - ${plan.name}`)}
+                    className="block w-full text-center py-3 rounded-xl text-sm font-bold transition bg-[#04102b] text-white hover:bg-[#0a1f5c]"
+                  >
+                    도입 문의
+                  </button>
+                )}
               </div>
             ))}
           </div>

@@ -301,6 +301,47 @@ export default function Home() {
                 </div>
               </div>
             </Link>
+
+
+            {/* ─ AI 사주 분석 ─ */}
+            <Link href="/saju" className="service-card group bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden hover:border-[#7c3aed]/30 hover:shadow-xl hover:shadow-violet-100 md:col-span-2">
+              <div className="relative bg-gradient-to-br from-[#0d0a2e] via-[#1a0f5c] to-[#04102b] px-6 pt-7 pb-6 overflow-hidden">
+                <div className="absolute inset-0 opacity-[0.06]"
+                  style={{ backgroundImage: 'radial-gradient(circle, #c4b5fd 1px, transparent 1px)', backgroundSize: '22px 22px' }} />
+                <div className="absolute top-2 right-2 w-28 h-28 rounded-full bg-amber-400/10 blur-2xl" />
+                <span className="absolute top-4 right-4 bg-violet-600 text-white text-xs font-bold px-2 py-0.5 rounded-lg tracking-wide">NEW</span>
+                <div className="relative flex items-start gap-5">
+                  <div className="w-11 h-11 rounded-xl bg-violet-400/15 border border-violet-400/25 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-amber-400/70 text-xs font-semibold mb-0.5 tracking-wide">AI SAJU ANALYTICS</div>
+                    <h3 className="text-white text-xl font-extrabold">AI 사주 분석</h3>
+                    <p className="text-violet-200/60 text-xs mt-1">전통 명리학과 GPT-4o의 만남 — 12가지 항목 상세 해석</p>
+                  </div>
+                </div>
+              </div>
+              <div className="px-6 py-5">
+                <p className="text-slate-600 text-sm leading-relaxed mb-4">사주팔자 원국 계산부터 신강/신약 분석, 용신·희신, 대운까지 — AI가 따뜻하고 정확하게 해석해드립니다.</p>
+                <div className="space-y-2 mb-5">
+                  {['전통 사주팔자 계산', 'AI 12가지 항목 해석', '무료 기본 · 유료 상세'].map(f => (
+                    <div key={f} className="flex items-center gap-2 text-sm text-slate-700">
+                      <div className="w-4 h-4 rounded-full bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0"><div className="w-1.5 h-1.5 rounded-full bg-violet-500" /></div>
+                      {f}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                  <div>
+                    <span className="text-[#04102b] font-extrabold text-lg">무료 체험 / 상세 ₩4,900</span>
+                    <span className="ml-2 text-xs bg-violet-50 border border-violet-200 text-violet-700 px-2 py-0.5 rounded-full font-medium">1회</span>
+                  </div>
+                  <span className="text-[#7c3aed] text-sm font-semibold flex items-center gap-1">자세히 보기 →</span>
+                </div>
+              </div>
+            </Link>
           </div>
 
           {/* ─ Freelance CTA ─ */}

@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  saju-engine:
+    build: .
+    container_name: saju-engine
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - API_SECRET=${API_SECRET}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-*}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - ENV=${ENV:-production}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    # NAS에서 메모리 제한 권장 (선택)
+    # mem_limit: 512m
+    # cpus: '1.0'

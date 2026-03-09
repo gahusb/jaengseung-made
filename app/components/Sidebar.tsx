@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
 const navItems = [
   {
@@ -58,6 +60,17 @@ const navItems = [
     desc: 'RPA 개발',
   },
   {
+    href: '/saju',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+      </svg>
+    ),
+    label: 'AI 사주 분석',
+    desc: '사주팔자 + AI 해석',
+    badge: 'NEW',
+  },
+  {
     href: '/freelance',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,6 +89,28 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUserEmail(data.user?.email ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUserEmail(session?.user?.email ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+    router.refresh();
+    onClose();
+  };
 
   return (
     <>
@@ -116,7 +151,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider">메뉴</span>
           </div>
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
             return (
               <Link
                 key={item.href}
@@ -157,18 +192,59 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           })}
         </nav>
 
-        {/* Bottom: Developer profile */}
+        {/* Bottom: 로그인 상태 */}
         <div className="p-4 border-t border-[#1a3a7a]/50 flex-shrink-0">
-          <div className="flex items-center gap-3 px-1">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow">
-              쟁
+          {userEmail ? (
+            /* 로그인 상태 */
+            <div className="space-y-2">
+              <Link
+                href="/mypage"
+                onClick={onClose}
+                className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-all ${
+                  pathname.startsWith('/mypage')
+                    ? 'bg-gradient-to-r from-blue-600 to-violet-600'
+                    : 'hover:bg-[#0a1f5c]'
+                }`}
+              >
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow">
+                  {userEmail[0].toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-white text-sm font-semibold truncate">{userEmail}</div>
+                  <div className="text-blue-400 text-xs">마이페이지</div>
+                </div>
+                <div className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0" />
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-[#0a1f5c] text-xs transition-all"
+              >
+                로그아웃
+              </button>
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-white text-sm font-semibold">쟁토리</div>
-              <div className="text-slate-500 text-xs">시니어 백엔드 개발자</div>
+          ) : (
+            /* 비로그인 상태 */
+            <div className="space-y-2">
+              <div className="flex items-center gap-3 px-1 mb-2">
+                <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-500 flex-shrink-0">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-slate-400 text-sm font-medium">비로그인</div>
+                  <div className="text-slate-600 text-xs">로그인하면 더 많은 기능</div>
+                </div>
+              </div>
+              <Link
+                href="/login"
+                onClick={onClose}
+                className="block w-full text-center bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-semibold px-3 py-2 rounded-xl hover:opacity-90 transition-all"
+              >
+                로그인 / 회원가입
+              </Link>
             </div>
-            <div className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0" title="온라인" />
-          </div>
+          )}
         </div>
       </aside>
     </>
