@@ -6,7 +6,7 @@ services:
     container_name: saju-engine
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - API_SECRET=${API_SECRET}
       - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-*}
