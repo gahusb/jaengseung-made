@@ -20,6 +20,13 @@ interface SajuAISectionProps {
   gender: string;
   birthKey: BirthKey;
   currentUrl: string;
+  // Python 엔진 데이터 (더 정밀한 절기 계산 결과)
+  engineData?: {
+    interactions?: any[];
+    shinsal?: any[];
+    gongmang?: any;
+    hiddenStems?: any[];
+  };
 }
 
 export default function SajuAISection({
@@ -31,6 +38,7 @@ export default function SajuAISection({
   gender,
   birthKey,
   currentUrl,
+  engineData,
 }: SajuAISectionProps) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>(
     savedInterpretation ? 'done' : 'idle'
@@ -46,7 +54,13 @@ export default function SajuAISection({
     fetch('/api/saju/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ saju: sajuData, daeun, daeunList, gender }),
+      body: JSON.stringify({
+        saju: sajuData,
+        daeun,
+        daeunList,
+        gender,
+        engineData, // Python 엔진 데이터 전달
+      }),
     })
       .then((r) => r.json())
       .then((data) => {

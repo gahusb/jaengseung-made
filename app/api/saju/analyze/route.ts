@@ -50,7 +50,7 @@ const MODELS = ['gpt-4o', 'gpt-4o-mini'] as const;
 
 export async function POST(request: Request) {
     try {
-        const { saju, daeun, daeunList, gender } = await request.json();
+        const { saju, daeun, daeunList, gender, engineData } = await request.json();
 
         // 종합 분석 수행
         let analysis;
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
             apiKey: process.env.OPENAI_API_KEY,
         });
 
-        const prompt = createSajuPrompt(saju, daeun, gender, analysis, daeunList || []);
+        const prompt = createSajuPrompt(saju, daeun, gender, analysis, daeunList || [], engineData);
 
         // 모델 폴백: gpt-4o 실패 시 gpt-4o-mini로 재시도
         let interpretation: string | null = null;

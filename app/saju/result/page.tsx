@@ -555,6 +555,12 @@ export default async function SajuResultPage({ searchParams }: PageProps) {
                   gender={gender}
                   birthKey={birthKey}
                   currentUrl={currentUrl}
+                  engineData={engineResult ? {
+                    interactions: engineResult.interactions,
+                    shinsal: engineResult.shinsal,
+                    gongmang: engineResult.gongmang,
+                    hiddenStems: engineResult.hiddenStems,
+                  } : undefined}
                 />
               );
             })()}
