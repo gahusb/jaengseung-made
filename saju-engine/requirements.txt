@@ -4,3 +4,4 @@ ephem==4.1.6
 slowapi==0.1.9
 python-dotenv==1.0.1
 pydantic==2.10.3
+korean-lunar-calendar==0.3.1

@@ -154,13 +154,16 @@ async def calculate_saju_api(request: Request, body: SajuRequest):
         year, month, day = body.year, body.month, body.day
         if body.calendar_type == 'lunar':
             try:
-                import korean_lunar_calendar
-                calendar = korean_lunar_calendar.KoreanLunarCalendar()
-                calendar.setLunarDate(year, month, day, False)
-                solar = calendar.SolarIsoFormat().split('-')
-                year, month, day = int(solar[0]), int(solar[1]), int(solar[2])
+                from korean_lunar_calendar import KoreanLunarCalendar
+                cal = KoreanLunarCalendar()
+                cal.setLunarDate(year, month, day, False)
+                solar_str = cal.SolarIsoFormat()  # 'YYYY-MM-DD'
+                parts = solar_str.split('-')
+                year, month, day = int(parts[0]), int(parts[1]), int(parts[2])
+                logger.info(f'음력 변환 완료: 음력 {body.year}/{body.month}/{body.day} → 양력 {year}/{month}/{day}')
             except Exception as e:
                 logger.warning(f'음력 변환 실패, 양력으로 처리: {e}')
+                raise HTTPException(status_code=400, detail=f'음력 변환 실패: {e}')
 
         # 사주팔자 계산
         saju = calculate_saju(year, month, day, body.hour, body.gender)
