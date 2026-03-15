@@ -562,7 +562,7 @@ export default function LottoRecommendPage() {
                     {(['single','batch'] as const).map(mode=>(
                       <button key={mode} className="mode-tab" onClick={()=>setGenMode(mode)} disabled={isProLoading}
                         style={{ background:genMode===mode?'linear-gradient(135deg,#fbbf24,#f59e0b)':'transparent',color:genMode===mode?'#78350f':'rgba(253,230,138,.45)',border:'none',borderRadius:'.5rem',padding:'.45rem 1.1rem',fontSize:'.78rem',fontWeight:genMode===mode?800:600,cursor:'pointer' }}>
-                        {mode==='single'?'단일 생성':'5개 배치'}
+                        {mode==='single'?'단일 생성':`${Math.min(5, MAX_COMBOS - combos.length)}개 배치`}
                       </button>
                     ))}
                   </div>
@@ -583,7 +583,7 @@ export default function LottoRecommendPage() {
                   {/* 메트릭 */}
                   {latestCombo?.metrics && !isProLoading && (
                     <div style={{ display:'flex',gap:'1rem',justifyContent:'center',marginBottom:'1.25rem',flexWrap:'wrap' }}>
-                      {[{l:'합계',v:latestCombo.metrics.sum},{l:'홀수',v:`${latestCombo.metrics.odd}개`},{l:'짝수',v:`${latestCombo.metrics.even}개`},{l:'범위',v:latestCombo.metrics.range}].map(s=>(
+                      {[{l:'홀수',v:`${latestCombo.metrics.odd}개`},{l:'짝수',v:`${latestCombo.metrics.even}개`},{l:'범위',v:latestCombo.metrics.range}].map(s=>(
                         <div key={s.l} style={{ background:'rgba(251,191,36,.07)',border:'1px solid rgba(251,191,36,.12)',borderRadius:'.5rem',padding:'.3rem .75rem',textAlign:'center' }}>
                           <div style={{ color:'#fbbf24',fontSize:'.85rem',fontWeight:800 }}>{s.v}</div>
                           <div style={{ color:'rgba(253,230,138,.4)',fontSize:'.62rem' }}>{s.l}</div>
@@ -594,7 +594,7 @@ export default function LottoRecommendPage() {
 
                   {isProLoading && (
                     <p style={{ color:'rgba(251,191,36,.55)',fontSize:'.82rem',marginBottom:'1.25rem',animation:'slideUp .3s ease' }}>
-                      {genMode==='batch'?'5개 번호 조합을 배치 생성 중...':'몬테카를로 시뮬레이션으로 최적 번호를 계산 중...'}
+                      {genMode==='batch'?`${Math.min(5, MAX_COMBOS - combos.length)}개 번호 조합을 배치 생성 중...`:'몬테카를로 시뮬레이션으로 최적 번호를 계산 중...'}
                     </p>
                   )}
                   {proState === 'error' && (
@@ -607,7 +607,7 @@ export default function LottoRecommendPage() {
                     {isProLoading ? (
                       <><div style={{ width:16,height:16,borderRadius:'50%',border:'2px solid rgba(251,191,36,.3)',borderTop:'2px solid rgba(251,191,36,.6)',animation:'spin .7s linear infinite' }} />계산 중...</>
                     ) : isMaxed ? '✓ 최대 조합 생성 완료' : (
-                      <><svg width={17} height={17} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>{genMode==='batch'?'5개 배치 생성하기':'번호 생성하기'}</>
+                      <><svg width={17} height={17} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>{genMode==='batch'?`${Math.min(5, MAX_COMBOS - combos.length)}개 배치 생성하기`:'번호 생성하기'}</>
                     )}
                   </button>
                   {isMaxed && (
@@ -637,7 +637,7 @@ export default function LottoRecommendPage() {
                             </div>
                           </div>
                           <div style={{ display:'flex',alignItems:'center',gap:'.75rem' }}>
-                            {c.metrics&&<span style={{ color:'rgba(251,191,36,.4)',fontSize:'.68rem' }}>합 {c.metrics.sum} · 홀 {c.metrics.odd}</span>}
+                            {c.metrics&&<span style={{ color:'rgba(251,191,36,.4)',fontSize:'.68rem' }}>홀 {c.metrics.odd} · 짝 {c.metrics.even}</span>}
                             <div style={{ color:'rgba(255,255,255,.18)',fontSize:'.68rem' }}>{c.createdAt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}</div>
                           </div>
                         </div>
