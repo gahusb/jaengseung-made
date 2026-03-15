@@ -15,7 +15,7 @@ function buildSajuResultUrl(rec: SajuRecord) {
   return url;
 }
 
-type Tab = 'profile' | 'saju' | 'payments' | 'orders';
+type Tab = 'profile' | 'saju' | 'lotto' | 'payments' | 'orders';
 type TelegramLinkState = 'idle' | 'generating' | 'waiting' | 'disconnecting';
 
 interface SajuRecord {
@@ -48,6 +48,26 @@ interface Order {
   status: string;
 }
 
+interface LottoHistoryItem {
+  id: number;
+  numbers: number[];
+  source: string;
+  plan_id: string;
+  created_at: string;
+}
+
+interface ActiveSubscription {
+  product_id: string;
+  created_at: string;
+  expires_at: string;
+}
+
+const PLAN_LABELS: Record<string, { label: string; emoji: string; color: string }> = {
+  lotto_gold:     { label: '골드', emoji: '🥇', color: 'amber' },
+  lotto_platinum: { label: '플래티넘', emoji: '💎', color: 'sky' },
+  lotto_diamond:  { label: '다이아', emoji: '👑', color: 'violet' },
+};
+
 export default function MyPage() {
   const router = useRouter();
   const supabase = createClient();
@@ -57,6 +77,8 @@ export default function MyPage() {
   const [sajuRecords, setSajuRecords] = useState<SajuRecord[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [lottoHistory, setLottoHistory] = useState<LottoHistoryItem[]>([]);
+  const [activeSubscriptions, setActiveSubscriptions] = useState<ActiveSubscription[]>([]);
 
   // 텔레그램 연동 상태
   const [telegramChatId, setTelegramChatId] = useState<string | null>(null);
@@ -108,6 +130,35 @@ export default function MyPage() {
         .eq('id', user.id)
         .maybeSingle();
       setTelegramChatId(profile?.telegram_chat_id ?? null);
+
+      // 활성 구독 조회 (paid 상태의 lotto 플랜)
+      const LOTTO_PLANS = ['lotto_gold', 'lotto_platinum', 'lotto_diamond'];
+      const { data: subs } = await supabase
+        .from('orders')
+        .select('product_id, created_at')
+        .eq('user_id', user.id)
+        .eq('status', 'paid')
+        .in('product_id', LOTTO_PLANS)
+        .order('created_at', { ascending: false });
+
+      if (subs && subs.length > 0) {
+        const activeSubs: ActiveSubscription[] = subs.map((s) => {
+          const createdAt = new Date(s.created_at);
+          const expiresAt = new Date(createdAt);
+          expiresAt.setDate(expiresAt.getDate() + 31);
+          return { product_id: s.product_id, created_at: s.created_at, expires_at: expiresAt.toISOString() };
+        });
+        setActiveSubscriptions(activeSubs);
+      }
+
+      // 로또 히스토리 조회
+      const { data: history } = await supabase
+        .from('lotto_history')
+        .select('id, numbers, source, plan_id, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      setLottoHistory(history ?? []);
 
       setLoading(false);
     }
@@ -178,6 +229,7 @@ export default function MyPage() {
   const tabs: { key: Tab; label: string; count?: number }[] = [
     { key: 'profile', label: '내 정보' },
     { key: 'saju', label: '사주 기록', count: sajuRecords.length },
+    { key: 'lotto', label: '🎰 로또 기록', count: lottoHistory.length },
     { key: 'payments', label: '결제 내역', count: payments.length },
     { key: 'orders', label: '의뢰 내역', count: orders.length },
   ];
@@ -268,6 +320,58 @@ export default function MyPage() {
                 </div>
               </div>
             </div>
+
+            {/* 구독 중인 서비스 */}
+            {activeSubscriptions.length > 0 && (
+              <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
+                <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
+                  <div className="w-1 h-5 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full" />
+                  구독 중인 서비스
+                </h2>
+                <div className="space-y-3">
+                  {activeSubscriptions.map((sub) => {
+                    const info = PLAN_LABELS[sub.product_id];
+                    const expiresDate = new Date(sub.expires_at);
+                    const daysLeft = Math.max(0, Math.ceil((expiresDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+                    const isExpired = daysLeft === 0;
+                    return (
+                      <div key={sub.product_id + sub.created_at}
+                        className={`flex items-center justify-between p-4 rounded-xl border ${isExpired ? 'border-slate-200 bg-slate-50' : 'border-amber-200 bg-amber-50/50'}`}>
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{info?.emoji ?? '🎟'}</span>
+                          <div>
+                            <div className="text-sm font-bold text-[#04102b]">
+                              로또 번호 추천 {info?.label ?? sub.product_id}
+                            </div>
+                            <div className="text-xs text-slate-500 mt-0.5">
+                              {new Date(sub.created_at).toLocaleDateString('ko-KR')} 구독 시작
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          {isExpired ? (
+                            <span className="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg">만료됨</span>
+                          ) : (
+                            <>
+                              <div className={`text-sm font-bold ${daysLeft <= 5 ? 'text-red-500' : 'text-amber-600'}`}>
+                                D-{daysLeft}
+                              </div>
+                              <div className="text-xs text-slate-400">{expiresDate.toLocaleDateString('ko-KR')} 만료</div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-3">
+                  <a href="/services/lotto/recommend"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 hover:text-amber-700 transition">
+                    번호 추천받기 →
+                  </a>
+                </div>
+              </div>
+            )}
 
             {/* 텔레그램 연동 카드 */}
             <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
@@ -413,6 +517,56 @@ export default function MyPage() {
                 </Link>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* 로또 번호 기록 */}
+        {tab === 'lotto' && (
+          <div>
+            {lottoHistory.length === 0 ? (
+              <EmptyState
+                icon="🎰"
+                title="생성된 번호 기록이 없습니다"
+                desc="로또 번호 추천 페이지에서 번호를 생성하면 여기에 기록됩니다"
+                linkHref="/services/lotto/recommend"
+                linkLabel="번호 추천받기"
+              />
+            ) : (
+              <div className="space-y-3">
+                <div className="text-xs text-slate-400 mb-1">총 {lottoHistory.length}개 조합 생성</div>
+                {lottoHistory.map((item) => {
+                  const info = PLAN_LABELS[item.plan_id];
+                  return (
+                    <div key={item.id} className="bg-white rounded-2xl border border-[#dbe8ff] px-5 py-4 flex items-center justify-between flex-wrap gap-3">
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <div className="flex gap-1.5 flex-wrap">
+                          {item.numbers.map((n) => {
+                            const color =
+                              n <= 10 ? 'bg-yellow-400 text-yellow-900' :
+                              n <= 20 ? 'bg-blue-500 text-white' :
+                              n <= 30 ? 'bg-red-500 text-white' :
+                              n <= 40 ? 'bg-slate-500 text-white' :
+                                        'bg-green-500 text-white';
+                            return (
+                              <span key={n} className={`w-8 h-8 rounded-full ${color} flex items-center justify-center text-xs font-black shadow-sm`}>
+                                {n}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 flex-shrink-0">
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${item.source === 'nas' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-slate-100 text-slate-500'}`}>
+                          {item.source === 'nas' ? 'NAS 추천' : '로컬 생성'}
+                        </span>
+                        <span className="text-xs text-amber-600 font-semibold">{info?.emoji} {info?.label}</span>
+                        <span className="text-xs text-slate-400">{new Date(item.created_at).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 

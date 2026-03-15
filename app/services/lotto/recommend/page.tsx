@@ -274,6 +274,16 @@ export default function LottoRecommendPage() {
     }
   };
 
+  // ── 히스토리 저장 (fire-and-forget) ──
+  const saveHistory = (numbers: number[], source: 'nas' | 'client') => {
+    if (!plan) return;
+    fetch('/api/lotto/history', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ numbers, source, plan_id: plan }),
+    }).catch(() => {/* 저장 실패는 조용히 무시 */});
+  };
+
   // ── 프리미엄 번호 생성 ──
   const handleGenerate = async () => {
     if (proState === 'loading' || combos.length >= MAX_COMBOS) return;
@@ -292,6 +302,7 @@ export default function LottoRecommendPage() {
         const newCombos: Combo[] = Array.from({ length: count }, () => {
           idRef.current += 1;
           const { numbers, metrics } = clientMonteCarlo();
+          saveHistory(numbers, 'client');
           return { id: idRef.current, numbers, metrics, createdAt: new Date() };
         });
         setCombos((prev) => [...prev, ...newCombos].slice(-MAX_COMBOS));
@@ -305,16 +316,20 @@ export default function LottoRecommendPage() {
         const data: BatchResponse = await res.json();
         const newCombos: Combo[] = (data.items ?? []).map((item) => {
           idRef.current += 1;
-          return { id: idRef.current, numbers: [...item.numbers].sort((a,b)=>a-b), metrics: item.metrics, createdAt: new Date() };
+          const numbers = [...item.numbers].sort((a,b)=>a-b);
+          saveHistory(numbers, 'nas');
+          return { id: idRef.current, numbers, metrics: item.metrics, createdAt: new Date() };
         });
         setCombos((prev) => [...prev, ...newCombos].slice(-MAX_COMBOS));
       } else {
         const data: RecommendResponse = await res.json();
         if (!data.numbers?.length) throw new Error('EMPTY_RESULT');
         idRef.current += 1;
+        const numbers = [...data.numbers].sort((a,b)=>a-b);
+        saveHistory(numbers, 'nas');
         setCombos((prev) => [...prev, {
           id: idRef.current,
-          numbers: [...data.numbers].sort((a,b)=>a-b),
+          numbers,
           metrics: data.metrics,
           overlap: data.recent_overlap?.repeated_numbers,
           createdAt: new Date(),
@@ -583,7 +598,7 @@ export default function LottoRecommendPage() {
                   {/* 메트릭 */}
                   {latestCombo?.metrics && !isProLoading && (
                     <div style={{ display:'flex',gap:'1rem',justifyContent:'center',marginBottom:'1.25rem',flexWrap:'wrap' }}>
-                      {[{l:'홀수',v:`${latestCombo.metrics.odd}개`},{l:'짝수',v:`${latestCombo.metrics.even}개`},{l:'범위',v:latestCombo.metrics.range}].map(s=>(
+                      {[{l:'합계',v:latestCombo.metrics.sum},{l:'홀수',v:`${latestCombo.metrics.odd}개`},{l:'짝수',v:`${latestCombo.metrics.even}개`},{l:'범위',v:latestCombo.metrics.range}].map(s=>(
                         <div key={s.l} style={{ background:'rgba(251,191,36,.07)',border:'1px solid rgba(251,191,36,.12)',borderRadius:'.5rem',padding:'.3rem .75rem',textAlign:'center' }}>
                           <div style={{ color:'#fbbf24',fontSize:'.85rem',fontWeight:800 }}>{s.v}</div>
                           <div style={{ color:'rgba(253,230,138,.4)',fontSize:'.62rem' }}>{s.l}</div>
@@ -637,7 +652,7 @@ export default function LottoRecommendPage() {
                             </div>
                           </div>
                           <div style={{ display:'flex',alignItems:'center',gap:'.75rem' }}>
-                            {c.metrics&&<span style={{ color:'rgba(251,191,36,.4)',fontSize:'.68rem' }}>홀 {c.metrics.odd} · 짝 {c.metrics.even}</span>}
+                            {c.metrics&&<span style={{ color:'rgba(251,191,36,.4)',fontSize:'.68rem' }}>합 {c.metrics.sum} · 홀 {c.metrics.odd}</span>}
                             <div style={{ color:'rgba(255,255,255,.18)',fontSize:'.68rem' }}>{c.createdAt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}</div>
                           </div>
                         </div>
