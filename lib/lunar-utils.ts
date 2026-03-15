@@ -1,6 +1,10 @@
 /**
  * 음력-양력 변환 유틸리티
+ * solarlunar 패키지 사용 (https://www.npmjs.com/package/solarlunar)
  */
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const solarlunar = require('solarlunar');
 
 interface LunarDate {
   year: number;
@@ -17,10 +21,6 @@ interface SolarDate {
 
 /**
  * 음력을 양력으로 변환
- * @param lunarYear 음력 년
- * @param lunarMonth 음력 월
- * @param lunarDay 음력 일
- * @param isLeapMonth 윤달 여부
  */
 export function lunarToSolar(
   lunarYear: number,
@@ -29,30 +29,20 @@ export function lunarToSolar(
   isLeapMonth: boolean = false
 ): SolarDate {
   try {
-    const lunar = require('lunar-calendar');
-    const result = lunar.lunarToSolar(lunarYear, lunarMonth, lunarDay, isLeapMonth);
-
+    const result = solarlunar.lunar2solar(lunarYear, lunarMonth, lunarDay, isLeapMonth);
     return {
-      year: result.year,
-      month: result.month,
-      day: result.day
+      year: result.cYear,
+      month: result.cMonth,
+      day: result.cDay,
     };
   } catch (error) {
     console.error('음력 변환 오류:', error);
-    // 변환 실패시 입력값 그대로 반환
-    return {
-      year: lunarYear,
-      month: lunarMonth,
-      day: lunarDay
-    };
+    return { year: lunarYear, month: lunarMonth, day: lunarDay };
   }
 }
 
 /**
  * 양력을 음력으로 변환
- * @param solarYear 양력 년
- * @param solarMonth 양력 월
- * @param solarDay 양력 일
  */
 export function solarToLunar(
   solarYear: number,
@@ -60,24 +50,16 @@ export function solarToLunar(
   solarDay: number
 ): LunarDate {
   try {
-    const lunar = require('lunar-calendar');
-    const result = lunar.solarToLunar(solarYear, solarMonth, solarDay);
-
+    const result = solarlunar.solar2lunar(solarYear, solarMonth, solarDay);
     return {
-      year: result.year,
-      month: result.month,
-      day: result.day,
-      isLeap: result.isLeap || false
+      year: result.lYear,
+      month: result.lMonth,
+      day: result.lDay,
+      isLeap: result.isLeap,
     };
   } catch (error) {
     console.error('양력 변환 오류:', error);
-    // 변환 실패시 입력값 그대로 반환
-    return {
-      year: solarYear,
-      month: solarMonth,
-      day: solarDay,
-      isLeap: false
-    };
+    return { year: solarYear, month: solarMonth, day: solarDay, isLeap: false };
   }
 }
 
