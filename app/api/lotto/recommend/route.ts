@@ -76,12 +76,31 @@ export async function GET(req: NextRequest) {
         ? '/api/lotto/best'
         : '/api/lotto/recommend';
 
-    const nasRes = await nasGet(nasPath);
+    let nasRes: Response;
+    try {
+      nasRes = await nasGet(nasPath);
+    } catch (fetchErr: unknown) {
+      const e = fetchErr as { name?: string };
+      console.warn('NAS unreachable:', fetchErr);
+      if (e?.name === 'TimeoutError') {
+        return NextResponse.json(
+          { error: 'NAS_UNAVAILABLE', plan: order.product_id, mode },
+          { status: 503 }
+        );
+      }
+      return NextResponse.json(
+        { error: 'NAS_UNAVAILABLE', plan: order.product_id, mode },
+        { status: 503 }
+      );
+    }
 
     if (!nasRes.ok) {
       const errText = await nasRes.text();
       console.error('NAS API error:', nasRes.status, errText);
-      return NextResponse.json({ error: 'NAS_API_ERROR' }, { status: 502 });
+      return NextResponse.json(
+        { error: 'NAS_UNAVAILABLE', plan: order.product_id, mode },
+        { status: 503 }
+      );
     }
 
     const nasData = await nasRes.json();
@@ -94,9 +113,6 @@ export async function GET(req: NextRequest) {
     });
   } catch (err: unknown) {
     const e = err as { name?: string; message?: string };
-    if (e?.name === 'TimeoutError') {
-      return NextResponse.json({ error: 'NAS_TIMEOUT' }, { status: 504 });
-    }
     if (e?.message === 'NAS_URL_NOT_CONFIGURED') {
       return NextResponse.json({ error: 'NAS_URL_NOT_CONFIGURED' }, { status: 500 });
     }

@@ -285,6 +285,20 @@ export default function LottoRecommendPage() {
         : '/api/lotto/recommend?mode=single';
       const res = await fetch(url);
       if (res.status === 403) { setIsSubscribed(false); setProState('idle'); return; }
+
+      // NAS 불가 시 클라이언트 Monte Carlo 폴백
+      if (res.status === 503) {
+        const count = genMode === 'batch' ? Math.min(5, MAX_COMBOS - combos.length) : 1;
+        const newCombos: Combo[] = Array.from({ length: count }, () => {
+          idRef.current += 1;
+          const { numbers, metrics } = clientMonteCarlo();
+          return { id: idRef.current, numbers, metrics, createdAt: new Date() };
+        });
+        setCombos((prev) => [...prev, ...newCombos].slice(-MAX_COMBOS));
+        setProState('result');
+        return;
+      }
+
       if (!res.ok) { const e = await res.json(); throw new Error(e.error ?? 'API_ERROR'); }
 
       if (genMode === 'batch') {
