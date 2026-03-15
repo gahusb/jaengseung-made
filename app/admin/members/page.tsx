@@ -9,7 +9,14 @@ interface Member {
   created_at: string;
   orderCount: number;
   totalPaid: number;
+  activeSub: { product_id: string; status: string; expires_at: string } | null;
 }
+
+const PLAN_LABELS: Record<string, string> = {
+  lotto_gold: '🥇 골드',
+  lotto_platinum: '💎 플래티넘',
+  lotto_diamond: '👑 다이아',
+};
 
 export default function AdminMembersPage() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -65,6 +72,7 @@ export default function AdminMembersPage() {
                 <th className="text-left px-5 py-3 text-slate-400 font-medium">이메일</th>
                 <th className="text-left px-5 py-3 text-slate-400 font-medium">이름</th>
                 <th className="text-left px-5 py-3 text-slate-400 font-medium">가입일</th>
+                <th className="text-left px-5 py-3 text-slate-400 font-medium">구독</th>
                 <th className="text-right px-5 py-3 text-slate-400 font-medium">결제 건수</th>
                 <th className="text-right px-5 py-3 text-slate-400 font-medium">총 결제액</th>
               </tr>
@@ -72,7 +80,7 @@ export default function AdminMembersPage() {
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-12 text-slate-500">
+                  <td colSpan={6} className="text-center py-12 text-slate-500">
                     회원 데이터가 없습니다
                   </td>
                 </tr>
@@ -83,6 +91,16 @@ export default function AdminMembersPage() {
                     <td className="px-5 py-3 text-slate-300">{m.full_name ?? '-'}</td>
                     <td className="px-5 py-3 text-slate-400">
                       {new Date(m.created_at).toLocaleDateString('ko-KR')}
+                    </td>
+                    <td className="px-5 py-3">
+                      {m.activeSub ? (
+                        <div>
+                          <span className="text-xs font-semibold text-amber-400">{PLAN_LABELS[m.activeSub.product_id] ?? m.activeSub.product_id}</span>
+                          <div className="text-xs text-slate-500">{new Date(m.activeSub.expires_at).toLocaleDateString('ko-KR')} 만료</div>
+                        </div>
+                      ) : (
+                        <span className="text-xs text-slate-600">-</span>
+                      )}
                     </td>
                     <td className="px-5 py-3 text-right">
                       <span className={`px-2 py-0.5 rounded-full text-xs ${m.orderCount > 0 ? 'bg-green-900/40 text-green-400' : 'bg-slate-700 text-slate-500'}`}>

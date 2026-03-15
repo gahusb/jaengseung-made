@@ -18,7 +18,7 @@ const techStack = [
 
 const CHECKLIST_MAP: Record<string, string[]> = {
   '로또 번호 추천': [
-    '구독 플랜 선택 (기본 / 프리미엄 / 연간)',
+    '구독 플랜 선택 (골드 900원 / 플래티넘 2,900원 / 다이아 9,900원)',
     '번호 수신 방법 (이메일 / 텔레그램)',
     '당첨 보장 없음 — 통계 기반 확률 최적화',
     '구독 취소는 이메일로 언제든 가능',
@@ -160,7 +160,7 @@ export default function Home() {
               <div className="px-6 py-5">
                 <p className="text-slate-600 text-sm leading-relaxed mb-4">출현 빈도, 패턴 분석, 핫/콜드 번호 알고리즘으로 매주 최적의 번호 조합을 제공합니다.</p>
                 <div className="space-y-2 mb-5">
-                  {['출현 빈도 통계 분석', '핫넘버 / 콜드넘버', '매주 5개 조합 제공'].map(f => (
+                  {['몬테카를로 시뮬레이션 분석', '핫넘버 / 콜드넘버 통계', '골드/플래티넘/다이아 플랜'].map(f => (
                     <div key={f} className="flex items-center gap-2 text-sm text-slate-700">
                       <div className="w-4 h-4 rounded-full bg-amber-100 border border-amber-200 flex items-center justify-center flex-shrink-0"><div className="w-1.5 h-1.5 rounded-full bg-amber-500" /></div>
                       {f}
@@ -169,7 +169,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                   <div>
-                    <span className="text-[#04102b] font-extrabold text-lg">월 4,900원~</span>
+                    <span className="text-[#04102b] font-extrabold text-lg">월 900원~</span>
                     <span className="ml-2 text-xs bg-amber-50 border border-amber-200 text-amber-700 px-2 py-0.5 rounded-full font-medium">구독형</span>
                   </div>
                   <span className="text-[#1a56db] text-sm font-semibold flex items-center gap-1">자세히 보기 →</span>

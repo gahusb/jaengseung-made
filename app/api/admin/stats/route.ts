@@ -15,18 +15,20 @@ export async function GET() {
   const supabase = createAdminClient();
 
   // 병렬 쿼리
-  const [profilesRes, ordersRes, paymentsRes, contactsRes, monthlyRes] = await Promise.all([
+  const [profilesRes, ordersRes, paymentsRes, contactsRes, monthlyRes, subsRes] = await Promise.all([
     supabase.from('profiles').select('id', { count: 'exact', head: true }),
     supabase.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'paid'),
     supabase.from('payments').select('amount').eq('status', 'paid'),
     supabase.from('contact_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
     supabase.from('payments').select('amount, created_at').eq('status', 'paid').order('created_at', { ascending: true }),
+    supabase.from('subscriptions').select('id', { count: 'exact', head: true }).eq('status', 'active'),
   ]);
 
   const totalMembers = profilesRes.count ?? 0;
   const totalOrders = ordersRes.count ?? 0;
   const totalRevenue = (paymentsRes.data ?? []).reduce((sum: number, p: { amount: number }) => sum + p.amount, 0);
   const pendingContacts = contactsRes.count ?? 0;
+  const activeSubscribers = subsRes.count ?? 0;
 
   // 최근 6개월 월별 수익 집계
   const monthly: Record<string, number> = {};
@@ -47,5 +49,5 @@ export async function GET() {
 
   const monthlyChart = Object.entries(monthly).map(([month, revenue]) => ({ month, revenue }));
 
-  return NextResponse.json({ totalMembers, totalOrders, totalRevenue, pendingContacts, monthlyChart });
+  return NextResponse.json({ totalMembers, totalOrders, totalRevenue, pendingContacts, activeSubscribers, monthlyChart });
 }
