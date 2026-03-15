@@ -15,7 +15,7 @@ function buildSajuResultUrl(rec: SajuRecord) {
   return url;
 }
 
-type Tab = 'profile' | 'saju' | 'lotto' | 'payments' | 'orders';
+type Tab = 'profile' | 'subscription' | 'lotto' | 'saju' | 'payments' | 'orders';
 type TelegramLinkState = 'idle' | 'generating' | 'waiting' | 'disconnecting';
 
 interface SajuRecord {
@@ -57,9 +57,13 @@ interface LottoHistoryItem {
 }
 
 interface ActiveSubscription {
+  id: string;
   product_id: string;
-  created_at: string;
+  status: string;
+  auto_renew: boolean;
+  started_at: string;
   expires_at: string;
+  cancelled_at: string | null;
 }
 
 const PLAN_LABELS: Record<string, { label: string; emoji: string; color: string }> = {
@@ -131,24 +135,11 @@ export default function MyPage() {
         .maybeSingle();
       setTelegramChatId(profile?.telegram_chat_id ?? null);
 
-      // 활성 구독 조회 (paid 상태의 lotto 플랜)
-      const LOTTO_PLANS = ['lotto_gold', 'lotto_platinum', 'lotto_diamond'];
-      const { data: subs } = await supabase
-        .from('orders')
-        .select('product_id, created_at')
-        .eq('user_id', user.id)
-        .eq('status', 'paid')
-        .in('product_id', LOTTO_PLANS)
-        .order('created_at', { ascending: false });
-
-      if (subs && subs.length > 0) {
-        const activeSubs: ActiveSubscription[] = subs.map((s) => {
-          const createdAt = new Date(s.created_at);
-          const expiresAt = new Date(createdAt);
-          expiresAt.setDate(expiresAt.getDate() + 31);
-          return { product_id: s.product_id, created_at: s.created_at, expires_at: expiresAt.toISOString() };
-        });
-        setActiveSubscriptions(activeSubs);
+      // 구독 목록 조회 (subscriptions 테이블)
+      const subRes = await fetch('/api/subscription');
+      if (subRes.ok) {
+        const subData = await subRes.json();
+        setActiveSubscriptions(subData.subscriptions ?? []);
       }
 
       // 로또 히스토리 조회
@@ -169,6 +160,38 @@ export default function MyPage() {
     await supabase.auth.signOut();
     router.push('/');
     router.refresh();
+  };
+
+  // ── 구독 해지 ──
+  const handleCancelSubscription = async (subId: string) => {
+    if (!confirm('구독을 해지하시겠습니까?\n만료일까지는 서비스를 계속 이용할 수 있습니다.')) return;
+    const res = await fetch(`/api/subscription/${subId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'cancel' }),
+    });
+    if (res.ok) {
+      setActiveSubscriptions((prev) =>
+        prev.map((s) => s.id === subId ? { ...s, status: 'cancelled', auto_renew: false, cancelled_at: new Date().toISOString() } : s)
+      );
+    } else {
+      alert('해지 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
+  };
+
+  // ── 자동갱신 토글 ──
+  const handleToggleAutoRenew = async (subId: string) => {
+    const res = await fetch(`/api/subscription/${subId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'toggle_autorenew' }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setActiveSubscriptions((prev) =>
+        prev.map((s) => s.id === subId ? { ...s, auto_renew: data.auto_renew } : s)
+      );
+    }
   };
 
   // ── 텔레그램 연결 ──
@@ -226,12 +249,15 @@ export default function MyPage() {
 
   if (!user) return null;
 
+  const activeSubs = activeSubscriptions.filter((s) => s.status === 'active' || s.status === 'cancelled');
+
   const tabs: { key: Tab; label: string; count?: number }[] = [
     { key: 'profile', label: '내 정보' },
-    { key: 'saju', label: '사주 기록', count: sajuRecords.length },
-    { key: 'lotto', label: '🎰 로또 기록', count: lottoHistory.length },
-    { key: 'payments', label: '결제 내역', count: payments.length },
-    { key: 'orders', label: '의뢰 내역', count: orders.length },
+    { key: 'subscription', label: '구독 관리', count: activeSubs.length || undefined },
+    { key: 'lotto', label: '로또 기록', count: lottoHistory.length || undefined },
+    { key: 'saju', label: '사주 기록', count: sajuRecords.length || undefined },
+    { key: 'payments', label: '결제 내역', count: payments.length || undefined },
+    { key: 'orders', label: '의뢰 내역', count: orders.length || undefined },
   ];
 
   return (
@@ -321,55 +347,25 @@ export default function MyPage() {
               </div>
             </div>
 
-            {/* 구독 중인 서비스 */}
-            {activeSubscriptions.length > 0 && (
-              <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
-                <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
-                  <div className="w-1 h-5 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full" />
-                  구독 중인 서비스
-                </h2>
-                <div className="space-y-3">
-                  {activeSubscriptions.map((sub) => {
-                    const info = PLAN_LABELS[sub.product_id];
-                    const expiresDate = new Date(sub.expires_at);
-                    const daysLeft = Math.max(0, Math.ceil((expiresDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
-                    const isExpired = daysLeft === 0;
-                    return (
-                      <div key={sub.product_id + sub.created_at}
-                        className={`flex items-center justify-between p-4 rounded-xl border ${isExpired ? 'border-slate-200 bg-slate-50' : 'border-amber-200 bg-amber-50/50'}`}>
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl">{info?.emoji ?? '🎟'}</span>
-                          <div>
-                            <div className="text-sm font-bold text-[#04102b]">
-                              로또 번호 추천 {info?.label ?? sub.product_id}
-                            </div>
-                            <div className="text-xs text-slate-500 mt-0.5">
-                              {new Date(sub.created_at).toLocaleDateString('ko-KR')} 구독 시작
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          {isExpired ? (
-                            <span className="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg">만료됨</span>
-                          ) : (
-                            <>
-                              <div className={`text-sm font-bold ${daysLeft <= 5 ? 'text-red-500' : 'text-amber-600'}`}>
-                                D-{daysLeft}
-                              </div>
-                              <div className="text-xs text-slate-400">{expiresDate.toLocaleDateString('ko-KR')} 만료</div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+            {/* 구독 중인 서비스 - 요약 (탭으로 유도) */}
+            {activeSubs.length > 0 && (
+              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-5 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{PLAN_LABELS[activeSubs[0].product_id]?.emoji ?? '🎟'}</span>
+                  <div>
+                    <div className="text-sm font-bold text-[#04102b]">
+                      로또 {PLAN_LABELS[activeSubs[0].product_id]?.label} 구독 중
+                    </div>
+                    <div className="text-xs text-amber-600 mt-0.5">
+                      {Math.max(0, Math.ceil((new Date(activeSubs[0].expires_at).getTime() - Date.now()) / 86400000))}일 후 만료
+                      {activeSubs[0].status === 'cancelled' && ' · 해지 예정'}
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-3">
-                  <a href="/services/lotto/recommend"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 hover:text-amber-700 transition">
-                    번호 추천받기 →
-                  </a>
-                </div>
+                <button onClick={() => setTab('subscription')}
+                  className="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition">
+                  구독 관리 →
+                </button>
               </div>
             )}
 
@@ -516,6 +512,122 @@ export default function MyPage() {
                   </div>
                 </Link>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* 구독 관리 */}
+        {tab === 'subscription' && (
+          <div className="space-y-4">
+            {activeSubscriptions.length === 0 ? (
+              <EmptyState
+                icon="📦"
+                title="활성 구독이 없습니다"
+                desc="로또 번호 추천 서비스를 구독하면 여기서 관리할 수 있습니다"
+                linkHref="/services/lotto"
+                linkLabel="구독 플랜 보기"
+              />
+            ) : (
+              activeSubscriptions.map((sub) => {
+                const info = PLAN_LABELS[sub.product_id];
+                const expiresDate = new Date(sub.expires_at);
+                const daysLeft = Math.max(0, Math.ceil((expiresDate.getTime() - Date.now()) / 86400000));
+                const isExpired = sub.status === 'expired';
+                const isCancelled = sub.status === 'cancelled';
+                const isActive = sub.status === 'active';
+
+                return (
+                  <div key={sub.id} className={`bg-white rounded-2xl border p-6 ${isExpired ? 'border-slate-200 opacity-60' : isCancelled ? 'border-orange-200' : 'border-[#dbe8ff]'}`}>
+                    {/* 헤더 */}
+                    <div className="flex items-start justify-between mb-5">
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl">{info?.emoji ?? '🎟'}</span>
+                        <div>
+                          <div className="font-bold text-[#04102b] text-base">
+                            로또 번호 추천 {info?.label ?? sub.product_id}
+                          </div>
+                          <div className="text-xs text-slate-500 mt-0.5">
+                            {new Date(sub.started_at).toLocaleDateString('ko-KR')} 시작
+                          </div>
+                        </div>
+                      </div>
+                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                        isActive ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
+                        isCancelled ? 'bg-orange-50 text-orange-600 border border-orange-200' :
+                        'bg-slate-100 text-slate-500'
+                      }`}>
+                        {isActive ? '이용 중' : isCancelled ? '해지 예정' : '만료됨'}
+                      </span>
+                    </div>
+
+                    {/* 만료 정보 */}
+                    <div className="grid grid-cols-2 gap-3 mb-5">
+                      <div className="bg-slate-50 rounded-xl p-3">
+                        <div className="text-xs text-slate-400 mb-1">만료일</div>
+                        <div className="text-sm font-bold text-[#04102b]">
+                          {expiresDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        </div>
+                      </div>
+                      <div className={`rounded-xl p-3 ${daysLeft <= 5 && !isExpired ? 'bg-red-50' : 'bg-slate-50'}`}>
+                        <div className="text-xs text-slate-400 mb-1">남은 기간</div>
+                        <div className={`text-sm font-bold ${isExpired ? 'text-slate-400' : daysLeft <= 5 ? 'text-red-500' : 'text-emerald-600'}`}>
+                          {isExpired ? '만료됨' : `D-${daysLeft}`}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 자동갱신 토글 */}
+                    {!isExpired && (
+                      <div className="flex items-center justify-between py-3 border-t border-slate-100 mb-4">
+                        <div>
+                          <div className="text-sm font-semibold text-[#04102b]">자동 갱신</div>
+                          <div className="text-xs text-slate-400 mt-0.5">
+                            {sub.auto_renew ? '만료 시 자동으로 갱신됩니다' : '만료 시 자동 갱신되지 않습니다'}
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handleToggleAutoRenew(sub.id)}
+                          disabled={isCancelled}
+                          className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none disabled:opacity-40 ${sub.auto_renew ? 'bg-emerald-500' : 'bg-slate-200'}`}
+                        >
+                          <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 ${sub.auto_renew ? 'translate-x-5' : 'translate-x-0'}`} />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* 해지 취소 버튼 */}
+                    {isCancelled && (
+                      <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 mb-4 text-xs text-orange-700">
+                        해지 신청됨 · {expiresDate.toLocaleDateString('ko-KR')}까지 서비스를 이용할 수 있습니다.
+                        {sub.cancelled_at && ` (해지일: ${new Date(sub.cancelled_at).toLocaleDateString('ko-KR')})`}
+                      </div>
+                    )}
+
+                    {/* 액션 버튼 */}
+                    <div className="flex gap-2 flex-wrap">
+                      <a href="/services/lotto/recommend"
+                        className="flex-1 text-center py-2 text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 rounded-xl transition shadow-sm">
+                        번호 추천받기
+                      </a>
+                      {isActive && (
+                        <button
+                          onClick={() => handleCancelSubscription(sub.id)}
+                          className="px-4 py-2 text-sm font-semibold text-red-500 border border-red-200 rounded-xl hover:bg-red-50 transition"
+                        >
+                          구독 해지
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+
+            {/* 구독 플랜 이동 */}
+            <div className="text-center py-2">
+              <a href="/services/lotto" className="text-sm text-slate-400 hover:text-slate-600 transition">
+                다른 플랜 보기 →
+              </a>
             </div>
           </div>
         )}
