@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
               value={id}
               onChange={(e) => setId(e.target.value)}
               required
-              autoComplete="username"
+              autoComplete="off"
               className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition"
               placeholder="관리자 ID 입력"
             />
