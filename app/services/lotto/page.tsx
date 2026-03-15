@@ -6,7 +6,7 @@ import ContactModal from '../../components/ContactModal';
 import PaymentButton from '../../components/PaymentButton';
 
 const CHECKLIST = [
-  '구독 플랜 선택 (기본 / 프리미엄 / 연간)',
+  '구독 플랜 선택 (골드 / 플래티넘 / 다이아)',
   '번호 수신 방법 (이메일 / 텔레그램 중 선택)',
   '로또 구매 후 직접 확인 필요 (자동 구매 아님)',
   '당첨 보장 없음 — 통계 기반 확률 최적화 서비스',
@@ -15,8 +15,9 @@ const CHECKLIST = [
 
 const plans = [
   {
-    name: '기본 플랜',
-    price: '4,900원',
+    name: '골드 플랜',
+    badge: '🥇',
+    price: '900원',
     period: '/ 월',
     desc: '매주 1회 번호 추천',
     features: [
@@ -25,11 +26,12 @@ const plans = [
       '이메일 발송',
     ],
     highlight: false,
-    productId: 'lotto_basic',
+    productId: 'lotto_gold',
   },
   {
-    name: '프리미엄 플랜',
-    price: '9,900원',
+    name: '플래티넘 플랜',
+    badge: '💎',
+    price: '2,900원',
     period: '/ 월',
     desc: '매주 3회 + 상세 분석 보고서',
     features: [
@@ -40,21 +42,22 @@ const plans = [
       '이메일 + 텔레그램 알림',
     ],
     highlight: true,
-    productId: 'lotto_premium',
+    productId: 'lotto_platinum',
   },
   {
-    name: '연간 플랜',
-    price: '89,900원',
-    period: '/ 년',
-    desc: '프리미엄 12개월 (2개월 무료)',
+    name: '다이아 플랜',
+    badge: '👑',
+    price: '9,900원',
+    period: '/ 월',
+    desc: '횟수 무제한 + 전체 기능',
     features: [
-      '프리미엄 플랜 전체 기능',
+      '플래티넘 플랜 전체 기능',
+      '번호 생성 횟수 무제한',
       '연간 당첨 패턴 리포트',
       '우선 고객 지원',
-      '2개월 무료 혜택',
     ],
     highlight: false,
-    productId: 'lotto_annual',
+    productId: 'lotto_diamond',
   },
 ];
 
@@ -160,6 +163,43 @@ export default function LottoPage() {
         </div>
       </div>
 
+      {/* ─── 구독자 전용 번호 추천 CTA ─── */}
+      <div className="px-6 pt-10 lg:px-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="relative overflow-hidden rounded-2xl border border-amber-400/30 bg-gradient-to-r from-amber-950/60 via-orange-950/40 to-amber-950/60 p-6 flex flex-col sm:flex-row items-center gap-5">
+            {/* glow */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-24 bg-amber-400/10 blur-3xl rounded-full" />
+            </div>
+            <div className="relative flex items-center gap-4 flex-1">
+              <div className="w-14 h-14 rounded-2xl bg-amber-400/15 border border-amber-400/30 flex items-center justify-center flex-shrink-0">
+                <svg className="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="text-amber-400 font-extrabold text-sm">구독자 전용</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </div>
+                <h3 className="text-white font-extrabold text-base leading-tight">
+                  지금 바로 번호를 추천받으세요
+                </h3>
+                <p className="text-amber-200/45 text-xs mt-0.5">
+                  몬테카를로 시뮬레이션으로 최대 5조합 즉시 생성
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/services/lotto/recommend"
+              className="relative flex-shrink-0 inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-[#78350f] px-6 py-3 rounded-xl font-extrabold text-sm transition-all shadow-lg shadow-amber-900/40 whitespace-nowrap"
+            >
+              번호 추천받기 →
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* ─── 분석 기능 ─── */}
       <div className="px-6 py-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
@@ -198,7 +238,10 @@ export default function LottoPage() {
                 {plan.highlight && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-amber-400 text-[#04102b] text-xs font-extrabold px-4 py-1 rounded-full tracking-wide">추천</div>
                 )}
-                <div className={`text-xs font-bold mb-2 tracking-wide ${plan.highlight ? 'text-amber-400' : 'text-slate-400'}`}>{plan.name.toUpperCase()}</div>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className="text-base">{plan.badge}</span>
+                  <span className={`text-xs font-bold tracking-wide ${plan.highlight ? 'text-amber-400' : 'text-slate-400'}`}>{plan.name.toUpperCase()}</span>
+                </div>
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className={`text-3xl font-extrabold ${plan.highlight ? 'text-white' : 'text-[#04102b]'}`}>{plan.price}</span>
                   <span className={`text-sm ${plan.highlight ? 'text-amber-300/60' : 'text-slate-400'}`}>{plan.period}</span>

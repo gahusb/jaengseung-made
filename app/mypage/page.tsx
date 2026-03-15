@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
+import TelegramGuideModal from '@/app/components/TelegramGuideModal';
 
 function buildSajuResultUrl(rec: SajuRecord) {
   const { birth_year, birth_month, birth_day, birth_hour, gender } = rec.saju_data;
@@ -15,6 +16,7 @@ function buildSajuResultUrl(rec: SajuRecord) {
 }
 
 type Tab = 'profile' | 'saju' | 'payments' | 'orders';
+type TelegramLinkState = 'idle' | 'generating' | 'waiting' | 'disconnecting';
 
 interface SajuRecord {
   id: number;
@@ -56,6 +58,13 @@ export default function MyPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
 
+  // 텔레그램 연동 상태
+  const [telegramChatId, setTelegramChatId] = useState<string | null>(null);
+  const [telegramLinkState, setTelegramLinkState] = useState<TelegramLinkState>('idle');
+  const [telegramDeepLink, setTelegramDeepLink] = useState<string>('');
+  const [telegramLinkExpiry, setTelegramLinkExpiry] = useState<string>('');
+  const [showTelegramGuide, setShowTelegramGuide] = useState(false);
+
   useEffect(() => {
     async function init() {
       const { data: { user } } = await supabase.auth.getUser();
@@ -92,6 +101,14 @@ export default function MyPage() {
         .limit(20);
       setOrders(ord || []);
 
+      // 텔레그램 chat_id 조회
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('telegram_chat_id')
+        .eq('id', user.id)
+        .maybeSingle();
+      setTelegramChatId(profile?.telegram_chat_id ?? null);
+
       setLoading(false);
     }
     init();
@@ -101,6 +118,51 @@ export default function MyPage() {
     await supabase.auth.signOut();
     router.push('/');
     router.refresh();
+  };
+
+  // ── 텔레그램 연결 ──
+  const handleTelegramConnect = async () => {
+    setTelegramLinkState('generating');
+    try {
+      const res = await fetch('/api/telegram/connect', { method: 'POST' });
+      if (!res.ok) throw new Error('API_ERROR');
+      const data = await res.json();
+      setTelegramDeepLink(data.deepLink);
+      setTelegramLinkExpiry(new Date(data.expiresAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }));
+      setTelegramLinkState('waiting');
+
+      // 15분 후 자동으로 idle 복귀
+      setTimeout(() => setTelegramLinkState('idle'), 15 * 60 * 1000);
+    } catch {
+      setTelegramLinkState('idle');
+      alert('연결 코드 발급 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
+  };
+
+  // 연결 후 상태 새로고침 (버튼 클릭 시)
+  const handleTelegramRefresh = async () => {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('telegram_chat_id')
+      .eq('id', user!.id)
+      .maybeSingle();
+    const chatId = profile?.telegram_chat_id ?? null;
+    setTelegramChatId(chatId);
+    if (chatId) setTelegramLinkState('idle');
+  };
+
+  // ── 텔레그램 연결 해제 ──
+  const handleTelegramDisconnect = async () => {
+    if (!confirm('텔레그램 연결을 해제하시겠습니까?')) return;
+    setTelegramLinkState('disconnecting');
+    try {
+      await fetch('/api/telegram/connect', { method: 'DELETE' });
+      setTelegramChatId(null);
+      setTelegramDeepLink('');
+    } catch {
+      alert('연결 해제 중 오류가 발생했습니다.');
+    }
+    setTelegramLinkState('idle');
   };
 
   if (loading) {
@@ -122,6 +184,11 @@ export default function MyPage() {
 
   return (
     <div className="min-h-full bg-[#f0f5ff]">
+      {/* 텔레그램 가이드 모달 */}
+      {showTelegramGuide && (
+        <TelegramGuideModal onClose={() => setShowTelegramGuide(false)} />
+      )}
+
       {/* 헤더 */}
       <div className="bg-gradient-to-br from-[#04102b] via-[#0a1f5c] to-[#04102b] px-6 py-10">
         <div className="max-w-4xl mx-auto">
@@ -202,6 +269,109 @@ export default function MyPage() {
               </div>
             </div>
 
+            {/* 텔레그램 연동 카드 */}
+            <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
+              <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
+                <div className="w-1 h-5 bg-gradient-to-b from-sky-500 to-blue-600 rounded-full" />
+                텔레그램 알림 연동
+                <button
+                  onClick={() => setShowTelegramGuide(true)}
+                  className="ml-1 w-5 h-5 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-400 hover:text-sky-500 text-xs font-bold flex items-center justify-center transition"
+                  title="연결 방법 보기"
+                >
+                  ?
+                </button>
+                <span className="ml-auto text-xs text-slate-400 font-normal">플래티넘 · 다이아 전용</span>
+              </h2>
+
+              {telegramChatId ? (
+                /* ── 연결됨 ── */
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-sky-500" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.667l-2.95-.924c-.64-.203-.654-.64.136-.954l11.566-4.458c.538-.194 1.006.131.972.89z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold text-[#04102b] flex items-center gap-1.5">
+                        연결됨
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
+                      </div>
+                      <div className="text-xs text-slate-500">Chat ID: {telegramChatId}</div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleTelegramDisconnect}
+                    disabled={telegramLinkState === 'disconnecting'}
+                    className="px-4 py-2 text-xs font-semibold text-red-500 border border-red-200 rounded-xl hover:bg-red-50 transition disabled:opacity-50"
+                  >
+                    {telegramLinkState === 'disconnecting' ? '해제 중...' : '연결 해제'}
+                  </button>
+                </div>
+              ) : telegramLinkState === 'waiting' ? (
+                /* ── 연결 대기 중 ── */
+                <div className="space-y-4">
+                  <div className="bg-sky-50 border border-sky-200 rounded-xl p-4">
+                    <p className="text-sm font-semibold text-sky-700 mb-1">📱 아래 순서로 진행하세요</p>
+                    <ol className="text-xs text-sky-600 space-y-1 list-decimal list-inside">
+                      <li>아래 버튼을 클릭해 텔레그램 봇을 엽니다</li>
+                      <li>텔레그램에서 <strong>시작</strong> 버튼을 누릅니다</li>
+                      <li>봇이 &quot;연결 완료&quot; 메시지를 보내면 새로고침을 눌러주세요</li>
+                    </ol>
+                    <p className="text-xs text-sky-500 mt-2">⏱ 유효시간: {telegramLinkExpiry}까지</p>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    <a
+                      href={telegramDeepLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-500 hover:bg-sky-400 text-white text-sm font-bold rounded-xl transition shadow-sm shadow-sky-200"
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.667l-2.95-.924c-.64-.203-.654-.64.136-.954l11.566-4.458c.538-.194 1.006.131.972.89z"/>
+                      </svg>
+                      텔레그램 봇 열기
+                    </a>
+                    <button
+                      onClick={handleTelegramRefresh}
+                      className="px-4 py-2.5 text-sm font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition"
+                    >
+                      연결 확인 새로고침
+                    </button>
+                    <button
+                      onClick={() => setTelegramLinkState('idle')}
+                      className="px-4 py-2.5 text-sm text-slate-400 rounded-xl hover:text-slate-600 transition"
+                    >
+                      취소
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* ── 미연결 ── */
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.667l-2.95-.924c-.64-.203-.654-.64.136-.954l11.566-4.458c.538-.194 1.006.131.972.89z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold text-[#04102b]">연결 안 됨</div>
+                      <div className="text-xs text-slate-500">텔레그램으로 번호를 바로 받아보세요</div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleTelegramConnect}
+                    disabled={telegramLinkState === 'generating'}
+                    className="px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 rounded-xl shadow-sm shadow-sky-200 transition disabled:opacity-60"
+                  >
+                    {telegramLinkState === 'generating' ? '생성 중...' : '텔레그램 연결하기'}
+                  </button>
+                </div>
+              )}
+            </div>
+
             <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
               <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
                 <div className="w-1 h-5 bg-gradient-to-b from-blue-600 to-violet-600 rounded-full" />
@@ -217,6 +387,17 @@ export default function MyPage() {
                   <div>
                     <div className="text-sm font-semibold text-[#04102b]">사주 분석</div>
                     <div className="text-xs text-slate-500">새 사주 보기</div>
+                  </div>
+                </Link>
+                <Link href="/services/lotto/recommend" className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-amber-300 hover:bg-amber-50/50 transition group">
+                  <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-[#04102b]">로또 번호 추천</div>
+                    <div className="text-xs text-slate-500">구독자 전용</div>
                   </div>
                 </Link>
                 <Link href="/freelance" className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-blue-300 hover:bg-blue-50/50 transition group">

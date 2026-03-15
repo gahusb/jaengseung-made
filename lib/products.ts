@@ -7,26 +7,26 @@ export interface Product {
 }
 
 export const PRODUCTS: Record<string, Product> = {
-  lotto_basic: {
-    id: 'lotto_basic',
-    name: '로또 기본 플랜',
-    price: 4900,
+  lotto_gold: {
+    id: 'lotto_gold',
+    name: '로또 골드 플랜',
+    price: 900,
     type: 'monthly',
-    description: '매주 5개 번호 조합 이메일 제공',
+    description: '매주 1회 번호 추천 · 이메일 발송',
   },
-  lotto_premium: {
-    id: 'lotto_premium',
-    name: '로또 프리미엄 플랜',
+  lotto_platinum: {
+    id: 'lotto_platinum',
+    name: '로또 플래티넘 플랜',
+    price: 2900,
+    type: 'monthly',
+    description: '매주 3회 번호 + 텔레그램 알림 + 상세 분석',
+  },
+  lotto_diamond: {
+    id: 'lotto_diamond',
+    name: '로또 다이아 플랜',
     price: 9900,
     type: 'monthly',
-    description: '매주 3회 번호 + 텔레그램 알림',
-  },
-  lotto_annual: {
-    id: 'lotto_annual',
-    name: '로또 연간 플랜',
-    price: 89900,
-    type: 'annual',
-    description: '프리미엄 12개월 (2개월 무료)',
+    description: '횟수 무제한 + 연간 패턴 리포트 + 전체 기능',
   },
   stock_starter_install: {
     id: 'stock_starter_install',

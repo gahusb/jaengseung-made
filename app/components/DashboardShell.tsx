@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
 
-const AUTH_PATHS = ['/login', '/signup'];
+const AUTH_PATHS = ['/login', '/signup', '/admin'];
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);

@@ -66,8 +66,10 @@ create table public.products (
 
 -- 초기 상품 데이터
 insert into public.products (id, name, description, price, category) values
-  ('saju_detail', 'AI 사주 상세 리포트', '신강/신약, 용신, 대운, AI 12가지 항목 해석', 4900, 'saju'),
-  ('lotto_premium', '로또 프리미엄 구독', '매주 프리미엄 번호 5조합 + 통계', 4900, 'lotto');
+  ('saju_detail',    'AI 사주 상세 리포트',  '신강/신약, 용신, 대운, AI 12가지 항목 해석',        4900, 'saju'),
+  ('lotto_gold',     '로또 골드 플랜',       '매주 1회 번호 추천 · 이메일 발송',                   900, 'lotto'),
+  ('lotto_platinum', '로또 플래티넘 플랜',   '매주 3회 번호 + 상세 분석 + 텔레그램 알림',          2900, 'lotto'),
+  ('lotto_diamond',  '로또 다이아 플랜',     '횟수 무제한 + 전체 기능 + 연간 패턴 리포트',         9900, 'lotto');
 
 
 -- ④ orders (주문 - 결제 전 생성)
@@ -119,3 +121,28 @@ create table public.contact_requests (
 alter table public.contact_requests enable row level security;
 create policy "본인 의뢰 내역 조회" on public.contact_requests for select using (auth.uid() = user_id);
 create policy "누구나 의뢰 생성" on public.contact_requests for insert with check (true);
+
+
+-- ⑦ service_settings (서비스 노출 on/off 관리자 설정)
+create table public.service_settings (
+  id text primary key,              -- 서비스 ID: 'saju', 'lotto', 'stock', ...
+  name text not null,
+  description text,
+  is_active boolean default true,
+  order_index integer default 0,
+  updated_at timestamptz default now()
+);
+
+-- 초기 서비스 데이터
+insert into public.service_settings (id, name, description, is_active, order_index) values
+  ('saju', 'AI 사주 분석', '사주 입력 및 AI 해석 서비스', true, 1),
+  ('lotto', '로또 번호 추천', '빅데이터 기반 로또 번호 분석', true, 2),
+  ('stock', '주식 자동매매', '텔레그램 연동 자동매매 프로그램', true, 3),
+  ('automation', '업무 자동화 RPA', '반복 업무 자동화 개발', true, 4),
+  ('prompt', '프롬프트 엔지니어링', 'AI 프롬프트 설계 서비스', true, 5),
+  ('freelance', '외주 개발', '맞춤형 소프트웨어 개발', true, 6);
+
+-- service_settings는 누구나 읽기 가능 (공개 서비스 목록 조회용)
+alter table public.service_settings enable row level security;
+create policy "누구나 서비스 설정 조회" on public.service_settings for select using (true);
+-- 쓰기는 service_role(관리자)만 가능 (별도 정책 없음 = anon 불가)
