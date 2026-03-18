@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
 import { createSajuPrompt } from '@/lib/saju-ai-prompt';
 import { performFullAnalysis } from '@/lib/ai-interpretation';
 
@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 
 const MOCK_INTERPRETATION = `
 ## 1. 일간 분석과 타고난 기질
-(API 키 문제 또는 할당량 초과로 인해 예시 데이터를 보여드립니다.)
+(AI 해석 서비스를 이용하려면 API 설정이 필요합니다. 아래는 예시 데이터입니다.)
 귀하는 **갑목(甲木)** 일간으로 태어나, 마치 곧게 뻗은 소나무와 같은 기상을 지니고 있다. 리더십이 강하고 추진력이 뛰어나며, 한번 마음먹은 일은 끝까지 해내는 뚝심이 있다.
 
 ## 2. 오행 균형과 용신 기반 개운법
@@ -45,77 +45,78 @@ const MOCK_INTERPRETATION = `
 "서두르지 않아도 봄은 온다." 조급해하지 말고 때를 기다리는 지혜가 필요하다.
 `;
 
-// 사용 가능한 모델 우선순위 (gpt-4o → gpt-4o-mini 폴백)
-const MODELS = ['gpt-4o', 'gpt-4o-mini'] as const;
-
 export async function POST(request: Request) {
+  try {
+    const { saju, daeun, daeunList, gender, engineData } = await request.json();
+
+    // 종합 분석 수행
+    let analysis;
     try {
-        const { saju, daeun, daeunList, gender, engineData } = await request.json();
-
-        // 종합 분석 수행
-        let analysis;
-        try {
-            analysis = performFullAnalysis(saju);
-        } catch (analysisError: any) {
-            console.error('Analysis calculation error:', analysisError.message);
-            return NextResponse.json(
-                { error: '사주 분석 계산 중 오류가 발생했습니다: ' + analysisError.message },
-                { status: 500 }
-            );
-        }
-
-        if (!process.env.OPENAI_API_KEY) {
-            console.warn('OpenAI API Key is missing');
-            return NextResponse.json({ interpretation: MOCK_INTERPRETATION, analysis });
-        }
-
-        const openai = new OpenAI({
-            apiKey: process.env.OPENAI_API_KEY,
-        });
-
-        const prompt = createSajuPrompt(saju, daeun, gender, analysis, daeunList || [], engineData);
-
-        // 모델 폴백: gpt-4o 실패 시 gpt-4o-mini로 재시도
-        let interpretation: string | null = null;
-        let usedModel = '';
-
-        for (const model of MODELS) {
-            try {
-                console.log(`Generating saju analysis with model: ${model}`);
-                const completion = await openai.chat.completions.create({
-                    messages: [{ role: 'system', content: prompt }],
-                    model,
-                    max_tokens: model === 'gpt-4o' ? 8192 : 4096,
-                    temperature: 0.75,
-                });
-                interpretation = completion.choices[0].message.content;
-                usedModel = model;
-                console.log(`Successfully generated with model: ${model}`);
-                break;
-            } catch (modelError: any) {
-                console.warn(`Model ${model} failed:`, modelError.message || modelError.status);
-                if (modelError.status === 401) {
-                    console.warn('OpenAI API Key is invalid (401). Returning mock data.');
-                    return NextResponse.json({ interpretation: MOCK_INTERPRETATION, analysis });
-                }
-                if (modelError.status === 429 || (modelError.error && modelError.error.code === 'insufficient_quota')) {
-                    console.warn('OpenAI Quota Exceeded. Returning mock data.');
-                    return NextResponse.json({ interpretation: MOCK_INTERPRETATION, analysis });
-                }
-                if (model === MODELS[MODELS.length - 1]) {
-                    throw modelError;
-                }
-                console.log(`Falling back to next model...`);
-            }
-        }
-
-        return NextResponse.json({ interpretation, analysis });
-    } catch (error: any) {
-        console.error('Error generating saju interpretation:', error.message || error);
-
-        return NextResponse.json(
-            { error: error.message || 'Failed to generate interpretation' },
-            { status: 500 }
-        );
+      analysis = performFullAnalysis(saju);
+    } catch (analysisError: any) {
+      console.error('Analysis calculation error:', analysisError.message);
+      return NextResponse.json(
+        { error: '사주 분석 계산 중 오류가 발생했습니다: ' + analysisError.message },
+        { status: 500 }
+      );
     }
+
+    if (!process.env.ANTHROPIC_API_KEY) {
+      console.warn('Anthropic API Key is missing — returning mock data');
+      return NextResponse.json({ interpretation: MOCK_INTERPRETATION, analysis });
+    }
+
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const prompt = createSajuPrompt(saju, daeun, gender, analysis, daeunList || [], engineData);
+
+    console.log('Generating saju analysis with claude-sonnet-4-6...');
+
+    let interpretation: string | null = null;
+
+    try {
+      const message = await client.messages.create({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 8192,
+        temperature: 0.75,
+        messages: [{ role: 'user', content: prompt }],
+      });
+
+      const block = message.content[0];
+      if (block.type === 'text') {
+        interpretation = block.text;
+      }
+      console.log('Successfully generated saju analysis with claude-sonnet-4-6');
+    } catch (claudeError: any) {
+      // claude-sonnet-4-6 실패 시 claude-haiku-4-5 폴백
+      console.warn('claude-sonnet-4-6 failed:', claudeError.message, '— trying haiku fallback');
+      try {
+        const fallback = await client.messages.create({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 4096,
+          temperature: 0.75,
+          messages: [{ role: 'user', content: prompt }],
+        });
+        const block = fallback.content[0];
+        if (block.type === 'text') {
+          interpretation = block.text;
+        }
+        console.log('Fallback to claude-haiku-4-5 succeeded');
+      } catch (haikusError: any) {
+        console.error('Both Claude models failed:', haikusError.message);
+        return NextResponse.json({ interpretation: MOCK_INTERPRETATION, analysis });
+      }
+    }
+
+    if (!interpretation) {
+      return NextResponse.json({ interpretation: MOCK_INTERPRETATION, analysis });
+    }
+
+    return NextResponse.json({ interpretation, analysis });
+  } catch (error: any) {
+    console.error('Error generating saju interpretation:', error.message || error);
+    return NextResponse.json(
+      { error: error.message || 'Failed to generate interpretation' },
+      { status: 500 }
+    );
+  }
 }

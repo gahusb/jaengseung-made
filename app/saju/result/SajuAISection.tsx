@@ -248,7 +248,7 @@ export default function SajuAISection({
           <h3 className="text-xl font-extrabold text-white mb-2">AI 상세 해석 (12개 항목)</h3>
           <p className="text-blue-200/60 text-sm mb-6">
             성격, 재물운, 직업 적성, 애정운, 건강운, 대운 분석 등<br />
-            GPT-4o가 생성하는 맞춤형 사주 해석을 받아보세요.
+            Claude AI가 생성하는 맞춤형 사주 해석을 받아보세요.
           </p>
 
           {/* 미리보기 섹션 목록 */}
