@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import ReportTab from './ReportTab';
+import PurchaseTab from './PurchaseTab';
+import PatternTab from './PatternTab';
 import { createClient } from '@/lib/supabase/client';
 
 // ─── 전략 타입 ────────────────────────────────────────────────────────────────
@@ -299,6 +302,8 @@ export default function LottoRecommendPage() {
   const [combos, setCombos] = useState<Combo[]>([]);
   const [proState, setProState] = useState<'idle' | 'loading' | 'result' | 'error'>('idle');
   const [proError, setProError] = useState('');
+  const [activeTab, setActiveTab] = useState<'generate' | 'report' | 'purchase' | 'pattern'>('generate');
+  const [perfStats, setPerfStats] = useState<{ total_checked: number; avg_correct: number; rate_3plus: number; vs_random: { improvement_pct: number } } | null>(null);
   const idRef = useRef(0);
   const MAX_COMBOS = PLAN_MAX_COMBOS[plan] ?? 5;
 
@@ -318,6 +323,11 @@ export default function LottoRecommendPage() {
           }
         } catch { /* ignore */ }
       }
+      // 성과 통계 (구독 여부 무관 로드 시도)
+      try {
+        const perfRes = await fetch('/api/lotto/stats/performance');
+        if (perfRes.ok) { const p = await perfRes.json(); setPerfStats(p); }
+      } catch { /* ignore */ }
       setPageReady(true);
     }
     init();
@@ -524,6 +534,66 @@ export default function LottoRecommendPage() {
               역대 {drawsCount.toLocaleString()}회 데이터 기반 통계 분석 · 5,000회 Monte Carlo 시뮬레이션으로 최적 조합 도출
             </p>
           </div>
+
+          {/* ── 성과 배너 ── */}
+          {perfStats && perfStats.total_checked > 0 && (
+            <div style={{ background: 'linear-gradient(135deg,rgba(74,222,128,.06),rgba(6,182,212,.06))', border: '1px solid rgba(74,222,128,.2)', borderRadius: '1rem', padding: '.85rem 1.25rem', marginBottom: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between', animation: 'slideIn .5s ease forwards' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
+                <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px rgba(74,222,128,.8)', animation: 'glowPulse 2s ease-in-out infinite', flexShrink: 0 }} />
+                <span style={{ color: '#4ade80', fontSize: '.72rem', fontWeight: 700 }}>실제 검증 성과</span>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: '#4ade80', fontWeight: 900, fontSize: '1.1rem', fontFamily: "'JetBrains Mono',monospace" }}>{(perfStats.rate_3plus * 100).toFixed(1)}%</div>
+                  <div style={{ color: 'rgba(255,255,255,.3)', fontSize: '.6rem' }}>3개 이상 일치율</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: '#4ade80', fontWeight: 900, fontSize: '1.1rem', fontFamily: "'JetBrains Mono',monospace" }}>{perfStats.avg_correct.toFixed(1)}개</div>
+                  <div style={{ color: 'rgba(255,255,255,.3)', fontSize: '.6rem' }}>평균 일치 번호</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: '#06b6d4', fontWeight: 900, fontSize: '1.1rem', fontFamily: "'JetBrains Mono',monospace" }}>+{perfStats.vs_random.improvement_pct.toFixed(0)}%</div>
+                  <div style={{ color: 'rgba(255,255,255,.3)', fontSize: '.6rem' }}>무작위 대비</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: 'rgba(255,255,255,.4)', fontWeight: 700, fontSize: '.95rem', fontFamily: "'JetBrains Mono',monospace" }}>{perfStats.total_checked.toLocaleString()}</div>
+                  <div style={{ color: 'rgba(255,255,255,.3)', fontSize: '.6rem' }}>검증 건수</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── 탭 네비게이션 ── */}
+          {isSubscribed && (
+            <div style={{ display: 'flex', gap: '.3rem', marginBottom: '1.5rem', background: 'rgba(255,255,255,.04)', borderRadius: '.75rem', padding: '.3rem', flexWrap: 'wrap' }}>
+              {([
+                { key: 'generate', label: '🎲 번호 생성' },
+                { key: 'report',   label: '📋 이번 주 공략' },
+                { key: 'purchase', label: '💰 구매 기록' },
+                { key: 'pattern',  label: '🔍 내 패턴' },
+              ] as const).map(tab => (
+                <button key={tab.key} onClick={() => setActiveTab(tab.key)}
+                  style={{
+                    flex: 1, minWidth: 80,
+                    background: activeTab === tab.key ? 'rgba(251,191,36,.15)' : 'transparent',
+                    border: `1px solid ${activeTab === tab.key ? 'rgba(251,191,36,.35)' : 'transparent'}`,
+                    color: activeTab === tab.key ? '#fbbf24' : 'rgba(255,255,255,.35)',
+                    borderRadius: '.5rem', padding: '.5rem .5rem', fontSize: '.72rem', fontWeight: 700,
+                    cursor: 'pointer', transition: 'all .2s ease', whiteSpace: 'nowrap',
+                  }}>
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* ── 탭별 컨텐츠: 공략/구매/패턴 ── */}
+          {isSubscribed && activeTab === 'report' && <ReportTab />}
+          {isSubscribed && activeTab === 'purchase' && <PurchaseTab />}
+          {isSubscribed && activeTab === 'pattern' && <PatternTab />}
+
+          {/* ── 기존 메인 콘텐츠 (번호 생성 탭 or 비구독) ── */}
+          <div style={{ display: isSubscribed && activeTab !== 'generate' ? 'none' : 'block' }}>
 
           {/* ── 통계 인디케이터 패널 (전체 공개) ── */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '.75rem', marginBottom: '2rem' }}>
@@ -1121,6 +1191,8 @@ export default function LottoRecommendPage() {
           <p style={{ textAlign: 'center', color: 'rgba(255,255,255,.1)', fontSize: '.65rem', marginTop: '1.75rem', lineHeight: 1.7, fontFamily: "'JetBrains Mono',monospace" }}>
             본 서비스는 몬테카를로 시뮬레이션 기반 통계 분석으로, 당첨을 보장하지 않습니다.
           </p>
+          </div>{/* ── 기존 메인 콘텐츠 래퍼 닫기 ── */}
+
         </div>
       </div>
     </>
