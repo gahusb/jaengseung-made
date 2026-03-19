@@ -60,9 +60,11 @@ function LoginForm() {
   };
 
   const handleGoogleLogin = async () => {
+    // NEXT_PUBLIC_SITE_URL 이 설정되어 있으면 우선 사용 (localhost 리다이렉트 방지)
+    const base = process.env.NEXT_PUBLIC_SITE_URL ?? window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: `${base}/auth/callback` },
     });
     if (error) setMessage('Google 로그인 오류: ' + error.message);
   };
