@@ -221,6 +221,65 @@ export default function LottoPage() {
         </div>
       </div>
 
+      {/* ─── 기능 비교표 ─── */}
+      <div className="px-6 pb-12 lg:px-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <p className="text-amber-600 text-xs font-bold uppercase tracking-widest mb-2">PLAN FEATURES</p>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">플랜별 기능 비교</h2>
+            <p className="text-slate-500 text-sm mt-2">내게 맞는 플랜을 선택하세요</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="text-left py-3 px-4 text-slate-500 text-sm font-semibold">기능</th>
+                  <th className="text-center py-3 px-4">
+                    <div className="text-amber-600 font-bold text-sm">🥇 골드</div>
+                    <div className="text-slate-400 text-xs font-normal">900원/월</div>
+                  </th>
+                  <th className="text-center py-3 px-4 bg-gradient-to-b from-amber-50 to-orange-50 rounded-t-xl">
+                    <div className="text-orange-600 font-bold text-sm">💎 플래티넘</div>
+                    <div className="text-slate-400 text-xs font-normal">2,900원/월</div>
+                    <div className="text-orange-500 text-xs font-bold mt-1">추천</div>
+                  </th>
+                  <th className="text-center py-3 px-4">
+                    <div className="text-blue-600 font-bold text-sm">👑 다이아</div>
+                    <div className="text-slate-400 text-xs font-normal">9,900원/월</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { feature: '번호 생성 횟수', gold: '1세트/일', plat: '3세트/일', dia: '무제한' },
+                  { feature: '배치 생성 (동시)', gold: '—', plat: '—', dia: '5개 동시' },
+                  { feature: '전략 선택 (균형/고위험/안정)', gold: '✓', plat: '✓', dia: '✓' },
+                  { feature: '이번 주 공략 리포트', gold: '✓', plat: '✓', dia: '✓' },
+                  { feature: '핫/콜드 번호 분석', gold: '✓', plat: '✓', dia: '✓' },
+                  { feature: '구매 기록 관리', gold: '✓', plat: '✓', dia: '✓' },
+                  { feature: '내 패턴 AI 분석', gold: '—', plat: '✓', dia: '✓' },
+                  { feature: '연간 당첨 패턴 리포트', gold: '—', plat: '—', dia: '✓' },
+                  { feature: '우선 고객 지원', gold: '—', plat: '—', dia: '✓' },
+                ].map((row, i) => (
+                  <tr key={row.feature} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                    <td className="py-3 px-4 text-slate-700 text-sm font-medium">{row.feature}</td>
+                    <td className="text-center py-3 px-4 text-sm">
+                      <span className={row.gold === '—' ? 'text-slate-300' : 'text-emerald-600 font-bold'}>{row.gold}</span>
+                    </td>
+                    <td className="text-center py-3 px-4 text-sm bg-amber-50/50">
+                      <span className={row.plat === '—' ? 'text-slate-300' : 'text-emerald-600 font-bold'}>{row.plat}</span>
+                    </td>
+                    <td className="text-center py-3 px-4 text-sm">
+                      <span className={row.dia === '—' ? 'text-slate-300' : 'text-emerald-600 font-bold'}>{row.dia}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       {/* ─── 요금제 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-5xl mx-auto">

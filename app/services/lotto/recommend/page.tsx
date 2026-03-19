@@ -157,6 +157,18 @@ const PLAN_MAX_COMBOS: Record<string, number> = {
   lotto_diamond: 999,
 };
 
+const PLAN_RANK: Record<string, number> = { lotto_gold: 1, lotto_platinum: 2, lotto_diamond: 3 };
+function planGte(userPlan: string, required: string): boolean {
+  return (PLAN_RANK[userPlan] ?? 0) >= (PLAN_RANK[required] ?? 1);
+}
+
+const TABS_CONFIG = [
+  { key: 'generate'  as const, label: '🎲 번호 생성',   requiredPlan: null             as string | null, planBadge: null             as string | null },
+  { key: 'report'    as const, label: '📋 이번 주 공략', requiredPlan: 'lotto_gold'     as string | null, planBadge: '🥇 GOLD+'       as string | null },
+  { key: 'purchase'  as const, label: '💰 구매 기록',    requiredPlan: 'lotto_gold'     as string | null, planBadge: '🥇 GOLD+'       as string | null },
+  { key: 'pattern'   as const, label: '🔍 내 패턴',      requiredPlan: 'lotto_platinum' as string | null, planBadge: '💎 PLATINUM+'   as string | null },
+];
+
 // ─── Lotto Ball ───────────────────────────────────────────────────────────────
 
 function getBallStyle(n: number): { bg: string; shadow: string; text: string } {
@@ -566,31 +578,75 @@ export default function LottoRecommendPage() {
           {/* ── 탭 네비게이션 ── */}
           {isSubscribed && (
             <div style={{ display: 'flex', gap: '.3rem', marginBottom: '1.5rem', background: 'rgba(255,255,255,.04)', borderRadius: '.75rem', padding: '.3rem', flexWrap: 'wrap' }}>
-              {([
-                { key: 'generate', label: '🎲 번호 생성' },
-                { key: 'report',   label: '📋 이번 주 공략' },
-                { key: 'purchase', label: '💰 구매 기록' },
-                { key: 'pattern',  label: '🔍 내 패턴' },
-              ] as const).map(tab => (
-                <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-                  style={{
-                    flex: 1, minWidth: 80,
-                    background: activeTab === tab.key ? 'rgba(251,191,36,.15)' : 'transparent',
-                    border: `1px solid ${activeTab === tab.key ? 'rgba(251,191,36,.35)' : 'transparent'}`,
-                    color: activeTab === tab.key ? '#fbbf24' : 'rgba(255,255,255,.35)',
-                    borderRadius: '.5rem', padding: '.5rem .5rem', fontSize: '.72rem', fontWeight: 700,
-                    cursor: 'pointer', transition: 'all .2s ease', whiteSpace: 'nowrap',
-                  }}>
-                  {tab.label}
-                </button>
-              ))}
+              {TABS_CONFIG.map(tab => {
+                const isLocked = tab.requiredPlan !== null && !planGte(plan, tab.requiredPlan);
+                const isActive = activeTab === tab.key;
+                return (
+                  <button
+                    key={tab.key}
+                    onClick={() => {
+                      if (isLocked) return;
+                      setActiveTab(tab.key);
+                    }}
+                    style={{
+                      flex: 1, minWidth: 80, position: 'relative',
+                      background: isLocked ? 'rgba(255,255,255,.02)' : isActive ? 'rgba(251,191,36,.15)' : 'transparent',
+                      border: `1px solid ${isLocked ? 'rgba(255,255,255,.05)' : isActive ? 'rgba(251,191,36,.35)' : 'transparent'}`,
+                      color: isLocked ? 'rgba(255,255,255,.2)' : isActive ? '#fbbf24' : 'rgba(255,255,255,.35)',
+                      borderRadius: '.5rem', padding: '.5rem .5rem', fontSize: '.72rem', fontWeight: 700,
+                      cursor: isLocked ? 'not-allowed' : 'pointer', transition: 'all .2s ease', whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {isLocked ? '🔒 ' : ''}{tab.label}
+                    {isLocked && tab.planBadge && (
+                      <div style={{
+                        position: 'absolute', top: -8, right: -4,
+                        background: tab.requiredPlan === 'lotto_platinum' ? 'linear-gradient(135deg,#a78bfa,#7c3aed)' : 'linear-gradient(135deg,#fbbf24,#d97706)',
+                        color: tab.requiredPlan === 'lotto_platinum' ? '#fff' : '#78350f',
+                        fontSize: '.45rem', fontWeight: 800, padding: '.15rem .4rem', borderRadius: '2rem',
+                        letterSpacing: '.06em', whiteSpace: 'nowrap',
+                      }}>
+                        {tab.planBadge}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           )}
 
           {/* ── 탭별 컨텐츠: 공략/구매/패턴 ── */}
           {isSubscribed && activeTab === 'report' && <ReportTab />}
           {isSubscribed && activeTab === 'purchase' && <PurchaseTab />}
-          {isSubscribed && activeTab === 'pattern' && <PatternTab />}
+          {isSubscribed && activeTab === 'pattern' && (
+            planGte(plan, 'lotto_platinum') ? (
+              <PatternTab />
+            ) : (
+              // 플래티넘 미만 → 업셀 카드
+              <div style={{ background: 'linear-gradient(145deg,rgba(167,139,250,.08),rgba(124,58,237,.04))', border: '1px solid rgba(167,139,250,.2)', borderRadius: '1.5rem', padding: '3rem 2rem', textAlign: 'center' }}>
+                <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg,rgba(167,139,250,.2),rgba(124,58,237,.1))', border: '1px solid rgba(167,139,250,.3)', margin: '0 auto 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>
+                  🔍
+                </div>
+                <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '.6rem', letterSpacing: '.18em', color: 'rgba(167,139,250,.5)', marginBottom: '.75rem' }}>PLATINUM PLAN REQUIRED</div>
+                <h3 style={{ color: '#a78bfa', fontSize: '1.2rem', fontWeight: 900, margin: '0 0 .75rem' }}>내 번호 패턴 분석</h3>
+                <p style={{ color: 'rgba(255,255,255,.35)', fontSize: '.82rem', lineHeight: 1.7, margin: '0 0 .75rem', maxWidth: 360, marginLeft: 'auto', marginRight: 'auto' }}>
+                  내가 자주 선택하는 번호, 기피하는 번호, 구간 분포를 AI가 분석합니다.<br />
+                  실제 당첨 패턴과 비교해 최적 전략을 도출해드립니다.
+                </p>
+                <div style={{ display: 'flex', gap: '.5rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+                  {['내 번호 빈도 분석', '기피 번호 감지', '구간 분포 히트맵', '당첨 패턴 비교'].map(f => (
+                    <span key={f} style={{ background: 'rgba(167,139,250,.1)', border: '1px solid rgba(167,139,250,.2)', borderRadius: '2rem', padding: '.3rem .8rem', color: 'rgba(167,139,250,.7)', fontSize: '.7rem', fontWeight: 600 }}>{f}</span>
+                  ))}
+                </div>
+                <a href="/services/lotto" style={{ display: 'inline-flex', alignItems: 'center', gap: '.5rem', background: 'linear-gradient(135deg,#a78bfa,#7c3aed)', color: '#fff', padding: '.85rem 2rem', borderRadius: '1rem', fontWeight: 800, fontSize: '.9rem', textDecoration: 'none', boxShadow: '0 4px 24px rgba(124,58,237,.4)' }}>
+                  💎 플래티넘으로 업그레이드 →
+                </a>
+                <p style={{ color: 'rgba(255,255,255,.18)', fontSize: '.7rem', marginTop: '.75rem' }}>
+                  현재 플랜: {PLAN_LABELS[plan] ?? plan} · 플래티넘 2,900원/월
+                </p>
+              </div>
+            )
+          )}
 
           {/* ── 기존 메인 콘텐츠 (번호 생성 탭 or 비구독) ── */}
           <div style={{ display: isSubscribed && activeTab !== 'generate' ? 'none' : 'block' }}>
@@ -831,7 +887,7 @@ export default function LottoRecommendPage() {
             </div>
 
             {/* 프리미엄 컨텐츠 */}
-            <div style={{ position: 'relative', filter: isSubscribed ? 'none' : 'blur(4px)', opacity: isSubscribed ? 1 : 0.45, pointerEvents: isSubscribed ? 'auto' : 'none', transition: 'filter .3s,opacity .3s', userSelect: isSubscribed ? 'auto' : 'none' }}>
+            <div style={{ position: 'relative', filter: isSubscribed ? 'none' : 'blur(6px)', opacity: isSubscribed ? 1 : 0.25, pointerEvents: isSubscribed ? 'auto' : 'none', transition: 'filter .3s,opacity .3s', userSelect: isSubscribed ? 'auto' : 'none' }}>
 
               {/* ── 번호 생성 메인 카드 ── */}
               <div style={{ background: 'linear-gradient(145deg,rgba(255,255,255,.04),rgba(251,191,36,.02))', border: '1px solid rgba(251,191,36,.15)', borderRadius: '1.75rem', padding: '2rem', marginBottom: '1.25rem', position: 'relative', overflow: 'hidden' }}>
@@ -1130,34 +1186,80 @@ export default function LottoRecommendPage() {
               )}
             </div>
 
-            {/* ── 비구독자 잠금 오버레이 ── */}
-            {!isSubscribed && (
-              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, padding: '1rem' }}>
-                <div style={{ textAlign: 'center', maxWidth: 420, background: 'linear-gradient(145deg,rgba(4,16,43,.92),rgba(10,5,0,.88))', backdropFilter: 'blur(12px)', border: '1px solid rgba(251,191,36,.22)', borderRadius: '1.75rem', padding: '2.5rem 2rem', boxShadow: '0 32px 80px rgba(0,0,0,.6)' }}>
-                  <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg,rgba(251,191,36,.18),rgba(249,115,22,.08))', border: '1px solid rgba(251,191,36,.28)', margin: '0 auto 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse 3s ease-in-out infinite' }}>
-                    <svg width={28} height={28} viewBox="0 0 24 24" fill="none" stroke="#fbbf24" strokeWidth={2}>
-                      <rect x="3" y="11" width="18" height="11" rx="2" />
-                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                  </div>
-                  <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '.6rem', letterSpacing: '.18em', color: 'rgba(251,191,36,.4)', marginBottom: '.75rem' }}>SUBSCRIPTION REQUIRED</div>
-                  <h3 style={{ color: '#fbbf24', fontSize: '1.15rem', fontWeight: 900, margin: '0 0 .625rem', letterSpacing: '-.01em' }}>구독하면 더 많이 받을 수 있어요</h3>
-                  <p style={{ color: 'rgba(253,230,138,.45)', fontSize: '.8rem', lineHeight: 1.7, margin: '0 0 1.5rem' }}>
-                    <strong style={{ color: '#fbbf24' }}>골드</strong> 주 1회 · <strong style={{ color: '#fbbf24' }}>플래티넘</strong> 주 3회 · <strong style={{ color: '#fbbf24' }}>다이아</strong> 무제한<br />
-                    핫/콜드 번호 분석 · 시뮬레이션 통계 · 연간 패턴 리포트
-                  </p>
-                  <div style={{ display: 'flex', gap: '.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                    <Link href="/services/lotto" style={{ display: 'inline-flex', alignItems: 'center', gap: '.4rem', background: 'linear-gradient(135deg,#fbbf24,#f59e0b)', color: '#78350f', padding: '.8rem 1.75rem', borderRadius: '.875rem', fontWeight: 800, fontSize: '.88rem', textDecoration: 'none', boxShadow: '0 4px 24px rgba(251,191,36,.3)' }}>
-                      구독 플랜 보기 →
-                    </Link>
-                    <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)', color: 'rgba(255,255,255,.45)', padding: '.8rem 1.25rem', borderRadius: '.875rem', fontWeight: 600, fontSize: '.88rem', textDecoration: 'none' }}>
-                      로그인
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
+
+          {/* ── 비구독자 업셀 블록 ── */}
+          {!isSubscribed && (
+            <div style={{ marginTop: '2rem' }}>
+              {/* 구분선 */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,transparent,rgba(251,191,36,.2),transparent)' }} />
+                <span style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '.65rem', letterSpacing: '.15em', color: 'rgba(251,191,36,.4)', textTransform: 'uppercase' }}>구독하면 이런 것들도</span>
+                <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,transparent,rgba(251,191,36,.2),transparent)' }} />
+              </div>
+
+              {/* 플랜별 기능 미리보기 카드 3개 */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                {[
+                  {
+                    plan: '🥇 골드 플랜',
+                    price: '900원/월',
+                    color: '#fbbf24',
+                    colorAlpha: 'rgba(251,191,36,.12)',
+                    borderColor: 'rgba(251,191,36,.25)',
+                    features: ['번호 1세트/일 생성', '이번 주 공략 리포트', '핫/콜드 번호 분석', '구매 기록 관리'],
+                    cta: '골드 시작하기',
+                    recommended: false,
+                  },
+                  {
+                    plan: '💎 플래티넘 플랜',
+                    price: '2,900원/월',
+                    color: '#a78bfa',
+                    colorAlpha: 'rgba(167,139,250,.12)',
+                    borderColor: 'rgba(167,139,250,.3)',
+                    features: ['번호 3세트/일 생성', '전략별 생성 (균형/고위험/안정)', '내 패턴 AI 분석', '상세 통계 대시보드'],
+                    cta: '플래티넘 시작하기',
+                    recommended: true,
+                  },
+                  {
+                    plan: '👑 다이아 플랜',
+                    price: '9,900원/월',
+                    color: '#38bdf8',
+                    colorAlpha: 'rgba(56,189,248,.1)',
+                    borderColor: 'rgba(56,189,248,.25)',
+                    features: ['번호 무제한 생성', '배치 생성 (5개 동시)', '연간 당첨 패턴 리포트', '우선 고객 지원'],
+                    cta: '다이아 시작하기',
+                    recommended: false,
+                  },
+                ].map(p => (
+                  <div key={p.plan} style={{ background: p.colorAlpha, border: `1px solid ${p.borderColor}`, borderRadius: '1.25rem', padding: '1.25rem', position: 'relative', overflow: 'hidden' }}>
+                    {p.recommended && (
+                      <div style={{ position: 'absolute', top: 10, right: 10, background: p.color, color: '#fff', fontSize: '.5rem', fontWeight: 800, padding: '.2rem .5rem', borderRadius: '2rem', letterSpacing: '.08em' }}>추천</div>
+                    )}
+                    <div style={{ color: p.color, fontSize: '.85rem', fontWeight: 800, marginBottom: '.25rem', fontFamily: "'Noto Sans KR',sans-serif" }}>{p.plan}</div>
+                    <div style={{ color: 'rgba(255,255,255,.3)', fontSize: '.72rem', marginBottom: '1rem', fontFamily: "'JetBrains Mono',monospace" }}>{p.price}</div>
+                    <ul style={{ listStyle: 'none', margin: 0, padding: 0, marginBottom: '1.25rem' }}>
+                      {p.features.map(f => (
+                        <li key={f} style={{ display: 'flex', alignItems: 'center', gap: '.5rem', marginBottom: '.4rem' }}>
+                          <div style={{ width: 4, height: 4, borderRadius: '50%', background: p.color, flexShrink: 0 }} />
+                          <span style={{ color: 'rgba(255,255,255,.4)', fontSize: '.72rem' }}>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <a href="/services/lotto" style={{ display: 'block', textAlign: 'center', background: p.colorAlpha, border: `1px solid ${p.borderColor}`, color: p.color, padding: '.6rem', borderRadius: '.75rem', fontWeight: 700, fontSize: '.75rem', textDecoration: 'none', transition: 'all .2s' }}>
+                      {p.cta} →
+                    </a>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ textAlign: 'center' }}>
+                <a href="/login" style={{ color: 'rgba(255,255,255,.25)', fontSize: '.75rem', textDecoration: 'none' }}>
+                  이미 구독 중이신가요? 로그인하기 →
+                </a>
+              </div>
+            </div>
+          )}
 
           {/* ── 소셜 증거 패널 ── */}
           <div style={{ background: 'rgba(255,255,255,.02)', border: '1px solid rgba(255,255,255,.04)', borderRadius: '1rem', padding: '1rem 1.5rem', marginTop: '1.75rem', display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
