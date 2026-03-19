@@ -175,7 +175,7 @@ export default function ExcelToolPage() {
             </div>
             <div className="flex flex-col gap-2 w-full sm:w-auto">
               <a
-                href="/downloads/Excel_Macro_Toolkit_v1.2.xlsm"
+                href={`${process.env.NEXT_PUBLIC_CDN_URL ?? ''}/downloads/Excel_Macro_Toolkit_v1.2.xlsm`}
                 download
                 className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-extrabold text-sm transition-all shadow-lg shadow-emerald-900/20 w-full sm:w-48"
               >
@@ -321,7 +321,7 @@ export default function ExcelToolPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href="/downloads/Excel_Macro_Toolkit_v1.2.xlsm"
+                href={`${process.env.NEXT_PUBLIC_CDN_URL ?? ''}/downloads/Excel_Macro_Toolkit_v1.2.xlsm`}
                 download
                 className="inline-flex items-center justify-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-[#052e16] px-6 py-3 rounded-xl font-extrabold text-sm transition-all"
               >
