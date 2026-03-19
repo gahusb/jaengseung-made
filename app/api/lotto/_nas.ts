@@ -15,9 +15,9 @@ function nasBase() {
   return base;
 }
 
-export async function nasGet(path: string): Promise<unknown> {
+export async function nasGet(path: string, timeoutMs = 25000): Promise<unknown> {
   const res = await fetch(`${nasBase()}${path}`, {
-    headers: nasHeaders(), signal: AbortSignal.timeout(10000),
+    headers: nasHeaders(), signal: AbortSignal.timeout(timeoutMs),
   });
   if (!res.ok) throw new Error(`NAS_${res.status}`);
   return res.json();
@@ -28,7 +28,7 @@ export async function nasPost(path: string, body: unknown): Promise<unknown> {
     method: 'POST',
     headers: { ...nasHeaders(), 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(10000),
+    signal: AbortSignal.timeout(25000),
   });
   if (!res.ok) throw new Error(`NAS_${res.status}`);
   return res.json();
@@ -39,7 +39,7 @@ export async function nasPut(path: string, body: unknown): Promise<unknown> {
     method: 'PUT',
     headers: { ...nasHeaders(), 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(10000),
+    signal: AbortSignal.timeout(25000),
   });
   if (!res.ok) throw new Error(`NAS_${res.status}`);
   return res.json();
@@ -47,7 +47,7 @@ export async function nasPut(path: string, body: unknown): Promise<unknown> {
 
 export async function nasDelete(path: string): Promise<unknown> {
   const res = await fetch(`${nasBase()}${path}`, {
-    method: 'DELETE', headers: nasHeaders(), signal: AbortSignal.timeout(10000),
+    method: 'DELETE', headers: nasHeaders(), signal: AbortSignal.timeout(25000),
   });
   if (!res.ok) throw new Error(`NAS_${res.status}`);
   return res.json();

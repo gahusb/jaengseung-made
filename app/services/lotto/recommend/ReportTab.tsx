@@ -78,8 +78,14 @@ export default function ReportTab() {
       fetch('/api/lotto/report/latest').then(r => r.json()),
       fetch('/api/lotto/report/history?limit=10').then(r => r.json()),
     ]).then(([rep, hist]) => {
+      if (rep?.error) {
+        setError(rep.error === 'NAS_TIMEOUT'
+          ? 'NAS 서버 응답 시간 초과. 잠시 후 다시 시도해주세요.'
+          : '리포트를 불러오지 못했습니다. (' + rep.error + ')');
+        return;
+      }
       setReport(rep);
-      setHistory(hist.reports ?? []);
+      setHistory(hist?.reports ?? []);
     }).catch(() => setError('리포트를 불러오지 못했습니다.'))
       .finally(() => setLoading(false));
   }, []);
@@ -101,7 +107,7 @@ export default function ReportTab() {
     <div style={{ textAlign: 'center', padding: '4rem 0', color: '#f87171', fontSize: '.85rem' }}>{error}</div>
   );
 
-  if (!report) return null;
+  if (!report || !report.confidence_factors || !report.recommended_sets) return null;
 
   const strategyColors = ['#fbbf24', '#60a5fa', '#a78bfa'];
 

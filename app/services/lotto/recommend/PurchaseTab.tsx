@@ -49,9 +49,10 @@ export default function PurchaseTab() {
         fetch('/api/lotto/purchase').then(r => r.json()),
         fetch('/api/lotto/purchase/stats').then(r => r.json()),
       ]);
+      if (recRes?.error || statRes?.error) throw new Error(recRes?.error ?? statRes?.error);
       setRecords(recRes.records ?? []);
       setStats(statRes);
-    } finally { setLoading(false); }
+    } catch { /* 에러 시 빈 상태 유지 */ } finally { setLoading(false); }
   };
 
   useEffect(() => { load(); }, []);

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { nasGet, requireSubscription, handleNasError } from '../../_nas';
 
+export const maxDuration = 60;
+
 export async function GET(request: Request) {
   try {
     const auth = await requireSubscription();

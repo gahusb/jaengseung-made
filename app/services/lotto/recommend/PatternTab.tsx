@@ -65,7 +65,10 @@ export default function PatternTab() {
 
   useEffect(() => {
     fetch('/api/lotto/analysis/personal').then(r => r.json())
-      .then(setData)
+      .then(d => {
+        if (d?.error) { setError(d.error === 'NAS_TIMEOUT' ? 'NAS 서버 응답 시간 초과.' : '패턴 분석을 불러오지 못했습니다.'); return; }
+        setData(d);
+      })
       .catch(() => setError('패턴 분석을 불러오지 못했습니다.'))
       .finally(() => setLoading(false));
   }, []);
