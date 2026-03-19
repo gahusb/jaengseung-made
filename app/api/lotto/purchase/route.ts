@@ -1,26 +1,58 @@
 import { NextResponse } from 'next/server';
-import { nasGet, nasPost, requireSubscription, handleNasError } from '../_nas';
+import { createClient } from '@/lib/supabase/server';
+import { requireSubscription } from '../_nas';
 
 export async function GET(request: Request) {
   try {
     const auth = await requireSubscription();
     if (auth instanceof NextResponse) return auth;
+
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
-    const params = new URLSearchParams();
-    if (searchParams.get('draw_no')) params.set('draw_no', searchParams.get('draw_no')!);
-    if (searchParams.get('days')) params.set('days', searchParams.get('days')!);
-    const qs = params.toString() ? `?${params}` : '';
-    const data = await nasGet(`/api/lotto/purchase${qs}`);
-    return NextResponse.json(data);
-  } catch (err) { return handleNasError(err); }
+    const drawNo = searchParams.get('draw_no');
+
+    let query = supabase
+      .from('lotto_purchases')
+      .select('id, draw_no, amount, sets, prize, note, created_at')
+      .eq('user_id', auth.userId)
+      .order('draw_no', { ascending: false });
+
+    if (drawNo) query = query.eq('draw_no', parseInt(drawNo));
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return NextResponse.json({ records: data ?? [] });
+  } catch (err) {
+    console.error('[purchase GET]', err);
+    return NextResponse.json({ error: 'DB_ERROR' }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
   try {
     const auth = await requireSubscription();
     if (auth instanceof NextResponse) return auth;
+
+    const supabase = await createClient();
     const body = await request.json();
-    const data = await nasPost('/api/lotto/purchase', body);
+
+    const { data, error } = await supabase
+      .from('lotto_purchases')
+      .insert({
+        user_id: auth.userId,
+        draw_no: body.draw_no,
+        amount: body.amount ?? 5000,
+        sets: body.sets ?? 5,
+        prize: body.prize ?? 0,
+        note: body.note ?? '',
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
     return NextResponse.json(data, { status: 201 });
-  } catch (err) { return handleNasError(err); }
+  } catch (err) {
+    console.error('[purchase POST]', err);
+    return NextResponse.json({ error: 'DB_ERROR' }, { status: 500 });
+  }
 }
