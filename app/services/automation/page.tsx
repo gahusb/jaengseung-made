@@ -4,6 +4,60 @@ import { useState } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
 
+const tools = [
+  {
+    id: 'excel',
+    title: '엑셀 자동화 도구',
+    subtitle: 'Excel Macro Toolkit v1.2',
+    desc: '반복 업무를 버튼 하나로 처리하는 엑셀 매크로 모음. 데이터 정리·집계·보고서 자동 생성 기능 포함.',
+    tags: ['VBA', 'Excel', '매크로', '무료'],
+    color: '#16a34a',
+    bgColor: '#f0fdf4',
+    borderColor: '#bbf7d0',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75.125v-1.125c0-.621.504-1.125 1.125-1.125h1.5m0 0v1.25m0-1.25c0-.621.504-1.125 1.125-1.125h1.5m0 0V7.875m0 0c0-.621.504-1.125 1.125-1.125h8.25c.621 0 1.125.504 1.125 1.125v8.25m0 0v1.125m0-1.125c0 .621-.504 1.125-1.125 1.125H6m12-8.25v8.25" />
+      </svg>
+    ),
+    href: '/services/automation/tools/excel',
+    ready: true,
+  },
+  {
+    id: 'scraper',
+    title: '웹 스크래핑 도구',
+    subtitle: 'Web Scraper v0.9 (베타)',
+    desc: '공공데이터·쇼핑몰 가격·뉴스를 자동 수집해 엑셀로 저장하는 Python 기반 수집 도구.',
+    tags: ['Python', 'BeautifulSoup', 'Excel 출력'],
+    color: '#2563eb',
+    bgColor: '#eff6ff',
+    borderColor: '#bfdbfe',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+      </svg>
+    ),
+    href: '/services/automation/tools/scraper',
+    ready: false,
+  },
+  {
+    id: 'email',
+    title: '이메일 자동 발송 도구',
+    subtitle: 'Email Scheduler (준비중)',
+    desc: '조건 설정 후 일정 시간에 자동으로 이메일을 발송. 엑셀 수신자 목록 연동 지원.',
+    tags: ['Python', 'SMTP', '스케줄링'],
+    color: '#7c3aed',
+    bgColor: '#f5f3ff',
+    borderColor: '#ddd6fe',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+      </svg>
+    ),
+    href: '/services/automation/tools/email',
+    ready: false,
+  },
+];
+
 const CHECKLIST = [
   '자동화하고 싶은 업무를 구체적으로 설명해주세요',
   '현재 사용 중인 프로그램/시스템 (엑셀, ERP, 쇼핑몰 등)',
@@ -195,6 +249,49 @@ export default function AutomationPage() {
           <p className="text-center text-slate-400 text-xs mt-4">
             * 실제 비용은 작업 복잡도, 데이터 양, 연동 시스템에 따라 달라집니다. 무료 상담 후 정확한 견적을 드립니다.
           </p>
+        </div>
+      </div>
+
+      {/* ─── 자동화 툴 다운로드 ─── */}
+      <div className="px-6 pb-12 lg:px-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <p className="text-cyan-600 text-xs font-bold uppercase tracking-widest mb-2">FREE TOOLS</p>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b] mb-2">자동화 도구 무료 다운로드</h2>
+            <p className="text-slate-500 text-sm">직접 만들어 사용 중인 자동화 도구를 무료로 공유합니다.<br />필요에 맞게 수정해서 쓰실 수 있어요.</p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {tools.map((tool) => (
+              <div key={tool.id} style={{ borderColor: tool.borderColor, backgroundColor: tool.bgColor }}
+                className="rounded-2xl border-2 p-5 flex flex-col relative">
+                {!tool.ready && (
+                  <div className="absolute top-3 right-3 bg-slate-200 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full">준비중</div>
+                )}
+                <div style={{ color: tool.color }} className="mb-3">{tool.icon}</div>
+                <div style={{ color: tool.color }} className="text-xs font-bold mb-0.5">{tool.subtitle}</div>
+                <div className="font-extrabold text-[#04102b] text-sm mb-2">{tool.title}</div>
+                <p className="text-slate-500 text-xs leading-relaxed mb-4 flex-1">{tool.desc}</p>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {tool.tags.map((tag) => (
+                    <span key={tag} style={{ color: tool.color, borderColor: tool.borderColor }}
+                      className="text-[10px] font-bold px-2 py-0.5 rounded-full border bg-white">{tag}</span>
+                  ))}
+                </div>
+                {tool.ready ? (
+                  <Link href={tool.href}
+                    style={{ backgroundColor: tool.color }}
+                    className="block w-full text-center py-2.5 rounded-xl text-white text-sm font-bold hover:opacity-90 transition">
+                    상세보기 · 다운로드 →
+                  </Link>
+                ) : (
+                  <button disabled
+                    className="block w-full text-center py-2.5 rounded-xl bg-slate-200 text-slate-400 text-sm font-bold cursor-not-allowed">
+                    준비 중입니다
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

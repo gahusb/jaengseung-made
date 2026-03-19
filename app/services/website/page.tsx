@@ -113,7 +113,6 @@ export default function WebsiteServicePage() {
   return (
     <div style={{ background: '#020817', minHeight: '100vh', color: 'white' }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
         @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes gridScroll { from { background-position: 0 0; } to { background-position: 48px 48px; } }
         .ws-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
@@ -139,12 +138,12 @@ export default function WebsiteServicePage() {
             display: 'inline-block', fontSize: 11, fontWeight: 700, letterSpacing: '0.2em',
             color: '#818cf8', textTransform: 'uppercase',
             border: '1px solid rgba(129,140,248,0.35)', padding: '5px 16px', borderRadius: 100,
-            marginBottom: 28, fontFamily: 'Syne, sans-serif',
+            marginBottom: 28, fontFamily: "'CookieRun', sans-serif",
           }}>
             Homepage Development Service
           </span>
           <h1 style={{
-            fontFamily: 'Syne, sans-serif', fontSize: 'clamp(30px, 5vw, 58px)', fontWeight: 800,
+            fontFamily: "'CookieRun', sans-serif", fontSize: 'clamp(30px, 5vw, 58px)', fontWeight: 800,
             lineHeight: 1.15, marginBottom: 20,
             background: 'linear-gradient(135deg, #ffffff 0%, #c7d2fe 50%, #818cf8 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
@@ -153,7 +152,7 @@ export default function WebsiteServicePage() {
           </h1>
           <p style={{
             fontSize: 16, color: '#94a3b8', lineHeight: 1.8, marginBottom: 36,
-            fontFamily: "'Noto Sans KR', sans-serif",
+            fontFamily: "'CookieRun', sans-serif",
           }}>
             7년차 대기업 개발자가 기획·디자인·개발·배포까지 원스톱으로.<br />
             단순한 외주가 아닌, 비즈니스 성과를 만드는 홈페이지를 제작합니다.
@@ -163,7 +162,7 @@ export default function WebsiteServicePage() {
               display: 'inline-block', padding: '14px 32px',
               background: 'linear-gradient(135deg, #6366f1, #818cf8)',
               borderRadius: 12, color: 'white', fontWeight: 700, fontSize: 15,
-              textDecoration: 'none', fontFamily: "'Noto Sans KR', sans-serif",
+              textDecoration: 'none', fontFamily: "'CookieRun', sans-serif",
               boxShadow: '0 8px 32px rgba(99,102,241,0.4)',
             }}>
               무료 상담 신청 →
@@ -172,7 +171,7 @@ export default function WebsiteServicePage() {
               display: 'inline-block', padding: '14px 32px',
               border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12,
               color: '#cbd5e1', fontWeight: 600, fontSize: 15,
-              textDecoration: 'none', fontFamily: "'Noto Sans KR', sans-serif",
+              textDecoration: 'none', fontFamily: "'CookieRun', sans-serif",
             }}>
               샘플 보기
             </a>
@@ -186,8 +185,8 @@ export default function WebsiteServicePage() {
               { num: '100%', label: '반응형 지원' },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 24, fontWeight: 800, color: 'white', fontFamily: 'Syne, sans-serif' }}>{s.num}</div>
-                <div style={{ fontSize: 12, color: '#475569', fontFamily: "'Noto Sans KR', sans-serif", marginTop: 2 }}>{s.label}</div>
+                <div style={{ fontSize: 24, fontWeight: 800, color: 'white', fontFamily: "'CookieRun', sans-serif" }}>{s.num}</div>
+                <div style={{ fontSize: 12, color: '#475569', fontFamily: "'CookieRun', sans-serif", marginTop: 2 }}>{s.label}</div>
               </div>
             ))}
           </div>
@@ -198,12 +197,12 @@ export default function WebsiteServicePage() {
       <section id="samples" style={{ padding: '56px 24px', maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <h2 style={{
-            fontFamily: 'Syne, sans-serif', fontSize: 28, fontWeight: 800,
+            fontFamily: "'CookieRun', sans-serif", fontSize: 28, fontWeight: 800,
             color: 'white', marginBottom: 10,
           }}>
             포트폴리오 샘플
           </h2>
-          <p style={{ color: '#64748b', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 15 }}>
+          <p style={{ color: '#64748b', fontFamily: "'CookieRun', sans-serif", fontSize: 15 }}>
             카드를 클릭하면 실제 완성 화면을 미리 확인할 수 있습니다
           </p>
         </div>
@@ -238,19 +237,19 @@ export default function WebsiteServicePage() {
                     background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)',
                     border: `1px solid ${s.accent}50`,
                     borderRadius: 8, padding: '5px 12px',
-                    fontSize: 11, color: s.accent, fontFamily: 'Syne, sans-serif', fontWeight: 700,
+                    fontSize: 11, color: s.accent, fontFamily: "'CookieRun', sans-serif", fontWeight: 700,
                   }}>
                     미리보기 →
                   </div>
                 </div>
                 <div style={{ padding: '18px 22px 22px' }}>
-                  <div style={{ fontSize: 11, color: '#475569', fontFamily: 'Syne, sans-serif', marginBottom: 5, letterSpacing: '0.05em' }}>
+                  <div style={{ fontSize: 11, color: '#475569', fontFamily: "'CookieRun', sans-serif", marginBottom: 5, letterSpacing: '0.05em' }}>
                     {s.subtitle}
                   </div>
-                  <div style={{ fontSize: 17, fontWeight: 700, color: 'white', fontFamily: 'Syne, sans-serif', marginBottom: 8 }}>
+                  <div style={{ fontSize: 17, fontWeight: 700, color: 'white', fontFamily: "'CookieRun', sans-serif", marginBottom: 8 }}>
                     {s.title}
                   </div>
-                  <div style={{ fontSize: 13, color: '#64748b', lineHeight: 1.65, fontFamily: "'Noto Sans KR', sans-serif" }}>
+                  <div style={{ fontSize: 13, color: '#64748b', lineHeight: 1.65, fontFamily: "'CookieRun', sans-serif" }}>
                     {s.desc}
                   </div>
                 </div>
@@ -264,10 +263,10 @@ export default function WebsiteServicePage() {
       <section style={{ padding: '56px 24px', background: 'rgba(255,255,255,0.02)', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 10 }}>
+            <h2 style={{ fontFamily: "'CookieRun', sans-serif", fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 10 }}>
               제작 프로세스
             </h2>
-            <p style={{ color: '#64748b', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 15 }}>
+            <p style={{ color: '#64748b', fontFamily: "'CookieRun', sans-serif", fontSize: 15 }}>
               투명하고 체계적인 5단계로 진행됩니다
             </p>
           </div>
@@ -281,15 +280,15 @@ export default function WebsiteServicePage() {
                 }}>
                   <div style={{ fontSize: 30, marginBottom: 10 }}>{p.icon}</div>
                   <div style={{
-                    fontSize: 10, color: '#6366f1', fontFamily: 'Syne, sans-serif',
+                    fontSize: 10, color: '#6366f1', fontFamily: "'CookieRun', sans-serif",
                     fontWeight: 700, letterSpacing: '0.1em', marginBottom: 6,
                   }}>
                     STEP {p.step}
                   </div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: 'white', fontFamily: "'Noto Sans KR', sans-serif", marginBottom: 5 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: 'white', fontFamily: "'CookieRun', sans-serif", marginBottom: 5 }}>
                     {p.title}
                   </div>
-                  <div style={{ fontSize: 11, color: '#475569', fontFamily: "'Noto Sans KR', sans-serif", lineHeight: 1.5 }}>
+                  <div style={{ fontSize: 11, color: '#475569', fontFamily: "'CookieRun', sans-serif", lineHeight: 1.5 }}>
                     {p.desc}
                   </div>
                 </div>
@@ -305,10 +304,10 @@ export default function WebsiteServicePage() {
       {/* Pricing */}
       <section style={{ padding: '56px 24px', maxWidth: 1000, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 10 }}>
+          <h2 style={{ fontFamily: "'CookieRun', sans-serif", fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 10 }}>
             가격 플랜
           </h2>
-          <p style={{ color: '#64748b', fontFamily: "'Noto Sans KR', sans-serif", fontSize: 15 }}>
+          <p style={{ color: '#64748b', fontFamily: "'CookieRun', sans-serif", fontSize: 15 }}>
             프로젝트 규모에 맞는 플랜을 선택하세요
           </p>
         </div>
@@ -326,28 +325,28 @@ export default function WebsiteServicePage() {
                   position: 'absolute', top: 18, right: 18,
                   background: plan.color, color: '#1e1b4b',
                   fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 100,
-                  fontFamily: 'Syne, sans-serif',
+                  fontFamily: "'CookieRun', sans-serif",
                 }}>BEST</div>
               )}
-              <div style={{ fontSize: 13, color: plan.color, fontFamily: 'Syne, sans-serif', fontWeight: 700, marginBottom: 10 }}>
+              <div style={{ fontSize: 13, color: plan.color, fontFamily: "'CookieRun', sans-serif", fontWeight: 700, marginBottom: 10 }}>
                 {plan.name}
               </div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 4 }}>
-                <span style={{ fontSize: 42, fontWeight: 800, color: 'white', fontFamily: 'Syne, sans-serif' }}>
+                <span style={{ fontSize: 42, fontWeight: 800, color: 'white', fontFamily: "'CookieRun', sans-serif" }}>
                   {plan.price}
                 </span>
-                <span style={{ fontSize: 16, color: '#94a3b8', fontFamily: "'Noto Sans KR', sans-serif" }}>
+                <span style={{ fontSize: 16, color: '#94a3b8', fontFamily: "'CookieRun', sans-serif" }}>
                   {plan.unit}
                 </span>
               </div>
-              <div style={{ fontSize: 12, color: '#475569', fontFamily: "'Noto Sans KR', sans-serif", marginBottom: 22 }}>
+              <div style={{ fontSize: 12, color: '#475569', fontFamily: "'CookieRun', sans-serif", marginBottom: 22 }}>
                 {plan.note}
               </div>
               <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 20, marginBottom: 24 }}>
                 {plan.features.map((f) => (
                   <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 11 }}>
                     <span style={{ color: plan.color, fontSize: 14, flexShrink: 0, fontWeight: 700 }}>✓</span>
-                    <span style={{ fontSize: 13, color: '#94a3b8', fontFamily: "'Noto Sans KR', sans-serif" }}>{f}</span>
+                    <span style={{ fontSize: 13, color: '#94a3b8', fontFamily: "'CookieRun', sans-serif" }}>{f}</span>
                   </div>
                 ))}
               </div>
@@ -356,7 +355,7 @@ export default function WebsiteServicePage() {
                 background: plan.featured ? plan.color : 'rgba(255,255,255,0.05)',
                 borderRadius: 10, color: plan.featured ? '#1e1b4b' : '#cbd5e1',
                 fontWeight: 700, fontSize: 14, textDecoration: 'none',
-                fontFamily: "'Noto Sans KR', sans-serif",
+                fontFamily: "'CookieRun', sans-serif",
                 border: plan.featured ? 'none' : '1px solid rgba(255,255,255,0.08)',
               }}>
                 상담 신청
@@ -369,7 +368,7 @@ export default function WebsiteServicePage() {
       {/* FAQ */}
       <section style={{ padding: '0 24px 56px', maxWidth: 720, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 10 }}>
+          <h2 style={{ fontFamily: "'CookieRun', sans-serif", fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 10 }}>
             자주 묻는 질문
           </h2>
         </div>
@@ -385,7 +384,7 @@ export default function WebsiteServicePage() {
                 background: 'none', border: 'none', cursor: 'pointer',
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12,
               }}>
-                <span style={{ fontSize: 14, fontWeight: 600, color: 'white', fontFamily: "'Noto Sans KR', sans-serif" }}>
+                <span style={{ fontSize: 14, fontWeight: 600, color: 'white', fontFamily: "'CookieRun', sans-serif" }}>
                   {faq.q}
                 </span>
                 <span style={{
@@ -398,7 +397,7 @@ export default function WebsiteServicePage() {
               {openFaq === i && (
                 <div style={{
                   padding: '0 22px 18px', fontSize: 14, color: '#64748b',
-                  lineHeight: 1.75, fontFamily: "'Noto Sans KR', sans-serif",
+                  lineHeight: 1.75, fontFamily: "'CookieRun', sans-serif",
                 }}>
                   {faq.a}
                 </div>
@@ -417,12 +416,12 @@ export default function WebsiteServicePage() {
           border: '1px solid rgba(129,140,248,0.3)',
           boxShadow: '0 24px 80px rgba(99,102,241,0.2)',
         }}>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 14 }}>
+          <h2 style={{ fontFamily: "'CookieRun', sans-serif", fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 14 }}>
             지금 바로 시작하세요
           </h2>
           <p style={{
             color: '#a5b4fc', fontSize: 15, lineHeight: 1.7, marginBottom: 30,
-            fontFamily: "'Noto Sans KR', sans-serif",
+            fontFamily: "'CookieRun', sans-serif",
           }}>
             무료 상담은 24시간 이내 답변드립니다.<br />
             어떤 규모의 프로젝트든 환영합니다.
@@ -431,7 +430,7 @@ export default function WebsiteServicePage() {
             display: 'inline-block', padding: '15px 40px',
             background: 'linear-gradient(135deg, #818cf8, #6366f1)',
             borderRadius: 12, color: 'white', fontWeight: 700, fontSize: 16,
-            textDecoration: 'none', fontFamily: "'Noto Sans KR', sans-serif",
+            textDecoration: 'none', fontFamily: "'CookieRun', sans-serif",
             boxShadow: '0 8px 32px rgba(99,102,241,0.5)',
           }}>
             무료 상담 신청하기 →
