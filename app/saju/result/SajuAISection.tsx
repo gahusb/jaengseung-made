@@ -165,6 +165,17 @@ function SectionCard({ section, meta, isOpen, onToggle }: {
   );
 }
 
+// mock 데이터 여부 감지 (저장된 해석이 예시 데이터인 경우 재생성 필요)
+function isMockInterpretation(text: string | null): boolean {
+  if (!text) return false;
+  return (
+    text.includes('API 키 문제 또는 할당량 초과') ||
+    text.includes('GEMINI_API_KEY 환경변수를 설정') ||
+    text.includes('예시 데이터를 보여드립니다') ||
+    text.includes('API 설정이 필요합니다')
+  );
+}
+
 // ── 메인 컴포넌트 ──────────────────────────────────────────────────────
 export default function SajuAISection({
   hasPaid,
@@ -177,11 +188,15 @@ export default function SajuAISection({
   currentUrl,
   engineData,
 }: SajuAISectionProps) {
+  // 저장된 해석이 mock 데이터면 재생성 필요
+  const isMock = isMockInterpretation(savedInterpretation);
+  const validSaved = savedInterpretation && !isMock ? savedInterpretation : null;
+
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>(
-    savedInterpretation ? 'done' : 'idle'
+    validSaved ? 'done' : 'idle'
   );
-  const [interpretation, setInterpretation] = useState(savedInterpretation ?? '');
-  const [openSections, setOpenSections] = useState<Set<number>>(new Set([0])); // 첫 섹션 기본 열림
+  const [interpretation, setInterpretation] = useState(validSaved ?? '');
+  const [openSections, setOpenSections] = useState<Set<number>>(new Set([0]));
   const called = useRef(false);
 
   const sections = parseInterpretation(interpretation);
@@ -198,8 +213,45 @@ export default function SajuAISection({
   const expandAll = () => setOpenSections(new Set(sections.map((_, i) => i)));
   const collapseAll = () => setOpenSections(new Set());
 
+  // 재생성: called ref 초기화 후 다시 API 호출
+  const handleRegenerate = () => {
+    called.current = false;
+    setStatus('idle');
+    setInterpretation('');
+    // idle → useEffect가 다시 실행되도록 상태 전환 트리거
+    setTimeout(() => {
+      called.current = false;
+      setStatus('loading');
+      fetch('/api/saju/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ saju: sajuData, daeun, daeunList, gender, engineData }),
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.interpretation && !isMockInterpretation(data.interpretation)) {
+            setInterpretation(data.interpretation);
+            setStatus('done');
+            setOpenSections(new Set([0]));
+            // DB에 실제 해석으로 덮어쓰기
+            const { birth_year, birth_month, birth_day } = birthKey;
+            if (typeof birth_year === 'number' && typeof birth_month === 'number' && typeof birth_day === 'number') {
+              fetch('/api/saju/save-interpretation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ interpretation: data.interpretation, birthKey }),
+              }).catch(() => {});
+            }
+          } else {
+            setStatus('error');
+          }
+        })
+        .catch(() => setStatus('error'));
+    }, 0);
+  };
+
   useEffect(() => {
-    if (!hasPaid || savedInterpretation || called.current) return;
+    if (!hasPaid || validSaved || called.current) return;
     called.current = true;
     setStatus('loading');
 
@@ -248,7 +300,7 @@ export default function SajuAISection({
           <h3 className="text-xl font-extrabold text-white mb-2">AI 상세 해석 (12개 항목)</h3>
           <p className="text-blue-200/60 text-sm mb-6">
             성격, 재물운, 직업 적성, 애정운, 건강운, 대운 분석 등<br />
-            Claude AI가 생성하는 맞춤형 사주 해석을 받아보세요.
+            Gemini 2.5 Pro가 생성하는 맞춤형 사주 해석을 받아보세요.
           </p>
 
           {/* 미리보기 섹션 목록 */}
@@ -320,9 +372,21 @@ export default function SajuAISection({
           <h2 className="text-sm font-extrabold text-white">AI 상세 해석</h2>
           <p className="text-blue-300/60 text-[11px]">12개 항목 · 클릭해서 펼쳐보세요</p>
         </div>
-        <span className="text-xs bg-emerald-400/20 border border-emerald-400/30 text-emerald-300 font-bold px-2.5 py-1 rounded-full">
-          결제 완료
-        </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleRegenerate}
+            title="AI 해석 재생성"
+            className="text-[11px] text-blue-300/60 hover:text-blue-200 px-2 py-1 rounded-lg hover:bg-white/10 transition-all flex items-center gap-1"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            재생성
+          </button>
+          <span className="text-xs bg-emerald-400/20 border border-emerald-400/30 text-emerald-300 font-bold px-2.5 py-1 rounded-full">
+            결제 완료
+          </span>
+        </div>
       </div>
 
       {/* 섹션 컨트롤 + 목록 */}

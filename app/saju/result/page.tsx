@@ -23,46 +23,6 @@ interface PageProps {
   }>;
 }
 
-// Python 사주 엔진 호출 (실패 시 null 반환)
-async function fetchFromPythonEngine(
-  year: number, month: number, day: number,
-  hour: number | null, gender: string
-): Promise<{
-  saju: any; daeunList: any[]; currentDaeun: any;
-  interactions: any[]; shinsal: any[]; gongmang: any; hiddenStems: any[];
-} | null> {
-  const url = process.env.SAJU_ENGINE_URL;
-  const secret = process.env.SAJU_ENGINE_SECRET;
-  if (!url) return null;
-
-  try {
-    const res = await fetch(`${url}/saju/calculate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(secret ? { 'X-API-Secret': secret } : {}),
-      },
-      body: JSON.stringify({ year, month, day, hour: hour ?? undefined, gender, calendar_type: 'solar' }),
-      signal: AbortSignal.timeout(10000),
-      cache: 'no-store',
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return {
-      saju: data.saju,
-      daeunList: data.daeunList,
-      currentDaeun: data.currentDaeun,
-      interactions: data.interactions,
-      shinsal: data.shinsal,
-      gongmang: data.gongmang,
-      hiddenStems: data.hiddenStems,
-    };
-  } catch {
-    console.warn('[사주] Python 엔진 연결 실패 — TypeScript 폴백 사용');
-    return null;
-  }
-}
-
 export default async function SajuResultPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const { year, month, day, hour, gender, calendarType, originalYear, originalMonth, originalDay, isLeapMonth } = params;
@@ -89,29 +49,26 @@ export default async function SajuResultPage({ searchParams }: PageProps) {
   const isLunar = calendarType === 'lunar';
   const isLeap = isLeapMonth === 'true';
 
-  // ── Python 엔진 호출 (폴백: TypeScript) ──────────────────────────────
-  const engineResult = await fetchFromPythonEngine(yearNum, monthNum, dayNum, hourNum, gender);
+  // ── 사주팔자 계산 (TypeScript — lunar-javascript 기반 정밀 절기 계산) ──
+  const sajuData = calculateSaju(yearNum, monthNum, dayNum, hourNum, gender);
 
-  // 사주팔자 (Python 엔진 우선, TS 폴백)
-  const sajuData = engineResult?.saju ?? calculateSaju(yearNum, monthNum, dayNum, hourNum, gender);
-
-  // 추가 분석 (신강신약, 용신, 오행균형, 세운) — TypeScript 계산 유지
+  // 추가 분석 (신강신약, 용신, 오행균형, 세운)
   const analysis = performFullAnalysis(sajuData);
   const elementScores = analysis.elementScores;
 
-  // 대운 (Python 엔진 우선, TS 폴백)
+  // 대운
   const currentYear = new Date().getFullYear();
-  const daeunList = engineResult?.daeunList ?? calculateDaeun(
+  const daeunList = calculateDaeun(
     yearNum, monthNum, dayNum, gender,
     sajuData.month.stem, sajuData.month.branch
   );
-  const currentDaeun = engineResult?.currentDaeun ?? getCurrentDaeun(daeunList, currentYear);
+  const currentDaeun = getCurrentDaeun(daeunList, currentYear);
 
-  // 지지 상호작용 / 신살 / 공망 / 지장간 (Python 엔진 우선, TS 폴백)
-  const branchInteractions = engineResult?.interactions ?? analysis.branchInteractions;
-  const shinsal = engineResult?.shinsal ?? analysis.shinsal;
-  const gongmang = engineResult?.gongmang ?? analysis.gongmang;
-  const hiddenStems = engineResult?.hiddenStems ?? analysis.hiddenStems;
+  // 지지 상호작용 / 신살 / 공망 / 지장간
+  const branchInteractions = analysis.branchInteractions;
+  const shinsal = analysis.shinsal;
+  const gongmang = analysis.gongmang;
+  const hiddenStems = analysis.hiddenStems;
 
   // ── 절기 정보 (표시용) ────────────────────────────────────────────────
   const solarTermIndex = getCurrentSolarTerm(yearNum, monthNum, dayNum);
@@ -187,9 +144,7 @@ export default async function SajuResultPage({ searchParams }: PageProps) {
   const zodiacIdx = (yearNum - 4) % 12;
   const zodiacAnimal = zodiacAnimals[zodiacIdx >= 0 ? zodiacIdx : zodiacIdx + 12];
 
-  const engineBadge = engineResult
-    ? <span className="text-[10px] bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">Python 엔진</span>
-    : <span className="text-[10px] bg-slate-100 border border-slate-200 text-slate-500 px-2 py-0.5 rounded-full">TS 폴백</span>;
+  const engineBadge = <span className="text-[10px] bg-blue-50 border border-blue-200 text-blue-600 px-2 py-0.5 rounded-full font-semibold">TS 계산</span>;
 
   return (
     <div className="min-h-full bg-[#f0f5ff]">
@@ -583,12 +538,7 @@ export default async function SajuResultPage({ searchParams }: PageProps) {
                   gender={gender}
                   birthKey={birthKey}
                   currentUrl={currentUrl}
-                  engineData={engineResult ? {
-                    interactions: engineResult.interactions,
-                    shinsal: engineResult.shinsal,
-                    gongmang: engineResult.gongmang,
-                    hiddenStems: engineResult.hiddenStems,
-                  } : undefined}
+                  engineData={undefined}
                 />
               );
             })()}

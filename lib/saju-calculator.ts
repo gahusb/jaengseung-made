@@ -45,11 +45,32 @@ const BASE_YEAR_BRANCH = 0; // 子
 
 /**
  * 년도의 간지를 계산
+ * month, day를 전달하면 입춘(立春) 기준으로 전년도 년주를 적용합니다.
  */
-export function getYearGanzi(year: number): { stem: string; branch: string; stemKr: string; branchKr: string } {
-  const yearDiff = year - BASE_YEAR;
-  const stemIndex = (BASE_YEAR_STEM + yearDiff) % 10;
-  const branchIndex = (BASE_YEAR_BRANCH + yearDiff) % 12;
+export function getYearGanzi(year: number, month?: number, day?: number): { stem: string; branch: string; stemKr: string; branchKr: string } {
+  let adjustedYear = year;
+
+  // 입춘(立春) 이전 출생이면 전년도 년주 사용
+  if (month !== undefined && day !== undefined) {
+    try {
+      const { getSolarTermDate } = require('./solar-terms');
+      const ipchun = getSolarTermDate(year, 0); // termIndex 0 = 입춘
+      const birthUTC = Date.UTC(year, month - 1, day);
+      const ipchunUTC = Date.UTC(year, ipchun.month - 1, ipchun.day);
+      if (birthUTC < ipchunUTC) {
+        adjustedYear = year - 1;
+      }
+    } catch {
+      // 절기 계산 실패 시 양력 2월 4일을 입춘 근사값으로 사용
+      if (month === 1 || (month === 2 && day < 4)) {
+        adjustedYear = year - 1;
+      }
+    }
+  }
+
+  const yearDiff = adjustedYear - BASE_YEAR;
+  const stemIndex = ((BASE_YEAR_STEM + yearDiff) % 10 + 10) % 10;
+  const branchIndex = ((BASE_YEAR_BRANCH + yearDiff) % 12 + 12) % 12;
 
   return {
     stem: HEAVENLY_STEMS[stemIndex],
@@ -67,12 +88,14 @@ export function getMonthGanzi(year: number, month: number, day: number): { stem:
   const { getSolarTermMonthBranch } = require('./solar-terms');
   const branchIndex = getSolarTermMonthBranch(year, month, day);
 
-  // 월 천간 계산 (년간에 따라 달라짐)
-  const yearStem = getYearGanzi(year).stem;
+  // 월 천간 계산 — 입춘 보정된 년간 사용
+  const yearStem = getYearGanzi(year, month, day).stem;
   const yearStemIndex = HEAVENLY_STEMS.indexOf(yearStem as any);
 
-  // 월 천간 공식: (년간 * 2 + 월지지) % 10
-  const stemIndex = (yearStemIndex * 2 + branchIndex) % 10;
+  // 오호둔월법 (五虎遁月法): 寅月(branchIndex=2)을 기준으로 년간별 시작 천간 결정
+  // 甲/己년: 寅月=丙(2), 乙/庚년: 寅月=戊(4), 丙/辛년: 寅月=庚(6), 丁/壬년: 寅月=壬(8), 戊/癸년: 寅月=甲(0)
+  const startStem = ((yearStemIndex % 5) * 2 + 2) % 10;
+  const stemIndex = (startStem + (branchIndex - 2 + 12) % 12) % 10;
 
   return {
     stem: HEAVENLY_STEMS[stemIndex],
@@ -86,14 +109,14 @@ export function getMonthGanzi(year: number, month: number, day: number): { stem:
  * 일의 간지를 계산 (만세력 기준)
  */
 export function getDayGanzi(year: number, month: number, day: number): { stem: string; branch: string; stemKr: string; branchKr: string } {
-  // 기준일 (1900-01-01) 부터의 일수 계산
-  const baseDate = new Date(1900, 0, 1);
-  const targetDate = new Date(year, month - 1, day);
-  const daysDiff = Math.floor((targetDate.getTime() - baseDate.getTime()) / (1000 * 60 * 60 * 24));
+  // UTC 기준으로 일수 계산 (로컬 타임존/DST 영향 제거)
+  const baseUTC = Date.UTC(1900, 0, 1);
+  const targetUTC = Date.UTC(year, month - 1, day);
+  const daysDiff = Math.floor((targetUTC - baseUTC) / (1000 * 60 * 60 * 24));
 
-  // 1900-01-01 = 丙寅일
-  const baseDayStem = 2;  // 丙
-  const baseDayBranch = 2; // 寅
+  // 1900-01-01 = 甲戌일 (60갑자 기준, JDN+49 공식 검증)
+  const baseDayStem = 0;   // 甲
+  const baseDayBranch = 10; // 戌
 
   const stemIndex = (baseDayStem + daysDiff) % 10;
   const branchIndex = (baseDayBranch + daysDiff) % 12;
@@ -223,7 +246,7 @@ export function calculateSaju(
   hour: number | null,
   gender: 'male' | 'female'
 ): SajuData {
-  const yearGanzi = getYearGanzi(year);
+  const yearGanzi = getYearGanzi(year, month, day);
   const monthGanzi = getMonthGanzi(year, month, day);
   const dayGanzi = getDayGanzi(year, month, day);
   const hourGanzi = hour !== null ? getHourGanzi(dayGanzi, hour) : null;

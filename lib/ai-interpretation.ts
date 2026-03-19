@@ -252,7 +252,9 @@ export function estimateYongShin(saju: SajuData, strength: DayMasterStrength): Y
       { elem: producingMe, score: balance[producingMe as keyof ElementBalance], name: '인성' },
       { elem: dayElement, score: balance[dayElement as keyof ElementBalance], name: '비겁' },
     ];
-    candidates.sort((a, b) => a.score - b.score);
+    // 신약: 인성/비겁 중 사주에 더 강하게 존재하는 것이 실질적 용신
+    // (점수가 높을수록 사주에서 작용하는 힘이 강해 일간을 도울 수 있음)
+    candidates.sort((a, b) => b.score - a.score);
     const yong = candidates[0];
     const hee = candidates[1];
 

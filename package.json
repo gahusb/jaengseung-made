@@ -10,9 +10,12 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.79.0",
+    "@google/generative-ai": "^0.24.1",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.99.0",
     "@tosspayments/tosspayments-sdk": "^2.6.0",
+    "dotenv": "^17.3.1",
+    "lunar-javascript": "^1.7.7",
     "next": "16.1.6",
     "openai": "^6.21.0",
     "react": "19.2.3",

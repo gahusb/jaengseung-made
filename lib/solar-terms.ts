@@ -1,7 +1,8 @@
 /**
- * 24절기 계산
+ * 24절기 계산 — lunar-javascript 라이브러리 기반 (정밀 천문학 계산)
  * 사주 계산에서 월주는 절기를 기준으로 합니다.
  */
+import { LunarYear, Solar } from 'lunar-javascript';
 
 // 24절기 (입춘부터 시작)
 export const SOLAR_TERMS = [
@@ -36,184 +37,110 @@ interface SolarTermDate {
 }
 
 /**
- * 정밀한 절기 계산 (천문학적 계산 기반)
- * solarlunar 라이브러리 사용
+ * 정밀한 절기 날짜 계산 (lunar-javascript 기반)
+ *
+ * termIndex 매핑 (0~23):
+ *   0=입춘, 1=우수, ..., 21=동지, 22=소한, 23=대한
+ *
+ * LunarYear.fromYear(y).getJieQiJulianDays() 인덱스 구조:
+ *   [0]=大雪(y-1), [1]=冬至(y-1), [2]=小寒(y), [3]=大寒(y),
+ *   [4]=立春(y) ← termIndex 0
+ *   [5]=雨水(y) ← termIndex 1
+ *   ...
+ *   [25]=冬至(y) ← termIndex 21
+ *   [26]=小寒(y+1) ← termIndex 22
+ *   [27]=大寒(y+1) ← termIndex 23
+ *
+ * 반환 규칙:
+ *   getSolarTermDate(year, 0~21)  → year 내 절기 날짜
+ *   getSolarTermDate(year, 22~23) → year 1월의 소한/대한 날짜
+ *     (내부적으로 LunarYear.fromYear(year - 1) 사용)
  */
 export function getSolarTermDate(year: number, termIndex: number): SolarTermDate {
-  try {
-    const solarLunar = require('solarlunar');
+  // 소한(22)/대한(23)은 해당 연도 1월에 위치.
+  // LunarYear.fromYear(y)[26/27]은 y+1년 1월을 반환하므로
+  // year의 1월 소한/대한을 얻으려면 year-1로 조회.
+  const lunarYear = termIndex >= 22 ? year - 1 : year;
+  const jds = LunarYear.fromYear(lunarYear).getJieQiJulianDays();
+  const jd = jds[termIndex + 4];
+  const solar = Solar.fromJulianDay(jd);
 
-    // solarlunar의 절기 데이터 가져오기
-    // 각 년도의 절기 정보를 계산
-    const termNames = [
-      '立春', '雨水', '驚蟄', '春分', '清明', '穀雨',
-      '立夏', '小滿', '芒種', '夏至', '小暑', '大暑',
-      '立秋', '處暑', '白露', '秋分', '寒露', '霜降',
-      '立冬', '小雪', '大雪', '冬至', '小寒', '大寒'
-    ];
-
-    // 해당 년도의 절기 찾기
-    // solarlunar는 양력 날짜로 절기 확인 가능
-    // 각 절기의 대략적인 날짜 범위에서 검색
-
-    const searchRanges = [
-      { month: 2, startDay: 3, endDay: 5 },   // 입춘
-      { month: 2, startDay: 18, endDay: 20 }, // 우수
-      { month: 3, startDay: 5, endDay: 7 },   // 경칩
-      { month: 3, startDay: 20, endDay: 22 }, // 춘분
-      { month: 4, startDay: 4, endDay: 6 },   // 청명
-      { month: 4, startDay: 19, endDay: 21 }, // 곡우
-      { month: 5, startDay: 5, endDay: 7 },   // 입하
-      { month: 5, startDay: 20, endDay: 22 }, // 소만
-      { month: 6, startDay: 5, endDay: 7 },   // 망종
-      { month: 6, startDay: 20, endDay: 22 }, // 하지
-      { month: 7, startDay: 6, endDay: 8 },   // 소서
-      { month: 7, startDay: 22, endDay: 24 }, // 대서
-      { month: 8, startDay: 7, endDay: 9 },   // 입추
-      { month: 8, startDay: 22, endDay: 24 }, // 처서
-      { month: 9, startDay: 7, endDay: 9 },   // 백로
-      { month: 9, startDay: 22, endDay: 24 }, // 추분
-      { month: 10, startDay: 7, endDay: 9 },  // 한로
-      { month: 10, startDay: 23, endDay: 24 },// 상강
-      { month: 11, startDay: 7, endDay: 8 },  // 입동
-      { month: 11, startDay: 21, endDay: 23 },// 소설
-      { month: 12, startDay: 6, endDay: 8 },  // 대설
-      { month: 12, startDay: 21, endDay: 23 },// 동지
-      { month: 1, startDay: 5, endDay: 7 },   // 소한
-      { month: 1, startDay: 19, endDay: 21 }, // 대한
-    ];
-
-    const range = searchRanges[termIndex];
-    const termName = termNames[termIndex];
-
-    // 해당 범위 내에서 절기 찾기
-    for (let day = range.startDay; day <= range.endDay; day++) {
-      const lunar = solarLunar.solar2lunar(year, range.month, day);
-      if (lunar && lunar.term === termName) {
-        return {
-          year,
-          month: range.month,
-          day,
-          hour: 0,
-          minute: 0
-        };
-      }
-    }
-
-    // 찾지 못한 경우 중간값 사용
-    const midDay = Math.floor((range.startDay + range.endDay) / 2);
-    return {
-      year,
-      month: range.month,
-      day: midDay,
-      hour: 0,
-      minute: 0
-    };
-
-  } catch (error) {
-    console.error('절기 계산 오류:', error);
-
-    // 폴백: 기존 근사값 사용
-    const baseMonth = [
-      2, 2, 3, 3, 4, 4,
-      5, 5, 6, 6, 7, 7,
-      8, 8, 9, 9, 10, 10,
-      11, 11, 12, 12, 1, 1
-    ];
-
-    const baseDay = [
-      4, 19, 5, 20, 4, 20,
-      5, 21, 6, 21, 7, 23,
-      7, 23, 8, 23, 8, 23,
-      7, 22, 7, 22, 5, 20
-    ];
-
-    return {
-      year,
-      month: baseMonth[termIndex],
-      day: baseDay[termIndex],
-      hour: 0,
-      minute: 0
-    };
-  }
+  return {
+    year: solar.getYear(),
+    month: solar.getMonth(),
+    day: solar.getDay(),
+    hour: solar.getHour(),
+    minute: solar.getMinute(),
+  };
 }
 
 /**
  * 주어진 날짜가 어느 절기 이후인지 확인
- * @param year 년
- * @param month 월
- * @param day 일
  * @returns 절기 인덱스 (0~23)
  */
 export function getCurrentSolarTerm(year: number, month: number, day: number): number {
-  const date = new Date(year, month - 1, day);
-  const dateValue = date.getTime();
+  const dateValue = Date.UTC(year, month - 1, day);
 
-  // 각 절기 날짜 확인
-  for (let i = 23; i >= 0; i--) {
-    const termDate = getSolarTermDate(year, i);
-    let termYear = termDate.year;
-    let termMonth = termDate.month;
+  const ipchunData = getSolarTermDate(year, 0);
+  const ipchunValue = Date.UTC(ipchunData.year, ipchunData.month - 1, ipchunData.day);
 
-    // 대한, 소한은 이전 해 처리
-    if (i >= 22 && month >= 2) {
-      termYear = year;
-    } else if (i >= 22) {
-      termYear = year - 1;
+  if (dateValue >= ipchunValue) {
+    // 입춘 이후: 동지(21)→입춘(0) 역순 검색
+    for (let i = 21; i >= 0; i--) {
+      const td = getSolarTermDate(year, i);
+      const termValue = Date.UTC(td.year, td.month - 1, td.day);
+      if (dateValue >= termValue) return i;
     }
-
-    const term = new Date(termYear, termMonth - 1, termDate.day);
-
-    if (dateValue >= term.getTime()) {
-      return i;
+    return 0;
+  } else {
+    // 입춘 이전 (1월 또는 2월 초): 이 해의 소한(22)/대한(23) 먼저 확인
+    for (let i = 23; i >= 22; i--) {
+      const td = getSolarTermDate(year, i);
+      const termValue = Date.UTC(td.year, td.month - 1, td.day);
+      if (dateValue >= termValue) return i;
     }
+    // 전년도 동지(21)→입춘(0) 역순 검색
+    for (let i = 21; i >= 0; i--) {
+      const td = getSolarTermDate(year - 1, i);
+      const termValue = Date.UTC(td.year, td.month - 1, td.day);
+      if (dateValue >= termValue) return i;
+    }
+    return 23;
   }
-
-  // 입춘 이전이면 전년도 대한 이후
-  return 23;
 }
 
 /**
  * 절기 기준 월주 지지 인덱스 계산
- * @param year 년
- * @param month 월
- * @param day 일
  * @returns 지지 인덱스 (0: 자, 1: 축, 2: 인, ...)
  */
 export function getSolarTermMonthBranch(year: number, month: number, day: number): number {
   const termIndex = getCurrentSolarTerm(year, month, day);
 
-  // 절기 인덱스를 월로 변환
-  // 입춘(0) -> 인월(2)
-  // 경칩(2) -> 묘월(3)
-  // 청명(4) -> 진월(4)
-  // ...
-
   const monthBranches = [
-    2,  // 입춘 -> 인월
-    2,  // 우수 -> 인월
-    3,  // 경칩 -> 묘월
-    3,  // 춘분 -> 묘월
-    4,  // 청명 -> 진월
-    4,  // 곡우 -> 진월
-    5,  // 입하 -> 사월
-    5,  // 소만 -> 사월
-    6,  // 망종 -> 오월
-    6,  // 하지 -> 오월
-    7,  // 소서 -> 미월
-    7,  // 대서 -> 미월
-    8,  // 입추 -> 신월
-    8,  // 처서 -> 신월
-    9,  // 백로 -> 유월
-    9,  // 추분 -> 유월
-    10, // 한로 -> 술월
-    10, // 상강 -> 술월
-    11, // 입동 -> 해월
-    11, // 소설 -> 해월
-    0,  // 대설 -> 자월
-    0,  // 동지 -> 자월
-    1,  // 소한 -> 축월
-    1,  // 대한 -> 축월
+    2,  // 입춘 → 인월
+    2,  // 우수 → 인월
+    3,  // 경칩 → 묘월
+    3,  // 춘분 → 묘월
+    4,  // 청명 → 진월
+    4,  // 곡우 → 진월
+    5,  // 입하 → 사월
+    5,  // 소만 → 사월
+    6,  // 망종 → 오월
+    6,  // 하지 → 오월
+    7,  // 소서 → 미월
+    7,  // 대서 → 미월
+    8,  // 입추 → 신월
+    8,  // 처서 → 신월
+    9,  // 백로 → 유월
+    9,  // 추분 → 유월
+    10, // 한로 → 술월
+    10, // 상강 → 술월
+    11, // 입동 → 해월
+    11, // 소설 → 해월
+    0,  // 대설 → 자월
+    0,  // 동지 → 자월
+    1,  // 소한 → 축월
+    1,  // 대한 → 축월
   ];
 
   return monthBranches[termIndex];
@@ -234,10 +161,8 @@ export function getDaysToNextSolarTerm(year: number, month: number, day: number)
   const currentTerm = getCurrentSolarTerm(year, month, day);
   const nextTermIndex = (currentTerm + 1) % 24;
 
-  let nextYear = year;
-  if (currentTerm === 23) {
-    nextYear = year + 1;
-  }
+  // 대한(23) 다음은 입춘(0) — 다음 연도
+  const nextYear = currentTerm === 23 ? year + 1 : year;
 
   const nextTerm = getSolarTermDate(nextYear, nextTermIndex);
   const nextDate = new Date(nextTerm.year, nextTerm.month - 1, nextTerm.day);

@@ -40,7 +40,6 @@ interface SajuRecord {
 
 function buildResultUrl(rec: SajuRecord) {
   const { birth_year, birth_month, birth_day, birth_hour, gender } = rec.saju_data;
-  // null/undefined 값이 있으면 URL 생성 불가
   if (!birth_year || !birth_month || !birth_day) return '/saju/input';
   let url = `/saju/result?year=${birth_year}&month=${birth_month}&day=${birth_day}&gender=${gender}&calendarType=solar`;
   if (birth_hour != null) url += `&hour=${birth_hour}`;

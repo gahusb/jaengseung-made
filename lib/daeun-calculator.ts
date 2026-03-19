@@ -42,17 +42,8 @@ function calculateDaeunStartAge(
     const currentTerm = getCurrentSolarTerm(birthYear, birthMonth, birthDay);
     const termDate = getSolarTermDate(birthYear, currentTerm);
 
-    let termYear = termDate.year;
-    let termMonth = termDate.month;
-
-    // 대한, 소한 처리
-    if (currentTerm >= 22 && birthMonth >= 2) {
-      termYear = birthYear;
-    } else if (currentTerm >= 22) {
-      termYear = birthYear - 1;
-    }
-
-    const termDateObj = new Date(termYear, termMonth - 1, termDate.day);
+    // getSolarTermDate가 소한(22)/대한(23)에 대해 birthYear 1월 날짜를 올바르게 반환
+    const termDateObj = new Date(termDate.year, termDate.month - 1, termDate.day);
     const birthDateObj = new Date(birthYear, birthMonth - 1, birthDay);
 
     const diffTime = birthDateObj.getTime() - termDateObj.getTime();
