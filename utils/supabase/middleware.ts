@@ -28,8 +28,12 @@ export async function updateSession(request: NextRequest) {
     { cookies: cookieMethods }
   );
 
-  // 세션 갱신 (IMPORTANT: getUser()는 반드시 호출해야 함)
-  await supabase.auth.getUser();
+  // 세션 갱신 — 실패해도 응답 반환 (외부 네트워크 오류로 hang 방지)
+  try {
+    await supabase.auth.getUser();
+  } catch {
+    // Supabase 일시 오류 시 세션 갱신 생략하고 통과
+  }
 
   return supabaseResponse;
 }

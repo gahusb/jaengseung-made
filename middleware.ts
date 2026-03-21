@@ -44,11 +44,21 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return await updateSession(request);
+  // API 라우트는 세션 갱신 불필요 — 각 API에서 독립적으로 인증 처리
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.next();
+  }
+
+  // Supabase 세션 갱신 — 실패해도 페이지 접근은 허용
+  try {
+    return await updateSession(request);
+  } catch {
+    return NextResponse.next({ request });
+  }
 }
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|api/telegram/webhook|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
