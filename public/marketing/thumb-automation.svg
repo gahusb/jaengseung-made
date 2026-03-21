@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="50%" style="stop-color:#064e3b"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#34d399"/>
+      <stop offset="100%" style="stop-color:#60a5fa"/>
+    </linearGradient>
+    <linearGradient id="timeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="60%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.18"/>
+      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="glowBlue" cx="85%" cy="70%" r="35%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:0.14"/>
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="nodeShadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#10b981" flood-opacity="0.4"/>
+    </filter>
+    <filter id="arrowGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#glow)"/>
+  <rect width="1200" height="675" fill="url(#glowBlue)"/>
+
+  <!-- 배경 도트 패턴 -->
+  <defs>
+    <pattern id="dots" width="36" height="36" patternUnits="userSpaceOnUse">
+      <circle cx="18" cy="18" r="1.2" fill="#1e293b" opacity="0.8"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="675" fill="url(#dots)"/>
+
+  <!-- 왼쪽 텍스트 영역 -->
+  <!-- 상단 뱃지 -->
+  <rect x="60" y="72" width="230" height="36" rx="18" fill="#065f46"/>
+  <text x="78" y="95" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#34d399">⚡ 반복 업무 완전 자동화</text>
+
+  <!-- 헤드라인 -->
+  <text x="60" y="162" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="50" font-weight="800" fill="#ffffff">하루 3시간을</text>
+  <text x="60" y="222" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="50" font-weight="800" fill="url(#headGrad)">되찾아 드립니다</text>
+  <text x="60" y="280" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="22" fill="#94a3b8">7년차 대기업 개발자의 자동화 솔루션</text>
+
+  <!-- 시간 절약 수치 뱃지 -->
+  <rect x="60" y="310" width="490" height="80" rx="14" fill="#0f172a" opacity="0.7"/>
+  <rect x="60" y="310" width="490" height="80" rx="14" stroke="#10b981" stroke-width="1" opacity="0.4"/>
+
+  <!-- 수치 1 -->
+  <text x="152" y="344" text-anchor="middle" font-family="sans-serif" font-size="32" font-weight="900" fill="#34d399">주 15h</text>
+  <text x="152" y="368" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">절약</text>
+  <!-- 구분선 -->
+  <line x1="218" y1="322" x2="218" y2="378" stroke="#1e293b" stroke-width="1.5"/>
+  <!-- 수치 2 -->
+  <text x="310" y="344" text-anchor="middle" font-family="sans-serif" font-size="32" font-weight="900" fill="#60a5fa">0%</text>
+  <text x="310" y="368" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">오류율</text>
+  <!-- 구분선 -->
+  <line x1="380" y1="322" x2="380" y2="378" stroke="#1e293b" stroke-width="1.5"/>
+  <!-- 수치 3 -->
+  <text x="468" y="344" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="20" font-weight="900" fill="#fbbf24">즉시 실행</text>
+  <text x="468" y="368" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">배포 완료</text>
+
+  <!-- 서비스 유형 리스트 -->
+  <text x="60" y="428" font-family="'Malgun Gothic',sans-serif" font-size="15" fill="#94a3b8">📊 엑셀 자동화  ·  📧 이메일 자동발송  ·  🕸️ 웹 크롤링</text>
+  <text x="60" y="460" font-family="'Malgun Gothic',sans-serif" font-size="15" fill="#94a3b8">🖥️ RPA  ·  📁 파일 자동 정리  ·  🔔 텔레그램 알림 연동</text>
+
+  <!-- 가격 뱃지 -->
+  <rect x="60" y="486" width="220" height="58" rx="14" fill="url(#timeGrad)"/>
+  <text x="170" y="510" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#d1fae5">시작 가격</text>
+  <text x="170" y="534" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="26" font-weight="800" fill="#ffffff">33만원~</text>
+
+  <!-- URL -->
+  <text x="60" y="628" font-family="sans-serif" font-size="14" fill="#475569">jaengseung-made.com</text>
+
+  <!-- 오른쪽 자동화 플로우 다이어그램 -->
+  <!-- 플로우 배경 박스 -->
+  <rect x="620" y="60" width="550" height="540" rx="20" fill="#0a0f1e" stroke="#10b981" stroke-width="1" opacity="0.9"/>
+  <rect x="640" y="74" width="200" height="22" rx="4" fill="#0f2a20"/>
+  <text x="648" y="90" font-family="sans-serif" font-size="11" fill="#10b981">● 자동화 실행 중...</text>
+
+  <!-- 노드 1: 입력 -->
+  <rect x="688" y="120" width="160" height="70" rx="12" fill="#0f172a" stroke="#10b981" stroke-width="1.5" filter="url(#nodeShadow)"/>
+  <text x="768" y="148" text-anchor="middle" font-size="20">📊</text>
+  <text x="768" y="172" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#34d399">엑셀 파일 입력</text>
+
+  <!-- 화살표 -->
+  <line x1="768" y1="190" x2="768" y2="228" stroke="#10b981" stroke-width="2" filter="url(#arrowGlow)"/>
+  <polygon points="758,224 768,240 778,224" fill="#10b981"/>
+
+  <!-- 노드 2: 처리 -->
+  <rect x="658" y="242" width="220" height="70" rx="12" fill="#1a3a2a" stroke="#34d399" stroke-width="1.5" filter="url(#nodeShadow)"/>
+  <text x="768" y="270" text-anchor="middle" font-size="20">⚙️</text>
+  <text x="768" y="294" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#ffffff">Python 스크립트 실행</text>
+
+  <!-- 화살표 -->
+  <line x1="768" y1="312" x2="768" y2="350" stroke="#10b981" stroke-width="2" filter="url(#arrowGlow)"/>
+  <polygon points="758,346 768,362 778,346" fill="#10b981"/>
+
+  <!-- 노드 3: 출력 -->
+  <rect x="688" y="364" width="160" height="70" rx="12" fill="#0f172a" stroke="#10b981" stroke-width="1.5" filter="url(#nodeShadow)"/>
+  <text x="768" y="392" text-anchor="middle" font-size="20">📋</text>
+  <text x="768" y="416" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#34d399">리포트 자동 생성</text>
+
+  <!-- 화살표 -->
+  <line x1="768" y1="434" x2="768" y2="472" stroke="#10b981" stroke-width="2" filter="url(#arrowGlow)"/>
+  <polygon points="758,468 768,484 778,468" fill="#10b981"/>
+
+  <!-- 알림 노드 -->
+  <rect x="648" y="484" width="240" height="70" rx="12" fill="#0a1628" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="768" y="512" text-anchor="middle" font-size="20">📱</text>
+  <text x="768" y="538" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#60a5fa">텔레그램 알림 전송</text>
+
+  <!-- 우측 정보 패널 -->
+  <rect x="920" y="120" width="220" height="434" rx="16" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+  <text x="1030" y="150" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#64748b">절약 시간 계산</text>
+  <!-- 막대 그래프 -->
+  <!-- 이전 -->
+  <text x="960" y="186" font-family="'Malgun Gothic',sans-serif" font-size="11" fill="#64748b">수동 작업</text>
+  <rect x="950" y="194" width="140" height="28" rx="6" fill="#1e293b"/>
+  <rect x="950" y="194" width="140" height="28" rx="6" fill="#ef4444" opacity="0.7"/>
+  <text x="1030" y="213" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">3시간/일</text>
+  <!-- 이후 -->
+  <text x="960" y="244" font-family="'Malgun Gothic',sans-serif" font-size="11" fill="#64748b">자동화 후</text>
+  <rect x="950" y="252" width="140" height="28" rx="6" fill="#1e293b"/>
+  <rect x="950" y="252" width="22" height="28" rx="6" fill="#10b981"/>
+  <text x="970" y="271" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">5분</text>
+
+  <!-- 기술 스택 -->
+  <text x="1030" y="312" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">사용 기술</text>
+  <rect x="960" y="320" width="60" height="26" rx="8" fill="#1e3a8a"/>
+  <text x="990" y="338" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#60a5fa">Python</text>
+  <rect x="1030" y="320" width="50" height="26" rx="8" fill="#065f46"/>
+  <text x="1055" y="338" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#34d399">VBA</text>
+  <rect x="960" y="356" width="70" height="26" rx="8" fill="#1c1917"/>
+  <text x="995" y="374" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#d6d3d1">Selenium</text>
+  <rect x="1040" y="356" width="50" height="26" rx="8" fill="#1e1b4b"/>
+  <text x="1065" y="374" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#a78bfa">RPA</text>
+
+  <!-- 전문가 뱃지 -->
+  <rect x="950" y="404" width="140" height="50" rx="12" fill="#1e3a8a"/>
+  <text x="1020" y="424" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#bfdbfe">7년차 개발자</text>
+  <text x="1020" y="444" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#ffffff">직접 분석 · 구현</text>
+
+  <!-- 하단 바 -->
+  <rect x="0" y="635" width="1200" height="40" fill="#065f46"/>
+  <text x="600" y="660" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">엑셀 · 이메일 · RPA · 크롤링  ·  7년차 대기업 개발자 직접 구축  ·  jaengseung-made.com</text>
+</svg>

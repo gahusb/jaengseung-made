@@ -231,14 +231,14 @@ export default function FreelancePage() {
               현재 프로젝트 접수 가능
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
-              맞춤 개발,<br />
+              연락 두절? 그런 거 없습니다.<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5ba4ff] to-[#818cf8]">
-                처음부터 직접 만들어드립니다
+                직접 만들고, 직접 책임집니다
               </span>
             </h1>
             <p className="text-blue-200/60 text-base md:text-lg max-w-xl mx-auto leading-relaxed mb-2">
-              검증된 코드 품질을 합리적인 가격에 경험하세요.
-              아이디어만 있어도 충분합니다.
+              개발자에게 맡겼다가 연락 두절된 경험 있으신가요?<br />
+              계약서 작성, 중간 보고, 소스코드 인도까지 — 단계마다 증거를 남깁니다.
             </p>
           </div>
 
@@ -437,11 +437,11 @@ export default function FreelancePage() {
             </div>
             <ul className="space-y-3.5">
               {[
-                { icon: '🏢', title: '대기업 백엔드 경력', desc: '대기업 수준의 코드 품질과 개발 프로세스 적용' },
-                { icon: '🖥️', title: '운영 중인 실제 서비스', desc: 'NAS 서버에서 로또·주식 시스템 직접 운영' },
-                { icon: '📄', title: '계약서 + 소스코드 제공', desc: '계약서 포함, 완성 후 소스코드 전체 인도' },
-                { icon: '🔒', title: '1개월 무상 AS 보장', desc: '납품 후 버그·문제 발생 시 무료 수정' },
-                { icon: '⚡', title: '24시간 내 답변', desc: '문의 후 하루 이내 답변 보장' },
+                { icon: '🌐', title: '지금 URL로 직접 확인', desc: 'jaengseung-made.com — 로또 분석, 주식 자동매매 지금도 운영 중' },
+                { icon: '📋', title: '계약서 먼저, 개발 나중', desc: '구두 약속 없음 — 견적서·계약서 발송 후 착수' },
+                { icon: '🔒', title: '납품 전 전액 환불 보장', desc: '마음에 안 드시면 이유 불문 전액 환불' },
+                { icon: '📦', title: '소스코드 100% 인도', desc: '완성 후 전체 소스코드 + 배포 가이드 제공' },
+                { icon: '⚡', title: '납기 지연 시 패널티', desc: '하루 늦을 때마다 10만원 감면 — 그래서 안 늦습니다' },
               ].map((item) => (
                 <li key={item.title} className="flex items-start gap-3">
                   <span className="text-base flex-shrink-0 mt-0.5">{item.icon}</span>
@@ -462,7 +462,7 @@ export default function FreelancePage() {
           <div className="text-center mb-8">
             <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">CONTACT</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">프로젝트 문의</h2>
-            <p className="text-slate-500 text-sm mt-2">아이디어만 있어도 충분합니다. 24시간 이내 답변드립니다.</p>
+            <p className="text-slate-500 text-sm mt-2">개발사 연락 두절로 손해 본 경험 있으신가요? 여기선 계약서부터 시작합니다.</p>
           </div>
 
           <div className="grid md:grid-cols-5 gap-6">

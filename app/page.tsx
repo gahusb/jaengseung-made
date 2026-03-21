@@ -5,10 +5,10 @@ import Link from 'next/link';
 import ContactModal from './components/ContactModal';
 
 const stats = [
-  { value: '7년+', label: '개발 경력' },
-  { value: '100+', label: '완료 프로젝트' },
-  { value: '24h', label: '평균 응답' },
-  { value: '98%', label: '고객 만족도' },
+  { value: '3개', label: '지금 운영 중인 서비스' },
+  { value: '24h', label: '이내 견적 발송 보장' },
+  { value: '100%', label: '소스코드 전달' },
+  { value: '1개월', label: '무상 AS 보장' },
 ];
 
 const techStack = [
@@ -83,18 +83,18 @@ export default function Home() {
         <div className="relative max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-blue-400/10 border border-blue-400/25 text-blue-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wide">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            7년차 대기업 백엔드 개발자 · 현재 서비스 운영 중
+            지금 이 순간도 작동 중인 서비스가 있습니다
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-5 tracking-tight">
-            실제로 작동하는<br />
+            URL을 드립니다.<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5ba4ff] to-[#818cf8]">
-              개발 서비스
-            </span>
-            를 제공합니다
+              직접 확인하고
+            </span>{' '}
+            결정하세요
           </h1>
           <p className="text-blue-200/70 text-base md:text-lg leading-relaxed mb-8 max-w-xl mx-auto">
-            대기업 개발 경험을 바탕으로, NAS 서버에서 로또 분석·주식 자동매매를
-            직접 운영하며 검증된 솔루션만 제공합니다.
+            jaengseung-made.com — 로또 분석, 주식 자동매매, 구독 결제까지
+            직접 만들고 지금도 운영 중입니다. 당신 것도 이렇게 만들어드립니다.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <button
@@ -104,7 +104,7 @@ export default function Home() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
-              무료 상담 신청
+              URL 확인 후 상담 신청
             </button>
             <a
               href="mailto:bgg8988@gmail.com"
@@ -380,14 +380,14 @@ export default function Home() {
             <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-1 h-5 bg-gradient-to-b from-[#1a56db] to-[#4338ca] rounded-full" />
-                <h3 className="font-bold text-[#04102b] text-sm">신뢰할 수 있는 이유</h3>
+                <h3 className="font-bold text-[#04102b] text-sm">왜 맡겨도 되는가</h3>
               </div>
               <ul className="space-y-3">
                 {[
-                  { icon: '🏢', text: '7년차 대기업 백엔드 개발 경력' },
-                  { icon: '🖥️', text: 'NAS 서버에서 실제 서비스 직접 운영 중' },
-                  { icon: '📱', text: '텔레그램·이메일 실시간 커뮤니케이션' },
-                  { icon: '🔒', text: '1개월 무상 유지보수 + 평생 AS 가능' },
+                  { icon: '🌐', text: 'jaengseung-made.com — 지금 바로 확인 가능한 실제 운영 서비스' },
+                  { icon: '🔒', text: '납품 전 마음에 안 드시면 이유 불문 전액 환불' },
+                  { icon: '📋', text: '계약서 + 소스코드 전체 제공 — 잠수 없음, 연락 두절 없음' },
+                  { icon: '⚡', text: '24시간 이내 답변 · 납기 지연 시 패널티 적용' },
                 ].map((item) => (
                   <li key={item.text} className="flex items-start gap-2.5 text-sm text-slate-700">
                     <span className="text-base flex-shrink-0 mt-0.5">{item.icon}</span>

@@ -148,14 +148,14 @@ export default function WebsiteServicePage() {
             background: 'linear-gradient(135deg, #ffffff 0%, #c7d2fe 50%, #818cf8 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           }}>
-            비즈니스를 빛내는 홈페이지,<br />직접 만들어드립니다
+홈페이지 맡겼다가 연락 끊긴 경험,<br />여기선 없습니다
           </h1>
           <p style={{
             fontSize: 16, color: '#94a3b8', lineHeight: 1.8, marginBottom: 36,
             fontFamily: "'CookieRun', sans-serif",
           }}>
-            7년차 대기업 개발자가 기획·디자인·개발·배포까지 원스톱으로.<br />
-            단순한 외주가 아닌, 비즈니스 성과를 만드는 홈페이지를 제작합니다.
+계약서 작성 → 중간 보고 → 소스코드 인도까지 단계마다 증거를 남깁니다.<br />
+            납기 지연 시 하루당 10만원 감면 — 그래서 안 늦습니다.
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/freelance?service=website" style={{
@@ -180,9 +180,9 @@ export default function WebsiteServicePage() {
           {/* Stats */}
           <div style={{ display: 'flex', gap: 32, justifyContent: 'center', marginTop: 48, flexWrap: 'wrap' }}>
             {[
-              { num: '3~5일', label: '최단 납품' },
+              { num: '3~5일', label: '최단 납품 (스타터)' },
               { num: '50만원~', label: '시작 가격' },
-              { num: '100%', label: '반응형 지원' },
+              { num: '전액환불', label: '납품 전 환불 보장' },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 24, fontWeight: 800, color: 'white', fontFamily: "'CookieRun', sans-serif" }}>{s.num}</div>

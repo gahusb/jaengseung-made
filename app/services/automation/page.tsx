@@ -306,7 +306,7 @@ export default function AutomationPage() {
               onClick={() => openModal('업무 자동화')}
               className="inline-flex items-center gap-2 bg-cyan-400 hover:bg-cyan-300 text-[#012030] px-8 py-3 rounded-xl font-extrabold text-sm transition-all shadow-lg shadow-cyan-900/30"
             >
-              무료 상담 신청 →
+              자동화 상담 신청 (계약서 포함) →
             </button>
           </div>
         </div>

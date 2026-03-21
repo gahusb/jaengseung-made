@@ -262,12 +262,12 @@ export default function StockPage() {
           <div className="bg-gradient-to-r from-[#011225] to-[#01204a] rounded-2xl border border-emerald-400/20 p-8 text-center">
             <p className="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-2">START TRADING</p>
             <h3 className="text-white text-2xl font-extrabold mb-2">지금 도입 상담 받아보세요</h3>
-            <p className="text-emerald-100/40 text-sm mb-6">무료 상담 후 정확한 견적을 드립니다</p>
+            <p className="text-emerald-100/40 text-sm mb-6">계약서 먼저, 개발 나중 — 구두 약속 없음</p>
             <button
               onClick={() => openModal('주식 자동 매매')}
               className="inline-flex items-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-[#011225] px-8 py-3 rounded-xl font-extrabold text-sm transition-all shadow-lg shadow-emerald-900/30"
             >
-              무료 상담 신청 →
+              시스템 확인 후 상담 신청 →
             </button>
           </div>
         </div>
