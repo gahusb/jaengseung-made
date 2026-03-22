@@ -235,7 +235,7 @@ export default function PromptPage() {
                     plan.highlight ? 'bg-violet-400 text-[#0d0a2e] hover:bg-violet-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
                   }`}
                 >
-                  견적 문의
+                  무료 상담 신청
                 </button>
               </div>
             ))}
@@ -254,7 +254,7 @@ export default function PromptPage() {
               onClick={() => openModal('프롬프트 엔지니어링')}
               className="inline-flex items-center gap-2 bg-violet-400 hover:bg-violet-300 text-[#0d0a2e] px-8 py-3 rounded-xl font-extrabold text-sm transition-all shadow-lg shadow-violet-900/30"
             >
-              프롬프트 설계 신청 →
+              무료 상담 신청 →
             </button>
           </div>
         </div>

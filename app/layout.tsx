@@ -4,18 +4,53 @@ import "./globals.css";
 import DashboardShell from "./components/DashboardShell";
 
 export const metadata: Metadata = {
-  title: "쟁승메이드 | 쟁토리의 프리미엄 개발 서비스",
+  title: {
+    default: "쟁승메이드 | 연락 두절 없는 7년차 개발자",
+    template: "%s | 쟁승메이드",
+  },
   description:
-    "로또 번호 추천, 주식 자동 매매, 프롬프트 엔지니어링, 업무 자동화. 쟁토리가 제공하는 신뢰할 수 있는 개발 서비스.",
+    "계약서 먼저, 납기 지키고, 소스코드 100% 인도. 7년차 대기업 백엔드 개발자가 운영하는 외주 개발·업무 자동화·RPA 서비스.",
   keywords: [
-    "로또 번호 추천",
-    "주식 자동 매매",
-    "프롬프트 엔지니어링",
+    "외주 개발",
+    "프리랜서 개발자",
     "업무 자동화",
     "RPA",
-    "외주 개발",
+    "웹사이트 제작",
+    "로또 번호 추천",
+    "주식 자동 매매",
     "텔레그램 봇",
+    "엑셀 자동화",
+    "프롬프트 엔지니어링",
   ],
+  authors: [{ name: "박재오", url: "https://jaengseung-made.com" }],
+  creator: "박재오",
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    url: "https://jaengseung-made.com",
+    siteName: "쟁승메이드",
+    title: "쟁승메이드 | 연락 두절 없는 7년차 개발자",
+    description:
+      "계약서 먼저, 납기 지키고, 소스코드 100% 인도. 외주 개발·업무 자동화·RPA 전문.",
+    images: [
+      {
+        url: "https://jaengseung-made.com/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "쟁승메이드 — 연락 두절 없는 개발자",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "쟁승메이드 | 연락 두절 없는 7년차 개발자",
+    description: "계약서 먼저, 납기 지키고, 소스코드 100% 인도.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
 };
 
 export default function RootLayout({

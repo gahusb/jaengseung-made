@@ -267,7 +267,7 @@ export default function StockPage() {
               onClick={() => openModal('주식 자동 매매')}
               className="inline-flex items-center gap-2 bg-emerald-400 hover:bg-emerald-300 text-[#011225] px-8 py-3 rounded-xl font-extrabold text-sm transition-all shadow-lg shadow-emerald-900/30"
             >
-              시스템 확인 후 상담 신청 →
+              무료 상담 신청 →
             </button>
           </div>
         </div>

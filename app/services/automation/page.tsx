@@ -241,7 +241,7 @@ export default function AutomationPage() {
                     plan.highlight ? 'bg-cyan-400 text-[#012030] hover:bg-cyan-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
                   }`}
                 >
-                  견적 문의
+                  무료 상담 신청
                 </button>
               </div>
             ))}
