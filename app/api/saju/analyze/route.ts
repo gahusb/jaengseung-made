@@ -64,16 +64,49 @@ const MODELS = [
 
 export async function POST(request: Request) {
   try {
-    const { saju, daeun, daeunList, gender, engineData } = await request.json();
+    // ── 결제 사용자 인증 (Gemini API 무단 호출 방지) ──────────
+    const { createClient } = await import('@/lib/supabase/server');
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+      // 로그인된 경우: saju_detail 결제 여부 확인
+      const { data: paidOrder } = await supabase
+        .from('orders')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('product_id', 'saju_detail')
+        .eq('status', 'paid')
+        .maybeSingle();
+
+      if (!paidOrder) {
+        return NextResponse.json({ error: '사주 리포트를 구매한 사용자만 이용할 수 있습니다' }, { status: 403 });
+      }
+    } else {
+      // 비로그인 사용자는 AI 호출 불가
+      return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
+    }
+
+    // ── 입력 길이 검증 (DoS / 프롬프트 인젝션 기초 방어) ──────
+    const raw = await request.json();
+    if (JSON.stringify(raw).length > 50_000) {
+      return NextResponse.json({ error: '요청 데이터가 너무 큽니다' }, { status: 400 });
+    }
+    const { saju, daeun, daeunList, gender, engineData } = raw;
+
+    // gender 값 제한
+    if (gender !== 'male' && gender !== 'female') {
+      return NextResponse.json({ error: '잘못된 성별 값' }, { status: 400 });
+    }
 
     // 종합 분석 수행
     let analysis;
     try {
       analysis = performFullAnalysis(saju);
     } catch (analysisError: any) {
-      console.error('[사주] 분석 계산 오류:', analysisError.message);
+      console.error('[사주] 분석 계산 오류');
       return NextResponse.json(
-        { error: '사주 분석 계산 중 오류: ' + analysisError.message },
+        { error: '사주 분석 중 오류가 발생했습니다' },
         { status: 500 }
       );
     }
