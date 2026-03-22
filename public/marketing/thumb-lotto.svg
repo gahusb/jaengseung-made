@@ -198,7 +198,7 @@
     <rect x="1034" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
     <text x="1078" y="540" text-anchor="middle" fill="#fbbf24">출현 주기</text>
   </g>
-  <text x="650" y="575" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">7년차 개발자가 직접 설계한 통계 알고리즘으로 매주 번호를 선별합니다.</text>
+  <text x="650" y="575" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">납기 보장 · 매주 업데이트되는 통계 알고리즘으로 최적 번호를 선별합니다.</text>
 
   <!-- 하단 바 -->
   <rect x="0" y="638" width="1200" height="37" fill="#92400e"/>

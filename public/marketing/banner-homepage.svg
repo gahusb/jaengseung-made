@@ -49,11 +49,11 @@
   <!-- 뱃지 -->
   <rect x="52" y="42" width="282" height="36" rx="18" fill="#1d4ed8" filter="url(#badgeShadBn)" opacity="0.9"/>
   <circle cx="74" cy="60" r="6" fill="#fbbf24"/>
-  <text x="90" y="65" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="14" font-weight="700" fill="#ffffff">7년차 대기업 현직 개발자 직접 제작</text>
+  <text x="90" y="65" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="14" font-weight="700" fill="#ffffff">납기 100% · 무료 AS · 연락두절 없음</text>
 
   <!-- 메인 헤드라인 -->
-  <text x="52" y="128" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="42" font-weight="900" fill="#ffffff">7년차 대기업 개발자가</text>
-  <text x="52" y="180" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="42" font-weight="900" fill="url(#textBn)">직접 만드는 홈페이지</text>
+  <text x="52" y="128" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="42" font-weight="900" fill="#ffffff">납기 지키고 연락 끊지 않는</text>
+  <text x="52" y="180" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="42" font-weight="900" fill="url(#textBn)">개발자가 만드는 홈페이지</text>
 
   <!-- 서브텍스트 -->
   <text x="52" y="222" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="17" fill="#94a3b8">기획 · 디자인 · 개발 · 배포 원스톱 · 납기 보장</text>
@@ -178,5 +178,5 @@
 
   <!-- 하단 바 -->
   <rect x="0" y="368" width="1200" height="32" fill="url(#btnBn)"/>
-  <text x="600" y="389" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="13" font-weight="600" fill="#ffffff">7년차 대기업 백엔드 개발자 박재오  ·  기획부터 런칭까지 원스톱  ·  jaengseung-made.com</text>
+  <text x="600" y="389" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="13" font-weight="600" fill="#ffffff">납기 100% 보장  ·  무료 AS 포함  ·  연락두절 없음  ·  jaengseung-made.com</text>
 </svg>

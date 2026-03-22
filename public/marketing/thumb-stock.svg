@@ -142,5 +142,5 @@
 
   <!-- 하단 바 -->
   <rect x="0" y="638" width="1200" height="37" fill="#052e16"/>
-  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">텔레그램 연동 국내주식 자동매매 봇  ·  KIS API  ·  7년차 개발자 직접 구축  ·  jaengseung-made.com</text>
+  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">텔레그램 연동 국내주식 자동매매 봇  ·  KIS API  ·  납기 보장 · AS포함  ·  jaengseung-made.com</text>
 </svg>

@@ -50,7 +50,7 @@
   <!-- 뱃지 -->
   <rect x="60" y="64" width="308" height="38" rx="19" fill="#1d4ed8" opacity="0.95"/>
   <circle cx="84" cy="83" r="6" fill="#fbbf24"/>
-  <text x="100" y="88" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="700" fill="#ffffff">대기업 현직 개발자 직접 제작</text>
+  <text x="100" y="88" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="700" fill="#ffffff">납기 100% · 무료 AS · 연락두절 없음</text>
 
   <!-- 메인 헤드라인 -->
   <text x="60" y="166" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="56" font-weight="900" fill="#ffffff">연락 끊기는</text>
@@ -58,7 +58,7 @@
   <text x="60" y="302" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="56" font-weight="900" fill="url(#headA)">그만하세요.</text>
 
   <!-- 서브텍스트 -->
-  <text x="60" y="348" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">기획 · 디자인 · 개발 · 배포 원스톱 — 7년차 대기업</text>
+  <text x="60" y="348" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">계약서로 시작 · 납기 보장 · AS까지 한 명이 책임</text>
 
   <!-- 구분선 -->
   <line x1="60" y1="372" x2="280" y2="372" stroke="#1a3a7a" stroke-width="1.5"/>
@@ -136,7 +136,7 @@
       <!-- 히어로 섹션 -->
       <rect x="756" y="145" width="412" height="148" fill="#eff6ff"/>
       <rect x="776" y="164" width="60" height="18" rx="9" fill="#bfdbfe"/>
-      <text x="806" y="178" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#1d4ed8">⭐ 7년차</text>
+      <text x="806" y="178" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#1d4ed8">✓ 납기보장</text>
       <rect x="776" y="190" width="180" height="20" rx="10" fill="#93c5fd"/>
       <rect x="776" y="218" width="140" height="16" rx="8" fill="#bfdbfe"/>
       <rect x="776" y="242" width="80" height="28" rx="14" fill="#2563eb"/>
@@ -200,5 +200,5 @@
 
   <!-- 하단 바 -->
   <rect x="0" y="638" width="1200" height="37" fill="url(#btnA)"/>
-  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">7년차 대기업 백엔드 개발자 박재오  ·  기획부터 배포까지 원스톱  ·  jaengseung-made.com</text>
+  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">납기 100% 보장  ·  무료 AS 포함  ·  연락두절 없음  ·  jaengseung-made.com</text>
 </svg>

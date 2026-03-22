@@ -45,7 +45,7 @@
   <!-- 헤드라인 -->
   <text x="60" y="162" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="54" font-weight="900" fill="#ffffff">하루 3시간을</text>
   <text x="60" y="228" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="54" font-weight="900" fill="url(#headAu)">되찾아 드립니다</text>
-  <text x="60" y="276" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">7년차 대기업 개발자의 업무 자동화 솔루션</text>
+  <text x="60" y="276" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">납기 보장 · 계약서 필수 · 연락두절 없는 자동화 솔루션</text>
 
   <!-- 수치 대비 패널 -->
   <rect x="60" y="304" width="510" height="88" rx="16" fill="#040e1c" stroke="#10b981" stroke-width="1" opacity="0.95"/>
@@ -180,10 +180,10 @@
 
   <!-- 전문가 배지 -->
   <rect x="960" y="492" width="170" height="56" rx="12" fill="#1e3a8a"/>
-  <text x="1045" y="516" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#bfdbfe">7년차 대기업 개발자</text>
-  <text x="1045" y="538" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#ffffff">직접 분석 · 구현</text>
+  <text x="1045" y="516" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#bfdbfe">납기 보장 · AS 포함</text>
+  <text x="1045" y="538" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#ffffff">직접 분석 · 직접 구현</text>
 
   <!-- 하단 바 -->
   <rect x="0" y="638" width="1200" height="37" fill="#052e1c"/>
-  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">엑셀 · 이메일 · RPA · 크롤링  ·  7년차 대기업 개발자 직접 구축  ·  jaengseung-made.com</text>
+  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">엑셀 · 이메일 · RPA · 크롤링  ·  납기 보장 · 연락두절 없음  ·  jaengseung-made.com</text>
 </svg>
