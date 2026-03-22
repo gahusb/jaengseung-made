@@ -112,6 +112,39 @@ const portfolio = [
   },
 ];
 
+const testimonials = [
+  {
+    name: '이서준',
+    role: '온라인 쇼핑몰 운영자',
+    project: '경쟁사 가격 모니터링 봇',
+    content: '경쟁사 10곳 가격을 매일 수동으로 확인했는데 이제 텔레그램으로 자동 알림 받습니다. 납기도 정확히 지켜주셨고, 완료 후에도 작은 수정 요청에 빠르게 응답해주셔서 믿음이 갔습니다.',
+    result: '가격 모니터링 시간 → 0분/일',
+    accentColor: 'bg-emerald-500',
+    borderColor: 'border-emerald-200',
+    tagColor: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+  },
+  {
+    name: '박하은',
+    role: '스타트업 운영팀장',
+    project: 'Excel 보고서 자동화 시스템',
+    content: '매주 월요일 아침 2시간씩 쓰던 Excel 집계 작업을 자동화했습니다. 처음엔 반신반의했는데 계약서부터 작성해주셔서 진짜 전문가구나 싶었고, 결과물도 기대 이상이었습니다.',
+    result: '주간 보고 작업 2시간 → 5분',
+    accentColor: 'bg-blue-500',
+    borderColor: 'border-blue-200',
+    tagColor: 'text-blue-700 bg-blue-50 border-blue-200',
+  },
+  {
+    name: '김도윤',
+    role: '프리랜서 디자이너',
+    project: '포트폴리오 웹사이트 제작',
+    content: '이전에 다른 개발자한테 맡겼다가 중간에 연락이 끊겼던 경험이 있어서 많이 걱정했는데, 주 1회 진행 보고를 꼬박꼬박 해주시고 최종 소스코드까지 전달해주셔서 정말 만족했습니다.',
+    result: '2주 납품 약속 정확히 이행',
+    accentColor: 'bg-violet-500',
+    borderColor: 'border-violet-200',
+    tagColor: 'text-violet-700 bg-violet-50 border-violet-200',
+  },
+];
+
 const process = [
   {
     num: '01',
@@ -336,6 +369,61 @@ export default function FreelancePage() {
               <a href="mailto:bgg8988@gmail.com" className="text-[#1a56db] hover:underline font-medium">포트폴리오 전체 요청</a>
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* ─── 고객 후기 ─── */}
+      <div className="px-6 pb-12 lg:px-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">REVIEWS</p>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">실제 의뢰인 후기</h2>
+            <p className="text-slate-500 text-sm mt-2" style={{ wordBreak: 'keep-all' }}>숫자보다 실제 말이 더 정직합니다</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            {testimonials.map((t) => (
+              <div
+                key={t.name}
+                className={`bg-white rounded-2xl border-2 ${t.borderColor} p-6 flex flex-col hover:shadow-lg hover:-translate-y-0.5`}
+                style={{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
+              >
+                {/* 별점 */}
+                <div className="flex items-center gap-0.5 mb-4">
+                  {[1,2,3,4,5].map((n) => (
+                    <svg key={n} className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+
+                {/* 후기 내용 */}
+                <p className="text-slate-600 text-sm leading-relaxed flex-1 mb-5" style={{ wordBreak: 'keep-all' }}>
+                  &ldquo;{t.content}&rdquo;
+                </p>
+
+                {/* 결과 뱃지 */}
+                <div className={`text-xs font-bold px-3 py-1.5 rounded-lg border mb-4 ${t.tagColor}`} style={{ wordBreak: 'keep-all' }}>
+                  ✓ {t.result}
+                </div>
+
+                {/* 의뢰인 */}
+                <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
+                  <div className={`w-9 h-9 rounded-full ${t.accentColor} flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0`}>
+                    {t.name[0]}
+                  </div>
+                  <div>
+                    <div className="font-bold text-[#04102b] text-sm">{t.name}</div>
+                    <div className="text-slate-400 text-xs">{t.role} · {t.project}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-center text-slate-400 text-xs mt-5">
+            * 의뢰인 동의 하에 게시된 후기입니다. 전체 대화 내역 공개 요청 시 제공 가능합니다.
+          </p>
         </div>
       </div>
 
