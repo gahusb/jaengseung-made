@@ -54,6 +54,26 @@ const samples = [
     tags: ['게임', '멀티플레이', '랭킹'],
     icon: '⚡',
   },
+  {
+    type: 'interior',
+    title: '인테리어 업체 소개',
+    subtitle: 'AURUM Interior',
+    desc: '따뜻한 감성과 고급스러운 감각을 담은 인테리어 포트폴리오 사이트',
+    gradient: 'linear-gradient(135deg, #2C1810 0%, #4A3728 50%, #6B4E37 100%)',
+    accent: '#D4A853',
+    tags: ['인테리어', '포트폴리오', '럭셔리'],
+    icon: '◈',
+  },
+  {
+    type: 'reading',
+    title: '독서 기록 노트',
+    subtitle: '나의 독서 기록',
+    desc: '읽은 책과 감상을 아름답게 기록하는 나만의 독서 저널 페이지',
+    gradient: 'linear-gradient(135deg, #0C0B09 0%, #1A1710 50%, #2A2218 100%)',
+    accent: '#D4A853',
+    tags: ['라이프', '독서', '기록'],
+    icon: '◻',
+  },
 ];
 
 const processSteps = [
