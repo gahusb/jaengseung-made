@@ -151,7 +151,7 @@ export default function SajuLottoSection({
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden">
+    <div id="saju-lotto-section" className="bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden">
       {/* 헤더 */}
       <div className="bg-gradient-to-r from-[#04102b] via-[#0d1f5c] to-[#04102b] px-6 py-5">
         <div className="flex items-center gap-3">

@@ -7,6 +7,7 @@ import { calculateElementScore, performFullAnalysis } from '@/lib/ai-interpretat
 import { createClient } from '@/lib/supabase/server';
 import SajuAISection from './SajuAISection';
 import SajuLottoSection from './SajuLottoSection';
+import SajuFortuneSection from './SajuFortuneSection';
 
 interface PageProps {
   searchParams: Promise<{
@@ -90,6 +91,7 @@ export default async function SajuResultPage({ searchParams }: PageProps) {
       hasPaid = !!order;
 
       if (hasPaid) {
+        // 1차: birth_hour 포함 정확한 키로 조회
         const birthKey: Record<string, unknown> = { birth_year: yearNum, birth_month: monthNum, birth_day: dayNum, gender };
         if (hourNum !== null) birthKey.birth_hour = hourNum;
         const { data: record } = await supabase
@@ -97,6 +99,16 @@ export default async function SajuResultPage({ searchParams }: PageProps) {
           .eq('user_id', user.id).eq('is_paid', true)
           .contains('saju_data', birthKey).maybeSingle();
         savedInterpretation = record?.interpretation ?? null;
+
+        // 2차 폴백: birth_hour 없이 조회 (시간 입력 안 한 케이스 or 불일치 방지)
+        if (!savedInterpretation) {
+          const birthKeyNoHour: Record<string, unknown> = { birth_year: yearNum, birth_month: monthNum, birth_day: dayNum, gender };
+          const { data: record2 } = await supabase
+            .from('saju_records').select('interpretation')
+            .eq('user_id', user.id).eq('is_paid', true)
+            .contains('saju_data', birthKeyNoHour).maybeSingle();
+          savedInterpretation = record2?.interpretation ?? null;
+        }
       }
 
       // 로또 구독 확인 — subscriptions 테이블 (세션 클라이언트로 RLS select_own 통과)
@@ -542,6 +554,20 @@ export default async function SajuResultPage({ searchParams }: PageProps) {
                 />
               );
             })()}
+
+            {/* 오늘의 운세 (사주 결제 시 표시) */}
+            {hasPaid && (
+              <SajuFortuneSection
+                yongShin={analysis.yongShin.yongShin}
+                yongShinKr={analysis.yongShin.yongShinKr}
+                heeShin={analysis.yongShin.heeShin}
+                heeShinKr={analysis.yongShin.heeShinKr}
+                yearNum={yearNum}
+                monthNum={monthNum}
+                dayNum={dayNum}
+                hasLottoSubscription={hasLottoSubscription}
+              />
+            )}
 
             {/* 사주 연동 로또 번호 추천 (사주 결제 시 표시) */}
             {hasPaid && (
