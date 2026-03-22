@@ -60,8 +60,12 @@ function LoginForm() {
   };
 
   const handleGoogleLogin = async () => {
-    // NEXT_PUBLIC_SITE_URL 이 설정되어 있으면 우선 사용 (localhost 리다이렉트 방지)
-    const base = process.env.NEXT_PUBLIC_SITE_URL ?? window.location.origin;
+    // dev 환경에서는 NEXT_PUBLIC_SITE_URL을 무시하고 현재 브라우저 origin 사용
+    // (NEXT_PUBLIC_SITE_URL이 .env.local에 있어도 localhost로 콜백 돌아옴)
+    const base =
+      process.env.NODE_ENV === 'development'
+        ? window.location.origin
+        : (process.env.NEXT_PUBLIC_SITE_URL ?? window.location.origin);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: `${base}/auth/callback` },

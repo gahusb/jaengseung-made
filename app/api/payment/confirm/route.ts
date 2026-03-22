@@ -28,7 +28,14 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. 토스페이먼츠 서버 승인
+    // dev: TOSS_SECRET_KEY=test_sk_* (테스트 결제)
+    // prod: TOSS_SECRET_KEY=live_sk_* (실결제) — Vercel 환경변수에 설정
     const secretKey = process.env.TOSS_SECRET_KEY!;
+    const isTestKey = secretKey.startsWith('test_');
+    if (!isTestKey && process.env.NODE_ENV === 'development') {
+      // 실수로 live 키를 dev에서 쓰는 것 방지
+      console.warn('[Payment] WARNING: live Toss key detected in development!');
+    }
     const encoded = Buffer.from(`${secretKey}:`).toString('base64');
 
     const tossRes = await fetch('https://api.tosspayments.com/v1/payments/confirm', {

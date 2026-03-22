@@ -6,15 +6,15 @@ export async function GET(request: Request) {
   const code = searchParams.get('code');
   const next = searchParams.get('next') ?? '/mypage';
 
-  // 프로덕션 기준 URL 결정
-  // 우선순위: NEXT_PUBLIC_SITE_URL > x-forwarded-host > origin
+  // 리다이렉트 기준 URL 결정
+  // - dev: 항상 현재 request의 origin (localhost) → NEXT_PUBLIC_SITE_URL 무시
+  // - prod: NEXT_PUBLIC_SITE_URL > x-forwarded-host (Vercel) > origin
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   const forwardedHost = request.headers.get('x-forwarded-host');
-  const baseUrl =
-    siteUrl ??
-    (process.env.NODE_ENV !== 'development' && forwardedHost
-      ? `https://${forwardedHost}`
-      : origin);
+  const isDev = process.env.NODE_ENV === 'development';
+  const baseUrl = isDev
+    ? origin
+    : (siteUrl ?? (forwardedHost ? `https://${forwardedHost}` : origin));
 
   if (code) {
     const supabase = await createClient();

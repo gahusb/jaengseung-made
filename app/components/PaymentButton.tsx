@@ -47,6 +47,8 @@ export default function PaymentButton({ productId, className, children, returnUr
       if (orderError) throw new Error('주문 생성 실패: ' + orderError.message);
 
       // 4. 토스페이먼츠 결제창 호출
+      // dev: NEXT_PUBLIC_TOSS_CLIENT_KEY=test_ck_* → 테스트 결제 (실제 청구 없음)
+      // prod: NEXT_PUBLIC_TOSS_CLIENT_KEY=live_ck_* → 실결제 (Vercel 환경변수에 설정)
       const { loadTossPayments } = await import('@tosspayments/tosspayments-sdk');
       const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
       const tossPayments = await loadTossPayments(clientKey);
@@ -81,13 +83,29 @@ export default function PaymentButton({ productId, className, children, returnUr
 
   if (!product) return null;
 
+  const isTestMode = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY?.startsWith('test_');
+
   return (
-    <button
-      onClick={handlePayment}
-      disabled={loading}
-      className={className}
-    >
-      {loading ? '결제 처리 중...' : children}
-    </button>
+    <div style={{ display: 'inline-block', position: 'relative' }}>
+      <button
+        onClick={handlePayment}
+        disabled={loading}
+        className={className}
+      >
+        {loading ? '결제 처리 중...' : children}
+      </button>
+      {/* dev/test 환경에서만 표시되는 배지 — 실수로 실결제 누르는 것 방지 */}
+      {isTestMode && (
+        <span style={{
+          position: 'absolute', top: -8, right: -8,
+          background: '#f59e0b', color: '#fff',
+          fontSize: 9, fontWeight: 800, letterSpacing: '0.05em',
+          padding: '2px 6px', borderRadius: 4,
+          pointerEvents: 'none', userSelect: 'none',
+        }}>
+          TEST
+        </span>
+      )}
+    </div>
   );
 }
