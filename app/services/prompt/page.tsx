@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+import PaymentButton from '../../components/PaymentButton';
 
 const CHECKLIST = [
   '주로 어떤 AI 도구를 사용하는지 (ChatGPT / Claude / Gemini)',
@@ -29,6 +30,7 @@ const plans = [
     desc: '특정 업무 1건 프롬프트 설계',
     features: ['요구사항 분석 및 인터뷰', '목적별 프롬프트 1개 설계', 'ChatGPT / Claude 최적화', '수정 1회 포함', '사용 가이드 문서 제공'],
     highlight: false,
+    productId: 'prompt_single',
   },
   {
     name: '비즈니스 패키지',
@@ -37,6 +39,7 @@ const plans = [
     desc: '업무 유형별 5개 프롬프트 세트',
     features: ['업무 분석 심층 인터뷰', '5개 프롬프트 맞춤 설계', '용도별 프롬프트 라이브러리', '수정 3회 포함', '활용 방법 1:1 교육 (30분)', '1개월 내 추가 조정 가능'],
     highlight: true,
+    productId: 'prompt_business',
   },
   {
     name: '팀/기업 패키지',
@@ -45,6 +48,7 @@ const plans = [
     desc: '부서·팀 전체 프롬프트 시스템 구축',
     features: ['팀 업무 프로세스 전체 분석', '10개 이상 프롬프트 설계', '팀 공유 프롬프트 라이브러리', '사내 가이드 문서 작성', '전 직원 교육 자료 제공', '3개월 내 업데이트 지원'],
     highlight: false,
+    productId: null,
   },
 ];
 
@@ -226,14 +230,25 @@ export default function PromptPage() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  onClick={() => openModal(`프롬프트 엔지니어링 - ${plan.name}`)}
-                  className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
-                    plan.highlight ? 'bg-violet-400 text-[#0d0a2e] hover:bg-violet-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
-                  }`}
-                >
-                  신청하기
-                </button>
+                {plan.productId ? (
+                  <PaymentButton
+                    productId={plan.productId}
+                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
+                      plan.highlight ? 'bg-violet-400 text-[#0d0a2e] hover:bg-violet-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
+                    }`}
+                  >
+                    바로 결제하기
+                  </PaymentButton>
+                ) : (
+                  <button
+                    onClick={() => openModal(`프롬프트 엔지니어링 - ${plan.name}`)}
+                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
+                      plan.highlight ? 'bg-violet-400 text-[#0d0a2e] hover:bg-violet-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
+                    }`}
+                  >
+                    견적 문의
+                  </button>
+                )}
               </div>
             ))}
           </div>

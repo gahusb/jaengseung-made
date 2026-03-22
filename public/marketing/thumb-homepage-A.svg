@@ -58,7 +58,7 @@
   <text x="60" y="302" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="56" font-weight="900" fill="url(#headA)">그만하세요.</text>
 
   <!-- 서브텍스트 -->
-  <text x="60" y="348" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">계약서로 시작 · 납기 보장 · AS까지 한 명이 책임</text>
+  <text x="60" y="348" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">계약서로 시작 · 납기 보장 · AS까지 책임</text>
 
   <!-- 구분선 -->
   <line x1="60" y1="372" x2="280" y2="372" stroke="#1a3a7a" stroke-width="1.5"/>

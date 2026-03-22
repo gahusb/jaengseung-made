@@ -233,7 +233,7 @@ export default function FreelancePage() {
             <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
               연락 두절? 그런 거 없습니다.<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5ba4ff] to-[#818cf8]">
-                직접 만들고, 직접 책임집니다
+                납기 지키고, 끝까지 책임집니다
               </span>
             </h1>
             <p className="text-blue-200/60 text-base md:text-lg max-w-xl mx-auto leading-relaxed mb-2">

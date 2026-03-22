@@ -63,4 +63,18 @@ export const PRODUCTS: Record<string, Product> = {
     type: 'one_time',
     description: 'AI 12가지 항목 상세 해석',
   },
+  prompt_single: {
+    id: 'prompt_single',
+    name: '프롬프트 단건 설계',
+    price: 30000,
+    type: 'one_time',
+    description: '업무 특화 프롬프트 1개 맞춤 설계 · 수정 1회 포함',
+  },
+  prompt_business: {
+    id: 'prompt_business',
+    name: '프롬프트 비즈니스 패키지',
+    price: 99000,
+    type: 'one_time',
+    description: '업무 유형별 프롬프트 5개 설계 · 수정 3회 · 1:1 교육 포함',
+  },
 };

@@ -295,7 +295,7 @@ export default function LandingPage() {
 
             <p style={{ color: '#94a3b8', fontSize: 17, lineHeight: 1.85, fontFamily: "'Noto Sans KR', sans-serif", marginBottom: 36, maxWidth: 500 }}>
               개발자에게 맡겼다가 <span style={{ color: '#fca5a5' }}>연락 두절</span>된 경험 있으신가요?<br />
-              납기 지키고 연락 끊지 않는 개발자가 계약서부터 소스코드 인도까지<br />한 명이 끝까지 책임집니다.
+              납기 지키고 연락 끊지 않는 개발팀이 계약서부터 소스코드 인도까지<br />끝까지 책임집니다.
             </p>
 
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
