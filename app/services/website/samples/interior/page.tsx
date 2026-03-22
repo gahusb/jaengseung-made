@@ -119,14 +119,15 @@ export default function InteriorSample() {
   const SURFACE = '#F0ECE4';
 
   return (
-    <div style={{ background: CREAM, color: DARK, fontFamily: "'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif", overflowX: 'hidden' }}>
+    <div className="au-page" style={{ background: CREAM, color: DARK, fontFamily: "'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif", overflowX: 'hidden' }}>
 
       {/* ══ 폰트 + 전역 CSS ══ */}
       <style dangerouslySetInnerHTML={{ __html: `
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css');
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        /* 전역 리셋을 .au-page 하위로 한정 — 사이드바 오염 방지 */
+        .au-page, .au-page *, .au-page *::before, .au-page *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         @keyframes au-fadeUp {
           from { opacity: 0; transform: translateY(2rem); filter: blur(4px); }

@@ -21,26 +21,32 @@ const BANNER_H = 40;
 const NAV_H    = 56;
 
 /* ═══════════════════════════════════════════════════
-   UNSPLASH FASHION IMAGES
+   FASHION IMAGES — picsum.photos (안정적, 항상 로드됨)
+   seed 값은 항상 동일한 이미지를 반환하므로 일관성 유지
 ═══════════════════════════════════════════════════ */
 const IMG = {
-  hero:  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=85',
-  p1:    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80',
-  p2:    'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=600&q=80',
-  p3:    'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=600&q=80',
-  p4:    'https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?auto=format&fit=crop&w=600&q=80',
-  p5:    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=600&q=80',
-  p6:    'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=600&q=80',
-  p7:    'https://images.unsplash.com/photo-1503342564405-cf0c5f9d5c79?auto=format&fit=crop&w=600&q=80',
-  p8:    'https://images.unsplash.com/photo-1525507119028-ed4ccf09e210?auto=format&fit=crop&w=600&q=80',
-  edit1: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1400&q=85',
-  feat1: 'https://images.unsplash.com/photo-1558171813-0022efd9b40d?auto=format&fit=crop&w=700&q=80',
-  feat2: 'https://images.unsplash.com/photo-1542060748-10c28b62716f?auto=format&fit=crop&w=700&q=80',
-  lb1:   'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=500&q=80',
-  lb2:   'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=500&q=80',
-  lb3:   'https://images.unsplash.com/photo-1503342564405-cf0c5f9d5c79?auto=format&fit=crop&w=500&q=80',
-  lb4:   'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=500&q=80',
-  lb5:   'https://images.unsplash.com/photo-1525507119028-ed4ccf09e210?auto=format&fit=crop&w=500&q=80',
+  /* 히어로 — 세로형 풀스크린 */
+  hero:  'https://picsum.photos/seed/mellow-hero/900/1200',
+  /* 상품 — 세로 portrait (3:4) */
+  p1:    'https://picsum.photos/seed/mellow-p1/480/640',
+  p2:    'https://picsum.photos/seed/mellow-p2/480/640',
+  p3:    'https://picsum.photos/seed/mellow-p3/480/640',
+  p4:    'https://picsum.photos/seed/mellow-p4/480/640',
+  p5:    'https://picsum.photos/seed/mellow-p5/480/640',
+  p6:    'https://picsum.photos/seed/mellow-p6/480/640',
+  p7:    'https://picsum.photos/seed/mellow-p7/480/640',
+  p8:    'https://picsum.photos/seed/mellow-p8/480/640',
+  /* 에디토리얼 배너 — 와이드 */
+  edit1: 'https://picsum.photos/seed/mellow-edit/1400/700',
+  /* 브랜드 스토리 이미지 */
+  feat1: 'https://picsum.photos/seed/mellow-feat1/600/800',
+  feat2: 'https://picsum.photos/seed/mellow-feat2/600/800',
+  /* 룩북 — portrait strip */
+  lb1:   'https://picsum.photos/seed/mellow-lb1/400/533',
+  lb2:   'https://picsum.photos/seed/mellow-lb2/400/533',
+  lb3:   'https://picsum.photos/seed/mellow-lb3/400/533',
+  lb4:   'https://picsum.photos/seed/mellow-lb4/400/533',
+  lb5:   'https://picsum.photos/seed/mellow-lb5/400/533',
 } as const;
 
 /* ═══════════════════════════════════════════════════
@@ -107,14 +113,15 @@ export default function ShoppingPage() {
   };
 
   return (
-    <div style={{ fontFamily: "'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif", background: T.paper, color: T.ink, overflowX: 'hidden' }}>
+    <div className="ml-page" style={{ fontFamily: "'Pretendard','Apple SD Gothic Neo',system-ui,sans-serif", background: T.paper, color: T.ink, overflowX: 'hidden' }}>
 
       {/* ── FONTS + GLOBAL ── */}
       <style dangerouslySetInnerHTML={{ __html: `
         @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css');
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        /* 전역 리셋을 .ml-page 하위로 한정 — 사이드바 오염 방지 */
+        .ml-page, .ml-page *, .ml-page *::before, .ml-page *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         /* scroll reveal */
         .ml-reveal {
