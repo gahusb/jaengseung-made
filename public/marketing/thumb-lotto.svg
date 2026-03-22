@@ -1,0 +1,206 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bgLt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1c1200"/>
+      <stop offset="50%" style="stop-color:#1a0e00"/>
+      <stop offset="100%" style="stop-color:#04102b"/>
+    </linearGradient>
+    <linearGradient id="headLt" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fbbf24"/>
+      <stop offset="100%" style="stop-color:#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="priceLt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#92400e"/>
+      <stop offset="100%" style="stop-color:#b45309"/>
+    </linearGradient>
+    <linearGradient id="goldBall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fde68a"/>
+      <stop offset="100%" style="stop-color:#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="redBall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fca5a5"/>
+      <stop offset="100%" style="stop-color:#ef4444"/>
+    </linearGradient>
+    <linearGradient id="blueBall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#93c5fd"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="greenBall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#86efac"/>
+      <stop offset="100%" style="stop-color:#22c55e"/>
+    </linearGradient>
+    <linearGradient id="grayBall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e2e8f0"/>
+      <stop offset="100%" style="stop-color:#94a3b8"/>
+    </linearGradient>
+    <radialGradient id="glowLt" cx="70%" cy="50%" r="55%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.18"/>
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="ballShadLt">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="panelShadLt">
+      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="1200" height="675" fill="url(#bgLt)"/>
+  <rect width="1200" height="675" fill="url(#glowLt)"/>
+
+  <!-- 배경 숫자 패턴 (은은하게) -->
+  <text x="620" y="88" font-family="monospace" font-size="13" fill="#2a1a00" opacity="0.7">7  12  23  34  41  45  [BONUS: 16]</text>
+  <text x="620" y="108" font-family="monospace" font-size="13" fill="#2a1a00" opacity="0.5">1  8  17  29  36  44  [BONUS: 3]</text>
+  <text x="620" y="590" font-family="monospace" font-size="13" fill="#2a1a00" opacity="0.4">FREQUENCY ANALYSIS | PATTERN: 연속번호 출현율 34.2%</text>
+  <text x="620" y="610" font-family="monospace" font-size="13" fill="#2a1a00" opacity="0.3">HOT: 3,7,14,23,32 | COLD: 5,19,28,38,42</text>
+
+  <!-- 왼쪽 콘텐츠 -->
+  <!-- 뱃지 -->
+  <rect x="60" y="62" width="272" height="40" rx="20" fill="#92400e" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="82" y="87" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#fde68a">🎯 빅데이터 통계 기반 분석</text>
+
+  <!-- 헤드라인 -->
+  <text x="60" y="162" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="54" font-weight="900" fill="#ffffff">운이 아닌</text>
+  <text x="60" y="228" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="54" font-weight="900" fill="url(#headLt)">데이터로 고릅니다</text>
+  <text x="60" y="276" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">1~45회차 전수 분석 · 출현 패턴 · 구간별 최적화</text>
+
+  <!-- 수치 뱃지 3개 -->
+  <rect x="60" y="300" width="156" height="70" rx="14" fill="#1c1200" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="138" y="332" text-anchor="middle" font-family="sans-serif" font-size="30" font-weight="900" fill="#fbbf24">1,115</text>
+  <text x="138" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">회차 전수 분석</text>
+
+  <rect x="228" y="300" width="156" height="70" rx="14" fill="#1c1200" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="306" y="332" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="28" font-weight="900" fill="#60a5fa">매주</text>
+  <text x="306" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">번호 업데이트</text>
+
+  <rect x="396" y="300" width="172" height="70" rx="14" fill="#1c1200" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="482" y="326" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#94a3b8">월 구독 시작</text>
+  <text x="482" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="30" font-weight="900" fill="#fbbf24">900원</text>
+
+  <!-- 플랜 설명 -->
+  <g font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#e2e8f0">
+    <rect x="60" y="388" width="12" height="12" rx="3" fill="#fbbf24"/>
+    <text x="82" y="400">골드 — 매주 1회 번호 추천 · 900원/월</text>
+    <rect x="60" y="416" width="12" height="12" rx="3" fill="#94a3b8"/>
+    <text x="82" y="428">플래티넘 — 주 3회 + 텔레그램 · 2,900원/월</text>
+    <rect x="60" y="444" width="12" height="12" rx="3" fill="#fbbf24"/>
+    <text x="82" y="456">다이아 — 무제한 + 연간 리포트 · 9,900원/월</text>
+  </g>
+
+  <!-- 가격 뱃지 -->
+  <rect x="60" y="476" width="248" height="72" rx="16" fill="url(#priceLt)"/>
+  <text x="184" y="503" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#fde68a">골드 플랜 시작 가격</text>
+  <text x="184" y="534" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="900" fill="#ffffff">월 900원~</text>
+
+  <!-- 안내 문구 -->
+  <rect x="60" y="562" width="510" height="34" rx="8" fill="#1c1200" opacity="0.85"/>
+  <text x="80" y="583" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#78716c">⚠️ 당첨을 보장하지 않습니다. 통계 기반 번호 추천 서비스입니다.</text>
+
+  <!-- URL -->
+  <text x="60" y="632" font-family="sans-serif" font-size="14" fill="#3b5998">jaengseung-made.com</text>
+
+  <!-- 오른쪽 로또 공 + 분석 패널 -->
+  <rect x="614" y="52" width="558" height="558" rx="22" fill="#100a00" stroke="#2a1a00" stroke-width="1.5" filter="url(#panelShadLt)"/>
+
+  <!-- 패널 헤더 -->
+  <rect x="614" y="52" width="558" height="46" rx="22" fill="#0c0800"/>
+  <rect x="614" y="76" width="558" height="22" fill="#0c0800"/>
+  <text x="893" y="82" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#f59e0b">🎱 이번주 추천 번호</text>
+
+  <!-- 로또 공 6개 (메인) -->
+  <!-- 공 1: 7 (파랑) -->
+  <circle cx="690" cy="160" r="46" fill="url(#blueBall)" filter="url(#ballShadLt)"/>
+  <circle cx="690" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
+  <text x="690" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#fff">7</text>
+
+  <!-- 공 2: 14 (빨강) -->
+  <circle cx="788" cy="160" r="46" fill="url(#redBall)" filter="url(#ballShadLt)"/>
+  <circle cx="788" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
+  <text x="788" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#fff">14</text>
+
+  <!-- 공 3: 23 (금) -->
+  <circle cx="886" cy="160" r="46" fill="url(#goldBall)" filter="url(#ballShadLt)"/>
+  <circle cx="886" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
+  <text x="886" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#7c3200">23</text>
+
+  <!-- 공 4: 31 (초록) -->
+  <circle cx="984" cy="160" r="46" fill="url(#greenBall)" filter="url(#ballShadLt)"/>
+  <circle cx="984" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
+  <text x="984" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#fff">31</text>
+
+  <!-- 공 5: 38 (파랑) -->
+  <circle cx="1082" cy="160" r="46" fill="url(#blueBall)" filter="url(#ballShadLt)"/>
+  <circle cx="1082" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
+  <text x="1082" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#fff">38</text>
+
+  <!-- 보너스 공: 45 (회색) -->
+  <text x="893" y="228" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="11" fill="#475569">BONUS</text>
+  <circle cx="1140" cy="218" r="30" fill="url(#grayBall)" filter="url(#ballShadLt)"/>
+  <circle cx="1140" cy="215" r="8" fill="rgba(255,255,255,0.3)"/>
+  <text x="1140" y="225" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="900" fill="#0f172a">45</text>
+
+  <!-- 구분선 -->
+  <line x1="634" y1="252" x2="1152" y2="252" stroke="#1e0e00" stroke-width="1.5"/>
+
+  <!-- 통계 그래프 영역 -->
+  <text x="893" y="280" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#94a3b8">번호별 출현 빈도 (최근 100회)</text>
+
+  <!-- 빈도 바 그래프 (간소화) -->
+  <g>
+    <!-- 1~10 구간 -->
+    <rect x="640" y="392" width="54" height="70" rx="0" fill="#3b82f6" opacity="0.7"/>
+    <rect x="640" y="362" width="54" height="30" rx="0" fill="#3b82f6" opacity="0.9"/>
+    <text x="667" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">1~10</text>
+    <!-- 11~20 구간 -->
+    <rect x="704" y="342" width="54" height="120" rx="0" fill="#22c55e" opacity="0.7"/>
+    <rect x="704" y="302" width="54" height="40" rx="0" fill="#22c55e" opacity="0.9"/>
+    <text x="731" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">11~20</text>
+    <!-- 21~30 구간 -->
+    <rect x="768" y="372" width="54" height="90" rx="0" fill="#f59e0b" opacity="0.7"/>
+    <rect x="768" y="352" width="54" height="20" rx="0" fill="#f59e0b" opacity="0.9"/>
+    <text x="795" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">21~30</text>
+    <!-- 31~40 구간 -->
+    <rect x="832" y="332" width="54" height="130" rx="0" fill="#ef4444" opacity="0.7"/>
+    <rect x="832" y="302" width="54" height="30" rx="0" fill="#ef4444" opacity="0.9"/>
+    <text x="859" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">31~40</text>
+    <!-- 41~45 구간 -->
+    <rect x="896" y="382" width="54" height="80" rx="0" fill="#a78bfa" opacity="0.7"/>
+    <rect x="896" y="362" width="54" height="20" rx="0" fill="#a78bfa" opacity="0.9"/>
+    <text x="923" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">41~45</text>
+  </g>
+  <!-- 기준선 -->
+  <line x1="634" y1="462" x2="966" y2="462" stroke="#1e0e00" stroke-width="1"/>
+
+  <!-- 우측 통계 텍스트 -->
+  <rect x="980" y="290" width="190" height="172" rx="14" fill="#0c0800" stroke="#2a1a00" stroke-width="1"/>
+  <text x="1075" y="316" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#94a3b8">HOT 번호</text>
+  <text x="1075" y="340" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#ef4444">3, 7, 14, 23, 32</text>
+  <line x1="990" y1="354" x2="1160" y2="354" stroke="#1e0e00" stroke-width="1"/>
+  <text x="1075" y="374" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#94a3b8">COLD 번호</text>
+  <text x="1075" y="398" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#60a5fa">5, 19, 28, 38, 42</text>
+  <line x1="990" y1="412" x2="1160" y2="412" stroke="#1e0e00" stroke-width="1"/>
+  <text x="1075" y="432" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#94a3b8">평균 출현 간격</text>
+  <text x="1075" y="454" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="900" fill="#fbbf24">7.8회</text>
+
+  <!-- AI 분석 태그 -->
+  <rect x="634" y="492" width="526" height="96" rx="14" fill="#1a0e00" stroke="#2a1a00" stroke-width="1"/>
+  <text x="650" y="516" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#f59e0b">분석 기법</text>
+  <g font-family="sans-serif" font-size="11" font-weight="700">
+    <rect x="650" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
+    <text x="694" y="540" text-anchor="middle" fill="#fbbf24">빈도 분석</text>
+    <rect x="746" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
+    <text x="790" y="540" text-anchor="middle" fill="#fbbf24">구간 패턴</text>
+    <rect x="842" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
+    <text x="886" y="540" text-anchor="middle" fill="#fbbf24">홀짝 비율</text>
+    <rect x="938" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
+    <text x="982" y="540" text-anchor="middle" fill="#fbbf24">연속번호</text>
+    <rect x="1034" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
+    <text x="1078" y="540" text-anchor="middle" fill="#fbbf24">출현 주기</text>
+  </g>
+  <text x="650" y="575" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">7년차 개발자가 직접 설계한 통계 알고리즘으로 매주 번호를 선별합니다.</text>
+
+  <!-- 하단 바 -->
+  <rect x="0" y="638" width="1200" height="37" fill="#92400e"/>
+  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#fde68a">빅데이터 통계 기반 로또 번호 추천  ·  1,115회차 전수 분석  ·  jaengseung-made.com</text>
+</svg>

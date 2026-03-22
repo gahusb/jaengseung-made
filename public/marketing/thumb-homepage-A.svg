@@ -1,186 +1,204 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0f172a"/>
-      <stop offset="55%" style="stop-color:#1e1b4b"/>
-      <stop offset="100%" style="stop-color:#1e3a8a"/>
+    <linearGradient id="bgA" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#04102b"/>
+      <stop offset="50%" style="stop-color:#0d1f4f"/>
+      <stop offset="100%" style="stop-color:#0a1840"/>
     </linearGradient>
-    <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="headA" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#60a5fa"/>
       <stop offset="100%" style="stop-color:#a78bfa"/>
     </linearGradient>
-    <linearGradient id="priceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#7c3aed"/>
-      <stop offset="100%" style="stop-color:#6d28d9"/>
-    </linearGradient>
-    <linearGradient id="btnGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="btnA" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#2563eb"/>
       <stop offset="100%" style="stop-color:#7c3aed"/>
     </linearGradient>
-    <radialGradient id="glow1" cx="70%" cy="30%" r="45%">
-      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:0.22"/>
+    <linearGradient id="priceA" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1d4ed8"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <radialGradient id="glowA1" cx="20%" cy="30%" r="50%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:0.18"/>
       <stop offset="100%" style="stop-color:#2563eb;stop-opacity:0"/>
     </radialGradient>
-    <radialGradient id="glow2" cx="85%" cy="75%" r="35%">
-      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.18"/>
+    <radialGradient id="glowA2" cx="80%" cy="70%" r="40%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.15"/>
       <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0"/>
     </radialGradient>
-    <filter id="shadow">
-      <feDropShadow dx="0" dy="12" stdDeviation="20" flood-color="#000" flood-opacity="0.55"/>
+    <filter id="shadowA">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#000" flood-opacity="0.6"/>
     </filter>
-    <filter id="glowFilter">
-      <feGaussianBlur stdDeviation="3" result="blur"/>
+    <filter id="glowFilterA">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <clipPath id="browserClip">
-      <rect x="620" y="60" width="550" height="530" rx="16"/>
+    <clipPath id="brClipA">
+      <rect x="620" y="55" width="548" height="540" rx="18"/>
     </clipPath>
+    <pattern id="gridA" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M 44 0 L 0 0 0 44" fill="none" stroke="#1a3a7a" stroke-width="0.4" opacity="0.5"/>
+    </pattern>
   </defs>
 
   <!-- 배경 -->
-  <rect width="1200" height="675" fill="url(#bg)"/>
-  <rect width="1200" height="675" fill="url(#glow1)"/>
-  <rect width="1200" height="675" fill="url(#glow2)"/>
-
-  <!-- 격자 패턴 -->
-  <defs>
-    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
-      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#334155" stroke-width="0.5" opacity="0.4"/>
-    </pattern>
-  </defs>
-  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect width="1200" height="675" fill="url(#bgA)"/>
+  <rect width="1200" height="675" fill="url(#glowA1)"/>
+  <rect width="1200" height="675" fill="url(#glowA2)"/>
+  <rect width="1200" height="675" fill="url(#gridA)"/>
 
   <!-- 왼쪽 콘텐츠 -->
-  <!-- 상단 뱃지 -->
-  <rect x="60" y="72" width="296" height="38" rx="19" fill="#1d4ed8" opacity="0.9"/>
-  <circle cx="82" cy="91" r="5" fill="#fbbf24"/>
-  <text x="98" y="96" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="700" fill="#ffffff">대기업 현직 개발자 직접 제작</text>
+  <!-- 뱃지 -->
+  <rect x="60" y="64" width="308" height="38" rx="19" fill="#1d4ed8" opacity="0.95"/>
+  <circle cx="84" cy="83" r="6" fill="#fbbf24"/>
+  <text x="100" y="88" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="700" fill="#ffffff">대기업 현직 개발자 직접 제작</text>
 
   <!-- 메인 헤드라인 -->
-  <text x="60" y="170" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="52" font-weight="800" fill="#ffffff">7년차 대기업</text>
-  <text x="60" y="232" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="52" font-weight="800" fill="#ffffff">개발자가 직접</text>
-  <text x="60" y="294" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="52" font-weight="800" fill="url(#headGrad)">만드는 홈페이지</text>
+  <text x="60" y="166" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="56" font-weight="900" fill="#ffffff">연락 끊기는</text>
+  <text x="60" y="234" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="56" font-weight="900" fill="#ffffff">외주, 이제</text>
+  <text x="60" y="302" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="56" font-weight="900" fill="url(#headA)">그만하세요.</text>
 
   <!-- 서브텍스트 -->
-  <text x="60" y="346" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="#94a3b8">기획 · 디자인 · 개발 · 배포 원스톱</text>
+  <text x="60" y="348" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">기획 · 디자인 · 개발 · 배포 원스톱 — 7년차 대기업</text>
+
+  <!-- 구분선 -->
+  <line x1="60" y1="372" x2="280" y2="372" stroke="#1a3a7a" stroke-width="1.5"/>
+
+  <!-- 핵심 특징 리스트 -->
+  <g font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#e2e8f0">
+    <rect x="60" y="386" width="12" height="12" rx="3" fill="#22c55e"/>
+    <text x="82" y="398">납기일 100% 준수</text>
+    <rect x="60" y="414" width="12" height="12" rx="3" fill="#22c55e"/>
+    <text x="82" y="426">납품 후 무료 AS 포함</text>
+    <rect x="60" y="442" width="12" height="12" rx="3" fill="#22c55e"/>
+    <text x="82" y="454">반응형 + SEO 최적화 기본</text>
+    <rect x="60" y="470" width="12" height="12" rx="3" fill="#22c55e"/>
+    <text x="82" y="482">Next.js 풀스택 개발</text>
+  </g>
 
   <!-- 가격 뱃지 -->
-  <rect x="60" y="376" width="230" height="62" rx="14" fill="url(#priceGrad)" filter="url(#glowFilter)"/>
-  <text x="175" y="400" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="600" fill="#ddd6fe">시작 가격</text>
-  <text x="175" y="428" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="26" font-weight="800" fill="#ffffff">스타터 50만원~</text>
-
-  <!-- 체크리스트 -->
-  <rect x="60" y="462" width="490" height="50" rx="10" fill="#0f172a" opacity="0.6"/>
-  <!-- 체크1 -->
-  <circle cx="84" cy="487" r="10" fill="#22c55e" opacity="0.2"/>
-  <text x="84" y="492" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="900" fill="#22c55e">✓</text>
-  <text x="100" y="492" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#e2e8f0">반응형</text>
-  <!-- 체크2 -->
-  <circle cx="198" cy="487" r="10" fill="#22c55e" opacity="0.2"/>
-  <text x="198" y="492" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="900" fill="#22c55e">✓</text>
-  <text x="214" y="492" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#e2e8f0">SEO 최적화</text>
-  <!-- 체크3 -->
-  <circle cx="328" cy="487" r="10" fill="#22c55e" opacity="0.2"/>
-  <text x="328" y="492" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="900" fill="#22c55e">✓</text>
-  <text x="344" y="492" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#e2e8f0">납기 보장</text>
-  <!-- 체크4 -->
-  <circle cx="440" cy="487" r="10" fill="#22c55e" opacity="0.2"/>
-  <text x="440" y="492" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="900" fill="#22c55e">✓</text>
-  <text x="456" y="492" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#e2e8f0">무료 AS</text>
-
-  <!-- 문의 버튼 -->
-  <rect x="60" y="534" width="200" height="52" rx="13" fill="url(#btnGrad)"/>
-  <text x="160" y="566" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="17" font-weight="700" fill="#ffffff">무료 상담 신청 →</text>
+  <rect x="60" y="506" width="260" height="68" rx="16" fill="url(#priceA)" filter="url(#glowFilterA)"/>
+  <text x="190" y="533" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" font-weight="600" fill="#bfdbfe">스타터 시작 가격</text>
+  <text x="190" y="562" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="30" font-weight="900" fill="#ffffff">50만원~</text>
 
   <!-- URL -->
-  <text x="60" y="628" font-family="sans-serif" font-size="14" fill="#475569">jaengseung-made.com</text>
+  <text x="60" y="632" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#3b5998">jaengseung-made.com</text>
 
   <!-- 오른쪽 브라우저 목업 -->
-  <g filter="url(#shadow)">
-    <rect x="620" y="60" width="550" height="530" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <g filter="url(#shadowA)">
+    <rect x="620" y="55" width="548" height="540" rx="18" fill="#0f172a" stroke="#1e3a8a" stroke-width="1.5"/>
     <!-- 탭바 -->
-    <rect x="620" y="60" width="550" height="44" rx="16" fill="#0f172a"/>
-    <rect x="620" y="92" width="550" height="12" fill="#0f172a"/>
+    <rect x="620" y="55" width="548" height="46" rx="18" fill="#040e28"/>
+    <rect x="620" y="82" width="548" height="19" fill="#040e28"/>
     <!-- 창 버튼 -->
-    <circle cx="650" cy="82" r="7" fill="#ef4444"/>
-    <circle cx="674" cy="82" r="7" fill="#f59e0b"/>
-    <circle cx="698" cy="82" r="7" fill="#22c55e"/>
+    <circle cx="650" cy="78" r="7" fill="#ef4444"/>
+    <circle cx="675" cy="78" r="7" fill="#f59e0b"/>
+    <circle cx="700" cy="78" r="7" fill="#22c55e"/>
     <!-- URL 바 -->
-    <rect x="724" y="70" width="380" height="24" rx="12" fill="#1e293b" stroke="#475569" stroke-width="1"/>
-    <text x="914" y="87" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">jaengseung-made.com</text>
+    <rect x="726" y="65" width="400" height="26" rx="13" fill="#0d1f4f" stroke="#1a3a7a" stroke-width="1"/>
+    <circle cx="746" cy="78" r="5" fill="#1a3a7a" opacity="0.6"/>
+    <text x="910" y="82" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475569">jaengseung-made.com</text>
 
     <!-- 브라우저 내부 -->
-    <g clip-path="url(#browserClip)">
-      <rect x="620" y="104" width="550" height="486" fill="#f8fafc"/>
+    <g clip-path="url(#brClipA)">
+      <rect x="620" y="101" width="548" height="494" fill="#f8fafc"/>
 
-      <!-- 네비 -->
-      <rect x="620" y="104" width="550" height="48" fill="#1d4ed8"/>
-      <rect x="638" y="118" width="70" height="20" rx="10" fill="#fff" opacity="0.25"/>
-      <rect x="900" y="118" width="45" height="20" rx="10" fill="#fff" opacity="0.15"/>
-      <rect x="952" y="118" width="45" height="20" rx="10" fill="#fff" opacity="0.15"/>
-      <rect x="1004" y="118" width="45" height="20" rx="10" fill="#fff" opacity="0.15"/>
-      <rect x="1100" y="114" width="56" height="28" rx="14" fill="#7c3aed"/>
-      <text x="1128" y="133" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#fff">문의</text>
+      <!-- 왼쪽 사이드바 (대시보드 스타일) -->
+      <rect x="620" y="101" width="136" height="494" fill="#04102b"/>
+      <!-- 사이드바 로고 -->
+      <rect x="634" y="116" width="30" height="30" rx="8" fill="#2563eb"/>
+      <text x="649" y="136" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="800" fill="#fff">쟁</text>
+      <rect x="672" y="120" width="70" height="10" rx="5" fill="#1e3a8a"/>
+      <rect x="672" y="136" width="50" height="8" rx="4" fill="#0d1f4f"/>
+      <!-- 사이드바 메뉴 -->
+      <rect x="630" y="164" width="108" height="28" rx="8" fill="#2563eb" opacity="0.9"/>
+      <rect x="638" y="172" width="12" height="12" rx="3" fill="#60a5fa" opacity="0.5"/>
+      <rect x="658" y="174" width="55" height="8" rx="4" fill="#fff" opacity="0.8"/>
+      <rect x="630" y="200" width="108" height="26" rx="7" fill="#0d1f4f"/>
+      <rect x="638" y="208" width="12" height="10" rx="2" fill="#1e3a8a"/>
+      <rect x="658" y="210" width="45" height="7" rx="3" fill="#1e3a8a"/>
+      <rect x="630" y="234" width="108" height="26" rx="7" fill="#0d1f4f"/>
+      <rect x="638" y="242" width="12" height="10" rx="2" fill="#1e3a8a"/>
+      <rect x="658" y="244" width="55" height="7" rx="3" fill="#1e3a8a"/>
+      <rect x="630" y="268" width="108" height="26" rx="7" fill="#0d1f4f"/>
+      <rect x="638" y="276" width="12" height="10" rx="2" fill="#1e3a8a"/>
+      <rect x="658" y="278" width="40" height="7" rx="3" fill="#1e3a8a"/>
+      <rect x="630" y="302" width="108" height="26" rx="7" fill="#0d1f4f"/>
+      <rect x="638" y="310" width="12" height="10" rx="2" fill="#1e3a8a"/>
+      <rect x="658" y="312" width="50" height="7" rx="3" fill="#1e3a8a"/>
+
+      <!-- 메인 콘텐츠 영역 -->
+      <!-- 상단 네비 -->
+      <rect x="756" y="101" width="412" height="44" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+      <rect x="776" y="116" width="120" height="14" rx="7" fill="#e2e8f0"/>
+      <rect x="1090" y="112" width="64" height="22" rx="11" fill="#2563eb"/>
+      <text x="1122" y="127" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#fff">문의하기</text>
 
       <!-- 히어로 섹션 -->
-      <rect x="620" y="152" width="550" height="160" fill="#eff6ff"/>
-      <!-- 히어로 텍스트 블록 -->
-      <rect x="642" y="174" width="180" height="18" rx="9" fill="#bfdbfe"/>
-      <rect x="642" y="200" width="240" height="22" rx="11" fill="#93c5fd"/>
-      <rect x="642" y="230" width="200" height="18" rx="9" fill="#bfdbfe"/>
-      <rect x="642" y="260" width="110" height="34" rx="17" fill="#2563eb"/>
-      <text x="697" y="283" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#fff">문의하기</text>
-      <!-- 히어로 이미지 -->
-      <rect x="950" y="164" width="196" height="134" rx="10" fill="#dbeafe"/>
-      <rect x="970" y="184" width="100" height="12" rx="6" fill="#93c5fd"/>
-      <rect x="970" y="204" width="140" height="12" rx="6" fill="#bfdbfe"/>
-      <rect x="970" y="224" width="120" height="12" rx="6" fill="#bfdbfe"/>
-      <rect x="970" y="254" width="80" height="26" rx="13" fill="#2563eb"/>
+      <rect x="756" y="145" width="412" height="148" fill="#eff6ff"/>
+      <rect x="776" y="164" width="60" height="18" rx="9" fill="#bfdbfe"/>
+      <text x="806" y="178" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#1d4ed8">⭐ 7년차</text>
+      <rect x="776" y="190" width="180" height="20" rx="10" fill="#93c5fd"/>
+      <rect x="776" y="218" width="140" height="16" rx="8" fill="#bfdbfe"/>
+      <rect x="776" y="242" width="80" height="28" rx="14" fill="#2563eb"/>
+      <text x="816" y="261" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff">문의하기</text>
+      <!-- 히어로 이미지 placeholder -->
+      <rect x="1010" y="156" width="140" height="120" rx="10" fill="#dbeafe"/>
+      <rect x="1026" y="174" width="80" height="10" rx="5" fill="#93c5fd"/>
+      <rect x="1026" y="192" width="108" height="10" rx="5" fill="#bfdbfe"/>
+      <rect x="1026" y="210" width="90" height="10" rx="5" fill="#bfdbfe"/>
+      <rect x="1026" y="234" width="60" height="22" rx="11" fill="#2563eb"/>
 
-      <!-- 서비스 카드 영역 -->
-      <rect x="620" y="312" width="550" height="20" fill="#f1f5f9"/>
-      <text x="895" y="327" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="11" fill="#94a3b8">주요 서비스</text>
+      <!-- 서비스 섹션 -->
+      <rect x="756" y="293" width="412" height="24" fill="#f1f5f9"/>
+      <text x="962" y="309" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="10" fill="#64748b">✦ 제공 서비스 ✦</text>
 
-      <!-- 카드 1 -->
-      <rect x="634" y="344" width="162" height="130" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
-      <rect x="634" y="344" width="162" height="5" rx="2" fill="#2563eb"/>
-      <rect x="648" y="362" width="50" height="50" rx="10" fill="#eff6ff"/>
-      <text x="673" y="394" text-anchor="middle" font-size="22">🏢</text>
-      <rect x="648" y="424" width="90" height="12" rx="6" fill="#e2e8f0"/>
-      <rect x="648" y="444" width="120" height="10" rx="5" fill="#f1f5f9"/>
-      <rect x="648" y="458" width="60" height="8" rx="4" fill="#f1f5f9"/>
+      <!-- 카드 행 1 -->
+      <rect x="762" y="325" width="122" height="108" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+      <rect x="762" y="325" width="122" height="5" rx="2" fill="#2563eb"/>
+      <rect x="776" y="342" width="36" height="36" rx="8" fill="#eff6ff"/>
+      <text x="794" y="366" text-anchor="middle" font-size="16">🏢</text>
+      <rect x="776" y="386" width="72" height="10" rx="5" fill="#e2e8f0"/>
+      <rect x="776" y="404" width="90" height="8" rx="4" fill="#f1f5f9"/>
+      <rect x="776" y="418" width="60" height="8" rx="4" fill="#f1f5f9"/>
 
-      <!-- 카드 2 -->
-      <rect x="808" y="344" width="162" height="130" rx="10" fill="#fff" stroke="#ede9fe" stroke-width="1.5"/>
-      <rect x="808" y="344" width="162" height="5" rx="2" fill="#7c3aed"/>
-      <rect x="820" y="338" width="50" height="20" rx="10" fill="#7c3aed"/>
-      <text x="845" y="353" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#fff">추천</text>
-      <rect x="822" y="362" width="50" height="50" rx="10" fill="#ede9fe"/>
-      <text x="847" y="394" text-anchor="middle" font-size="22">⚡</text>
-      <rect x="822" y="424" width="90" height="12" rx="6" fill="#ddd6fe"/>
-      <rect x="822" y="444" width="120" height="10" rx="5" fill="#ede9fe"/>
-      <rect x="822" y="458" width="60" height="8" rx="4" fill="#f5f3ff"/>
+      <rect x="894" y="325" width="122" height="108" rx="10" fill="#fff" stroke="#ede9fe" stroke-width="1.5"/>
+      <rect x="894" y="325" width="122" height="5" rx="2" fill="#7c3aed"/>
+      <rect x="910" y="342" width="36" height="36" rx="8" fill="#ede9fe"/>
+      <text x="928" y="366" text-anchor="middle" font-size="16">⚡</text>
+      <rect x="910" y="386" width="72" height="10" rx="5" fill="#ddd6fe"/>
+      <rect x="910" y="404" width="90" height="8" rx="4" fill="#ede9fe"/>
+      <rect x="910" y="418" width="60" height="8" rx="4" fill="#f5f3ff"/>
 
-      <!-- 카드 3 -->
-      <rect x="982" y="344" width="162" height="130" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
-      <rect x="982" y="344" width="162" height="5" rx="2" fill="#059669"/>
-      <rect x="996" y="362" width="50" height="50" rx="10" fill="#ecfdf5"/>
-      <text x="1021" y="394" text-anchor="middle" font-size="22">🚀</text>
-      <rect x="996" y="424" width="90" height="12" rx="6" fill="#e2e8f0"/>
-      <rect x="996" y="444" width="120" height="10" rx="5" fill="#f1f5f9"/>
-      <rect x="996" y="458" width="60" height="8" rx="4" fill="#f1f5f9"/>
+      <rect x="1026" y="325" width="122" height="108" rx="10" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
+      <rect x="1026" y="325" width="122" height="5" rx="2" fill="#059669"/>
+      <rect x="1042" y="342" width="36" height="36" rx="8" fill="#ecfdf5"/>
+      <text x="1060" y="366" text-anchor="middle" font-size="16">🚀</text>
+      <rect x="1042" y="386" width="72" height="10" rx="5" fill="#d1fae5"/>
+      <rect x="1042" y="404" width="90" height="8" rx="4" fill="#ecfdf5"/>
+      <rect x="1042" y="418" width="60" height="8" rx="4" fill="#ecfdf5"/>
 
-      <!-- 하단 푸터 영역 -->
-      <rect x="620" y="486" width="550" height="104" fill="#0f172a"/>
-      <rect x="642" y="502" width="80" height="14" rx="7" fill="#334155"/>
-      <rect x="642" y="524" width="120" height="10" rx="5" fill="#1e293b"/>
-      <rect x="642" y="540" width="100" height="10" rx="5" fill="#1e293b"/>
-      <rect x="1050" y="502" width="96" height="34" rx="8" fill="#2563eb"/>
-      <text x="1098" y="524" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#fff">상담 신청</text>
+      <!-- 실적 수치 행 -->
+      <rect x="756" y="441" width="412" height="60" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="840" y="476" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="18" font-weight="900" fill="#0f172a">7년</text>
+      <text x="840" y="491" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="9" fill="#64748b">개발 경력</text>
+      <line x1="899" y1="455" x2="899" y2="491" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="962" y="476" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="18" font-weight="900" fill="#2563eb">100%</text>
+      <text x="962" y="491" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="9" fill="#64748b">납기 준수</text>
+      <line x1="1025" y1="455" x2="1025" y2="491" stroke="#e2e8f0" stroke-width="1"/>
+      <text x="1087" y="476" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="18" font-weight="900" fill="#7c3aed">무료</text>
+      <text x="1087" y="491" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="9" fill="#64748b">AS 포함</text>
+
+      <!-- 하단 푸터 -->
+      <rect x="756" y="501" width="412" height="94" fill="#04102b"/>
+      <rect x="780" y="518" width="60" height="12" rx="6" fill="#1e3a8a"/>
+      <rect x="780" y="538" width="100" height="9" rx="4" fill="#0d1f4f"/>
+      <rect x="780" y="554" width="80" height="9" rx="4" fill="#0d1f4f"/>
+      <rect x="1080" y="518" width="74" height="30" rx="8" fill="#2563eb"/>
+      <text x="1117" y="538" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#fff">상담 신청</text>
     </g>
   </g>
 
   <!-- 하단 바 -->
-  <rect x="0" y="635" width="1200" height="40" fill="#1d4ed8"/>
-  <text x="600" y="660" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">7년차 대기업 백엔드 개발자 박재오  ·  기획부터 배포까지 원스톱  ·  jaengseung-made.com</text>
+  <rect x="0" y="638" width="1200" height="37" fill="url(#btnA)"/>
+  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">7년차 대기업 백엔드 개발자 박재오  ·  기획부터 배포까지 원스톱  ·  jaengseung-made.com</text>
 </svg>

@@ -1,88 +1,110 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
   <defs>
-    <linearGradient id="topBg" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#0f172a"/>
-      <stop offset="100%" style="stop-color:#1e3a8a"/>
+    <linearGradient id="bgB" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#04102b"/>
+      <stop offset="100%" style="stop-color:#1e1b4b"/>
     </linearGradient>
-    <linearGradient id="card2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="topBarB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#04102b"/>
+      <stop offset="100%" style="stop-color:#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="card2GradB" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#eff6ff"/>
       <stop offset="100%" style="stop-color:#ede9fe"/>
     </linearGradient>
-    <filter id="cardShadow">
-      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.15"/>
+    <linearGradient id="headB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#60a5fa"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="btnB" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2563eb"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <filter id="cardShadowB">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#000" flood-opacity="0.2"/>
     </filter>
-    <filter id="card2Shadow">
-      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#7c3aed" flood-opacity="0.25"/>
+    <filter id="card2ShadowB">
+      <feDropShadow dx="0" dy="12" stdDeviation="24" flood-color="#7c3aed" flood-opacity="0.3"/>
     </filter>
+    <radialGradient id="glowB" cx="50%" cy="60%" r="60%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0"/>
+    </radialGradient>
   </defs>
 
-  <!-- 상단 어두운 배경 -->
-  <rect width="1200" height="280" fill="url(#topBg)"/>
-  <!-- 하단 밝은 배경 -->
-  <rect y="280" width="1200" height="395" fill="#f8fafc"/>
+  <!-- 배경: 상단 어두운 영역 -->
+  <rect width="1200" height="300" fill="url(#topBarB)"/>
+  <!-- 하단 밝은 영역 -->
+  <rect y="300" width="1200" height="375" fill="#f8fafc"/>
+  <rect width="1200" height="675" fill="url(#glowB)"/>
 
-  <!-- 상단 로고/브랜드 -->
-  <rect x="60" y="36" width="44" height="44" rx="12" fill="#2563eb"/>
-  <text x="82" y="64" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="18" font-weight="900" fill="#fff">쟁</text>
-  <text x="116" y="52" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="700" fill="#60a5fa">쟁승메이드</text>
-  <text x="116" y="70" font-family="sans-serif" font-size="12" fill="#475569">홈페이지 제작 전문</text>
+  <!-- 상단: 브랜드 + 헤드라인 -->
+  <!-- 로고 -->
+  <rect x="60" y="38" width="42" height="42" rx="12" fill="#2563eb"/>
+  <text x="81" y="65" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="18" font-weight="900" fill="#fff">쟁</text>
+  <text x="114" y="52" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="700" fill="#60a5fa">쟁승메이드</text>
+  <text x="114" y="70" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">홈페이지 제작 전문</text>
 
-  <!-- 상단 헤드라인 -->
-  <text x="600" y="128" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="48" font-weight="800" fill="#ffffff">기업급 품질, 합리적 가격</text>
-  <text x="600" y="180" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="22" fill="#94a3b8">7년차 대기업 현직 개발자 · Next.js 풀스택 · SEO 최적화</text>
+  <!-- 헤드라인 -->
+  <text x="600" y="130" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="50" font-weight="900" fill="#ffffff">기업급 품질, 합리적 가격</text>
+  <text x="600" y="180" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="21" fill="#94a3b8">7년차 대기업 현직 개발자 · Next.js 풀스택 · SEO 최적화</text>
 
   <!-- 구분선 -->
-  <line x1="400" y1="218" x2="800" y2="218" stroke="#334155" stroke-width="1"/>
+  <line x1="380" y1="218" x2="820" y2="218" stroke="#1a3a7a" stroke-width="1"/>
 
-  <!-- 아이콘 지표 3개 -->
-  <text x="340" y="255" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#60a5fa">⚡ 최단 7일 납품</text>
-  <text x="600" y="255" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#a78bfa">🔒 코드 품질 보장</text>
-  <text x="860" y="255" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#34d399">✓ 납품 후 AS 포함</text>
+  <!-- 강점 3개 -->
+  <text x="330" y="255" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#60a5fa">⚡ 최단 7일 납품</text>
+  <text x="600" y="255" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#a78bfa">🔒 코드 품질 보증</text>
+  <text x="870" y="255" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#34d399">✓ 납품 후 AS 포함</text>
 
   <!-- 플랜 카드 3개 -->
   <!-- 카드1: 스타터 -->
-  <rect x="60" y="304" width="330" height="320" rx="20" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#cardShadow)"/>
-  <rect x="60" y="304" width="330" height="8" rx="4" fill="#2563eb"/>
-  <text x="225" y="350" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#2563eb">STARTER</text>
-  <text x="225" y="410" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="52" font-weight="900" fill="#0f172a">50만원</text>
-  <text x="225" y="438" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">~부터 시작</text>
-  <line x1="84" y1="454" x2="366" y2="454" stroke="#f1f5f9" stroke-width="1.5"/>
-  <text x="100" y="480" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#64748b">✓  5페이지 이내</text>
-  <text x="100" y="504" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#64748b">✓  반응형 디자인</text>
-  <text x="100" y="528" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#64748b">✓  SEO 기본 설정</text>
-  <text x="100" y="552" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#64748b">✓  납기 7일</text>
-  <rect x="84" y="574" width="262" height="40" rx="10" fill="#eff6ff"/>
-  <text x="215" y="599" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#2563eb">상담 신청</text>
+  <rect x="50" y="308" width="330" height="326" rx="20" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#cardShadowB)"/>
+  <rect x="50" y="308" width="330" height="8" rx="4" fill="#2563eb"/>
+  <text x="215" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#2563eb">STARTER</text>
+  <text x="215" y="422" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="56" font-weight="900" fill="#0f172a">50만원</text>
+  <text x="215" y="448" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">부터 시작</text>
+  <line x1="74" y1="466" x2="356" y2="466" stroke="#f1f5f9" stroke-width="1.5"/>
+  <text x="90" y="492" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#475569">✓  5페이지 이내</text>
+  <text x="90" y="516" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#475569">✓  반응형 디자인</text>
+  <text x="90" y="540" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#475569">✓  SEO 기본 설정</text>
+  <text x="90" y="564" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#475569">✓  납기 7일</text>
+  <rect x="74" y="584" width="262" height="40" rx="10" fill="#eff6ff"/>
+  <text x="205" y="609" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#2563eb">상담 신청하기</text>
 
-  <!-- 카드2: 비즈니스 (추천) -->
-  <rect x="430" y="284" width="340" height="360" rx="20" fill="url(#card2Grad)" stroke="#7c3aed" stroke-width="2" filter="url(#card2Shadow)"/>
-  <rect x="430" y="284" width="340" height="8" rx="4" fill="#7c3aed"/>
+  <!-- 카드2: 비즈니스 (추천, 크고 돌출) -->
+  <rect x="425" y="286" width="348" height="370" rx="20" fill="url(#card2GradB)" stroke="#7c3aed" stroke-width="2.5" filter="url(#card2ShadowB)"/>
+  <rect x="425" y="286" width="348" height="8" rx="4" fill="#7c3aed"/>
   <!-- 추천 뱃지 -->
-  <rect x="672" y="274" width="76" height="28" rx="14" fill="#7c3aed"/>
-  <text x="710" y="293" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#fff">⭐ 추천</text>
-  <text x="600" y="334" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#7c3aed">BUSINESS</text>
-  <text x="600" y="400" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="52" font-weight="900" fill="#0f172a">150만원</text>
-  <text x="600" y="428" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">~부터 시작</text>
-  <line x1="450" y1="444" x2="750" y2="444" stroke="#ddd6fe" stroke-width="1.5"/>
-  <text x="470" y="470" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#374151">✓  10페이지 이내</text>
-  <text x="470" y="494" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#374151">✓  커스텀 디자인</text>
-  <text x="470" y="518" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#374151">✓  관리자 페이지</text>
-  <text x="470" y="542" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#374151">✓  SEO 최적화</text>
-  <text x="470" y="566" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#374151">✓  납기 14일</text>
-  <rect x="450" y="590" width="300" height="44" rx="12" fill="#7c3aed"/>
-  <text x="600" y="617" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="16" font-weight="700" fill="#fff">상담 신청 →</text>
+  <rect x="671" y="274" width="80" height="28" rx="14" fill="#7c3aed"/>
+  <text x="711" y="293" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#fff">⭐ 추천</text>
+  <text x="599" y="338" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#7c3aed">BUSINESS</text>
+  <text x="599" y="410" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="56" font-weight="900" fill="#0f172a">150만원</text>
+  <text x="599" y="436" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">부터 시작</text>
+  <line x1="447" y1="454" x2="751" y2="454" stroke="#ddd6fe" stroke-width="1.5"/>
+  <text x="465" y="480" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  10페이지 이내</text>
+  <text x="465" y="504" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  커스텀 디자인</text>
+  <text x="465" y="528" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  관리자 페이지</text>
+  <text x="465" y="552" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  SEO 완전 최적화</text>
+  <text x="465" y="576" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  납기 14일</text>
+  <rect x="447" y="598" width="304" height="46" rx="13" fill="#7c3aed"/>
+  <text x="599" y="626" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="16" font-weight="700" fill="#fff">지금 상담 신청 →</text>
 
   <!-- 카드3: 프리미엄 -->
-  <rect x="810" y="304" width="330" height="320" rx="20" fill="#0f172a" stroke="#334155" stroke-width="1.5" filter="url(#cardShadow)"/>
-  <rect x="810" y="304" width="330" height="8" rx="4" fill="#f59e0b"/>
-  <text x="975" y="350" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#fbbf24">PREMIUM</text>
-  <text x="975" y="410" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="52" font-weight="900" fill="#ffffff">300만원</text>
-  <text x="975" y="438" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">~부터 시작</text>
-  <line x1="830" y1="454" x2="1120" y2="454" stroke="#1e293b" stroke-width="1.5"/>
-  <text x="850" y="480" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#94a3b8">✓  페이지 수 무제한</text>
-  <text x="850" y="504" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#94a3b8">✓  결제/회원 시스템</text>
-  <text x="850" y="528" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#94a3b8">✓  DB 연동</text>
-  <text x="850" y="552" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#94a3b8">✓  6개월 유지보수</text>
-  <rect x="830" y="574" width="262" height="40" rx="10" fill="#1e293b"/>
-  <text x="961" y="599" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#fbbf24">프리미엄 상담</text>
+  <rect x="820" y="308" width="330" height="326" rx="20" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" filter="url(#cardShadowB)"/>
+  <rect x="820" y="308" width="330" height="8" rx="4" fill="#f59e0b"/>
+  <text x="985" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#fbbf24">PREMIUM</text>
+  <text x="985" y="422" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="56" font-weight="900" fill="#ffffff">300만원</text>
+  <text x="985" y="448" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">부터 시작</text>
+  <line x1="842" y1="466" x2="1128" y2="466" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="860" y="492" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">✓  페이지 수 무제한</text>
+  <text x="860" y="516" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">✓  결제/회원 시스템</text>
+  <text x="860" y="540" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">✓  DB 연동</text>
+  <text x="860" y="564" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">✓  6개월 유지보수</text>
+  <rect x="842" y="584" width="262" height="40" rx="10" fill="#1e293b"/>
+  <text x="973" y="609" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#fbbf24">프리미엄 상담</text>
+
+  <!-- 하단 바 -->
+  <rect x="0" y="638" width="1200" height="37" fill="url(#btnB)"/>
+  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">7년차 대기업 백엔드 개발자 박재오  ·  기획부터 배포까지 원스톱  ·  jaengseung-made.com</text>
 </svg>

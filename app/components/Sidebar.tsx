@@ -192,6 +192,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           })}
         </nav>
 
+        {/* 상호명 / 사업자 정보 — 토스페이먼츠 심사 필수 표기 */}
+        <div className="px-4 pt-3 pb-1 border-t border-[#1a3a7a]/30 flex-shrink-0">
+          <p className="text-slate-600 text-[10px] leading-relaxed">
+            <span className="block font-semibold text-slate-500 mb-0.5">상호명 : 쟁승메이드</span>
+            <span className="block">대표 : 박재오</span>
+            <span className="block">이메일 : bgg8988@gmail.com</span>
+            <span className="block">문의 : 010-3907-1392</span>
+            <span className="block mt-1 text-slate-700">© 2025 쟁승메이드</span>
+          </p>
+        </div>
+
         {/* Bottom: 로그인 상태 */}
         <div className="p-4 border-t border-[#1a3a7a]/50 flex-shrink-0">
           {userEmail ? (
