@@ -5,11 +5,11 @@ import { useState, useEffect } from 'react';
 
 /* ── DATA ── */
 const portfolio = [
-  { title: '한남동 단독주택', cat: '주거 인테리어', area: '245㎡', seed: 'architecture-house', w: 820, h: 1060 },
-  { title: '청담 파인다이닝', cat: '상업 공간', area: '190㎡', seed: 'restaurant-interior', w: 820, h: 540 },
-  { title: '성수 브랜드 오피스', cat: '업무 공간', area: '380㎡', seed: 'office-design', w: 400, h: 540 },
-  { title: '용산 아파트 리모델링', cat: '리모델링', area: '95㎡', seed: 'apartment-modern', w: 400, h: 400 },
-  { title: '강남 카페 에스프레소랩', cat: '상업 공간', area: '120㎡', seed: 'cafe-minimal', w: 820, h: 480 },
+  { title: '한남동 단독주택', cat: '주거 인테리어', area: '245㎡', img: 'https://i.pinimg.com/1200x/a7/56/f4/a756f4482ad282353fe89b6ddc4ba3e1.jpg' },
+  { title: '청담 파인다이닝', cat: '상업 공간', area: '190㎡', img: 'https://i.pinimg.com/736x/f2/68/a7/f268a7cb3405e960a3d1bf7c44c9c7e5.jpg' },
+  { title: '성수 브랜드 오피스', cat: '업무 공간', area: '380㎡', img: 'https://i.pinimg.com/736x/f3/15/2a/f3152a792b7310b6475b40cf912ae0c1.jpg' },
+  { title: '용산 아파트 리모델링', cat: '리모델링', area: '95㎡', img: 'https://i.pinimg.com/474x/76/14/4a/76144a948cea14b77dd2fd43f0da8484.jpg' },
+  { title: '강남 카페 에스프레소랩', cat: '상업 공간', area: '120㎡', img: 'https://i.pinimg.com/736x/03/72/b0/0372b0f07d36982f4d3889290a7c762f.jpg' },
 ];
 
 const services = [
@@ -18,21 +18,21 @@ const services = [
     sub: 'Residential',
     desc: '생활의 리듬에 맞춘 공간을 설계합니다. 단독주택부터 아파트까지, 당신의 일상이 더 아름다워지도록 모든 디테일을 손수 고릅니다.',
     details: ['공간 기획 및 3D 시뮬레이션', '자재 선정 동행 서비스', '시공 전 과정 PM', '준공 후 AS 1년'],
-    seed: 'living-room-bright', w: 680, h: 520,
+    img: 'https://i.pinimg.com/736x/1d/af/b2/1dafb2117511994568cc45ceed09a64c.jpg',
   },
   {
     title: '상업 공간 디자인',
     sub: 'Commercial',
     desc: '브랜드의 철학이 공간 언어로 번역됩니다. 첫 방문객이 문을 열었을 때 느끼는 그 감정까지 설계의 범위입니다.',
     details: ['브랜드 아이덴티티 반영', '동선 및 고객 UX 설계', '조명·음향 플래닝', '설비 협력사 연계'],
-    seed: 'commercial-modern', w: 680, h: 520,
+    img: 'https://www.lunalightstudios.com/cdn/shop/files/contemporary-aluminum-funnel-suspension-pendant-lamp-fits-study-room-or-cafe-6-5-10-inch-wide-1-light-grey-226.webp?v=1768032185&width=675',
   },
   {
     title: '리모델링 & 재생',
     sub: 'Remodeling',
     desc: '기존 공간의 가능성을 새로운 시선으로 바라봅니다. 구조적 변경부터 마감재 교체까지, 완전한 변신을 지원합니다.',
     details: ['현장 실측 및 구조 분석', '철거~완공 원스톱', '예산 내 최적 시공', '친환경 자재 우선 적용'],
-    seed: 'renovation-before-after', w: 680, h: 520,
+    img: 'https://i.pinimg.com/474x/76/14/4a/76144a948cea14b77dd2fd43f0da8484.jpg',
   },
 ];
 
@@ -274,7 +274,7 @@ export default function InteriorSample() {
         {/* Right — Image */}
         <div style={{ position: 'relative', background: SURFACE, overflow: 'hidden' }}>
           <img
-            src="https://picsum.photos/seed/interior-design-hero/900/1100"
+            src="https://i.pinimg.com/736x/f3/15/2a/f3152a792b7310b6475b40cf912ae0c1.jpg"
             alt="아우라 인테리어 대표 작업"
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             loading="eager"
@@ -320,7 +320,7 @@ export default function InteriorSample() {
           <div className="au-reveal" style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr', gridTemplateRows: 'auto auto', gap: 14 }}>
             {/* Large — spans 1 col, 2 rows */}
             <div className="au-portfolio-cell" style={{ gridRow: 'span 2', minHeight: 580 }}>
-              <img src={`https://picsum.photos/seed/${portfolio[0].seed}/820/1060`} alt={portfolio[0].title} className="au-portfolio-img" />
+              <img src={portfolio[0].img} alt={portfolio[0].title} className="au-portfolio-img" />
               <div className="au-portfolio-overlay">
                 <div style={{ fontSize: 11, color: 'rgba(250,248,245,0.6)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>{portfolio[0].cat}</div>
                 <div style={{ fontSize: 18, fontWeight: 700, color: 'white', fontFamily: "'Playfair Display', serif" }}>{portfolio[0].title}</div>
@@ -329,7 +329,7 @@ export default function InteriorSample() {
             </div>
             {/* Top right 1 */}
             <div className="au-portfolio-cell" style={{ minHeight: 280 }}>
-              <img src={`https://picsum.photos/seed/${portfolio[1].seed}/600/400`} alt={portfolio[1].title} className="au-portfolio-img" />
+              <img src={portfolio[1].img} alt={portfolio[1].title} className="au-portfolio-img" />
               <div className="au-portfolio-overlay">
                 <div style={{ fontSize: 11, color: 'rgba(250,248,245,0.6)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>{portfolio[1].cat}</div>
                 <div style={{ fontSize: 16, fontWeight: 700, color: 'white', fontFamily: "'Playfair Display', serif" }}>{portfolio[1].title}</div>
@@ -337,7 +337,7 @@ export default function InteriorSample() {
             </div>
             {/* Top right 2 */}
             <div className="au-portfolio-cell" style={{ minHeight: 280 }}>
-              <img src={`https://picsum.photos/seed/${portfolio[2].seed}/600/400`} alt={portfolio[2].title} className="au-portfolio-img" />
+              <img src={portfolio[2].img} alt={portfolio[2].title} className="au-portfolio-img" />
               <div className="au-portfolio-overlay">
                 <div style={{ fontSize: 11, color: 'rgba(250,248,245,0.6)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>{portfolio[2].cat}</div>
                 <div style={{ fontSize: 16, fontWeight: 700, color: 'white', fontFamily: "'Playfair Display', serif" }}>{portfolio[2].title}</div>
@@ -345,7 +345,7 @@ export default function InteriorSample() {
             </div>
             {/* Bottom right — spans 2 cols */}
             <div className="au-portfolio-cell" style={{ gridColumn: 'span 2', minHeight: 280 }}>
-              <img src={`https://picsum.photos/seed/${portfolio[4].seed}/1200/480`} alt={portfolio[4].title} className="au-portfolio-img" />
+              <img src={portfolio[4].img} alt={portfolio[4].title} className="au-portfolio-img" />
               <div className="au-portfolio-overlay">
                 <div style={{ fontSize: 11, color: 'rgba(250,248,245,0.6)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 4 }}>{portfolio[4].cat}</div>
                 <div style={{ fontSize: 18, fontWeight: 700, color: 'white', fontFamily: "'Playfair Display', serif" }}>{portfolio[4].title}</div>
@@ -372,7 +372,7 @@ export default function InteriorSample() {
                 {/* Image side */}
                 <div style={{ order: i % 2 === 0 ? 2 : 1, position: 'relative', minHeight: 400, overflow: 'hidden', borderRadius: i % 2 === 0 ? '0 20px 20px 0' : '20px 0 0 20px' }}>
                   <img
-                    src={`https://picsum.photos/seed/${svc.seed}/680/520`}
+                    src={svc.img}
                     alt={svc.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.7s cubic-bezier(0.16,1,0.3,1)' }}
                     loading="lazy" decoding="async"
