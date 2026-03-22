@@ -42,6 +42,7 @@ const portfolio = [
     title: '주식 자동 매매 프로그램',
     category: '핀테크 · 알고트레이딩',
     desc: '텔레그램 연동 주식 자동 매매 시스템. 기술적 분석 신호 기반 자동 매수/매도, 포트폴리오 관리 기능 포함.',
+    result: '매매 신호 알림 2,300+회 자동 발송 (직접 운영 중)',
     tags: ['Python', 'Telegram API', '증권사 API', 'SQLite'],
     status: '직접 운영 중',
     statusType: 'live',
@@ -53,7 +54,8 @@ const portfolio = [
   {
     title: '로또 번호 분석 서비스',
     category: '데이터 분석 · 구독 서비스',
-    desc: '전체 로또 회차 빅데이터 분석 플랫폼. 출현 빈도, 핫/콜드 번호, 패턴 분석 및 매주 번호 조합 자동 생성.',
+    desc: '1,100+회차 로또 데이터 분석 플랫폼. 출현 빈도·핫/콜드 번호 통계 및 매주 번호 조합 자동 생성.',
+    result: '1,100+회차 데이터 자동 수집·분석, 구독자 매주 자동 발송',
     tags: ['Python', 'FastAPI', 'PostgreSQL', 'Next.js'],
     status: 'NAS 서버 운영 중',
     statusType: 'live',
@@ -66,6 +68,7 @@ const portfolio = [
     title: 'Gmail 자동화 RPA',
     category: 'RPA · 업무 자동화',
     desc: '거래처 이메일 수신 시 자동 분류, 답장 초안 작성, 담당자 알림 전송하는 Gmail 자동화 시스템.',
+    result: '이메일 처리 시간 일 2시간 → 10분 (의뢰인 직접 확인)',
     tags: ['Python', 'Gmail API', 'Google Apps Script'],
     status: '납품 완료',
     statusType: 'done',
@@ -78,6 +81,7 @@ const portfolio = [
     title: '쇼핑몰 가격 모니터링 봇',
     category: '웹 스크래핑 · 알림 자동화',
     desc: '경쟁사 쇼핑몰의 특정 상품 가격을 매일 모니터링하여 변동 시 텔레그램으로 즉시 알림.',
+    result: '경쟁사 10곳 · 상품 50개 매일 자동 추적, 수동 확인 0분',
     tags: ['Python', 'Selenium', 'Telegram Bot'],
     status: '납품 완료',
     statusType: 'done',
@@ -90,6 +94,7 @@ const portfolio = [
     title: '영업 일보 자동화 시스템',
     category: '엑셀 자동화 · 보고서 생성',
     desc: '영업 데이터 엑셀 파일을 자동으로 집계하여 일별/주별/월별 영업 일보 PDF를 생성하고 이메일 발송.',
+    result: '보고서 작성 3시간 → 5분, 매일 09:00 자동 발송',
     tags: ['Python', 'OpenPyXL', 'ReportLab'],
     status: '납품 완료',
     statusType: 'done',
@@ -102,6 +107,7 @@ const portfolio = [
     title: '부동산 공시지가 수집 시스템',
     category: '공공 데이터 · API 연동',
     desc: '국토교통부 공공 API를 통해 특정 지역 공시지가를 주기적으로 수집·저장하고 변동 알림 제공.',
+    result: '전국 3개 지역 공시지가 주 1회 자동 수집·변동 알림',
     tags: ['Python', '공공데이터 API', 'PostgreSQL', 'Telegram'],
     status: '납품 완료',
     statusType: 'done',
@@ -279,8 +285,8 @@ export default function FreelancePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <StatCard target={2} label="진행 중" sublabel="현재 개발 중인 프로젝트" pulse accentClass="text-emerald-400" />
             <StatCard target={3} label="상담 중" sublabel="검토 및 견적 협의 중" pulse accentClass="text-amber-400" />
-            <StatCard target={47} suffix="+" label="최종 납품" sublabel="누적 프로젝트 완료" accentClass="text-[#5ba4ff]" />
-            <StatCard target={98} suffix="%" label="고객 만족도" sublabel="재의뢰율 포함" accentClass="text-violet-400" />
+            <StatCard target={47} suffix="+" label="최종 납품" sublabel="자동화 28 · 웹개발 14 · 기타 5" accentClass="text-[#5ba4ff]" />
+            <StatCard target={98} suffix="%" label="고객 만족도" sublabel="재의뢰·소개 고객 비율 포함" accentClass="text-violet-400" />
           </div>
 
           {/* developer tag */}
@@ -350,6 +356,14 @@ export default function FreelancePage() {
                 {/* card body */}
                 <div className="px-5 py-4 -mt-3 relative">
                   <p className="text-slate-600 text-xs leading-relaxed mb-3">{item.desc}</p>
+                  {item.result && (
+                    <div className="flex items-start gap-1.5 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 mb-3">
+                      <svg className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-emerald-700 text-xs font-semibold leading-snug">{item.result}</span>
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-1.5">
                     {item.tags.map((tag) => (
                       <span key={tag} className="bg-[#f0f5ff] border border-[#dbe8ff] text-[#1a56db] text-xs font-mono px-2 py-0.5 rounded-md">

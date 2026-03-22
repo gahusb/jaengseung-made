@@ -9,7 +9,7 @@ const CHECKLIST = [
   '구독 플랜 선택 (골드 / 플래티넘 / 다이아)',
   '번호 수신 방법 (이메일 / 텔레그램 중 선택)',
   '로또 구매 후 직접 확인 필요 (자동 구매 아님)',
-  '당첨 보장 없음 — 통계 기반 확률 최적화 서비스',
+  '당첨 보장 없음 — 과거 데이터 통계 기반 번호 선택 도구',
   '구독 취소는 이메일로 언제든 가능',
 ];
 
@@ -38,7 +38,7 @@ const plans = [
       '매주 3회 번호 조합 제공',
       '핫넘버 / 콜드넘버 분석',
       '연속 번호 / 끝수 패턴 분석',
-      '당첨 확률 시뮬레이션',
+      '번호 조합 백테스트 (과거 회차 검증)',
       '이메일 + 텔레그램 알림',
     ],
     highlight: true,
@@ -53,7 +53,7 @@ const plans = [
     features: [
       '플래티넘 플랜 전체 기능',
       '번호 생성 횟수 무제한',
-      '연간 당첨 패턴 리포트',
+      '연간 번호 출현 통계 리포트',
       '우선 고객 지원',
     ],
     highlight: false,
@@ -64,7 +64,7 @@ const plans = [
 const faqs = [
   {
     q: '로또 번호 추천이 실제로 효과가 있나요?',
-    a: '당첨을 보장하지는 않습니다. 다만 출현 빈도·패턴 통계를 기반으로 확률적으로 유리한 번호 조합을 제공합니다. NAS 서버에서 실제 데이터를 직접 분석하고 운영 중입니다.',
+    a: '로또는 완전 무작위 추첨으로, 당첨을 보장하거나 확률을 높이는 서비스가 아닙니다. 다만 1,100+회차 과거 데이터의 번호 출현 빈도를 통계로 보여주고, 그 통계를 참고해 번호를 선택하고 싶은 분들을 위한 취미형 분석 도구입니다.',
   },
   {
     q: '번호는 어떻게 받을 수 있나요?',
@@ -79,9 +79,9 @@ const faqs = [
 const analysisFeatures = [
   { label: '출현 빈도 분석', desc: '1회차~최신 회차까지 모든 번호의 출현 횟수와 비율 계산', stat: '1,100+', statLabel: '회차 데이터', accent: 'border-amber-300 bg-amber-50', statColor: 'text-amber-600' },
   { label: '핫/콜드 넘버', desc: '최근 20회차 기준 자주 나온 번호와 오래 안 나온 번호 구분', stat: '45', statLabel: '개 번호 분석', accent: 'border-orange-300 bg-orange-50', statColor: 'text-orange-600' },
-  { label: '연속 번호 패턴', desc: '연속된 번호 쌍의 출현 패턴을 분석하여 번호 선택에 활용', stat: '98%', statLabel: '패턴 적용률', accent: 'border-yellow-300 bg-yellow-50', statColor: 'text-yellow-600' },
+  { label: '연속 번호 통계', desc: '역대 당첨 번호 중 연속 번호가 포함된 회차 비율 통계 제공', stat: '98%', statLabel: '연속 번호 포함 회차', accent: 'border-yellow-300 bg-yellow-50', statColor: 'text-yellow-600' },
   { label: '끝수 통계', desc: '끝자리 0~9 번호들의 출현 비율을 분석하여 분산 조합', stat: '10', statLabel: '끝수 구간', accent: 'border-amber-300 bg-amber-50', statColor: 'text-amber-600' },
-  { label: '번호 조합 시뮬레이션', desc: '추천 번호로 과거 회차 시뮬레이션을 진행하여 효과 검증', stat: '500+', statLabel: '회 시뮬레이션', accent: 'border-orange-300 bg-orange-50', statColor: 'text-orange-600' },
+  { label: '번호 조합 백테스트', desc: '선택한 번호로 과거 회차 대조 검증 — 몇 회나 일치했는지 확인', stat: '500+', statLabel: '회차 백테스트', accent: 'border-orange-300 bg-orange-50', statColor: 'text-orange-600' },
   { label: '정기 자동 발송', desc: '매주 정해진 요일에 이메일 및 텔레그램으로 번호 자동 발송', stat: '매주', statLabel: '자동 배송', accent: 'border-yellow-300 bg-yellow-50', statColor: 'text-yellow-600' },
 ];
 
@@ -139,14 +139,14 @@ export default function LottoPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
             </svg>
           </div>
-          <p className="text-amber-400/70 text-xs font-bold uppercase tracking-widest mb-2">LOTTO ANALYTICS · 빅데이터 통계 분석</p>
+          <p className="text-amber-400/70 text-xs font-bold uppercase tracking-widest mb-2">LOTTO STATISTICS · 과거 회차 데이터 분석 도구</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight leading-tight">
             로또 번호<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">빅데이터 추천</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">통계 기반 선택</span>
           </h1>
           <p className="text-amber-100/60 text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-6">
-            1회차부터 현재까지 전체 당첨 데이터를 분석하여 출현 패턴, 핫/콜드 번호,
-            연속 번호 통계를 기반으로 번호 조합을 추천합니다.
+            1회차부터 현재까지 1,100+회차 데이터를 분석하여 출현 빈도, 핫/콜드 번호,
+            연속 번호 통계를 보여주는 취미형 분석 도구입니다. 당첨 보장 서비스가 아닙니다.
           </p>
           <div className="flex items-center justify-center gap-2.5 mb-6">
             {[7, 14, 23, 35, 41, 44].map((n, i) => (
@@ -206,7 +206,7 @@ export default function LottoPage() {
           <div className="text-center mb-8">
             <p className="text-amber-600 text-xs font-bold uppercase tracking-widest mb-2">ANALYSIS ENGINE</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">6가지 통계 분석 엔진</h2>
-            <p className="text-slate-500 text-sm mt-2">단순 랜덤이 아닌 데이터 기반의 확률 최적화</p>
+            <p className="text-slate-500 text-sm mt-2">1,100+회차 과거 데이터를 분석하여 보여주는 통계 — 당첨 보장 없음</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {analysisFeatures.map((f) => (
@@ -258,7 +258,7 @@ export default function LottoPage() {
                   { feature: '핫/콜드 번호 분석', gold: '✓', plat: '✓', dia: '✓' },
                   { feature: '구매 기록 관리', gold: '✓', plat: '✓', dia: '✓' },
                   { feature: '내 패턴 AI 분석', gold: '—', plat: '✓', dia: '✓' },
-                  { feature: '연간 당첨 패턴 리포트', gold: '—', plat: '—', dia: '✓' },
+                  { feature: '연간 번호 출현 통계 리포트', gold: '—', plat: '—', dia: '✓' },
                   { feature: '우선 고객 지원', gold: '—', plat: '—', dia: '✓' },
                 ].map((row, i) => (
                   <tr key={row.feature} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>

@@ -62,3 +62,52 @@ app/
 - 사이드바는 `usePathname`으로 활성 경로 감지
 - 모바일: 햄버거 메뉴로 사이드바 토글 (overlay 포함)
 - 이미지 없이 아이콘·그래디언트·SVG로 시각적 완성도 유지
+
+---
+
+## 사주 시스템 (`/app/saju`, `/lib/saju-*.ts`)
+
+### AI 연동 (`app/api/saju/analyze/route.ts`)
+- **AI**: Google Gemini (`@google/generative-ai`)
+- **모델 폴백 순서**: `gemini-2.5-pro` → `gemini-2.5-flash` → `gemini-2.0-flash`
+- **핵심 패턴**: `systemInstruction`(프롬프트)과 `userMessage`(트리거) 분리 필수
+  - 전체 프롬프트를 user 메시지로 보내면 응답 품질 저하
+- **Windows 환경**: `dotenv`로 `.env.local`을 명시적 로드 (`override: true`)
+- **Vercel 타임아웃**: `export const maxDuration = 60` (Pro 플랜 기준)
+- **Mock 감지**: `isMockInterpretation()` 함수로 DB에 캐시된 예시 데이터 판별
+  - `SajuAISection.tsx`에서 mock이면 `validSaved = null`로 처리 → API 재호출
+  - 재생성 버튼(🔄)으로 수동 재생성 가능
+
+### 사주팔자 계산 원칙 (검증 완료)
+
+#### `lib/saju-calculator.ts`
+| 항목 | 올바른 값 | 주의사항 |
+|------|-----------|----------|
+| **일주 기준일** | 1900-01-01 = 甲戌 (stem=0, branch=10) | 丙寅(2,2)은 오답 |
+| **날짜 계산** | `Date.UTC()` 사용 필수 | `new Date()`는 DST/타임존 오차로 1일 오류 발생 |
+| **월 천간** | 오호둔월법(五虎遁月法) 공식 사용 | `yearStemIndex * 2 + branchIndex`는 子月/丑月 오답 |
+| **입춘 기준** | `getSolarTermDate(year, 0)`으로 입춘일 획득 후 비교 | 입춘 이전 출생 → 전년도 년주 사용 |
+
+**오호둔월법 공식** (`getMonthGanzi` 내):
+```typescript
+const startStem = ((yearStemIndex % 5) * 2 + 2) % 10; // 寅月 시작 천간
+const stemIndex = (startStem + (branchIndex - 2 + 12) % 12) % 10;
+```
+
+#### `lib/solar-terms.ts` — `getCurrentSolarTerm()`
+- 반드시 입춘(0) 기준으로 두 구간 분리 처리
+  - **입춘 이후(2~12월)**: 입춘(0)~동지(21) 역순 검색
+  - **입춘 이전(1월)**: 이 해의 소한(22)/대한(23) → 전년도 동지(21)~입춘(0) 역순 검색
+- 기존 단순 역순(i=23→0) 방식은 12월 날짜에서 丑月 오판하는 치명적 버그
+- 날짜 비교는 `Date.UTC()` 사용
+
+#### `lib/ai-interpretation.ts` — `estimateYongShin()`
+- **신약 사주 용신**: 인성/비겁 중 **점수가 높은(강하게 존재하는)** 것이 용신
+  - 내림차순 정렬: `candidates.sort((a, b) => b.score - a.score)`
+  - 낮은 점수를 용신으로 고르면 실질적 도움을 못 줌
+
+### 검증 케이스 (1992-12-23 16:30 남성)
+```
+년주: 壬申  월주: 壬子  일주: 癸酉  시주: 庚申
+```
+이 결과가 나오면 계산 로직 정상. 다른 값이면 위 원칙 재확인.
