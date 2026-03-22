@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 /* ── DATA ── */
 const portfolio = [
@@ -85,20 +85,111 @@ const ArrowRight = ({ color = '#8B6914' }: { color?: string }) => (
 );
 
 /* ── COMPONENT ── */
+const FRAME_COUNT = 48;
+
 export default function InteriorSample() {
   const [scrolled, setScrolled] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const scrollSectionRef = useRef<HTMLDivElement>(null);
+  const textOverlayRef = useRef<HTMLDivElement>(null);
+  const framesRef = useRef<HTMLImageElement[]>([]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener('scroll', onScroll, { passive: true });
+    /* ── NAV scroll state ── */
+    const onNavScroll = () => setScrolled(window.scrollY > 80);
+    window.addEventListener('scroll', onNavScroll, { passive: true });
 
+    /* ── Reveal animations ── */
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('au-visible'); }),
       { threshold: 0.08 }
     );
     document.querySelectorAll('.au-reveal').forEach((el) => observer.observe(el));
 
-    return () => { window.removeEventListener('scroll', onScroll); observer.disconnect(); };
+    /* ── Frame preloading ── */
+    const frames: HTMLImageElement[] = new Array(FRAME_COUNT);
+    framesRef.current = frames;
+    let firstLoaded = false;
+
+    const drawFrame = (index: number) => {
+      const canvas = canvasRef.current;
+      const img = frames[Math.max(0, Math.min(FRAME_COUNT - 1, index))];
+      if (!canvas || !img?.complete || !img.naturalWidth) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const cw = canvas.width, ch = canvas.height;
+      const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+      const dx = (cw - img.naturalWidth * scale) / 2;
+      const dy = (ch - img.naturalHeight * scale) / 2;
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.drawImage(img, dx, dy, img.naturalWidth * scale, img.naturalHeight * scale);
+    };
+
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      const img = new Image();
+      img.src = `/interior-frames/frame-${String(i + 1).padStart(3, '0')}.webp`;
+      img.onload = () => {
+        if (!firstLoaded) { firstLoaded = true; drawFrame(0); }
+      };
+      frames[i] = img;
+    }
+
+    /* ── Canvas resize ── */
+    const resizeCanvas = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawFrame(0);
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    /* ── Scroll scrubbing ── */
+    const textMilestones = [
+      { start: 0,    end: 0.33, idx: 0 },
+      { start: 0.33, end: 0.66, idx: 1 },
+      { start: 0.66, end: 1.0,  idx: 2 },
+    ];
+
+    let rafId = 0;
+    const onScrub = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const section = scrollSectionRef.current;
+        if (!section) return;
+        const rect = section.getBoundingClientRect();
+        const scrollable = section.offsetHeight - window.innerHeight;
+        if (scrollable <= 0) return;
+        const progress = Math.max(0, Math.min(1, -rect.top / scrollable));
+        const frameIdx = Math.floor(progress * (FRAME_COUNT - 1));
+        drawFrame(frameIdx);
+
+        // Update text overlay visibility via DOM (no re-render)
+        const overlayEl = textOverlayRef.current;
+        if (!overlayEl) return;
+        const els = overlayEl.querySelectorAll<HTMLElement>('[data-milestone]');
+        els.forEach((el) => {
+          const s = parseFloat(el.dataset.start ?? '0');
+          const e2 = parseFloat(el.dataset.end ?? '1');
+          const vis = progress >= s && progress < e2;
+          el.style.opacity = vis ? '1' : '0';
+          el.style.transform = vis ? 'translateY(0)' : `translateY(${progress < s ? '1.5rem' : '-1.5rem'})`;
+        });
+        // Update progress bar
+        const bar = overlayEl.querySelector<HTMLElement>('[data-progress-bar]');
+        if (bar) bar.style.width = `${progress * 100}%`;
+      });
+    };
+    window.addEventListener('scroll', onScrub, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onNavScroll);
+      window.removeEventListener('scroll', onScrub);
+      window.removeEventListener('resize', resizeCanvas);
+      observer.disconnect();
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const NAV_H = 72;
@@ -166,6 +257,43 @@ export default function InteriorSample() {
         .au-step-num { font-family: 'Playfair Display', Georgia, serif; font-size: 48px; font-weight: 700; color: rgba(139,105,20,0.15); line-height: 1; margin-bottom: 12px; }
 
         [style*='word-break'] { word-break: keep-all; }
+
+        /* ── Scroll animation section ── */
+        .au-scrub-text {
+          position: absolute;
+          opacity: 0;
+          transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+          pointer-events: none;
+          will-change: opacity, transform;
+        }
+        .au-scrub-progress {
+          position: absolute;
+          bottom: 48px; left: 80px; right: 80px;
+          height: 1px;
+          background: rgba(250,248,245,0.12);
+        }
+        .au-scrub-progress-fill {
+          height: 100%;
+          background: rgba(139,105,20,0.7);
+          width: 0%;
+          transition: width 0.1s linear;
+        }
+
+        /* ── Hero video ── */
+        @keyframes au-hero-drift {
+          from { transform: scale(1.06); }
+          to   { transform: scale(1.0); }
+        }
+        .au-hero-video {
+          position: absolute; inset: 0;
+          width: 100%; height: 100%;
+          object-fit: cover;
+          animation: au-hero-drift 8s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
+
+        @media (max-width: 768px) {
+          .au-scrub-progress { left: 24px; right: 24px; bottom: 32px; }
+        }
       `}} />
 
       {/* ── BACK BANNER ── */}
@@ -214,89 +342,171 @@ export default function InteriorSample() {
         </div>
       </nav>
 
-      {/* ── HERO ── Split 60/40 */}
-      <section style={{ minHeight: 'calc(100dvh - 112px)', display: 'grid', gridTemplateColumns: '1fr 1fr', overflow: 'hidden' }}>
-        {/* Left — Text */}
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '80px 64px 80px 80px', position: 'relative' }}>
-          {/* Grain texture */}
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', opacity: 0.025, pointerEvents: 'none' }} />
+      {/* ── HERO ── Full-bleed video background */}
+      <section style={{ position: 'relative', height: '100dvh', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+        {/* Background video */}
+        <video
+          className="au-hero-video"
+          autoPlay muted loop playsInline
+          src="/interior-hero.mp4"
+        />
+        {/* Gradient overlays — left focus + bottom fade */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg, rgba(12,10,8,0.72) 0%, rgba(12,10,8,0.35) 55%, rgba(12,10,8,0.08) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(12,10,8,0.75) 0%, transparent 55%)' }} />
+        {/* Grain texture */}
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', opacity: 0.04, pointerEvents: 'none' }} />
 
-          <div style={{ animation: 'au-fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) both' }}>
-            {/* Eyebrow */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: `rgba(139,105,20,0.08)`, border: `1px solid rgba(139,105,20,0.2)`, borderRadius: 100, padding: '5px 14px', marginBottom: 28 }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: GOLD }} />
-              <span style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                서울 기반 인테리어 디자인
+        {/* Award badge — top right */}
+        <div style={{ position: 'absolute', top: 32, right: 40, zIndex: 2, background: 'rgba(12,10,8,0.5)', backdropFilter: 'blur(16px)', borderRadius: 100, padding: '6px 16px', border: '1px solid rgba(250,248,245,0.12)' }}>
+          <span style={{ fontSize: 12, color: '#F5EDDF', fontWeight: 600, letterSpacing: '0.06em', fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>Award Winner 2024</span>
+        </div>
+
+        {/* Hero text — bottom-left */}
+        <div style={{ position: 'relative', zIndex: 2, padding: '0 80px 72px', animation: 'au-fadeUp 1s cubic-bezier(0.16,1,0.3,1) both' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(139,105,20,0.18)', border: '1px solid rgba(139,105,20,0.35)', borderRadius: 100, padding: '5px 14px', marginBottom: 24 }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: GOLD }} />
+            <span style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>서울 기반 인테리어 디자인</span>
+          </div>
+
+          <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 'clamp(42px, 5vw, 72px)', fontWeight: 700, lineHeight: 1.12, color: '#F5EDDF', letterSpacing: '-0.02em', marginBottom: 20, wordBreak: 'keep-all', maxWidth: 680 }}>
+            공간이 당신의<br />
+            이야기를<br />
+            <em style={{ color: GOLD, fontStyle: 'italic' }}>담습니다.</em>
+          </h1>
+
+          <p style={{ fontSize: 16, color: 'rgba(245,237,223,0.65)', lineHeight: 1.85, maxWidth: 460, marginBottom: 36, wordBreak: 'keep-all' }}>
+            아우라 인테리어는 12년간 247개의 공간을 완성했습니다.
+          </p>
+
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 48 }}>
+            <Link href="#contact" className="au-btn-primary" style={{ background: GOLD, color: '#1C1A17' }}>
+              <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(28,26,23,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <ArrowRight color="#1C1A17" />
               </span>
-            </div>
+              무료 공간 상담 시작
+            </Link>
+            <a href="#portfolio" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: 'rgba(245,237,223,0.75)', fontSize: 14, fontWeight: 500, textDecoration: 'none', transition: 'color 0.3s' }}>
+              포트폴리오 보기 <ArrowRight color="rgba(245,237,223,0.75)" />
+            </a>
+          </div>
 
-            <h1 style={{
-              fontFamily: "'Playfair Display', Georgia, serif",
-              fontSize: 'clamp(40px, 4.5vw, 64px)',
-              fontWeight: 700, lineHeight: 1.18, color: DARK,
-              letterSpacing: '-0.02em', marginBottom: 24,
-              wordBreak: 'keep-all',
-            }}>
-              공간이 당신의<br />
-              이야기를<br />
-              <em style={{ color: GOLD, fontStyle: 'italic' }}>담습니다.</em>
-            </h1>
-
-            <p style={{ fontSize: 16, color: '#6B6456', lineHeight: 1.85, maxWidth: 460, marginBottom: 40, wordBreak: 'keep-all' }}>
-              아우라 인테리어는 12년간 247개의 공간을 완성했습니다.<br />
-              주거부터 상업 공간까지, 당신의 이야기가 머무는 곳을 만듭니다.
-            </p>
-
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 48 }}>
-              <Link href="#contact" className="au-btn-primary">
-                <span style={{ width: 32, height: 32, borderRadius: '50%', background: 'rgba(250,248,245,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <ArrowRight color="#FAF8F5" />
-                </span>
-                무료 공간 상담 시작
-              </Link>
-              <a href="#portfolio" className="au-btn-ghost">
-                포트폴리오 보기
-              </a>
-            </div>
-
-            {/* Mini stats */}
-            <div style={{ display: 'flex', gap: 32, paddingTop: 32, borderTop: `1px solid rgba(139,105,20,0.12)` }}>
-              {[['247+', '완공 프로젝트'], ['4.96', '고객 만족도'], ['12년', '디자인 경력']].map(([n, l]) => (
-                <div key={l}>
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 26, fontWeight: 700, color: DARK }}>{n}</div>
-                  <div style={{ fontSize: 12, color: '#A0917C', marginTop: 2 }}>{l}</div>
-                </div>
-              ))}
-            </div>
+          {/* Mini stats */}
+          <div style={{ display: 'flex', gap: 36, paddingTop: 28, borderTop: '1px solid rgba(250,248,245,0.1)' }}>
+            {[['247+', '완공 프로젝트'], ['4.96', '고객 만족도'], ['12년', '디자인 경력']].map(([n, l]) => (
+              <div key={l}>
+                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700, color: '#F5EDDF' }}>{n}</div>
+                <div style={{ fontSize: 12, color: 'rgba(245,237,223,0.5)', marginTop: 2 }}>{l}</div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Right — Image */}
-        <div style={{ position: 'relative', background: SURFACE, overflow: 'hidden' }}>
-          <img
-            src="https://i.pinimg.com/736x/f3/15/2a/f3152a792b7310b6475b40cf912ae0c1.jpg"
-            alt="아우라 인테리어 대표 작업"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            loading="eager"
-            decoding="async"
-          />
-          {/* Floating badge */}
-          <div style={{
-            position: 'absolute', bottom: 40, left: -24,
-            background: 'white', borderRadius: 16, padding: '16px 20px',
-            boxShadow: '0 20px 60px rgba(28,26,23,0.18)',
-            animation: 'au-float 5s ease-in-out infinite',
-            border: '1px solid rgba(139,105,20,0.1)',
-          }}>
-            <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
-              {[1,2,3,4,5].map(i => <StarIcon key={i} filled />)}
-            </div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: DARK }}>최근 완공 · 한남동 단독주택</div>
-            <div style={{ fontSize: 12, color: '#A0917C', marginTop: 2 }}>고객 만족도 5.0 / 5.0</div>
+        {/* Floating review badge */}
+        <div style={{ position: 'absolute', bottom: 72, right: 64, zIndex: 2, background: 'rgba(255,255,255,0.96)', borderRadius: 16, padding: '14px 18px', boxShadow: '0 24px 64px rgba(12,10,8,0.3)', animation: 'au-float 5s ease-in-out infinite', border: '1px solid rgba(139,105,20,0.1)' }}>
+          <div style={{ display: 'flex', gap: 3, marginBottom: 5 }}>
+            {[1,2,3,4,5].map(i => <StarIcon key={i} filled />)}
           </div>
-          {/* Category tag */}
-          <div style={{ position: 'absolute', top: 32, right: 32, background: 'rgba(28,26,23,0.7)', backdropFilter: 'blur(12px)', borderRadius: 100, padding: '6px 14px', border: '1px solid rgba(250,248,245,0.1)' }}>
-            <span style={{ fontSize: 12, color: '#F5EDDF', fontWeight: 600, letterSpacing: '0.05em' }}>Award Winner 2024</span>
+          <div style={{ fontSize: 12, fontWeight: 700, color: DARK }}>최근 완공 · 한남동 단독주택</div>
+          <div style={{ fontSize: 11, color: '#A0917C', marginTop: 2 }}>고객 만족도 5.0 / 5.0</div>
+        </div>
+
+        {/* Scroll cue */}
+        <div style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 9, color: 'rgba(245,237,223,0.4)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>Scroll</span>
+          <div style={{ width: 1, height: 32, background: 'linear-gradient(to bottom, rgba(245,237,223,0.3), transparent)', animation: 'au-float 2s ease-in-out infinite' }} />
+        </div>
+      </section>
+
+      {/* ── SCROLL ANIMATION — Frame Scrubbing ── */}
+      <section
+        ref={scrollSectionRef}
+        style={{ position: 'relative', height: '380vh', background: DARK }}
+      >
+        <div style={{ position: 'sticky', top: 0, height: '100dvh', overflow: 'hidden' }}>
+          {/* Canvas: frame-by-frame WebP playback */}
+          <canvas
+            ref={canvasRef}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}
+          />
+
+          {/* Gradient overlays for readability */}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(12,10,8,0.55) 0%, transparent 60%)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(12,10,8,0.4) 0%, transparent 40%)' }} />
+
+          {/* Text overlays — controlled by scroll scrubbing */}
+          <div ref={textOverlayRef} style={{ position: 'absolute', inset: 0, padding: '0 80px', display: 'flex', alignItems: 'center' }}>
+
+            {/* Milestone 1: 0–33% */}
+            <div
+              className="au-scrub-text"
+              data-milestone="0"
+              data-start="0"
+              data-end="0.33"
+              style={{ position: 'absolute', left: 80, top: '50%', transform: 'translateY(calc(-50% + 1.5rem)' }}
+            >
+              <p style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>공간 철학</p>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(40px, 5vw, 68px)', fontWeight: 700, lineHeight: 1.1, color: '#F5EDDF', letterSpacing: '-0.02em', wordBreak: 'keep-all', maxWidth: 560 }}>
+                공간이 바뀌면<br />
+                <em style={{ color: GOLD, fontStyle: 'italic' }}>일상이 바뀝니다.</em>
+              </h2>
+              <p style={{ fontSize: 16, color: 'rgba(245,237,223,0.6)', marginTop: 20, lineHeight: 1.8, maxWidth: 420, wordBreak: 'keep-all' }}>
+                우리는 단순한 시공을 넘어, 당신이 매일 경험하는 삶의 배경을 설계합니다.
+              </p>
+            </div>
+
+            {/* Milestone 2: 33–66% */}
+            <div
+              className="au-scrub-text"
+              data-milestone="1"
+              data-start="0.33"
+              data-end="0.66"
+              style={{ position: 'absolute', left: 80, top: '50%', transform: 'translateY(calc(-50% + 1.5rem)' }}
+            >
+              <p style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>실적</p>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(40px, 5vw, 68px)', fontWeight: 700, lineHeight: 1.1, color: '#F5EDDF', letterSpacing: '-0.02em', wordBreak: 'keep-all', maxWidth: 560 }}>
+                12년간<br />
+                <em style={{ color: GOLD, fontStyle: 'italic' }}>247개의 공간.</em>
+              </h2>
+              <div style={{ display: 'flex', gap: 40, marginTop: 28 }}>
+                {[['247+', '완공 프로젝트'], ['4.96', '고객 만족도'], ['98%', '재의뢰율']].map(([n, l]) => (
+                  <div key={l}>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, fontWeight: 700, color: '#F5EDDF', lineHeight: 1 }}>{n}</div>
+                    <div style={{ fontSize: 12, color: 'rgba(245,237,223,0.5)', marginTop: 6 }}>{l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Milestone 3: 66–100% */}
+            <div
+              className="au-scrub-text"
+              data-milestone="2"
+              data-start="0.66"
+              data-end="1"
+              style={{ position: 'absolute', left: 80, top: '50%', transform: 'translateY(calc(-50% + 1.5rem)' }}
+            >
+              <p style={{ fontSize: 11, color: GOLD, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>지금 시작하세요</p>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(40px, 5vw, 68px)', fontWeight: 700, lineHeight: 1.1, color: '#F5EDDF', letterSpacing: '-0.02em', wordBreak: 'keep-all', maxWidth: 560 }}>
+                당신의 공간<br />
+                <em style={{ color: GOLD, fontStyle: 'italic' }}>이야기를 시작하세요.</em>
+              </h2>
+              <Link href="#contact" className="au-btn-primary" style={{ background: GOLD, color: '#1C1A17', marginTop: 28, display: 'inline-flex', pointerEvents: 'auto' }}>
+                <span style={{ width: 30, height: 30, borderRadius: '50%', background: 'rgba(28,26,23,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <ArrowRight color="#1C1A17" />
+                </span>
+                무료 상담 신청
+              </Link>
+            </div>
+          </div>
+
+          {/* Progress bar — bottom */}
+          <div className="au-scrub-progress">
+            <div className="au-scrub-progress-fill" data-progress-bar />
+          </div>
+
+          {/* Frame counter — bottom right */}
+          <div style={{ position: 'absolute', bottom: 48, right: 80, fontSize: 11, color: 'rgba(245,237,223,0.25)', fontFamily: "'Playfair Display', serif", fontStyle: 'italic', letterSpacing: '0.05em' }}>
+            스크롤로 영상 탐색
           </div>
         </div>
       </section>
