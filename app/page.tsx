@@ -207,7 +207,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                   <div>
-                    <span className="text-[#04102b] font-extrabold text-lg">설치 99,000원~</span>
+                    <span className="text-[#04102b] font-extrabold text-lg">설치 49,000원~</span>
                     <span className="ml-2 text-xs bg-emerald-50 border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full font-medium">설치형</span>
                   </div>
                   <span className="text-[#1a56db] text-sm font-semibold flex items-center gap-1">자세히 보기 →</span>
@@ -294,7 +294,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                   <div>
-                    <span className="text-[#04102b] font-extrabold text-lg">프로젝트 100,000원~</span>
+                    <span className="text-[#04102b] font-extrabold text-lg">5만원~</span>
                     <span className="ml-2 text-xs bg-cyan-50 border border-cyan-200 text-cyan-700 px-2 py-0.5 rounded-full font-medium">프로젝트</span>
                   </div>
                   <span className="text-[#1a56db] text-sm font-semibold flex items-center gap-1">자세히 보기 →</span>

@@ -76,8 +76,8 @@ const automationTypes = [
 ];
 
 const plans = [
-  { name: '단순 자동화', price: '100,000원~', desc: '단일 작업 · 1~3일 소요', examples: '엑셀 매크로, 단순 스크래핑, 이메일 자동화', highlight: false },
-  { name: '중간 자동화', price: '300,000원~', desc: '복합 작업 · 1~2주 소요', examples: 'RPA 프로세스, API 연동, 텔레그램 봇', highlight: true },
+  { name: '단순 자동화', price: '5만원~', desc: '단일 작업 · 1~3일 소요', examples: '엑셀 매크로, 단순 스크래핑, 이메일 자동화', highlight: false },
+  { name: '자동화 심화', price: '15만원~', desc: '복합 작업 · 1~2주 소요', examples: 'RPA 프로세스, API 연동, 텔레그램 봇', highlight: true },
   { name: '대형 자동화', price: '협의', desc: '시스템 통합 · 2주 이상 소요', examples: '전사 업무 자동화, 멀티 시스템 통합', highlight: false },
 ];
 

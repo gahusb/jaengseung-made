@@ -67,7 +67,7 @@ const processSteps = [
 const plans = [
   {
     name: '스타터',
-    price: '50',
+    price: '20',
     unit: '만원~',
     color: '#38bdf8',
     features: ['5페이지 이내', '반응형 디자인', '기본 SEO 설정', '1개월 유지보수', '3~5영업일 납품'],
@@ -75,7 +75,7 @@ const plans = [
   },
   {
     name: '비즈니스',
-    price: '150',
+    price: '100',
     unit: '만원~',
     color: '#818cf8',
     featured: true,
@@ -84,7 +84,7 @@ const plans = [
   },
   {
     name: '프리미엄',
-    price: '300',
+    price: '200',
     unit: '만원~',
     color: '#f472b6',
     features: ['페이지 수 무제한', '맞춤 디자인', '결제/회원 시스템', 'DB 연동', '6개월 유지보수', '일정 협의'],
@@ -181,7 +181,7 @@ export default function WebsiteServicePage() {
           <div style={{ display: 'flex', gap: 32, justifyContent: 'center', marginTop: 48, flexWrap: 'wrap' }}>
             {[
               { num: '3~5일', label: '최단 납품 (스타터)' },
-              { num: '50만원~', label: '시작 가격' },
+              { num: '20만원~', label: '시작 가격' },
               { num: '전액환불', label: '납품 전 환불 보장' },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: 'center' }}>
