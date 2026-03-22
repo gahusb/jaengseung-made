@@ -48,7 +48,7 @@ const plans = [
     desc: '부서·팀 전체 프롬프트 시스템 구축',
     features: ['팀 업무 프로세스 전체 분석', '10개 이상 프롬프트 설계', '팀 공유 프롬프트 라이브러리', '사내 가이드 문서 작성', '전 직원 교육 자료 제공', '3개월 내 업데이트 지원'],
     highlight: false,
-    productId: null,
+    productId: 'prompt_team',
   },
 ];
 

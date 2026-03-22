@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
+import PaymentButton from '../../components/PaymentButton';
 
 const samples = [
   {
@@ -102,6 +103,7 @@ const plans = [
     color: '#38bdf8',
     features: ['5페이지 이내', '반응형 디자인', '기본 SEO 설정', '1개월 유지보수', '3~5영업일 납품'],
     note: '개인 블로그, 소규모 소개 사이트',
+    productId: 'website_starter',
   },
   {
     name: '비즈니스',
@@ -111,6 +113,7 @@ const plans = [
     featured: true,
     features: ['10페이지 이내', '반응형 디자인', '관리자 페이지', 'SEO 최적화', '3개월 유지보수', '1~2주 납품'],
     note: '기업 사이트, 브랜드 페이지',
+    productId: 'website_business',
   },
   {
     name: '프리미엄',
@@ -119,6 +122,7 @@ const plans = [
     color: '#f472b6',
     features: ['페이지 수 무제한', '맞춤 디자인', '결제/회원 시스템', 'DB 연동', '6개월 유지보수', '일정 협의'],
     note: '쇼핑몰, SaaS, 복합 시스템',
+    productId: 'website_premium',
   },
 ];
 
@@ -529,16 +533,18 @@ export default function WebsiteServicePage() {
                     </div>
                   ))}
                 </div>
-                <Link href="/freelance?service=website" style={{
-                  display: 'block', textAlign: 'center', padding: '13px',
-                  background: plan.featured ? plan.color : 'rgba(255,255,255,0.04)',
-                  borderRadius: 10, color: plan.featured ? '#1e1b4b' : '#94a3b8',
-                  fontWeight: 700, fontSize: 14, textDecoration: 'none',
-                  border: plan.featured ? 'none' : '1px solid rgba(255,255,255,0.07)',
-                  transition: 'opacity 0.2s',
-                }}>
-                  상담 신청
-                </Link>
+                <PaymentButton
+                  productId={plan.productId}
+                  style={{
+                    display: 'block', width: '100%', textAlign: 'center', padding: '13px',
+                    background: plan.featured ? plan.color : 'rgba(255,255,255,0.04)',
+                    borderRadius: 10, color: plan.featured ? '#1e1b4b' : '#94a3b8',
+                    fontWeight: 700, fontSize: 14, border: plan.featured ? 'none' : '1px solid rgba(255,255,255,0.07)',
+                    transition: 'opacity 0.2s', cursor: 'pointer',
+                  }}
+                >
+                  바로 결제하기
+                </PaymentButton>
               </div>
             ))}
           </div>

@@ -8,11 +8,12 @@ import { PRODUCTS } from '@/lib/products';
 interface PaymentButtonProps {
   productId: string;
   className?: string;
+  style?: React.CSSProperties;
   children: React.ReactNode;
   returnUrl?: string;
 }
 
-export default function PaymentButton({ productId, className, children, returnUrl }: PaymentButtonProps) {
+export default function PaymentButton({ productId, className, style, children, returnUrl }: PaymentButtonProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
@@ -86,11 +87,12 @@ export default function PaymentButton({ productId, className, children, returnUr
   const isTestMode = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY?.startsWith('test_');
 
   return (
-    <div style={{ display: 'inline-block', position: 'relative' }}>
+    <div style={{ display: style ? 'block' : 'inline-block', position: 'relative' }}>
       <button
         onClick={handlePayment}
         disabled={loading}
         className={className}
+        style={style}
       >
         {loading ? '결제 처리 중...' : children}
       </button>

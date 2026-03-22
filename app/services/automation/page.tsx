@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+import PaymentButton from '../../components/PaymentButton';
 
 const tools = [
   {
@@ -76,9 +77,9 @@ const automationTypes = [
 ];
 
 const plans = [
-  { name: '단순 자동화', price: '5만원~', desc: '단일 작업 · 1~3일 소요', examples: '엑셀 매크로, 단순 스크래핑, 이메일 자동화', highlight: false },
-  { name: '자동화 심화', price: '15만원~', desc: '복합 작업 · 1~2주 소요', examples: 'RPA 프로세스, API 연동, 텔레그램 봇', highlight: true },
-  { name: '대형 자동화', price: '협의', desc: '시스템 통합 · 2주 이상 소요', examples: '전사 업무 자동화, 멀티 시스템 통합', highlight: false },
+  { name: '단순 자동화', price: '5만원~', desc: '단일 작업 · 1~3일 소요', examples: '엑셀 매크로, 단순 스크래핑, 이메일 자동화', highlight: false, productId: 'automation_basic' },
+  { name: '자동화 심화', price: '15만원~', desc: '복합 작업 · 1~2주 소요', examples: 'RPA 프로세스, API 연동, 텔레그램 봇', highlight: true, productId: 'automation_advanced' },
+  { name: '대형 자동화', price: '협의', desc: '시스템 통합 · 2주 이상 소요', examples: '전사 업무 자동화, 멀티 시스템 통합', highlight: false, productId: null },
 ];
 
 const process = [
@@ -235,14 +236,25 @@ export default function AutomationPage() {
                 <div className={`text-xs leading-relaxed mb-6 flex-1 p-3 rounded-xl ${plan.highlight ? 'bg-cyan-400/10 text-cyan-100/70' : 'bg-[#f0f5ff] text-slate-600'}`}>
                   예: {plan.examples}
                 </div>
-                <button
-                  onClick={() => openModal(`업무 자동화 - ${plan.name}`)}
-                  className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
-                    plan.highlight ? 'bg-cyan-400 text-[#012030] hover:bg-cyan-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
-                  }`}
-                >
-                  견적 문의
-                </button>
+                {plan.productId ? (
+                  <PaymentButton
+                    productId={plan.productId}
+                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
+                      plan.highlight ? 'bg-cyan-400 text-[#012030] hover:bg-cyan-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
+                    }`}
+                  >
+                    바로 결제하기
+                  </PaymentButton>
+                ) : (
+                  <button
+                    onClick={() => openModal(`업무 자동화 - ${plan.name}`)}
+                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
+                      plan.highlight ? 'bg-cyan-400 text-[#012030] hover:bg-cyan-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
+                    }`}
+                  >
+                    견적 문의
+                  </button>
+                )}
               </div>
             ))}
           </div>
