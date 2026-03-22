@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
-import PaymentButton from '../../components/PaymentButton';
+import ContactModal from '../../components/ContactModal';
 
 const samples = [
   {
@@ -160,6 +160,13 @@ function useReveal() {
 export default function WebsiteServicePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showTop, setShowTop] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalService, setModalService] = useState('홈페이지 제작');
+
+  const openModal = (service: string) => {
+    setModalService(service);
+    setModalOpen(true);
+  };
 
   useEffect(() => {
     const scroller = (document.querySelector('.main-content') as HTMLElement | null) ?? document.documentElement;
@@ -176,6 +183,21 @@ export default function WebsiteServicePage() {
 
   return (
     <div style={{ background: '#030712', minHeight: '100vh', color: 'white', fontFamily: "'Pretendard', 'Apple SD Gothic Neo', system-ui, sans-serif" }}>
+      <ContactModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        service={modalService}
+        checklist={[
+          '원하시는 홈페이지 종류 (소개/쇼핑몰/SaaS 등)',
+          '참고하고 싶은 사이트 URL (있으면)',
+          '필요한 주요 페이지 및 기능',
+          '희망 납품 일정 및 예산 범위',
+          '디자인 선호 스타일 (모던/감성/심플 등)',
+        ]}
+        accentColor="text-indigo-400"
+        headerFrom="#0a0a1a"
+        headerTo="#1e1b4b"
+      />
       <style dangerouslySetInnerHTML={{ __html: `
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css');
 
@@ -533,8 +555,8 @@ export default function WebsiteServicePage() {
                     </div>
                   ))}
                 </div>
-                <PaymentButton
-                  productId={plan.productId}
+                <button
+                  onClick={() => openModal(`홈페이지 제작 - ${plan.name}`)}
                   style={{
                     display: 'block', width: '100%', textAlign: 'center', padding: '13px',
                     background: plan.featured ? plan.color : 'rgba(255,255,255,0.04)',
@@ -543,8 +565,8 @@ export default function WebsiteServicePage() {
                     transition: 'opacity 0.2s', cursor: 'pointer',
                   }}
                 >
-                  바로 결제하기
-                </PaymentButton>
+                  견적 문의
+                </button>
               </div>
             ))}
           </div>

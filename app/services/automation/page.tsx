@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
-import PaymentButton from '../../components/PaymentButton';
 
 const tools = [
   {
@@ -236,25 +235,14 @@ export default function AutomationPage() {
                 <div className={`text-xs leading-relaxed mb-6 flex-1 p-3 rounded-xl ${plan.highlight ? 'bg-cyan-400/10 text-cyan-100/70' : 'bg-[#f0f5ff] text-slate-600'}`}>
                   예: {plan.examples}
                 </div>
-                {plan.productId ? (
-                  <PaymentButton
-                    productId={plan.productId}
-                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
-                      plan.highlight ? 'bg-cyan-400 text-[#012030] hover:bg-cyan-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
-                    }`}
-                  >
-                    바로 결제하기
-                  </PaymentButton>
-                ) : (
-                  <button
-                    onClick={() => openModal(`업무 자동화 - ${plan.name}`)}
-                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
-                      plan.highlight ? 'bg-cyan-400 text-[#012030] hover:bg-cyan-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
-                    }`}
-                  >
-                    견적 문의
-                  </button>
-                )}
+                <button
+                  onClick={() => openModal(`업무 자동화 - ${plan.name}`)}
+                  className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
+                    plan.highlight ? 'bg-cyan-400 text-[#012030] hover:bg-cyan-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
+                  }`}
+                >
+                  견적 문의
+                </button>
               </div>
             ))}
           </div>

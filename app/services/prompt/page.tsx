@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
-import PaymentButton from '../../components/PaymentButton';
 
 const CHECKLIST = [
   '주로 어떤 AI 도구를 사용하는지 (ChatGPT / Claude / Gemini)',
@@ -230,25 +229,14 @@ export default function PromptPage() {
                     </li>
                   ))}
                 </ul>
-                {plan.productId ? (
-                  <PaymentButton
-                    productId={plan.productId}
-                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
-                      plan.highlight ? 'bg-violet-400 text-[#0d0a2e] hover:bg-violet-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
-                    }`}
-                  >
-                    바로 결제하기
-                  </PaymentButton>
-                ) : (
-                  <button
-                    onClick={() => openModal(`프롬프트 엔지니어링 - ${plan.name}`)}
-                    className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
-                      plan.highlight ? 'bg-violet-400 text-[#0d0a2e] hover:bg-violet-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
-                    }`}
-                  >
-                    견적 문의
-                  </button>
-                )}
+                <button
+                  onClick={() => openModal(`프롬프트 엔지니어링 - ${plan.name}`)}
+                  className={`block w-full text-center py-3 rounded-xl text-sm font-bold transition ${
+                    plan.highlight ? 'bg-violet-400 text-[#0d0a2e] hover:bg-violet-300' : 'bg-[#04102b] text-white hover:bg-[#0a1f5c]'
+                  }`}
+                >
+                  견적 문의
+                </button>
               </div>
             ))}
           </div>
