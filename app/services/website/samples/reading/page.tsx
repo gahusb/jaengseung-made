@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
 /* ═══════════════════════════════════════
@@ -167,14 +168,25 @@ function BookCard({ book, large = false }: { book: Book; large?: boolean }) {
 ═══════════════════════════════════════ */
 export default function ReadingPage() {
   const [activeGenre, setActiveGenre] = useState('전체');
+  const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
+    const scroller: HTMLElement =
+      (document.querySelector('.main-content') as HTMLElement | null) ??
+      document.documentElement;
+
+    const onScroll = () => setShowTop(scroller.scrollTop > 400);
+    scroller.addEventListener('scroll', onScroll, { passive: true });
+
     const obs = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('rd-visible'); }),
-      { threshold: 0.1 }
+      { threshold: 0.1, root: scroller === document.documentElement ? null : scroller }
     );
     document.querySelectorAll('.rd-reveal').forEach(el => obs.observe(el));
-    return () => obs.disconnect();
+    return () => {
+      scroller.removeEventListener('scroll', onScroll);
+      obs.disconnect();
+    };
   }, []);
 
   const genres = ['전체', '소설', '고전', '자기계발', '과학', '심리학'];
@@ -303,6 +315,24 @@ export default function ReadingPage() {
           .rd-monthly-bar { height: 80px !important; }
         }
       `}} />
+
+      {/* ── BACK BANNER ── */}
+      <div style={{
+        background: 'linear-gradient(135deg,#0C0B09,#1A1710)',
+        borderBottom: '1px solid rgba(212,168,83,0.12)',
+        height: 40, display: 'flex', alignItems: 'center',
+        padding: '0 24px', gap: 12, flexShrink: 0, position: 'relative', zIndex: 300,
+      }}>
+        <Link href="/services/website" style={{ color: 'rgba(212,168,83,0.7)', fontSize: 13, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, transition: 'color 0.2s' }}
+          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color = '#D4A853')}
+          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color = 'rgba(212,168,83,0.7)')}>
+          ← 홈페이지 제작 서비스로 돌아가기
+        </Link>
+        <span style={{ color: 'rgba(212,168,83,0.2)' }}>|</span>
+        <span style={{ color: 'rgba(212,168,83,0.4)', fontSize: 12, fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic' }}>
+          SAMPLE · 독서 기록 노트
+        </span>
+      </div>
 
       <div className="rd-root rd-grain" style={{ position: 'relative' }}>
 
@@ -604,6 +634,30 @@ export default function ReadingPage() {
           <p style={{ fontSize: '0.75rem', color: '#4A4035', margin: 0 }}>책은 시간을 초월한 대화다.</p>
         </footer>
       </div>
+
+      {/* ── SCROLL TO TOP ── */}
+      <button
+        onClick={() => {
+          const scroller = (document.querySelector('.main-content') as HTMLElement | null) ?? document.documentElement;
+          scroller.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        style={{
+          position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 400,
+          width: 48, height: 48, borderRadius: '50%',
+          background: '#D4A853', border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 8px 32px rgba(212,168,83,0.4)',
+          opacity: showTop ? 1 : 0,
+          transform: showTop ? 'translateY(0) scale(1)' : 'translateY(12px) scale(0.9)',
+          transition: 'opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1)',
+          pointerEvents: showTop ? 'auto' : 'none',
+        }}
+        aria-label="맨 위로"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0C0B09" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="18 15 12 9 6 15"/>
+        </svg>
+      </button>
     </>
   );
 }
