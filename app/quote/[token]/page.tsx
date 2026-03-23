@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 interface WBSTask { id: string; name: string; duration: string; description: string; }
 interface WBSPhase { id: string; phase: string; tasks: WBSTask[]; }
@@ -26,6 +26,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function QuotePage() {
   const { token } = useParams<{ token: string }>();
+  const searchParams = useSearchParams();
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -50,6 +51,10 @@ export default function QuotePage() {
         const rec = (d.quote.maintenance as MaintenancePlan[]).find((p) => p.recommended);
         if (rec) setSelectedMaintenance(rec.id);
         else if (d.quote.maintenance.length > 0) setSelectedMaintenance(d.quote.maintenance[0].id);
+        // ?print=1 파라미터 시 자동 인쇄 다이얼로그
+        if (searchParams.get('print') === '1') {
+          setTimeout(() => window.print(), 800);
+        }
       })
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
@@ -137,6 +142,15 @@ export default function QuotePage() {
         * { box-sizing: border-box; }
         input[type=checkbox] { accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer; }
         input[type=radio] { accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer; }
+        @media print {
+          body { background: white !important; color: #1e293b !important; }
+          .no-print { display: none !important; }
+          .print-break { page-break-before: always; }
+          [style*="background: #0a0f1e"], [style*="background: #0f172a"] {
+            background: white !important;
+            color: #1e293b !important;
+          }
+        }
       `}</style>
 
       {/* 헤더 */}
@@ -149,10 +163,28 @@ export default function QuotePage() {
               <div style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>쟁승메이드</div>
               <div style={{ color: '#475569', fontSize: 11 }}>jaengseung-made.com</div>
             </div>
-            <div style={{ marginLeft: 'auto' }}>
+            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)', color: '#818cf8', fontSize: 11, fontWeight: 600, padding: '4px 12px', borderRadius: 100 }}>
                 공식 견적서
               </span>
+              <button
+                className="no-print"
+                onClick={() => window.print()}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)',
+                  color: '#cbd5e1', fontSize: 13, fontWeight: 600,
+                  padding: '6px 14px', borderRadius: 8, cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.14)'; e.currentTarget.style.color = 'white'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#cbd5e1'; }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                PDF 저장
+              </button>
             </div>
           </div>
 

@@ -200,6 +200,17 @@ export default function QuoteEditorPage() {
               미리보기
             </a>
           )}
+          {/* PDF 저장 */}
+          {publicToken && (
+            <a href={`/quote/${publicToken}?print=1`} target="_blank" rel="noreferrer"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border border-violet-700 text-violet-400 hover:text-violet-300 hover:border-violet-500 transition-all">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11v6m-3-3l3 3 3-3" />
+              </svg>
+              PDF 저장
+            </a>
+          )}
           {/* 저장 */}
           <button onClick={() => save()} disabled={saving}
             className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all ${saved ? 'bg-green-600 text-white' : 'bg-blue-600 hover:bg-blue-500 text-white'} disabled:opacity-60`}>
