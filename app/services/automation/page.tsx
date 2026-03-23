@@ -58,6 +58,47 @@ const tools = [
   },
 ];
 
+const premiumTools = [
+  {
+    id: 'realestate',
+    title: '부동산 매물 크롤링 프로그램',
+    subtitle: 'Real Estate Crawler v1.0',
+    desc: '직방·다방·피터팬·네이버부동산 4개 플랫폼을 동시 수집. 지역·거래유형·매물유형 선택 후 플랫폼별 시트로 Excel 자동 저장.',
+    tags: ['Python', '4개 플랫폼', '중복제거', 'Excel 출력'],
+    price: '3만원',
+    features: ['직방·다방·피터팬·네이버부동산 동시 수집', '지역·거래유형·매물유형 선택', '자동 중복 제거', '플랫폼별 시트 분리 Excel 저장'],
+    color: '#b45309',
+    bgFrom: '#451a03',
+    bgTo: '#78350f',
+    accentColor: '#f59e0b',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+      </svg>
+    ),
+    downloadPath: '/downloads/real_estate_crawler_v1.0.py',
+  },
+  {
+    id: 'accounting',
+    title: '사업장 회계 장부 자동화 프로그램',
+    subtitle: 'Accounting Automation v1.0',
+    desc: '쇼핑몰·식당·제조업·서비스업 업종별 수입/지출 입력 → 매출총이익·영업이익·순이익 자동 계산 + 회계사 관점 조언 리포트.',
+    tags: ['Python', '업종별 맞춤', '손익계산서', '회계 조언'],
+    price: '5만원',
+    features: ['업종별 맞춤 항목 (쇼핑몰·식당·제조·서비스업)', '매출총이익·영업이익·순이익 자동 계산', '부가세 신고 준비 자료 자동 생성', '회계 전문가 관점 경고·조언 리포트'],
+    color: '#0f766e',
+    bgFrom: '#042f2e',
+    bgTo: '#134e4a',
+    accentColor: '#2dd4bf',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-7 h-7">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+      </svg>
+    ),
+    downloadPath: '/downloads/accounting_automation_v1.0.py',
+  },
+];
+
 const CHECKLIST = [
   '자동화하고 싶은 업무를 구체적으로 설명해주세요',
   '현재 사용 중인 프로그램/시스템 (엑셀, ERP, 쇼핑몰 등)',
@@ -252,7 +293,71 @@ export default function AutomationPage() {
         </div>
       </div>
 
-      {/* ─── 자동화 툴 다운로드 ─── */}
+      {/* ─── 프리미엄 툴 ─── */}
+      <div className="px-6 pb-4 lg:px-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <span className="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-400/30 text-amber-700 text-xs font-bold px-3 py-1 rounded-full mb-3">
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              PREMIUM TOOLS
+            </span>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b] mb-2">프리미엄 자동화 프로그램</h2>
+            <p className="text-slate-500 text-sm">전문 분야별 고급 자동화 프로그램. 구매 후 소스코드 전달 + 1개월 무상 지원.</p>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-6">
+            {premiumTools.map((tool) => (
+              <div key={tool.id}
+                className="rounded-2xl overflow-hidden border border-white/10 shadow-xl flex flex-col"
+                style={{ background: `linear-gradient(145deg, ${tool.bgFrom}, ${tool.bgTo})` }}>
+                {/* 카드 헤더 */}
+                <div className="p-6 pb-4">
+                  <div className="flex items-start justify-between mb-4">
+                    <div style={{ color: tool.accentColor }} className="opacity-90">{tool.icon}</div>
+                    <div className="flex flex-col items-end gap-1.5">
+                      <span className="bg-white/10 text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/20">PREMIUM</span>
+                      <span style={{ color: tool.accentColor }} className="text-xl font-extrabold">{tool.price}</span>
+                    </div>
+                  </div>
+                  <div style={{ color: tool.accentColor }} className="text-xs font-bold mb-1 opacity-80">{tool.subtitle}</div>
+                  <h3 className="text-white font-extrabold text-base mb-2 leading-snug" style={{ wordBreak: 'keep-all' }}>{tool.title}</h3>
+                  <p className="text-white/50 text-xs leading-relaxed" style={{ wordBreak: 'keep-all' }}>{tool.desc}</p>
+                </div>
+                {/* 기능 목록 */}
+                <div className="px-6 pb-4 flex-1">
+                  <div className="border-t border-white/10 pt-4 space-y-2">
+                    {tool.features.map((f) => (
+                      <div key={f} className="flex items-start gap-2">
+                        <svg className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: tool.accentColor }} viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                        </svg>
+                        <span className="text-white/70 text-xs" style={{ wordBreak: 'keep-all' }}>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* 태그 + CTA */}
+                <div className="px-6 pb-6">
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {tool.tags.map((tag) => (
+                      <span key={tag} className="text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20 text-white/60">{tag}</span>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => openModal(`업무 자동화 프리미엄 - ${tool.title}`)}
+                    className="w-full py-3 rounded-xl text-sm font-extrabold transition-all hover:opacity-90 active:scale-[0.98]"
+                    style={{ backgroundColor: tool.accentColor, color: tool.bgFrom }}
+                  >
+                    구매 문의 · 소스코드 전달 →
+                  </button>
+                  <p className="text-white/30 text-[10px] text-center mt-2">구매 후 Python 소스코드 + 사용 가이드 전달</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ─── 자동화 툴 무료 다운로드 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
