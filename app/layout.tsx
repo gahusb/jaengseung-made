@@ -5,11 +5,11 @@ import DashboardShell from "./components/DashboardShell";
 
 export const metadata: Metadata = {
   title: {
-    default: "쟁승메이드 | 연락 두절 없는 7년차 개발자",
+    default: "쟁승메이드 | 연락 두절 없는 현직 대기업 개발자",
     template: "%s | 쟁승메이드",
   },
   description:
-    "계약서 먼저, 납기 지키고, 소스코드 100% 인도. 7년차 대기업 백엔드 개발자가 운영하는 외주 개발·업무 자동화·RPA 서비스.",
+    "계약서 먼저, 납기 지키고, 소스코드 100% 인도. 현직 대기업 백엔드 개발자가 운영하는 외주 개발·업무 자동화·RPA 서비스.",
   keywords: [
     "외주 개발",
     "프리랜서 개발자",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: "https://jaengseung-made.com",
     siteName: "쟁승메이드",
-    title: "쟁승메이드 | 연락 두절 없는 7년차 개발자",
+    title: "쟁승메이드 | 연락 두절 없는 현직 대기업 개발자",
     description:
       "계약서 먼저, 납기 지키고, 소스코드 100% 인도. 외주 개발·업무 자동화·RPA 전문.",
     images: [
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "쟁승메이드 | 연락 두절 없는 7년차 개발자",
+    title: "쟁승메이드 | 연락 두절 없는 현직 대기업 개발자",
     description: "계약서 먼저, 납기 지키고, 소스코드 100% 인도.",
   },
   robots: {

@@ -234,7 +234,7 @@ export default function Home() {
                     backgroundImage: 'linear-gradient(135deg, #5ba4ff 0%, #818cf8 60%, #a78bfa 100%)',
                   }}
                 >
-                  7년차 개발자
+                  현직 대기업 개발자
                 </span>
                 가<br />
                 직접 만들어 드립니다
