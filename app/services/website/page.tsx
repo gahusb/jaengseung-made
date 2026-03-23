@@ -933,7 +933,7 @@ export default function WebsiteServicePage() {
           scroller.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         style={{
-          position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 200,
+          position: 'fixed', bottom: '5.5rem', right: '2rem', zIndex: 200,
           width: 48, height: 48, borderRadius: '50%',
           background: 'linear-gradient(135deg, #6366f1, #818cf8)',
           border: 'none', cursor: 'pointer',

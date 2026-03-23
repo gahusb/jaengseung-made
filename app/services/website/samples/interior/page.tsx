@@ -591,7 +591,7 @@ export default function InteriorSample() {
       <button
         id="au-top-btn"
         style={{
-          position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 200,
+          position: 'fixed', bottom: '5.5rem', right: '2rem', zIndex: 200,
           width: 48, height: 48, borderRadius: '50%',
           background: GOLD, border: 'none', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',

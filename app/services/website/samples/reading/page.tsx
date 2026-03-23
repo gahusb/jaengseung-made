@@ -642,7 +642,7 @@ export default function ReadingPage() {
           scroller.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         style={{
-          position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 400,
+          position: 'fixed', bottom: '5.5rem', right: '2rem', zIndex: 400,
           width: 48, height: 48, borderRadius: '50%',
           background: '#D4A853', border: 'none', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
