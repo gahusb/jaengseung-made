@@ -1,182 +1,231 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400">
   <defs>
-    <linearGradient id="bgBn" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#04102b"/>
-      <stop offset="55%" style="stop-color:#0d1f4f"/>
-      <stop offset="100%" style="stop-color:#1e1b4b"/>
+    <linearGradient id="bn-bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#04102b"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
     </linearGradient>
-    <linearGradient id="textBn" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#60a5fa"/>
-      <stop offset="100%" style="stop-color:#a78bfa"/>
-    </linearGradient>
-    <linearGradient id="btnBn" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#2563eb"/>
-      <stop offset="100%" style="stop-color:#7c3aed"/>
-    </linearGradient>
-    <linearGradient id="priceBn" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1d4ed8"/>
-      <stop offset="100%" style="stop-color:#7c3aed"/>
-    </linearGradient>
-    <radialGradient id="glowBn1" cx="25%" cy="40%" r="45%">
-      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:0.2"/>
-      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:0"/>
+    <radialGradient id="bn-blueGlow" cx="30%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0.0"/>
     </radialGradient>
-    <radialGradient id="glowBn2" cx="85%" cy="60%" r="35%">
-      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.15"/>
-      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0"/>
-    </radialGradient>
-    <clipPath id="brClipBn">
-      <rect x="660" y="28" width="508" height="320" rx="14"/>
-    </clipPath>
-    <filter id="shadowBn">
-      <feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#000" flood-opacity="0.55"/>
-    </filter>
-    <filter id="badgeShadBn">
-      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#2563eb" flood-opacity="0.4"/>
-    </filter>
-    <pattern id="dotsBn" width="36" height="36" patternUnits="userSpaceOnUse">
-      <circle cx="18" cy="18" r="1" fill="#1a3a7a" opacity="0.4"/>
-    </pattern>
+    <linearGradient id="bn-badgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="bn-priceBadge" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="bn-bottomBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="bn-browserChrome" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e2535"/>
+      <stop offset="100%" stop-color="#141c2e"/>
+    </linearGradient>
+    <linearGradient id="bn-sidebar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
   </defs>
 
-  <!-- 배경 -->
-  <rect width="1200" height="400" fill="url(#bgBn)"/>
-  <rect width="1200" height="400" fill="url(#glowBn1)"/>
-  <rect width="1200" height="400" fill="url(#glowBn2)"/>
-  <rect width="1200" height="400" fill="url(#dotsBn)"/>
+  <!-- Background -->
+  <rect width="1200" height="400" fill="url(#bn-bgGrad)"/>
+  <rect width="1200" height="400" fill="url(#bn-blueGlow)"/>
 
-  <!-- 왼쪽 콘텐츠 -->
-  <!-- 뱃지 -->
-  <rect x="52" y="42" width="282" height="36" rx="18" fill="#1d4ed8" filter="url(#badgeShadBn)" opacity="0.9"/>
-  <circle cx="74" cy="60" r="6" fill="#fbbf24"/>
-  <text x="90" y="65" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="14" font-weight="700" fill="#ffffff">납기 100% · 무료 AS · 연락두절 없음</text>
+  <!-- Organic background shapes -->
+  <path d="M 0 0 C 200 -30 400 80 600 50 C 800 20 1000 100 1200 80 L 1200 0 Z" fill="rgba(37,99,235,0.05)"/>
+  <path d="M 0 400 C 150 360 350 390 500 370 C 650 350 800 380 1000 360 L 1200 350 L 1200 400 Z" fill="rgba(124,58,237,0.05)"/>
 
-  <!-- 메인 헤드라인 -->
-  <text x="52" y="128" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="42" font-weight="900" fill="#ffffff">납기 지키고 연락 끊지 않는</text>
-  <text x="52" y="180" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="42" font-weight="900" fill="url(#textBn)">개발자가 만드는 홈페이지</text>
+  <!-- Dot pattern background -->
+  <pattern id="bn-dots" x="0" y="0" width="36" height="36" patternUnits="userSpaceOnUse">
+    <circle cx="18" cy="18" r="1.0" fill="rgba(255,255,255,0.05)"/>
+  </pattern>
+  <rect width="1200" height="400" fill="url(#bn-dots)"/>
 
-  <!-- 서브텍스트 -->
-  <text x="52" y="222" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="17" fill="#94a3b8">기획 · 디자인 · 개발 · 배포 원스톱 · 납기 보장</text>
+  <!-- ===== LEFT CONTENT ===== -->
 
-  <!-- 가격 + 체크리스트 -->
-  <rect x="52" y="245" width="194" height="50" rx="12" fill="url(#priceBn)"/>
-  <text x="149" y="265" text-anchor="middle" font-family="'Malgun Gothic',Arial,sans-serif" font-size="12" font-weight="600" fill="#ddd6fe">스타터 시작가</text>
-  <text x="149" y="286" text-anchor="middle" font-family="'Malgun Gothic',Arial,sans-serif" font-size="22" font-weight="900" fill="#ffffff">50만원~</text>
+  <!-- Badge row -->
+  <rect x="44" y="32" width="318" height="28" rx="14" fill="url(#bn-badgeGrad)" stroke="rgba(59,130,246,0.5)" stroke-width="1"/>
+  <text x="203" y="51" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11.5" fill="#93c5fd" text-anchor="middle" font-weight="600">납기 100% · 무료 AS · 연락두절 없음</text>
 
-  <!-- 체크리스트 -->
-  <g font-family="'Malgun Gothic',Arial,sans-serif" font-size="14" fill="#94a3b8">
-    <circle cx="62" cy="326" r="9" fill="#22c55e" opacity="0.15"/>
-    <text x="62" y="331" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700" fill="#22c55e">✓</text>
-    <text x="80" y="331">반응형 디자인</text>
+  <!-- Headline -->
+  <text x="44" y="108" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="38" fill="white" font-weight="800" letter-spacing="-0.5">납기 지키고 연락 끊지 않는</text>
+  <text x="44" y="156" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="38" fill="#60a5fa" font-weight="800" letter-spacing="-0.5">개발자가 만드는 홈페이지</text>
 
-    <circle cx="208" cy="326" r="9" fill="#22c55e" opacity="0.15"/>
-    <text x="208" y="331" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700" fill="#22c55e">✓</text>
-    <text x="226" y="331">SEO 최적화</text>
+  <!-- Subtext -->
+  <text x="44" y="186" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="rgba(255,255,255,0.5)">기획 · 디자인 · 개발 · 배포 원스톱 · 납기 보장</text>
 
-    <circle cx="348" cy="326" r="9" fill="#22c55e" opacity="0.15"/>
-    <text x="348" y="331" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700" fill="#22c55e">✓</text>
-    <text x="366" y="331">납기 보장</text>
+  <!-- Price badge -->
+  <rect x="44" y="200" width="116" height="36" rx="18" fill="url(#bn-priceBadge)"/>
+  <text x="102" y="223" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" fill="white" text-anchor="middle" font-weight="800">50만원~</text>
 
-    <circle cx="62" cy="358" r="9" fill="#22c55e" opacity="0.15"/>
-    <text x="62" y="363" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700" fill="#22c55e">✓</text>
-    <text x="80" y="363">무료 AS</text>
-
-    <circle cx="208" cy="358" r="9" fill="#22c55e" opacity="0.15"/>
-    <text x="208" y="363" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700" fill="#22c55e">✓</text>
-    <text x="226" y="363">Next.js 풀스택</text>
-  </g>
-
-  <!-- URL -->
-  <text x="52" y="390" font-family="Arial,sans-serif" font-size="13" fill="#3b5998">jaengseung-made.com</text>
-
-  <!-- 오른쪽 브라우저 목업 -->
-  <g filter="url(#shadowBn)">
-    <rect x="660" y="28" width="508" height="320" rx="14" fill="#0f172a" stroke="#1e3a8a" stroke-width="1.5"/>
-    <!-- 탭바 -->
-    <rect x="660" y="28" width="508" height="38" rx="14" fill="#040e28"/>
-    <rect x="660" y="52" width="508" height="14" fill="#040e28"/>
-    <!-- 창 버튼 -->
-    <circle cx="684" cy="47" r="6" fill="#ef4444"/>
-    <circle cx="706" cy="47" r="6" fill="#f59e0b"/>
-    <circle cx="728" cy="47" r="6" fill="#22c55e"/>
-    <!-- URL 바 -->
-    <rect x="748" y="36" width="368" height="22" rx="11" fill="#0d1f4f" stroke="#1a3a7a" stroke-width="1"/>
-    <text x="932" y="51" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="#475569">jaengseung-made.com</text>
-
-    <!-- 내부 콘텐츠 -->
-    <g clip-path="url(#brClipBn)">
-      <rect x="660" y="66" width="508" height="282" fill="#f8fafc"/>
-
-      <!-- 사이드바 -->
-      <rect x="660" y="66" width="124" height="282" fill="#04102b"/>
-      <!-- 사이드바 로고 -->
-      <rect x="672" y="80" width="26" height="26" rx="7" fill="#2563eb"/>
-      <text x="685" y="98" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="800" fill="#fff">쟁</text>
-      <!-- 메뉴 항목들 -->
-      <rect x="668" y="118" width="100" height="24" rx="7" fill="#2563eb" opacity="0.9"/>
-      <rect x="676" y="124" width="8" height="10" rx="2" fill="#60a5fa" opacity="0.5"/>
-      <rect x="690" y="126" width="48" height="6" rx="3" fill="#fff" opacity="0.8"/>
-      <rect x="668" y="148" width="100" height="22" rx="6" fill="#0d1f4f"/>
-      <rect x="676" y="154" width="8" height="8" rx="2" fill="#1e3a8a"/>
-      <rect x="690" y="156" width="38" height="5" rx="2" fill="#1e3a8a"/>
-      <rect x="668" y="176" width="100" height="22" rx="6" fill="#0d1f4f"/>
-      <rect x="676" y="182" width="8" height="8" rx="2" fill="#1e3a8a"/>
-      <rect x="690" y="184" width="44" height="5" rx="2" fill="#1e3a8a"/>
-      <rect x="668" y="204" width="100" height="22" rx="6" fill="#0d1f4f"/>
-      <rect x="676" y="210" width="8" height="8" rx="2" fill="#1e3a8a"/>
-      <rect x="690" y="212" width="36" height="5" rx="2" fill="#1e3a8a"/>
-
-      <!-- 메인 콘텐츠 -->
-      <!-- 상단 네비 -->
-      <rect x="784" y="66" width="384" height="36" fill="#fff" stroke="#e2e8f0" stroke-width="0.5"/>
-      <rect x="800" y="76" width="100" height="14" rx="7" fill="#e2e8f0"/>
-      <rect x="1094" y="72" width="56" height="20" rx="10" fill="#2563eb"/>
-      <text x="1122" y="86" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="700" fill="#fff">문의하기</text>
-
-      <!-- 히어로 -->
-      <rect x="784" y="102" width="384" height="100" fill="#eff6ff"/>
-      <rect x="800" y="118" width="50" height="14" rx="7" fill="#bfdbfe"/>
-      <rect x="800" y="140" width="150" height="16" rx="8" fill="#93c5fd"/>
-      <rect x="800" y="164" width="110" height="12" rx="6" fill="#bfdbfe"/>
-      <rect x="800" y="184" width="70" height="22" rx="11" fill="#2563eb"/>
-      <text x="835" y="199" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#fff">문의하기</text>
-      <rect x="1040" y="110" width="108" height="80" rx="8" fill="#dbeafe"/>
-      <rect x="1050" y="124" width="70" height="8" rx="4" fill="#93c5fd"/>
-      <rect x="1050" y="138" width="85" height="8" rx="4" fill="#bfdbfe"/>
-      <rect x="1050" y="152" width="76" height="8" rx="4" fill="#bfdbfe"/>
-
-      <!-- 서비스 카드 행 -->
-      <rect x="784" y="202" width="126" height="82" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
-      <rect x="784" y="202" width="126" height="5" rx="2" fill="#2563eb"/>
-      <rect x="796" y="216" width="30" height="30" rx="7" fill="#eff6ff"/>
-      <text x="811" y="237" text-anchor="middle" font-size="13">🏢</text>
-      <rect x="796" y="254" width="60" height="8" rx="4" fill="#e2e8f0"/>
-      <rect x="796" y="268" width="80" height="6" rx="3" fill="#f1f5f9"/>
-
-      <rect x="918" y="202" width="126" height="82" rx="8" fill="#fff" stroke="#ede9fe" stroke-width="1.5"/>
-      <rect x="918" y="202" width="126" height="5" rx="2" fill="#7c3aed"/>
-      <rect x="930" y="216" width="30" height="30" rx="7" fill="#ede9fe"/>
-      <text x="945" y="237" text-anchor="middle" font-size="13">⚡</text>
-      <rect x="930" y="254" width="60" height="8" rx="4" fill="#ddd6fe"/>
-      <rect x="930" y="268" width="80" height="6" rx="3" fill="#ede9fe"/>
-
-      <rect x="1052" y="202" width="116" height="82" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1"/>
-      <rect x="1052" y="202" width="116" height="5" rx="2" fill="#059669"/>
-      <rect x="1064" y="216" width="30" height="30" rx="7" fill="#ecfdf5"/>
-      <text x="1079" y="237" text-anchor="middle" font-size="13">🚀</text>
-      <rect x="1064" y="254" width="60" height="8" rx="4" fill="#d1fae5"/>
-      <rect x="1064" y="268" width="76" height="6" rx="3" fill="#ecfdf5"/>
-
-      <!-- 하단 푸터 -->
-      <rect x="784" y="284" width="384" height="64" fill="#04102b"/>
-      <rect x="800" y="296" width="60" height="10" rx="5" fill="#1e3a8a"/>
-      <rect x="800" y="312" width="90" height="7" rx="3" fill="#0d1f4f"/>
-      <rect x="1088" y="293" width="64" height="26" rx="8" fill="#2563eb"/>
-      <text x="1120" y="310" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#fff">상담 신청</text>
+  <!-- Checklist items (SVG check icons, no emojis) -->
+  <g>
+    <!-- Item 1: 반응형 디자인 -->
+    <g transform="translate(44, 250)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#1d4ed8"/>
+      <path d="M 3 8 L 6 11 L 13 4" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </g>
+    <text x="68" y="263" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="rgba(255,255,255,0.75)">반응형 디자인</text>
+
+    <!-- Item 2: SEO 최적화 -->
+    <g transform="translate(44, 278)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#1d4ed8"/>
+      <path d="M 3 8 L 6 11 L 13 4" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="68" y="291" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="rgba(255,255,255,0.75)">SEO 최적화</text>
+
+    <!-- Item 3: 납기 보장 -->
+    <g transform="translate(196, 250)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#1d4ed8"/>
+      <path d="M 3 8 L 6 11 L 13 4" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="220" y="263" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="rgba(255,255,255,0.75)">납기 보장</text>
+
+    <!-- Item 4: 무료 AS -->
+    <g transform="translate(196, 278)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#1d4ed8"/>
+      <path d="M 3 8 L 6 11 L 13 4" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="220" y="291" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="rgba(255,255,255,0.75)">무료 AS</text>
+
+    <!-- Item 5: Next.js 풀스택 -->
+    <g transform="translate(44, 306)">
+      <rect x="0" y="0" width="16" height="16" rx="4" fill="#1d4ed8"/>
+      <path d="M 3 8 L 6 11 L 13 4" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="68" y="319" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="rgba(255,255,255,0.75)">Next.js 풀스택</text>
   </g>
 
-  <!-- 하단 바 -->
-  <rect x="0" y="368" width="1200" height="32" fill="url(#btnBn)"/>
-  <text x="600" y="389" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif" font-size="13" font-weight="600" fill="#ffffff">납기 100% 보장  ·  무료 AS 포함  ·  연락두절 없음  ·  jaengseung-made.com</text>
+  <!-- URL text -->
+  <text x="44" y="353" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.3)">jaengseungmade.vercel.app</text>
+
+  <!-- ===== RIGHT: BROWSER MOCKUP ===== -->
+
+  <!-- Browser outer frame -->
+  <rect x="636" y="24" width="524" height="330" rx="12" fill="url(#bn-browserChrome)" stroke="rgba(99,102,241,0.3)" stroke-width="1.5"/>
+
+  <!-- Browser tab bar -->
+  <rect x="636" y="24" width="524" height="36" rx="12" fill="#1a2235"/>
+  <rect x="636" y="44" width="524" height="16" fill="#1a2235"/>
+
+  <!-- Window buttons -->
+  <circle cx="660" cy="42" r="6" fill="#ef4444" fill-opacity="0.8"/>
+  <circle cx="680" cy="42" r="6" fill="#f59e0b" fill-opacity="0.8"/>
+  <circle cx="700" cy="42" r="6" fill="#22c55e" fill-opacity="0.8"/>
+
+  <!-- Tab -->
+  <rect x="720" y="30" width="140" height="24" rx="6" fill="#0f172a"/>
+  <text x="790" y="47" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.6)" text-anchor="middle">쟁승메이드</text>
+
+  <!-- URL bar -->
+  <rect x="636" y="60" width="524" height="28" fill="#141c2e"/>
+  <rect x="730" y="66" width="330" height="16" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <text x="895" y="78" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9" fill="rgba(255,255,255,0.35)" text-anchor="middle">jaengseungmade.vercel.app</text>
+
+  <!-- Browser body content area -->
+  <rect x="636" y="88" width="524" height="266" rx="0" fill="#0d1120"/>
+
+  <!-- Browser sidebar -->
+  <rect x="636" y="88" width="100" height="266" fill="url(#bn-sidebar)"/>
+
+  <!-- Sidebar nav items (geometric icons) -->
+  <!-- Home icon -->
+  <g transform="translate(654, 108)">
+    <path d="M 8 1 L 1 7 L 1 15 L 6 15 L 6 10 L 10 10 L 10 15 L 15 15 L 15 7 Z" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="676" y="120" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="8.5" fill="rgba(255,255,255,0.5)">홈</text>
+
+  <!-- Services icon -->
+  <g transform="translate(654, 134)">
+    <rect x="0" y="0" width="7" height="7" rx="1.5" stroke="#60a5fa" stroke-width="1.2" fill="none"/>
+    <rect x="9" y="0" width="7" height="7" rx="1.5" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" fill="none"/>
+    <rect x="0" y="9" width="7" height="7" rx="1.5" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" fill="none"/>
+    <rect x="9" y="9" width="7" height="7" rx="1.5" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" fill="none"/>
+  </g>
+  <text x="676" y="146" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="8.5" fill="#60a5fa">서비스</text>
+
+  <!-- Portfolio icon -->
+  <g transform="translate(654, 162)">
+    <rect x="0" y="0" width="16" height="12" rx="2" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" fill="none"/>
+    <line x1="0" y1="4" x2="16" y2="4" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+    <line x1="4" y1="0" x2="4" y2="12" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+  </g>
+  <text x="676" y="173" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="8.5" fill="rgba(255,255,255,0.4)">포트폴리오</text>
+
+  <!-- Contact icon -->
+  <g transform="translate(654, 188)">
+    <rect x="0" y="2" width="16" height="12" rx="2" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" fill="none"/>
+    <path d="M 0 4 L 8 9 L 16 4" stroke="rgba(255,255,255,0.35)" stroke-width="1.2" fill="none"/>
+  </g>
+  <text x="676" y="199" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="8.5" fill="rgba(255,255,255,0.4)">문의</text>
+
+  <!-- Active indicator bar on sidebar -->
+  <rect x="636" y="128" width="3" height="28" rx="1.5" fill="#2563eb"/>
+
+  <!-- Main content area -->
+
+  <!-- Hero section in browser -->
+  <rect x="740" y="96" width="408" height="84" rx="8" fill="rgba(37,99,235,0.12)" stroke="rgba(37,99,235,0.2)" stroke-width="1"/>
+  <text x="750" y="118" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11.5" fill="white" font-weight="700">쟁승메이드 서비스</text>
+  <text x="750" y="136" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.45)">전문 개발자가 만드는 맞춤형 솔루션</text>
+  <rect x="750" y="148" width="80" height="22" rx="11" fill="#1d4ed8"/>
+  <text x="790" y="163" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9" fill="white" text-anchor="middle" font-weight="600">서비스 보기</text>
+
+  <!-- Service cards row -->
+  <!-- Card 1 -->
+  <rect x="740" y="190" width="124" height="72" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <!-- Chart bar icon -->
+  <g transform="translate(752, 204)">
+    <rect x="0" y="8" width="6" height="8" rx="1" fill="#22c55e" fill-opacity="0.8"/>
+    <rect x="8" y="4" width="6" height="12" rx="1" fill="#22c55e"/>
+    <rect x="16" y="6" width="6" height="10" rx="1" fill="#22c55e" fill-opacity="0.7"/>
+  </g>
+  <text x="752" y="236" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9" fill="rgba(255,255,255,0.7)" font-weight="600">주식 자동매매</text>
+  <text x="752" y="250" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="8.5" fill="rgba(255,255,255,0.4)">텔레그램 연동</text>
+
+  <!-- Card 2 (active/highlighted) -->
+  <rect x="872" y="190" width="124" height="72" rx="8" fill="rgba(37,99,235,0.15)" stroke="rgba(37,99,235,0.35)" stroke-width="1.5"/>
+  <!-- Globe/web icon -->
+  <g transform="translate(884, 204)">
+    <circle cx="10" cy="8" r="8" stroke="#60a5fa" stroke-width="1.2" fill="none"/>
+    <ellipse cx="10" cy="8" rx="4" ry="8" stroke="#60a5fa" stroke-width="1" fill="none"/>
+    <line x1="2" y1="8" x2="18" y2="8" stroke="#60a5fa" stroke-width="1"/>
+    <line x1="3" y1="4" x2="17" y2="4" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="3" y1="12" x2="17" y2="12" stroke="#60a5fa" stroke-width="0.8" stroke-opacity="0.5"/>
+  </g>
+  <text x="884" y="236" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9" fill="white" font-weight="600">홈페이지 제작</text>
+  <text x="884" y="250" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="8.5" fill="rgba(255,255,255,0.5)">Next.js 풀스택</text>
+
+  <!-- Card 3 -->
+  <rect x="1004" y="190" width="124" height="72" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <!-- Sparkle/AI icon -->
+  <g transform="translate(1016, 202)">
+    <circle cx="10" cy="10" r="6" stroke="#a78bfa" stroke-width="1.2" fill="none"/>
+    <line x1="10" y1="1" x2="10" y2="4" stroke="#a78bfa" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="10" y1="16" x2="10" y2="19" stroke="#a78bfa" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="1" y1="10" x2="4" y2="10" stroke="#a78bfa" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="16" y1="10" x2="19" y2="10" stroke="#a78bfa" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <text x="1016" y="236" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9" fill="rgba(255,255,255,0.7)" font-weight="600">AI 사주 분석</text>
+  <text x="1016" y="250" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="8.5" fill="rgba(255,255,255,0.4)">Gemini 연동</text>
+
+  <!-- Bottom section in browser -->
+  <rect x="740" y="274" width="408" height="72" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+  <text x="750" y="294" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9" fill="rgba(255,255,255,0.35)">최근 완성 프로젝트</text>
+
+  <!-- Project item 1 -->
+  <circle cx="756" cy="314" r="4" fill="rgba(37,99,235,0.6)"/>
+  <text x="766" y="318" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9" fill="rgba(255,255,255,0.5)">소상공인 예약 관리 시스템</text>
+
+  <!-- Project item 2 -->
+  <circle cx="756" cy="330" r="4" fill="rgba(124,58,237,0.6)"/>
+  <text x="766" y="334" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9" fill="rgba(255,255,255,0.5)">부동산 매물 분석 대시보드</text>
+
+  <!-- ===== BOTTOM BAR ===== -->
+  <rect x="0" y="368" width="1200" height="32" fill="url(#bn-bottomBar)"/>
+  <line x1="0" y1="368" x2="1200" y2="368" stroke="rgba(99,102,241,0.5)" stroke-width="1"/>
+  <text x="600" y="389" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="rgba(255,255,255,0.85)" text-anchor="middle" font-weight="700">지금 무료 상담 받기 → jaengseungmade.vercel.app</text>
 </svg>

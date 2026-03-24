@@ -1,122 +1,174 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
   <defs>
-    <linearGradient id="bgPr" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1e1b4b"/>
-      <stop offset="100%" style="stop-color:#04102b"/>
+    <linearGradient id="pr-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#04102b"/>
     </linearGradient>
-    <linearGradient id="headPr" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#a78bfa"/>
-      <stop offset="100%" style="stop-color:#60a5fa"/>
-    </linearGradient>
-    <linearGradient id="badGradPr" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1f2937"/>
-      <stop offset="100%" style="stop-color:#111827"/>
-    </linearGradient>
-    <linearGradient id="goodGradPr" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1e1b4b"/>
-      <stop offset="100%" style="stop-color:#2d2b69"/>
-    </linearGradient>
-    <radialGradient id="glowPr" cx="50%" cy="40%" r="55%">
-      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.18"/>
-      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0"/>
+    <radialGradient id="pr-glow1" cx="20%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#04102b" stop-opacity="0"/>
     </radialGradient>
-    <filter id="bubbleShadPr">
-      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#7c3aed" flood-opacity="0.25"/>
-    </filter>
-    <filter id="panelShadPr">
-      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-color="#000" flood-opacity="0.45"/>
+    <radialGradient id="pr-glow2" cx="80%" cy="40%" r="45%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#04102b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pr-bottomBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="pr-headGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+    <linearGradient id="pr-afterBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <filter id="pr-panelShadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#000" flood-opacity="0.5"/>
     </filter>
   </defs>
 
   <!-- 배경 -->
-  <rect width="1200" height="675" fill="url(#bgPr)"/>
-  <rect width="1200" height="675" fill="url(#glowPr)"/>
+  <rect width="1200" height="675" fill="url(#pr-bg)"/>
+  <rect width="1200" height="675" fill="url(#pr-glow1)"/>
+  <rect width="1200" height="675" fill="url(#pr-glow2)"/>
 
-  <!-- 배경 코드 텍스트 (은은하게) -->
-  <text x="30" y="92" font-family="monospace" font-size="12" fill="#312e81" opacity="0.55">system: You are an expert business analyst with 10 years of experience...</text>
-  <text x="30" y="118" font-family="monospace" font-size="12" fill="#312e81" opacity="0.4">role: assistant | temperature: 0.3 | max_tokens: 4096</text>
-  <text x="30" y="590" font-family="monospace" font-size="12" fill="#312e81" opacity="0.35">{"output_format": "structured", "language": "ko", "tone": "professional"}</text>
-  <text x="30" y="614" font-family="monospace" font-size="12" fill="#312e81" opacity="0.25">chain_of_thought: true | few_shot_examples: 3</text>
+  <!-- 유기적 배경 곡선 -->
+  <path d="M 600 675 C 700 620 900 660 1200 600 L 1200 675 Z" fill="rgba(124,58,237,0.06)"/>
+  <path d="M 0 0 C 200 60 350 -10 520 40 L 520 0 Z" fill="rgba(124,58,237,0.04)"/>
+  <path d="M 650 0 C 820 80 1000 20 1200 60 L 1200 0 Z" fill="rgba(37,99,235,0.04)"/>
 
-  <!-- 왼쪽 텍스트 -->
+  <!-- ===== 왼쪽 콘텐츠 ===== -->
+
   <!-- 뱃지 -->
-  <rect x="60" y="60" width="290" height="40" rx="20" fill="#3b0764" stroke="#7c3aed" stroke-width="1.5"/>
-  <text x="84" y="86" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#c4b5fd">🧠 AI 프롬프트 전문 설계</text>
+  <rect x="48" y="68" width="210" height="32" rx="16" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="1"/>
+  <text x="153" y="89" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#a78bfa">AI 프롬프트 전문 설계</text>
 
   <!-- 헤드라인 -->
-  <text x="60" y="164" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="50" font-weight="900" fill="#ffffff">AI를 제대로</text>
-  <text x="60" y="224" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="50" font-weight="900" fill="url(#headPr)">써본 적 있으신가요?</text>
-  <text x="60" y="272" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">업무 특화 프롬프트로 생산성 10배 향상</text>
+  <text x="48" y="162" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="48" font-weight="700" fill="white">AI를 제대로</text>
+  <text x="48" y="222" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="48" font-weight="700" fill="url(#pr-headGrad)">써본 적 있으신가요?</text>
 
-  <!-- 수치 뱃지 3개 -->
-  <rect x="60" y="298" width="142" height="68" rx="14" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1.5"/>
-  <text x="131" y="330" text-anchor="middle" font-family="sans-serif" font-size="32" font-weight="900" fill="#a78bfa">10x</text>
-  <text x="131" y="354" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">생산성 향상</text>
+  <!-- 서브텍스트 -->
+  <text x="48" y="264" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" fill="#94a3b8">업무 특화 AI 프롬프트 설계로 생산성을 극대화하세요</text>
 
-  <rect x="214" y="298" width="142" height="68" rx="14" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1.5"/>
-  <text x="285" y="330" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="28" font-weight="900" fill="#60a5fa">3일</text>
-  <text x="285" y="354" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">납품 (베이직)</text>
+  <!-- 수치 3개 -->
+  <rect x="48" y="286" width="440" height="76" rx="14" fill="rgba(0,0,0,0.25)" stroke="rgba(124,58,237,0.2)" stroke-width="1"/>
+  <!-- 수치 1 -->
+  <text x="116" y="318" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="28" font-weight="700" fill="url(#pr-headGrad)">10x</text>
+  <text x="116" y="340" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#94a3b8">생산성 향상</text>
+  <line x1="195" y1="296" x2="195" y2="352" stroke="rgba(124,58,237,0.3)" stroke-width="1"/>
+  <!-- 수치 2 -->
+  <text x="272" y="318" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="28" font-weight="700" fill="#34d399">3일</text>
+  <text x="272" y="340" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#94a3b8">납품</text>
+  <line x1="352" y1="296" x2="352" y2="352" stroke="rgba(124,58,237,0.3)" stroke-width="1"/>
+  <!-- 수치 3 -->
+  <text x="416" y="318" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="28" font-weight="700" fill="#fbbf24">10만<tspan font-size="16">원~</tspan></text>
+  <text x="416" y="340" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#94a3b8">시작 가격</text>
 
-  <rect x="368" y="298" width="156" height="68" rx="14" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1.5"/>
-  <text x="446" y="326" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#94a3b8">시작 가격</text>
-  <text x="446" y="354" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="26" font-weight="900" fill="#34d399">10만원~</text>
+  <!-- AI 플랫폼 뱃지 -->
+  <text x="48" y="398" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#64748b">지원 AI 플랫폼</text>
+  <!-- ChatGPT -->
+  <rect x="48" y="410" width="96" height="30" rx="15" fill="rgba(16,185,129,0.1)" stroke="#10b981" stroke-width="1"/>
+  <text x="96" y="429" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="#34d399">ChatGPT</text>
+  <!-- Claude -->
+  <rect x="152" y="410" width="76" height="30" rx="15" fill="rgba(239,68,68,0.1)" stroke="#f87171" stroke-width="1"/>
+  <text x="190" y="429" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="#f87171">Claude</text>
+  <!-- Gemini -->
+  <rect x="236" y="410" width="76" height="30" rx="15" fill="rgba(37,99,235,0.1)" stroke="#60a5fa" stroke-width="1"/>
+  <text x="274" y="429" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="#60a5fa">Gemini</text>
 
-  <!-- 지원 AI 플랫폼 -->
-  <text x="60" y="402" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#64748b">지원 AI 플랫폼 :</text>
-  <rect x="168" y="385" width="106" height="30" rx="9" fill="#10a37f" opacity="0.9"/>
-  <text x="221" y="404" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">ChatGPT</text>
-  <rect x="284" y="385" width="80" height="30" rx="9" fill="#c35a38" opacity="0.9"/>
-  <text x="324" y="404" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">Claude</text>
-  <rect x="374" y="385" width="84" height="30" rx="9" fill="#1a73e8" opacity="0.9"/>
-  <text x="416" y="404" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">Gemini</text>
+  <!-- 적용 분야 목록 -->
+  <text x="48" y="474" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#64748b">적용 분야</text>
+  <text x="48" y="498" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#e2e8f0">· 임원 보고서 자동화</text>
+  <text x="48" y="520" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#e2e8f0">· 고객 이메일 초안 작성</text>
+  <text x="48" y="542" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#e2e8f0">· 데이터 분석 리포트 생성</text>
+  <text x="48" y="564" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#e2e8f0">· 코드 리뷰 및 문서화</text>
 
-  <!-- 적용 분야 -->
-  <g font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">
-    <text x="60" y="448">📝 보고서·기획서  ·  📊 데이터 분석  ·  📧 이메일 작성</text>
-    <text x="60" y="476">💡 아이디어 발굴  ·  🎯 마케팅 카피  ·  💬 고객 응대</text>
+  <!-- ===== 오른쪽 Before/After 패널 ===== -->
+  <g filter="url(#pr-panelShadow)">
+    <!-- 패널 외곽 -->
+    <rect x="590" y="48" width="582" height="578" rx="16" fill="#111827" stroke="#374151" stroke-width="1.5"/>
+
+    <!-- BEFORE 영역 -->
+    <rect x="590" y="48" width="582" height="290" rx="16" fill="#1f2937"/>
+    <rect x="590" y="290" width="582" height="20" fill="#1f2937"/>
+
+    <!-- BEFORE 레이블 -->
+    <text x="618" y="82" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" font-weight="700" fill="#ef4444" letter-spacing="1">BEFORE</text>
+    <text x="666" y="82" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#6b7280">— 일반 프롬프트</text>
+
+    <!-- 사용자 말풍선 (오른쪽) -->
+    <rect x="1002" y="96" width="148" height="64" rx="12" fill="#374151"/>
+    <!-- 말풍선 꼬리 -->
+    <path d="M 1150 148 L 1162 154 L 1150 160 Z" fill="#374151"/>
+    <text x="1076" y="118" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#f9fafb">보고서 써줘</text>
+    <text x="1076" y="136" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#9ca3af">막연한 요청</text>
+    <text x="1076" y="150" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#9ca3af">단 4글자</text>
+
+    <!-- AI 응답 말풍선 (왼쪽) -->
+    <rect x="618" y="180" width="360" height="90" rx="12" fill="#111827" stroke="#374151" stroke-width="1"/>
+    <!-- AI 레이블 -->
+    <text x="630" y="200" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#6b7280">AI 응답</text>
+    <rect x="642" y="208" width="180" height="8" rx="4" fill="#374151"/>
+    <rect x="642" y="222" width="220" height="8" rx="4" fill="#374151"/>
+    <rect x="642" y="236" width="160" height="8" rx="4" fill="#374151"/>
+    <rect x="642" y="250" width="200" height="8" rx="4" fill="#374151"/>
+
+    <!-- 구분 레이블 -->
+    <text x="1050" y="196" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#ef4444">빈 템플릿 반환</text>
+    <text x="1050" y="214" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#6b7280">어색한 문체</text>
+    <text x="1050" y="230" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#6b7280">활용 불가</text>
+
+    <!-- 시각적 구분선 (BEFORE→AFTER) -->
+    <path d="M 626 338 C 700 332 1000 348 1172 340" stroke="#374151" stroke-width="1" fill="none"/>
+    <rect x="800" y="328" width="84" height="22" rx="11" fill="#374151"/>
+    <text x="842" y="343" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" font-weight="600" fill="#9ca3af">VS</text>
+
+    <!-- AFTER 영역 -->
+    <rect x="590" y="360" width="582" height="266" rx="16" fill="url(#pr-afterBg)"/>
+    <rect x="590" y="360" width="582" height="20" fill="url(#pr-afterBg)"/>
+
+    <!-- AFTER 레이블 -->
+    <text x="618" y="394" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" font-weight="700" fill="#22c55e" letter-spacing="1">AFTER</text>
+    <text x="666" y="394" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#94a3b8">— 최적화 프롬프트</text>
+
+    <!-- 최적화 프롬프트 박스 -->
+    <rect x="618" y="404" width="300" height="120" rx="10" fill="rgba(124,58,237,0.15)" stroke="#7c3aed" stroke-width="1"/>
+    <text x="630" y="422" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#a78bfa" font-weight="600">[역할]</text>
+    <text x="668" y="422" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#e2e8f0">당신은 10년 경력 기획자입니다</text>
+    <text x="630" y="440" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#a78bfa" font-weight="600">[배경]</text>
+    <text x="668" y="440" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#e2e8f0">Q3 매출 현황 임원 보고 목적</text>
+    <text x="630" y="458" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#a78bfa" font-weight="600">[형식]</text>
+    <text x="668" y="458" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#e2e8f0">3단 구조: 현황·분석·제언</text>
+    <text x="630" y="476" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#a78bfa" font-weight="600">[제약]</text>
+    <text x="668" y="476" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#e2e8f0">500자 이내, 전문 용어 최소화</text>
+    <text x="630" y="494" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#a78bfa" font-weight="600">[톤]</text>
+    <text x="668" y="494" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#e2e8f0">간결하고 데이터 중심</text>
+    <!-- 말풍선 꼬리 -->
+    <path d="M 618 462 L 606 468 L 618 474 Z" fill="rgba(124,58,237,0.15)"/>
+
+    <!-- AI 응답 말풍선 (오른쪽, 구조화된 출력) -->
+    <rect x="930" y="404" width="228" height="138" rx="12" fill="rgba(37,99,235,0.15)" stroke="#2563eb" stroke-width="1"/>
+    <!-- 말풍선 꼬리 -->
+    <path d="M 1154 504 L 1165 510 L 1154 516 Z" fill="rgba(37,99,235,0.15)"/>
+    <text x="942" y="422" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#60a5fa" font-weight="600">AI 구조화 응답</text>
+    <!-- 구조화된 내용 시뮬레이션 -->
+    <rect x="942" y="430" width="90" height="7" rx="3" fill="rgba(96,165,250,0.6)"/>
+    <rect x="942" y="444" width="168" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
+    <rect x="942" y="456" width="148" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
+    <rect x="942" y="468" width="158" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
+    <rect x="942" y="482" width="90" height="7" rx="3" fill="rgba(96,165,250,0.6)"/>
+    <rect x="942" y="496" width="148" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
+    <rect x="942" y="508" width="120" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
+    <text x="942" y="534" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="#22c55e">즉시 활용 가능</text>
+
+    <!-- 성과 뱃지 -->
+    <rect x="618" y="560" width="530" height="40" rx="10" fill="rgba(34,197,94,0.08)" stroke="rgba(34,197,94,0.2)" stroke-width="1"/>
+    <text x="883" y="585" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#22c55e">업무 시간 90% 단축 · 품질 일관성 100% 확보</text>
   </g>
 
-  <!-- URL -->
-  <text x="60" y="632" font-family="sans-serif" font-size="14" fill="#3b5998">jaengseung-made.com</text>
-
-  <!-- 오른쪽 Before/After 패널 -->
-  <!-- Before 영역 -->
-  <text x="634" y="86" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#ef4444">❌  BEFORE — 일반 프롬프트</text>
-  <rect x="626" y="100" width="546" height="226" rx="18" fill="url(#badGradPr)" stroke="#374151" stroke-width="1" filter="url(#panelShadPr)"/>
-
-  <!-- 사용자 메시지 (오른쪽 말풍선) -->
-  <rect x="862" y="118" width="288" height="48" rx="12" fill="#374151"/>
-  <text x="878" y="138" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#e5e7eb">보고서 써줘</text>
-  <text x="878" y="158" font-family="'Malgun Gothic',sans-serif" font-size="11" fill="#9ca3af">(프롬프트 7글자)</text>
-
-  <!-- AI 응답 (왼쪽 말풍선) -->
-  <rect x="640" y="182" width="334" height="126" rx="12" fill="#1f2937"/>
-  <text x="660" y="204" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#9ca3af">보고서를 작성해 드리겠습니다.</text>
-  <text x="660" y="226" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#9ca3af">제목: 보고서</text>
-  <text x="660" y="248" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#9ca3af">내용: [내용을 입력해주세요]</text>
-  <text x="660" y="270" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#6b7280">결론: [결론을 입력해주세요]</text>
-  <text x="660" y="294" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#ef4444">→ 쓸모없는 빈 템플릿 반환</text>
-
-  <!-- After 영역 -->
-  <text x="634" y="358" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#34d399">✅  AFTER — 최적화 프롬프트</text>
-  <rect x="626" y="374" width="546" height="256" rx="18" fill="url(#goodGradPr)" stroke="#7c3aed" stroke-width="2" filter="url(#bubbleShadPr)"/>
-
-  <!-- 최적화 프롬프트 박스 -->
-  <rect x="832" y="390" width="322" height="110" rx="14" fill="#312e81"/>
-  <text x="852" y="412" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#c4b5fd">[역할] 5년 경력 경영분석가</text>
-  <text x="852" y="432" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#c4b5fd">[배경] 임원 보고용, 3분 이내</text>
-  <text x="852" y="452" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#c4b5fd">[형식] 요약→현황→제언</text>
-  <text x="852" y="472" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#c4b5fd">[제약] 불필요한 미사여구 제거</text>
-  <text x="852" y="492" font-family="'Malgun Gothic',sans-serif" font-size="11" fill="#7c3aed">← 최적화 프롬프트 (118글자)</text>
-
-  <!-- AI 응답 (좋은 버전) -->
-  <rect x="640" y="516" width="352" height="100" rx="14" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1.5"/>
-  <text x="660" y="540" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#e2e8f0">📋 [임원 보고 요약]</text>
-  <text x="660" y="560" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#c4b5fd">▶ 핵심 수치: 매출 12% 성장</text>
-  <text x="660" y="580" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#c4b5fd">▶ 리스크: 원가 상승 3건 확인</text>
-  <text x="660" y="600" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#34d399">→ 즉시 활용 가능한 임원 보고서 완성!</text>
-
   <!-- 하단 바 -->
-  <rect x="0" y="638" width="1200" height="37" fill="#3b0764"/>
-  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">ChatGPT · Claude · Gemini 업무 특화 프롬프트 설계  ·  납기 보장 · AS포함  ·  jaengseung-made.com</text>
+  <rect x="0" y="638" width="1200" height="37" fill="url(#pr-bottomBar)"/>
+  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="white">jaengseung-made.vercel.app — AI 프롬프트 전문 설계</text>
 </svg>

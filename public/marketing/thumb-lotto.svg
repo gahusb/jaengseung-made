@@ -1,206 +1,295 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
   <defs>
-    <linearGradient id="bgLt" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1c1200"/>
-      <stop offset="50%" style="stop-color:#1a0e00"/>
-      <stop offset="100%" style="stop-color:#04102b"/>
+    <linearGradient id="lt-bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1c1200"/>
+      <stop offset="100%" stop-color="#04102b"/>
     </linearGradient>
-    <linearGradient id="headLt" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#fbbf24"/>
-      <stop offset="100%" style="stop-color:#f59e0b"/>
-    </linearGradient>
-    <linearGradient id="priceLt" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#92400e"/>
-      <stop offset="100%" style="stop-color:#b45309"/>
-    </linearGradient>
-    <linearGradient id="goldBall" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#fde68a"/>
-      <stop offset="100%" style="stop-color:#f59e0b"/>
-    </linearGradient>
-    <linearGradient id="redBall" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#fca5a5"/>
-      <stop offset="100%" style="stop-color:#ef4444"/>
-    </linearGradient>
-    <linearGradient id="blueBall" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#93c5fd"/>
-      <stop offset="100%" style="stop-color:#3b82f6"/>
-    </linearGradient>
-    <linearGradient id="greenBall" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#86efac"/>
-      <stop offset="100%" style="stop-color:#22c55e"/>
-    </linearGradient>
-    <linearGradient id="grayBall" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#e2e8f0"/>
-      <stop offset="100%" style="stop-color:#94a3b8"/>
-    </linearGradient>
-    <radialGradient id="glowLt" cx="70%" cy="50%" r="55%">
-      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.18"/>
-      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0"/>
+    <radialGradient id="lt-amberGlow" cx="70%" cy="40%" r="45%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.0"/>
     </radialGradient>
-    <filter id="ballShadLt">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.4"/>
-    </filter>
-    <filter id="panelShadLt">
-      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-color="#000" flood-opacity="0.5"/>
-    </filter>
+    <linearGradient id="lt-badgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <linearGradient id="lt-panelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1000"/>
+      <stop offset="100%" stop-color="#0a0a18"/>
+    </linearGradient>
+    <linearGradient id="lt-bottomBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#1c1200"/>
+    </linearGradient>
+    <!-- Ball gradients -->
+    <radialGradient id="lt-blueBall" cx="35%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="50%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </radialGradient>
+    <radialGradient id="lt-redBall" cx="35%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="50%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </radialGradient>
+    <radialGradient id="lt-goldBall" cx="35%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#78350f"/>
+    </radialGradient>
+    <radialGradient id="lt-greenBall" cx="35%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </radialGradient>
+    <radialGradient id="lt-grayBall" cx="35%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </radialGradient>
+    <!-- Bar chart gradients -->
+    <linearGradient id="lt-bar1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="lt-bar2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#f87171"/>
+    </linearGradient>
+    <linearGradient id="lt-bar3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="lt-bar4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <linearGradient id="lt-bar5" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
   </defs>
 
-  <!-- 배경 -->
-  <rect width="1200" height="675" fill="url(#bgLt)"/>
-  <rect width="1200" height="675" fill="url(#glowLt)"/>
+  <!-- Background -->
+  <rect width="1200" height="675" fill="url(#lt-bgGrad)"/>
+  <rect width="1200" height="675" fill="url(#lt-amberGlow)"/>
 
-  <!-- 배경 숫자 패턴 (은은하게) -->
-  <text x="620" y="88" font-family="monospace" font-size="13" fill="#2a1a00" opacity="0.7">7  12  23  34  41  45  [BONUS: 16]</text>
-  <text x="620" y="108" font-family="monospace" font-size="13" fill="#2a1a00" opacity="0.5">1  8  17  29  36  44  [BONUS: 3]</text>
-  <text x="620" y="590" font-family="monospace" font-size="13" fill="#2a1a00" opacity="0.4">FREQUENCY ANALYSIS | PATTERN: 연속번호 출현율 34.2%</text>
-  <text x="620" y="610" font-family="monospace" font-size="13" fill="#2a1a00" opacity="0.3">HOT: 3,7,14,23,32 | COLD: 5,19,28,38,42</text>
+  <!-- Organic arc background -->
+  <path d="M 600 -50 C 800 0 1100 100 1300 300" stroke="rgba(245,158,11,0.06)" stroke-width="80" fill="none"/>
 
-  <!-- 왼쪽 콘텐츠 -->
-  <!-- 뱃지 -->
-  <rect x="60" y="62" width="272" height="40" rx="20" fill="#92400e" stroke="#f59e0b" stroke-width="1.5"/>
-  <text x="82" y="87" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#fde68a">🎯 빅데이터 통계 기반 분석</text>
-
-  <!-- 헤드라인 -->
-  <text x="60" y="162" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="54" font-weight="900" fill="#ffffff">운이 아닌</text>
-  <text x="60" y="228" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="54" font-weight="900" fill="url(#headLt)">데이터로 고릅니다</text>
-  <text x="60" y="276" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">1~45회차 전수 분석 · 출현 패턴 · 구간별 최적화</text>
-
-  <!-- 수치 뱃지 3개 -->
-  <rect x="60" y="300" width="156" height="70" rx="14" fill="#1c1200" stroke="#f59e0b" stroke-width="1.5"/>
-  <text x="138" y="332" text-anchor="middle" font-family="sans-serif" font-size="30" font-weight="900" fill="#fbbf24">1,115</text>
-  <text x="138" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">회차 전수 분석</text>
-
-  <rect x="228" y="300" width="156" height="70" rx="14" fill="#1c1200" stroke="#f59e0b" stroke-width="1.5"/>
-  <text x="306" y="332" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="28" font-weight="900" fill="#60a5fa">매주</text>
-  <text x="306" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">번호 업데이트</text>
-
-  <rect x="396" y="300" width="172" height="70" rx="14" fill="#1c1200" stroke="#f59e0b" stroke-width="1.5"/>
-  <text x="482" y="326" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#94a3b8">월 구독 시작</text>
-  <text x="482" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="30" font-weight="900" fill="#fbbf24">900원</text>
-
-  <!-- 플랜 설명 -->
-  <g font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#e2e8f0">
-    <rect x="60" y="388" width="12" height="12" rx="3" fill="#fbbf24"/>
-    <text x="82" y="400">골드 — 매주 1회 번호 추천 · 900원/월</text>
-    <rect x="60" y="416" width="12" height="12" rx="3" fill="#94a3b8"/>
-    <text x="82" y="428">플래티넘 — 주 3회 + 텔레그램 · 2,900원/월</text>
-    <rect x="60" y="444" width="12" height="12" rx="3" fill="#fbbf24"/>
-    <text x="82" y="456">다이아 — 무제한 + 연간 리포트 · 9,900원/월</text>
+  <!-- Dot grid pattern -->
+  <g opacity="0.06">
+    <pattern id="lt-dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1.2" fill="#f59e0b"/>
+    </pattern>
+    <rect width="1200" height="675" fill="url(#lt-dots)"/>
   </g>
 
-  <!-- 가격 뱃지 -->
-  <rect x="60" y="476" width="248" height="72" rx="16" fill="url(#priceLt)"/>
-  <text x="184" y="503" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#fde68a">골드 플랜 시작 가격</text>
-  <text x="184" y="534" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="900" fill="#ffffff">월 900원~</text>
+  <!-- ===== LEFT CONTENT ===== -->
 
-  <!-- 안내 문구 -->
-  <rect x="60" y="562" width="510" height="34" rx="8" fill="#1c1200" opacity="0.85"/>
-  <text x="80" y="583" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#78716c">⚠️ 당첨을 보장하지 않습니다. 통계 기반 번호 추천 서비스입니다.</text>
+  <!-- Badge -->
+  <rect x="52" y="52" width="208" height="34" rx="17" fill="url(#lt-badgeGrad)" stroke="#f59e0b" stroke-width="1" stroke-opacity="0.6"/>
+  <text x="156" y="74" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12.5" fill="#fcd34d" text-anchor="middle" font-weight="600">빅데이터 통계 기반 분석</text>
 
-  <!-- URL -->
-  <text x="60" y="632" font-family="sans-serif" font-size="14" fill="#3b5998">jaengseung-made.com</text>
+  <!-- Headline -->
+  <text x="52" y="142" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="52" fill="white" font-weight="800" letter-spacing="-1">운이 아닌</text>
+  <text x="52" y="202" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="52" fill="#fbbf24" font-weight="800" letter-spacing="-1">데이터로 고릅니다</text>
 
-  <!-- 오른쪽 로또 공 + 분석 패널 -->
-  <rect x="614" y="52" width="558" height="558" rx="22" fill="#100a00" stroke="#2a1a00" stroke-width="1.5" filter="url(#panelShadLt)"/>
-
-  <!-- 패널 헤더 -->
-  <rect x="614" y="52" width="558" height="46" rx="22" fill="#0c0800"/>
-  <rect x="614" y="76" width="558" height="22" fill="#0c0800"/>
-  <text x="893" y="82" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#f59e0b">🎱 이번주 추천 번호</text>
-
-  <!-- 로또 공 6개 (메인) -->
-  <!-- 공 1: 7 (파랑) -->
-  <circle cx="690" cy="160" r="46" fill="url(#blueBall)" filter="url(#ballShadLt)"/>
-  <circle cx="690" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
-  <text x="690" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#fff">7</text>
-
-  <!-- 공 2: 14 (빨강) -->
-  <circle cx="788" cy="160" r="46" fill="url(#redBall)" filter="url(#ballShadLt)"/>
-  <circle cx="788" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
-  <text x="788" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#fff">14</text>
-
-  <!-- 공 3: 23 (금) -->
-  <circle cx="886" cy="160" r="46" fill="url(#goldBall)" filter="url(#ballShadLt)"/>
-  <circle cx="886" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
-  <text x="886" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#7c3200">23</text>
-
-  <!-- 공 4: 31 (초록) -->
-  <circle cx="984" cy="160" r="46" fill="url(#greenBall)" filter="url(#ballShadLt)"/>
-  <circle cx="984" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
-  <text x="984" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#fff">31</text>
-
-  <!-- 공 5: 38 (파랑) -->
-  <circle cx="1082" cy="160" r="46" fill="url(#blueBall)" filter="url(#ballShadLt)"/>
-  <circle cx="1082" cy="156" r="12" fill="rgba(255,255,255,0.35)"/>
-  <text x="1082" y="168" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="900" fill="#fff">38</text>
-
-  <!-- 보너스 공: 45 (회색) -->
-  <text x="893" y="228" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="11" fill="#475569">BONUS</text>
-  <circle cx="1140" cy="218" r="30" fill="url(#grayBall)" filter="url(#ballShadLt)"/>
-  <circle cx="1140" cy="215" r="8" fill="rgba(255,255,255,0.3)"/>
-  <text x="1140" y="225" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="900" fill="#0f172a">45</text>
-
-  <!-- 구분선 -->
-  <line x1="634" y1="252" x2="1152" y2="252" stroke="#1e0e00" stroke-width="1.5"/>
-
-  <!-- 통계 그래프 영역 -->
-  <text x="893" y="280" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#94a3b8">번호별 출현 빈도 (최근 100회)</text>
-
-  <!-- 빈도 바 그래프 (간소화) -->
+  <!-- Stats row -->
   <g>
-    <!-- 1~10 구간 -->
-    <rect x="640" y="392" width="54" height="70" rx="0" fill="#3b82f6" opacity="0.7"/>
-    <rect x="640" y="362" width="54" height="30" rx="0" fill="#3b82f6" opacity="0.9"/>
-    <text x="667" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">1~10</text>
-    <!-- 11~20 구간 -->
-    <rect x="704" y="342" width="54" height="120" rx="0" fill="#22c55e" opacity="0.7"/>
-    <rect x="704" y="302" width="54" height="40" rx="0" fill="#22c55e" opacity="0.9"/>
-    <text x="731" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">11~20</text>
-    <!-- 21~30 구간 -->
-    <rect x="768" y="372" width="54" height="90" rx="0" fill="#f59e0b" opacity="0.7"/>
-    <rect x="768" y="352" width="54" height="20" rx="0" fill="#f59e0b" opacity="0.9"/>
-    <text x="795" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">21~30</text>
-    <!-- 31~40 구간 -->
-    <rect x="832" y="332" width="54" height="130" rx="0" fill="#ef4444" opacity="0.7"/>
-    <rect x="832" y="302" width="54" height="30" rx="0" fill="#ef4444" opacity="0.9"/>
-    <text x="859" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">31~40</text>
-    <!-- 41~45 구간 -->
-    <rect x="896" y="382" width="54" height="80" rx="0" fill="#a78bfa" opacity="0.7"/>
-    <rect x="896" y="362" width="54" height="20" rx="0" fill="#a78bfa" opacity="0.9"/>
-    <text x="923" y="478" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">41~45</text>
+    <rect x="52" y="226" width="148" height="70" rx="12" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+    <text x="126" y="252" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="22" fill="#fbbf24" text-anchor="middle" font-weight="800">1,115</text>
+    <text x="126" y="274" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle">회차 전수 분석</text>
+
+    <rect x="210" y="226" width="148" height="70" rx="12" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+    <text x="284" y="252" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="22" fill="#fbbf24" text-anchor="middle" font-weight="800">매주</text>
+    <text x="284" y="274" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle">업데이트</text>
+
+    <rect x="368" y="226" width="148" height="70" rx="12" fill="rgba(245,158,11,0.12)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+    <text x="442" y="252" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="22" fill="#fbbf24" text-anchor="middle" font-weight="800">900원</text>
+    <text x="442" y="274" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.5)" text-anchor="middle">시작</text>
   </g>
-  <!-- 기준선 -->
-  <line x1="634" y1="462" x2="966" y2="462" stroke="#1e0e00" stroke-width="1"/>
 
-  <!-- 우측 통계 텍스트 -->
-  <rect x="980" y="290" width="190" height="172" rx="14" fill="#0c0800" stroke="#2a1a00" stroke-width="1"/>
-  <text x="1075" y="316" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#94a3b8">HOT 번호</text>
-  <text x="1075" y="340" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#ef4444">3, 7, 14, 23, 32</text>
-  <line x1="990" y1="354" x2="1160" y2="354" stroke="#1e0e00" stroke-width="1"/>
-  <text x="1075" y="374" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#94a3b8">COLD 번호</text>
-  <text x="1075" y="398" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#60a5fa">5, 19, 28, 38, 42</text>
-  <line x1="990" y1="412" x2="1160" y2="412" stroke="#1e0e00" stroke-width="1"/>
-  <text x="1075" y="432" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#94a3b8">평균 출현 간격</text>
-  <text x="1075" y="454" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="900" fill="#fbbf24">7.8회</text>
+  <!-- Plan list -->
+  <rect x="52" y="316" width="350" height="120" rx="14" fill="rgba(255,255,255,0.04)" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
+  <text x="72" y="344" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11.5" fill="rgba(255,255,255,0.4)" font-weight="600">구독 플랜</text>
 
-  <!-- AI 분석 태그 -->
-  <rect x="634" y="492" width="526" height="96" rx="14" fill="#1a0e00" stroke="#2a1a00" stroke-width="1"/>
-  <text x="650" y="516" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#f59e0b">분석 기법</text>
-  <g font-family="sans-serif" font-size="11" font-weight="700">
-    <rect x="650" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
-    <text x="694" y="540" text-anchor="middle" fill="#fbbf24">빈도 분석</text>
-    <rect x="746" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
-    <text x="790" y="540" text-anchor="middle" fill="#fbbf24">구간 패턴</text>
-    <rect x="842" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
-    <text x="886" y="540" text-anchor="middle" fill="#fbbf24">홀짝 비율</text>
-    <rect x="938" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
-    <text x="982" y="540" text-anchor="middle" fill="#fbbf24">연속번호</text>
-    <rect x="1034" y="524" width="88" height="24" rx="7" fill="#1c1200" stroke="#f59e0b" stroke-width="1"/>
-    <text x="1078" y="540" text-anchor="middle" fill="#fbbf24">출현 주기</text>
+  <!-- Gold -->
+  <circle cx="78" cy="369" r="6" fill="#fbbf24"/>
+  <text x="92" y="374" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" font-weight="600">골드</text>
+  <text x="160" y="374" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.45)">기본 추천 5조합 · 매주 제공</text>
+
+  <!-- Platinum -->
+  <circle cx="78" cy="397" r="6" fill="#94a3b8"/>
+  <text x="92" y="402" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" font-weight="600">플래티넘</text>
+  <text x="178" y="402" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.45)">통계 심층 분석 + 10조합</text>
+
+  <!-- Diamond -->
+  <circle cx="78" cy="425" r="6" fill="#60a5fa"/>
+  <text x="92" y="430" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" font-weight="600">다이아</text>
+  <text x="160" y="430" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.45)">AI 패턴 분석 + 무제한 조합</text>
+
+  <!-- Price badge -->
+  <rect x="52" y="456" width="190" height="72" rx="14" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" stroke-width="2"/>
+  <text x="147" y="482" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="#fcd34d" text-anchor="middle">월 구독 시작가</text>
+  <text x="147" y="513" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="32" fill="white" text-anchor="middle" font-weight="800">900<tspan font-size="16" fill="#fcd34d">원~</tspan></text>
+
+  <!-- Disclaimer -->
+  <text x="52" y="556" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.28)">* 로또는 운의 게임이며, 당첨을 보장하지 않습니다.</text>
+  <text x="52" y="573" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.28)">* 통계 기반 분석이며 확률 향상을 보장하지 않습니다.</text>
+
+  <!-- ===== RIGHT: LOTTO PANEL ===== -->
+
+  <rect x="620" y="36" width="540" height="600" rx="22" fill="url(#lt-panelGrad)" stroke="rgba(245,158,11,0.3)" stroke-width="1.5"/>
+
+  <!-- Panel header -->
+  <rect x="620" y="36" width="540" height="60" rx="22" fill="rgba(245,158,11,0.15)"/>
+  <rect x="620" y="68" width="540" height="28" fill="rgba(245,158,11,0.15)"/>
+  <text x="890" y="74" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" fill="#fbbf24" text-anchor="middle" font-weight="700">이번주 추천 번호</text>
+  <text x="890" y="92" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.4)" text-anchor="middle">1,115회차 데이터 기반 빈도 분석</text>
+
+  <!-- Lotto Balls Row -->
+  <!-- Ball 7 (blue) -->
+  <ellipse cx="686" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.3)"/>
+  <circle cx="686" cy="158" r="36" fill="url(#lt-blueBall)"/>
+  <ellipse cx="676" cy="146" rx="12" ry="7" fill="rgba(255,255,255,0.32)"/>
+  <text x="686" y="165" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="white" text-anchor="middle" font-weight="800">7</text>
+
+  <!-- Ball 14 (red) -->
+  <ellipse cx="762" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.3)"/>
+  <circle cx="762" cy="158" r="36" fill="url(#lt-redBall)"/>
+  <ellipse cx="752" cy="146" rx="12" ry="7" fill="rgba(255,255,255,0.32)"/>
+  <text x="762" y="165" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="white" text-anchor="middle" font-weight="800">14</text>
+
+  <!-- Ball 23 (gold) -->
+  <ellipse cx="838" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.3)"/>
+  <circle cx="838" cy="158" r="36" fill="url(#lt-goldBall)"/>
+  <ellipse cx="828" cy="146" rx="12" ry="7" fill="rgba(255,255,255,0.38)"/>
+  <text x="838" y="165" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="white" text-anchor="middle" font-weight="800">23</text>
+
+  <!-- Ball 31 (green) -->
+  <ellipse cx="914" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.3)"/>
+  <circle cx="914" cy="158" r="36" fill="url(#lt-greenBall)"/>
+  <ellipse cx="904" cy="146" rx="12" ry="7" fill="rgba(255,255,255,0.32)"/>
+  <text x="914" y="165" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="white" text-anchor="middle" font-weight="800">31</text>
+
+  <!-- Ball 38 (blue) -->
+  <ellipse cx="990" cy="192" rx="36" ry="6" fill="rgba(0,0,0,0.3)"/>
+  <circle cx="990" cy="158" r="36" fill="url(#lt-blueBall)"/>
+  <ellipse cx="980" cy="146" rx="12" ry="7" fill="rgba(255,255,255,0.32)"/>
+  <text x="990" y="165" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="white" text-anchor="middle" font-weight="800">38</text>
+
+  <!-- Bonus label + smaller ball -->
+  <text x="1100" y="144" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.4)" text-anchor="middle">보너스</text>
+  <ellipse cx="1100" cy="185" rx="28" ry="5" fill="rgba(0,0,0,0.28)"/>
+  <circle cx="1100" cy="158" r="28" fill="url(#lt-grayBall)"/>
+  <ellipse cx="1093" cy="148" rx="9" ry="5.5" fill="rgba(255,255,255,0.3)"/>
+  <text x="1100" y="164" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" fill="white" text-anchor="middle" font-weight="800">45</text>
+
+  <!-- Section divider -->
+  <line x1="640" y1="212" x2="1140" y2="212" stroke="rgba(245,158,11,0.18)" stroke-width="1"/>
+
+  <!-- Bar chart section title -->
+  <text x="640" y="234" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.5)" font-weight="600">구간별 출현 빈도</text>
+
+  <!-- Bar chart (5 rounded bars) -->
+  <!-- 1~10 -->
+  <rect x="642" y="244" width="68" height="12" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <rect x="642" y="244" width="48" height="12" rx="6" fill="url(#lt-bar1)"/>
+  <text x="716" y="255" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.45)">1~10</text>
+
+  <!-- 11~20 -->
+  <rect x="642" y="264" width="68" height="12" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <rect x="642" y="264" width="60" height="12" rx="6" fill="url(#lt-bar2)"/>
+  <text x="716" y="275" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.45)">11~20</text>
+
+  <!-- 21~30 -->
+  <rect x="642" y="284" width="68" height="12" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <rect x="642" y="284" width="55" height="12" rx="6" fill="url(#lt-bar3)"/>
+  <text x="716" y="295" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.45)">21~30</text>
+
+  <!-- 31~40 -->
+  <rect x="642" y="304" width="68" height="12" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <rect x="642" y="304" width="52" height="12" rx="6" fill="url(#lt-bar4)"/>
+  <text x="716" y="315" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.45)">31~40</text>
+
+  <!-- 41~45 -->
+  <rect x="642" y="324" width="68" height="12" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <rect x="642" y="324" width="36" height="12" rx="6" fill="url(#lt-bar5)"/>
+  <text x="716" y="335" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.45)">41~45</text>
+
+  <!-- HOT/COLD panel -->
+  <line x1="640" y1="352" x2="1140" y2="352" stroke="rgba(245,158,11,0.18)" stroke-width="1"/>
+
+  <text x="640" y="373" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.5)" font-weight="600">HOT 번호</text>
+  <text x="870" y="373" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.5)" font-weight="600">COLD 번호</text>
+
+  <!-- HOT numbers -->
+  <g>
+    <circle cx="660" cy="395" r="18" fill="#dc2626" fill-opacity="0.85"/>
+    <text x="660" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">7</text>
+    <circle cx="696" cy="395" r="18" fill="#dc2626" fill-opacity="0.75"/>
+    <text x="696" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">14</text>
+    <circle cx="732" cy="395" r="18" fill="#dc2626" fill-opacity="0.65"/>
+    <text x="732" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">23</text>
+    <circle cx="768" cy="395" r="18" fill="#dc2626" fill-opacity="0.55"/>
+    <text x="768" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">38</text>
+    <circle cx="804" cy="395" r="18" fill="#dc2626" fill-opacity="0.45"/>
+    <text x="804" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">45</text>
   </g>
-  <text x="650" y="575" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">납기 보장 · 매주 업데이트되는 통계 알고리즘으로 최적 번호를 선별합니다.</text>
 
-  <!-- 하단 바 -->
-  <rect x="0" y="638" width="1200" height="37" fill="#92400e"/>
-  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#fde68a">빅데이터 통계 기반 로또 번호 추천  ·  1,115회차 전수 분석  ·  jaengseung-made.com</text>
+  <!-- COLD numbers -->
+  <g>
+    <circle cx="888" cy="395" r="18" fill="#1e3a8a" fill-opacity="0.85"/>
+    <text x="888" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">3</text>
+    <circle cx="924" cy="395" r="18" fill="#1e3a8a" fill-opacity="0.75"/>
+    <text x="924" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">19</text>
+    <circle cx="960" cy="395" r="18" fill="#1e3a8a" fill-opacity="0.65"/>
+    <text x="960" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">27</text>
+    <circle cx="996" cy="395" r="18" fill="#1e3a8a" fill-opacity="0.55"/>
+    <text x="996" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">33</text>
+    <circle cx="1032" cy="395" r="18" fill="#1e3a8a" fill-opacity="0.45"/>
+    <text x="1032" y="401" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="700">41</text>
+  </g>
+
+  <!-- Analysis tags section -->
+  <line x1="640" y1="428" x2="1140" y2="428" stroke="rgba(245,158,11,0.18)" stroke-width="1"/>
+  <text x="640" y="450" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.5)" font-weight="600">분석 기법</text>
+
+  <!-- Tags -->
+  <rect x="640" y="458" width="90" height="26" rx="13" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+  <text x="685" y="475" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="#fcd34d" text-anchor="middle">빈도 분석</text>
+
+  <rect x="738" y="458" width="90" height="26" rx="13" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+  <text x="783" y="475" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="#fcd34d" text-anchor="middle">구간 분포</text>
+
+  <rect x="836" y="458" width="90" height="26" rx="13" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+  <text x="881" y="475" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="#fcd34d" text-anchor="middle">연속 번호</text>
+
+  <rect x="934" y="458" width="90" height="26" rx="13" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+  <text x="979" y="475" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="#fcd34d" text-anchor="middle">홀짝 비율</text>
+
+  <rect x="1032" y="458" width="90" height="26" rx="13" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+  <text x="1077" y="475" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="#fcd34d" text-anchor="middle">회차 패턴</text>
+
+  <!-- Second row tags -->
+  <rect x="640" y="492" width="90" height="26" rx="13" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="685" y="509" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.45)" text-anchor="middle">합산 범위</text>
+
+  <rect x="738" y="492" width="90" height="26" rx="13" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="783" y="509" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.45)" text-anchor="middle">끝수 분석</text>
+
+  <rect x="836" y="492" width="90" height="26" rx="13" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="881" y="509" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.45)" text-anchor="middle">AC값</text>
+
+  <rect x="934" y="492" width="90" height="26" rx="13" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="979" y="509" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.45)" text-anchor="middle">소·중·고수</text>
+
+  <!-- CTA button -->
+  <rect x="640" y="534" width="480" height="58" rx="14" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" stroke-width="2"/>
+  <text x="880" y="568" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" fill="white" text-anchor="middle" font-weight="700">월 900원으로 이번주 번호 받기</text>
+
+  <!-- ===== BOTTOM BAR ===== -->
+  <rect x="0" y="638" width="1200" height="37" fill="url(#lt-bottomBar)"/>
+  <line x1="0" y1="638" x2="1200" y2="638" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
+  <text x="600" y="662" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-weight="600">jaengseungmade.vercel.app · 로또 번호 빅데이터 분석</text>
 </svg>

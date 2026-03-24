@@ -1,110 +1,144 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
   <defs>
-    <linearGradient id="bgB" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#04102b"/>
-      <stop offset="100%" style="stop-color:#1e1b4b"/>
+    <linearGradient id="hpB-bgTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#04102b"/>
+      <stop offset="100%" stop-color="#0d1f4f"/>
     </linearGradient>
-    <linearGradient id="topBarB" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#04102b"/>
-      <stop offset="100%" style="stop-color:#1e1b4b"/>
-    </linearGradient>
-    <linearGradient id="card2GradB" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#eff6ff"/>
-      <stop offset="100%" style="stop-color:#ede9fe"/>
-    </linearGradient>
-    <linearGradient id="headB" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#60a5fa"/>
-      <stop offset="100%" style="stop-color:#a78bfa"/>
-    </linearGradient>
-    <linearGradient id="btnB" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#2563eb"/>
-      <stop offset="100%" style="stop-color:#7c3aed"/>
-    </linearGradient>
-    <filter id="cardShadowB">
-      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#000" flood-opacity="0.2"/>
-    </filter>
-    <filter id="card2ShadowB">
-      <feDropShadow dx="0" dy="12" stdDeviation="24" flood-color="#7c3aed" flood-opacity="0.3"/>
-    </filter>
-    <radialGradient id="glowB" cx="50%" cy="60%" r="60%">
-      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.12"/>
-      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0"/>
+    <radialGradient id="hpB-glow1" cx="30%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#1d4ed8" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#04102b" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="hpB-glow2" cx="75%" cy="25%" r="40%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#04102b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hpB-bottomBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="hpB-headGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="hpB-bizBorder" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <filter id="hpB-cardShadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+    <filter id="hpB-bizShadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#7c3aed" flood-opacity="0.3"/>
+    </filter>
   </defs>
 
-  <!-- 배경: 상단 어두운 영역 -->
-  <rect width="1200" height="300" fill="url(#topBarB)"/>
-  <!-- 하단 밝은 영역 -->
-  <rect y="300" width="1200" height="375" fill="#f8fafc"/>
-  <rect width="1200" height="675" fill="url(#glowB)"/>
+  <!-- 배경 상단 (어두운 네이비) -->
+  <rect width="1200" height="675" fill="url(#hpB-bgTop)"/>
+  <rect width="1200" height="675" fill="url(#hpB-glow1)"/>
+  <rect width="1200" height="675" fill="url(#hpB-glow2)"/>
 
-  <!-- 상단: 브랜드 + 헤드라인 -->
-  <!-- 로고 -->
-  <rect x="60" y="38" width="42" height="42" rx="12" fill="#2563eb"/>
-  <text x="81" y="65" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="18" font-weight="900" fill="#fff">쟁</text>
-  <text x="114" y="52" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="700" fill="#60a5fa">쟁승메이드</text>
-  <text x="114" y="70" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">홈페이지 제작 전문</text>
+  <!-- 하단 밝은 배경 -->
+  <rect x="0" y="300" width="1200" height="375" fill="#f8fafc"/>
 
-  <!-- 헤드라인 -->
-  <text x="600" y="130" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="50" font-weight="900" fill="#ffffff">기업급 품질, 합리적 가격</text>
-  <text x="600" y="180" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="21" fill="#94a3b8">납기 보장 · Next.js 풀스택 · 계약서 필수 · SEO 최적화</text>
+  <!-- 유기적 웨이브 구분선 -->
+  <path d="M 0 290 C 200 270 400 320 600 300 C 800 280 1000 310 1200 295 L 1200 300 L 0 300 Z" fill="#f8fafc"/>
+  <!-- 보조 블롭 -->
+  <path d="M 0 0 C 150 40 300 -20 500 30 L 500 0 Z" fill="rgba(37,99,235,0.04)"/>
+  <path d="M 700 0 C 900 50 1100 -10 1200 40 L 1200 0 Z" fill="rgba(124,58,237,0.04)"/>
 
-  <!-- 구분선 -->
-  <line x1="380" y1="218" x2="820" y2="218" stroke="#1a3a7a" stroke-width="1"/>
+  <!-- ===== 상단 헤드라인 영역 ===== -->
+  <text x="600" y="82" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#93c5fd" letter-spacing="1">PREMIUM DEVELOPMENT SERVICE</text>
+  <text x="600" y="142" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="46" font-weight="700" fill="url(#hpB-headGrad)">기업급 품질, 합리적 가격</text>
+  <text x="600" y="182" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="18" fill="#94a3b8">7년차 대기업 개발자가 직접 개발하는 맞춤 솔루션</text>
 
-  <!-- 강점 3개 -->
-  <text x="330" y="255" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#60a5fa">⚡ 최단 7일 납품</text>
-  <text x="600" y="255" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#a78bfa">🔒 코드 품질 보증</text>
-  <text x="870" y="255" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="15" font-weight="600" fill="#34d399">✓ 납품 후 AS 포함</text>
+  <!-- 3개 특징 -->
+  <g>
+    <!-- 특징 1 -->
+    <circle cx="280" cy="228" r="7" fill="#22c55e"/>
+    <text x="294" y="233" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#e2e8f0">최단 7일 납품</text>
 
-  <!-- 플랜 카드 3개 -->
-  <!-- 카드1: 스타터 -->
-  <rect x="50" y="308" width="330" height="326" rx="20" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#cardShadowB)"/>
-  <rect x="50" y="308" width="330" height="8" rx="4" fill="#2563eb"/>
-  <text x="215" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#2563eb">STARTER</text>
-  <text x="215" y="422" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="56" font-weight="900" fill="#0f172a">50만원</text>
-  <text x="215" y="448" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">부터 시작</text>
-  <line x1="74" y1="466" x2="356" y2="466" stroke="#f1f5f9" stroke-width="1.5"/>
-  <text x="90" y="492" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#475569">✓  5페이지 이내</text>
-  <text x="90" y="516" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#475569">✓  반응형 디자인</text>
-  <text x="90" y="540" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#475569">✓  SEO 기본 설정</text>
-  <text x="90" y="564" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#475569">✓  납기 7일</text>
-  <rect x="74" y="584" width="262" height="40" rx="10" fill="#eff6ff"/>
-  <text x="205" y="609" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#2563eb">상담 신청하기</text>
+    <!-- 특징 2 -->
+    <circle cx="490" cy="228" r="7" fill="#60a5fa"/>
+    <text x="504" y="233" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#e2e8f0">코드 품질 보증</text>
 
-  <!-- 카드2: 비즈니스 (추천, 크고 돌출) -->
-  <rect x="425" y="286" width="348" height="370" rx="20" fill="url(#card2GradB)" stroke="#7c3aed" stroke-width="2.5" filter="url(#card2ShadowB)"/>
-  <rect x="425" y="286" width="348" height="8" rx="4" fill="#7c3aed"/>
-  <!-- 추천 뱃지 -->
-  <rect x="671" y="274" width="80" height="28" rx="14" fill="#7c3aed"/>
-  <text x="711" y="293" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#fff">⭐ 추천</text>
-  <text x="599" y="338" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#7c3aed">BUSINESS</text>
-  <text x="599" y="410" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="56" font-weight="900" fill="#0f172a">150만원</text>
-  <text x="599" y="436" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">부터 시작</text>
-  <line x1="447" y1="454" x2="751" y2="454" stroke="#ddd6fe" stroke-width="1.5"/>
-  <text x="465" y="480" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  10페이지 이내</text>
-  <text x="465" y="504" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  커스텀 디자인</text>
-  <text x="465" y="528" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  관리자 페이지</text>
-  <text x="465" y="552" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  SEO 완전 최적화</text>
-  <text x="465" y="576" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#374151">✓  납기 14일</text>
-  <rect x="447" y="598" width="304" height="46" rx="13" fill="#7c3aed"/>
-  <text x="599" y="626" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="16" font-weight="700" fill="#fff">지금 상담 신청 →</text>
+    <!-- 특징 3 -->
+    <circle cx="700" cy="228" r="7" fill="#a78bfa"/>
+    <text x="714" y="233" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#e2e8f0">납품 후 AS 포함</text>
+  </g>
 
-  <!-- 카드3: 프리미엄 -->
-  <rect x="820" y="308" width="330" height="326" rx="20" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" filter="url(#cardShadowB)"/>
-  <rect x="820" y="308" width="330" height="8" rx="4" fill="#f59e0b"/>
-  <text x="985" y="356" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#fbbf24">PREMIUM</text>
-  <text x="985" y="422" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="56" font-weight="900" fill="#ffffff">300만원</text>
-  <text x="985" y="448" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#64748b">부터 시작</text>
-  <line x1="842" y1="466" x2="1128" y2="466" stroke="#1e293b" stroke-width="1.5"/>
-  <text x="860" y="492" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">✓  페이지 수 무제한</text>
-  <text x="860" y="516" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">✓  결제/회원 시스템</text>
-  <text x="860" y="540" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">✓  DB 연동</text>
-  <text x="860" y="564" font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">✓  6개월 유지보수</text>
-  <rect x="842" y="584" width="262" height="40" rx="10" fill="#1e293b"/>
-  <text x="973" y="609" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#fbbf24">프리미엄 상담</text>
+  <!-- ===== 플랜 카드 3개 ===== -->
+
+  <!-- 스타터 카드 -->
+  <g filter="url(#hpB-cardShadow)">
+    <rect x="78" y="296" width="290" height="310" rx="16" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+    <!-- 상단 컬러 바 -->
+    <rect x="78" y="296" width="290" height="5" rx="2" fill="#22c55e"/>
+    <!-- 플랜명 -->
+    <text x="110" y="336" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#64748b" font-weight="600" letter-spacing="1">STARTER</text>
+    <text x="110" y="362" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="28" font-weight="700" fill="#1e293b">스타터</text>
+    <!-- 가격 -->
+    <text x="110" y="398" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="32" font-weight="700" fill="#22c55e">33<tspan font-size="18">만원~</tspan></text>
+    <!-- 구분선 -->
+    <line x1="110" y1="412" x2="338" y2="412" stroke="#e2e8f0" stroke-width="1"/>
+    <!-- 기능 목록 -->
+    <text x="124" y="434" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  업무 자동화 스크립트</text>
+    <text x="124" y="457" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  납품 후 2주 AS</text>
+    <text x="124" y="480" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  코드 설명 문서 포함</text>
+    <text x="124" y="503" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#94a3b8">—  시스템 통합 제외</text>
+    <!-- CTA -->
+    <rect x="110" y="526" width="228" height="38" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+    <text x="224" y="550" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#16a34a">문의하기</text>
+  </g>
+
+  <!-- 비즈니스 카드 (강조) -->
+  <g filter="url(#hpB-bizShadow)">
+    <rect x="388" y="286" width="310" height="330" rx="16" fill="white" stroke="url(#hpB-bizBorder)" stroke-width="2.5"/>
+    <!-- 상단 컬러 바 -->
+    <rect x="388" y="286" width="310" height="5" rx="2" fill="url(#hpB-bizBorder)"/>
+    <!-- 추천 배지 -->
+    <rect x="484" y="270" width="118" height="24" rx="12" fill="#7c3aed"/>
+    <text x="543" y="287" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" font-weight="600" fill="white">가장 인기있는 플랜</text>
+    <!-- 플랜명 -->
+    <text x="422" y="330" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#7c3aed" font-weight="600" letter-spacing="1">BUSINESS</text>
+    <text x="422" y="358" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="28" font-weight="700" fill="#1e293b">비즈니스</text>
+    <!-- 가격 -->
+    <text x="422" y="396" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="32" font-weight="700" fill="#7c3aed">66<tspan font-size="18">만원~</tspan></text>
+    <!-- 구분선 -->
+    <line x1="422" y1="410" x2="668" y2="410" stroke="#e2e8f0" stroke-width="1"/>
+    <!-- 기능 목록 -->
+    <text x="436" y="432" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  풀스택 웹/앱 개발</text>
+    <text x="436" y="455" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  납품 후 1개월 AS</text>
+    <text x="436" y="478" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  DB 설계 + API 개발</text>
+    <text x="436" y="501" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  배포 환경 구성 포함</text>
+    <text x="436" y="524" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  코드 인계 교육 포함</text>
+    <!-- CTA -->
+    <rect x="422" y="545" width="254" height="42" rx="12" fill="url(#hpB-headGrad)"/>
+    <text x="549" y="571" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="700" fill="white">지금 문의하기</text>
+  </g>
+
+  <!-- 프리미엄 카드 -->
+  <g filter="url(#hpB-cardShadow)">
+    <rect x="728" y="296" width="290" height="310" rx="16" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
+    <!-- 상단 컬러 바 -->
+    <rect x="728" y="296" width="290" height="5" rx="2" fill="#f59e0b"/>
+    <!-- 플랜명 -->
+    <text x="760" y="336" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#64748b" font-weight="600" letter-spacing="1">PREMIUM</text>
+    <text x="760" y="362" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="28" font-weight="700" fill="#1e293b">프리미엄</text>
+    <!-- 가격 -->
+    <text x="760" y="398" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="32" font-weight="700" fill="#d97706">100<tspan font-size="18">만원~</tspan></text>
+    <!-- 구분선 -->
+    <line x1="760" y1="412" x2="988" y2="412" stroke="#e2e8f0" stroke-width="1"/>
+    <!-- 기능 목록 -->
+    <text x="774" y="434" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  기업용 대형 시스템</text>
+    <text x="774" y="457" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  납품 후 3개월 AS</text>
+    <text x="774" y="480" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  성능 최적화 포함</text>
+    <text x="774" y="503" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#374151">✓  보안 감사 포함</text>
+    <!-- CTA -->
+    <rect x="760" y="526" width="228" height="38" rx="10" fill="#fffbeb" stroke="#fde68a" stroke-width="1.5"/>
+    <text x="874" y="550" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#d97706">문의하기</text>
+  </g>
 
   <!-- 하단 바 -->
-  <rect x="0" y="638" width="1200" height="37" fill="url(#btnB)"/>
-  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ffffff">납기 100% 보장  ·  무료 AS 포함  ·  연락두절 없음  ·  jaengseung-made.com</text>
+  <rect x="0" y="638" width="1200" height="37" fill="url(#hpB-bottomBar)"/>
+  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="white">jaengseung-made.vercel.app — 지금 바로 문의하세요</text>
 </svg>

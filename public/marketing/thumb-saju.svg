@@ -1,227 +1,281 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
   <defs>
-    <linearGradient id="bgSj" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0e0720"/>
-      <stop offset="50%" style="stop-color:#1a0a3a"/>
-      <stop offset="100%" style="stop-color:#04102b"/>
+    <linearGradient id="sj-bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e0720"/>
+      <stop offset="100%" stop-color="#04102b"/>
     </linearGradient>
-    <linearGradient id="headSj" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#c4b5fd"/>
-      <stop offset="100%" style="stop-color:#a78bfa"/>
-    </linearGradient>
-    <linearGradient id="goldSj" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#fde68a"/>
-      <stop offset="100%" style="stop-color:#f59e0b"/>
-    </linearGradient>
-    <linearGradient id="priceSj" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#4c1d95"/>
-      <stop offset="100%" style="stop-color:#7c3aed"/>
-    </linearGradient>
-    <linearGradient id="pillarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#1e1b4b"/>
-      <stop offset="100%" style="stop-color:#0e0720"/>
-    </linearGradient>
-    <radialGradient id="glowSj" cx="70%" cy="50%" r="55%">
-      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:0.2"/>
-      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0"/>
+    <radialGradient id="sj-purpleGlow" cx="72%" cy="45%" r="42%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.0"/>
     </radialGradient>
-    <radialGradient id="orb" cx="40%" cy="35%" r="60%">
-      <stop offset="0%" style="stop-color:#312e81"/>
-      <stop offset="100%" style="stop-color:#0e0720"/>
-    </radialGradient>
-    <filter id="glowSjF">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="panelShadSj">
-      <feDropShadow dx="0" dy="12" stdDeviation="22" flood-color="#000" flood-opacity="0.55"/>
-    </filter>
+    <linearGradient id="sj-badgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b0764"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
+    </linearGradient>
+    <linearGradient id="sj-panelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a0a30"/>
+      <stop offset="100%" stop-color="#0a0a1e"/>
+    </linearGradient>
+    <linearGradient id="sj-bottomBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b0764"/>
+      <stop offset="100%" stop-color="#04102b"/>
+    </linearGradient>
+    <!-- Pillar card gradients -->
+    <linearGradient id="sj-pillarNorm" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1040"/>
+      <stop offset="100%" stop-color="#14082e"/>
+    </linearGradient>
+    <linearGradient id="sj-pillarActive" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2d1060"/>
+      <stop offset="100%" stop-color="#1a0840"/>
+    </linearGradient>
+    <!-- Ohaeng bar gradients -->
+    <linearGradient id="sj-woodBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="100%" stop-color="#4ade80"/>
+    </linearGradient>
+    <linearGradient id="sj-fireBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b91c1c"/>
+      <stop offset="100%" stop-color="#f87171"/>
+    </linearGradient>
+    <linearGradient id="sj-earthBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a16207"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="sj-metalBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="sj-waterBar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
   </defs>
 
-  <!-- 배경 -->
-  <rect width="1200" height="675" fill="url(#bgSj)"/>
-  <rect width="1200" height="675" fill="url(#glowSj)"/>
+  <!-- Background -->
+  <rect width="1200" height="675" fill="url(#sj-bgGrad)"/>
+  <rect width="1200" height="675" fill="url(#sj-purpleGlow)"/>
 
-  <!-- 별 배경 효과 -->
-  <circle cx="680" cy="120" r="1.5" fill="#c4b5fd" opacity="0.6"/>
-  <circle cx="720" cy="80" r="1" fill="#a78bfa" opacity="0.5"/>
-  <circle cx="760" cy="140" r="1.5" fill="#c4b5fd" opacity="0.4"/>
-  <circle cx="800" cy="100" r="1" fill="#ddd6fe" opacity="0.6"/>
-  <circle cx="840" cy="60" r="2" fill="#a78bfa" opacity="0.3"/>
-  <circle cx="900" cy="120" r="1.5" fill="#c4b5fd" opacity="0.5"/>
-  <circle cx="950" cy="70" r="1" fill="#ddd6fe" opacity="0.4"/>
-  <circle cx="1000" cy="100" r="1.5" fill="#a78bfa" opacity="0.6"/>
-  <circle cx="1050" cy="50" r="1" fill="#c4b5fd" opacity="0.5"/>
-  <circle cx="1100" cy="90" r="2" fill="#ddd6fe" opacity="0.3"/>
-  <circle cx="650" cy="200" r="1" fill="#a78bfa" opacity="0.5"/>
-  <circle cx="700" cy="240" r="1.5" fill="#c4b5fd" opacity="0.4"/>
-  <circle cx="730" cy="580" r="1" fill="#a78bfa" opacity="0.5"/>
-  <circle cx="780" cy="560" r="1.5" fill="#c4b5fd" opacity="0.4"/>
-  <circle cx="820" cy="600" r="1" fill="#ddd6fe" opacity="0.5"/>
+  <!-- Organic arc background -->
+  <path d="M 614 0 C 700 80 800 40 900 120 C 1000 200 1100 150 1200 200 L 1200 0 Z" fill="rgba(124,58,237,0.05)"/>
 
-  <!-- 배경 한자 장식 (은은하게) -->
-  <text x="80" y="580" font-family="'Malgun Gothic',sans-serif" font-size="80" fill="#1a0a3a" opacity="0.6">天</text>
-  <text x="400" y="620" font-family="'Malgun Gothic',sans-serif" font-size="60" fill="#1a0a3a" opacity="0.4">命</text>
+  <!-- Stars (varied sizes and opacities) -->
+  <circle cx="42" cy="28" r="1.5" fill="rgba(255,255,255,0.7)"/>
+  <circle cx="120" cy="55" r="1.0" fill="rgba(255,255,255,0.5)"/>
+  <circle cx="198" cy="18" r="2.0" fill="rgba(255,255,255,0.8)"/>
+  <circle cx="310" cy="42" r="1.2" fill="rgba(255,255,255,0.55)"/>
+  <circle cx="420" cy="22" r="1.5" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="490" cy="60" r="1.0" fill="rgba(255,255,255,0.45)"/>
+  <circle cx="540" cy="30" r="1.8" fill="rgba(255,255,255,0.7)"/>
+  <circle cx="90" cy="110" r="1.2" fill="rgba(255,255,255,0.5)"/>
+  <circle cx="170" cy="140" r="0.9" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="250" cy="95" r="1.6" fill="rgba(255,255,255,0.65)"/>
+  <circle cx="360" cy="130" r="1.1" fill="rgba(255,255,255,0.5)"/>
+  <circle cx="460" cy="105" r="1.4" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="30" cy="200" r="1.0" fill="rgba(255,255,255,0.45)"/>
+  <circle cx="148" cy="220" r="1.7" fill="rgba(255,255,255,0.7)"/>
+  <circle cx="330" cy="210" r="0.9" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="475" cy="185" r="1.3" fill="rgba(255,255,255,0.55)"/>
+  <circle cx="68" cy="310" r="1.2" fill="rgba(255,255,255,0.5)"/>
+  <circle cx="200" cy="340" r="0.8" fill="rgba(255,255,255,0.38)"/>
+  <circle cx="390" cy="280" r="1.5" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="520" cy="320" r="1.0" fill="rgba(255,255,255,0.45)"/>
+  <circle cx="140" cy="420" r="1.4" fill="rgba(255,255,255,0.55)"/>
+  <circle cx="285" cy="445" r="0.9" fill="rgba(255,255,255,0.4)"/>
+  <circle cx="440" cy="400" r="1.6" fill="rgba(255,255,255,0.65)"/>
+  <circle cx="80" cy="520" r="1.1" fill="rgba(255,255,255,0.48)"/>
+  <circle cx="240" cy="560" r="1.3" fill="rgba(255,255,255,0.52)"/>
+  <circle cx="400" cy="530" r="0.8" fill="rgba(255,255,255,0.38)"/>
 
-  <!-- 왼쪽 콘텐츠 -->
-  <!-- 뱃지 -->
-  <rect x="60" y="62" width="290" height="40" rx="20" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1.5"/>
-  <text x="82" y="87" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#c4b5fd">✨ 전통 사주 × AI 딥러닝 분석</text>
+  <!-- Background Kanji decoration -->
+  <text x="80" y="390" font-family="serif" font-size="160" fill="rgba(124,58,237,0.04)" font-weight="900">天</text>
+  <text x="380" y="480" font-family="serif" font-size="120" fill="rgba(124,58,237,0.03)" font-weight="900">命</text>
 
-  <!-- 헤드라인 -->
-  <text x="60" y="164" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="52" font-weight="900" fill="#ffffff">타고난 운명을</text>
-  <text x="60" y="228" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="52" font-weight="900" fill="url(#headSj)">AI가 읽어드립니다</text>
-  <text x="60" y="274" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="19" fill="#94a3b8">사주팔자 완전 해석 · 12가지 인생 항목 분석</text>
+  <!-- ===== LEFT CONTENT ===== -->
 
-  <!-- 12항목 분석 목록 -->
-  <g font-family="'Malgun Gothic',sans-serif" font-size="14" fill="#94a3b8">
-    <text x="60" y="310">🔮 성격·적성  ·  💼 직업운  ·  💰 재물운  ·  ❤️ 애정운</text>
-    <text x="60" y="340">🏠 가정운  ·  ⚕️ 건강운  ·  📅 연간운  ·  ✨ 용신·기신</text>
-    <text x="60" y="370">🌟 대운 흐름  ·  🤝 인연 분석  ·  ⚠️ 주의 시기  ·  💡 조언</text>
-  </g>
+  <!-- Badge -->
+  <rect x="52" y="52" width="232" height="34" rx="17" fill="url(#sj-badgeGrad)" stroke="#7c3aed" stroke-width="1" stroke-opacity="0.6"/>
+  <text x="168" y="74" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12.5" fill="#c4b5fd" text-anchor="middle" font-weight="600">전통 사주 × AI 딥러닝 분석</text>
 
-  <!-- 차별화 포인트 -->
-  <rect x="60" y="392" width="520" height="80" rx="14" fill="#0e0720" stroke="#1e1b4b" stroke-width="1"/>
-  <g font-family="'Malgun Gothic',sans-serif">
-    <circle cx="88" cy="420" r="16" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1"/>
-    <text x="88" y="426" text-anchor="middle" font-size="14">🤖</text>
-    <text x="114" y="416" font-size="14" font-weight="700" fill="#e2e8f0">Gemini AI 해석 엔진</text>
-    <text x="114" y="434" font-size="12" fill="#64748b">단순 운세가 아닌 근거 있는 해석</text>
+  <!-- Headline -->
+  <text x="52" y="142" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="50" fill="white" font-weight="800" letter-spacing="-1">타고난 운명을</text>
+  <text x="52" y="200" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="50" fill="#a78bfa" font-weight="800" letter-spacing="-1">AI가 읽어드립니다</text>
 
-    <circle cx="88" cy="460" r="16" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1"/>
-    <text x="88" y="466" text-anchor="middle" font-size="14">📜</text>
-    <text x="114" y="456" font-size="14" font-weight="700" fill="#e2e8f0">전통 사주 학문 기반</text>
-    <text x="114" y="474" font-size="12" fill="#64748b">오행·천간지지·신살 완전 적용</text>
-  </g>
+  <!-- 12 analysis items text -->
+  <rect x="52" y="222" width="490" height="86" rx="12" fill="rgba(124,58,237,0.08)" stroke="rgba(124,58,237,0.25)" stroke-width="1"/>
+  <text x="297" y="248" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12.5" fill="rgba(255,255,255,0.65)" text-anchor="middle">성격·적성  ·  직업운  ·  재물운  ·  애정운</text>
+  <text x="297" y="272" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12.5" fill="rgba(255,255,255,0.65)" text-anchor="middle">가정운  ·  건강운  ·  연간운  ·  용신·기신</text>
+  <text x="297" y="296" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12.5" fill="rgba(255,255,255,0.65)" text-anchor="middle">대운 흐름  ·  인연 분석  ·  주의 시기  ·  조언</text>
 
-  <!-- 가격 뱃지 -->
-  <rect x="60" y="488" width="256" height="72" rx="16" fill="url(#priceSj)"/>
-  <text x="188" y="515" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#ddd6fe">AI 상세 리포트</text>
-  <text x="188" y="545" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="900" fill="#ffffff">4,900원</text>
+  <!-- Differentiation points -->
+  <rect x="52" y="324" width="232" height="72" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(124,58,237,0.25)" stroke-width="1"/>
+  <!-- AI icon: circle + lines -->
+  <circle cx="74" cy="354" r="10" stroke="#a78bfa" stroke-width="1.5" fill="none"/>
+  <line x1="74" y1="344" x2="74" y2="348" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="84" y1="354" x2="80" y2="354" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="64" y1="354" x2="68" y2="354" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="74" y1="364" x2="74" y2="360" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="94" y="352" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12.5" fill="white" font-weight="600">Gemini AI 해석 엔진</text>
+  <text x="94" y="370" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.42)">최신 AI 모델 적용</text>
 
-  <!-- 무료 기본 분석 안내 -->
-  <rect x="60" y="574" width="520" height="36" rx="10" fill="#1e1b4b" opacity="0.85"/>
-  <text x="80" y="597" font-family="'Malgun Gothic',sans-serif" font-size="13" fill="#a78bfa">🎁 기본 사주팔자 계산·오행 분석은 무료 제공</text>
+  <rect x="296" y="324" width="232" height="72" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(124,58,237,0.25)" stroke-width="1"/>
+  <!-- Book icon -->
+  <rect x="316" y="344" width="16" height="20" rx="2" stroke="#a78bfa" stroke-width="1.5" fill="none"/>
+  <line x1="316" y1="350" x2="332" y2="350" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.5"/>
+  <line x1="316" y1="355" x2="332" y2="355" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.5"/>
+  <line x1="316" y1="360" x2="328" y2="360" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="340" y="352" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12.5" fill="white" font-weight="600">전통 사주 학문 기반</text>
+  <text x="340" y="370" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.42)">정통 명리학 이론 적용</text>
 
-  <!-- URL -->
-  <text x="60" y="632" font-family="sans-serif" font-size="14" fill="#3b5998">jaengseung-made.com</text>
+  <!-- Price badge -->
+  <rect x="52" y="416" width="200" height="84" rx="14" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="2"/>
+  <text x="152" y="442" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="#c4b5fd" text-anchor="middle">12항목 전체 리포트</text>
+  <text x="152" y="480" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="34" fill="white" text-anchor="middle" font-weight="800">4,900<tspan font-size="16" fill="#c4b5fd">원</tspan></text>
 
-  <!-- 오른쪽 사주팔자 패널 -->
-  <rect x="614" y="52" width="558" height="558" rx="22" fill="#0a0618" stroke="#1e1b4b" stroke-width="1.5" filter="url(#panelShadSj)"/>
-  <!-- 상단 장식선 -->
-  <line x1="634" y1="104" x2="1152" y2="104" stroke="#1e1b4b" stroke-width="1"/>
+  <text x="52" y="524" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11.5" fill="#86efac">기본 사주 분석은 무료로 제공됩니다</text>
 
-  <!-- 패널 타이틀 -->
-  <text x="893" y="84" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="15" font-weight="700" fill="url(#goldSj)">✦ 사주 분석 결과 ✦</text>
+  <!-- Disclaimer -->
+  <text x="52" y="558" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.28)">* 사주 분석은 참고용이며 실제 결과를 보장하지 않습니다.</text>
+  <text x="52" y="576" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.28)">* AI 해석 결과는 전문 상담을 대체하지 않습니다.</text>
 
-  <!-- 사주 팔자 표 (4기둥) -->
-  <!-- 헤더 -->
-  <text x="680" y="132" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">시주(時柱)</text>
-  <text x="790" y="132" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">일주(日柱)</text>
-  <text x="900" y="132" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">월주(月柱)</text>
-  <text x="1010" y="132" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#64748b">년주(年柱)</text>
+  <!-- ===== RIGHT: SAJU PANEL ===== -->
 
-  <!-- 기둥 1: 시주 -->
-  <rect x="642" y="144" width="76" height="90" rx="12" fill="url(#pillarGrad)" stroke="#1e1b4b" stroke-width="1.5"/>
-  <text x="680" y="186" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="700" fill="#60a5fa">庚</text>
-  <text x="680" y="210" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">경(庚)</text>
-  <rect x="642" y="248" width="76" height="90" rx="12" fill="url(#pillarGrad)" stroke="#1e1b4b" stroke-width="1.5"/>
-  <text x="680" y="290" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="700" fill="#60a5fa">申</text>
-  <text x="680" y="314" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">신(申) · 금(金)</text>
+  <rect x="610" y="30" width="552" height="610" rx="22" fill="url(#sj-panelGrad)" stroke="rgba(124,58,237,0.35)" stroke-width="1.5"/>
 
-  <!-- 기둥 2: 일주 (하이라이트) -->
-  <rect x="752" y="144" width="76" height="90" rx="12" fill="#1e1b4b" stroke="#7c3aed" stroke-width="2"/>
-  <text x="790" y="186" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="700" fill="#c4b5fd">癸</text>
-  <text x="790" y="210" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#a78bfa">계(癸)</text>
-  <rect x="752" y="248" width="76" height="90" rx="12" fill="#1e1b4b" stroke="#7c3aed" stroke-width="2"/>
-  <text x="790" y="290" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="700" fill="#c4b5fd">酉</text>
-  <text x="790" y="314" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#a78bfa">유(酉) · 금(金)</text>
-  <!-- 일주 뱃지 -->
-  <rect x="740" y="130" width="100" height="20" rx="10" fill="#7c3aed"/>
-  <text x="790" y="144" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="10" font-weight="700" fill="#fff">나의 일주</text>
+  <!-- Panel header -->
+  <rect x="610" y="30" width="552" height="56" rx="22" fill="rgba(124,58,237,0.2)"/>
+  <rect x="610" y="60" width="552" height="26" fill="rgba(124,58,237,0.2)"/>
+  <text x="886" y="64" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" fill="#fbbf24" text-anchor="middle" font-weight="700">사주 분석 결과</text>
+  <text x="886" y="82" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.4)" text-anchor="middle">1992년 12월 23일 · 오후 4시 30분 · 남성</text>
 
-  <!-- 기둥 3: 월주 -->
-  <rect x="862" y="144" width="76" height="90" rx="12" fill="url(#pillarGrad)" stroke="#1e1b4b" stroke-width="1.5"/>
-  <text x="900" y="186" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="700" fill="#34d399">壬</text>
-  <text x="900" y="210" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">임(壬)</text>
-  <rect x="862" y="248" width="76" height="90" rx="12" fill="url(#pillarGrad)" stroke="#1e1b4b" stroke-width="1.5"/>
-  <text x="900" y="290" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="700" fill="#34d399">子</text>
-  <text x="900" y="314" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">자(子) · 수(水)</text>
+  <!-- 4 Pillars (시주/일주/월주/년주) - right to left order display -->
+  <!-- Year pillar (년주) -->
+  <rect x="626" y="100" width="118" height="130" rx="12" fill="url(#sj-pillarNorm)" stroke="rgba(124,58,237,0.3)" stroke-width="1"/>
+  <text x="685" y="122" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.4)" text-anchor="middle">년주 年柱</text>
+  <!-- Subtle grid micro-pattern -->
+  <rect x="636" y="130" width="98" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+  <text x="685" y="158" font-family="serif" font-size="36" fill="#60a5fa" text-anchor="middle" font-weight="700">壬</text>
+  <rect x="636" y="180" width="98" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+  <text x="685" y="208" font-family="serif" font-size="36" fill="#60a5fa" text-anchor="middle" font-weight="700">申</text>
+  <text x="685" y="222" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9.5" fill="rgba(255,255,255,0.3)" text-anchor="middle">임 · 신</text>
 
-  <!-- 기둥 4: 년주 -->
-  <rect x="972" y="144" width="76" height="90" rx="12" fill="url(#pillarGrad)" stroke="#1e1b4b" stroke-width="1.5"/>
-  <text x="1010" y="186" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="700" fill="#fbbf24">壬</text>
-  <text x="1010" y="210" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">임(壬)</text>
-  <rect x="972" y="248" width="76" height="90" rx="12" fill="url(#pillarGrad)" stroke="#1e1b4b" stroke-width="1.5"/>
-  <text x="1010" y="290" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="32" font-weight="700" fill="#fbbf24">申</text>
-  <text x="1010" y="314" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="12" fill="#475569">신(申) · 금(金)</text>
+  <!-- Month pillar (월주) -->
+  <rect x="754" y="100" width="118" height="130" rx="12" fill="url(#sj-pillarNorm)" stroke="rgba(124,58,237,0.3)" stroke-width="1"/>
+  <text x="813" y="122" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.4)" text-anchor="middle">월주 月柱</text>
+  <rect x="764" y="130" width="98" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+  <text x="813" y="158" font-family="serif" font-size="36" fill="#60a5fa" text-anchor="middle" font-weight="700">壬</text>
+  <rect x="764" y="180" width="98" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+  <text x="813" y="208" font-family="serif" font-size="36" fill="#60a5fa" text-anchor="middle" font-weight="700">子</text>
+  <text x="813" y="222" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9.5" fill="rgba(255,255,255,0.3)" text-anchor="middle">임 · 자</text>
 
-  <!-- 오행 그래프 -->
-  <line x1="634" y1="356" x2="1152" y2="356" stroke="#1e1b4b" stroke-width="1"/>
-  <text x="893" y="380" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#64748b">오행(五行) 분포</text>
+  <!-- Day pillar (일주) - ACTIVE with purple border -->
+  <rect x="882" y="96" width="122" height="138" rx="12" fill="url(#sj-pillarActive)" stroke="#7c3aed" stroke-width="2.5"/>
+  <rect x="882" y="96" width="122" height="138" rx="12" fill="none" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="943" y="116" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#c4b5fd" text-anchor="middle" font-weight="600">일주 日柱</text>
+  <text x="943" y="128" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9" fill="#a78bfa" text-anchor="middle">나의 일주</text>
+  <rect x="893" y="132" width="100" height="44" rx="8" fill="rgba(124,58,237,0.15)"/>
+  <text x="943" y="160" font-family="serif" font-size="36" fill="#fbbf24" text-anchor="middle" font-weight="700">癸</text>
+  <rect x="893" y="184" width="100" height="44" rx="8" fill="rgba(124,58,237,0.15)"/>
+  <text x="943" y="212" font-family="serif" font-size="36" fill="#fbbf24" text-anchor="middle" font-weight="700">酉</text>
+  <text x="943" y="226" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9.5" fill="rgba(255,255,255,0.4)" text-anchor="middle">계 · 유</text>
 
-  <g font-family="'Malgun Gothic',sans-serif" font-size="11">
-    <!-- 목(木) -->
-    <text x="654" y="406" fill="#64748b">목(木)</text>
-    <rect x="654" y="412" width="80" height="14" rx="4" fill="#0a2010"/>
-    <rect x="654" y="412" width="8" height="14" rx="4" fill="#22c55e"/>
-    <text x="666" y="424" fill="#22c55e">▪</text>
+  <!-- Hour pillar (시주) -->
+  <rect x="1014" y="100" width="118" height="130" rx="12" fill="url(#sj-pillarNorm)" stroke="rgba(124,58,237,0.3)" stroke-width="1"/>
+  <text x="1073" y="122" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.4)" text-anchor="middle">시주 時柱</text>
+  <rect x="1024" y="130" width="98" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+  <text x="1073" y="158" font-family="serif" font-size="36" fill="#94a3b8" text-anchor="middle" font-weight="700">庚</text>
+  <rect x="1024" y="180" width="98" height="42" rx="8" fill="rgba(255,255,255,0.04)"/>
+  <text x="1073" y="208" font-family="serif" font-size="36" fill="#94a3b8" text-anchor="middle" font-weight="700">申</text>
+  <text x="1073" y="222" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="9.5" fill="rgba(255,255,255,0.3)" text-anchor="middle">경 · 신</text>
 
-    <!-- 화(火) -->
-    <text x="754" y="406" fill="#64748b">화(火)</text>
-    <rect x="754" y="412" width="80" height="14" rx="4" fill="#2a0a00"/>
-    <rect x="754" y="412" width="6" height="14" rx="4" fill="#ef4444"/>
+  <!-- Section: Ohaeng distribution -->
+  <line x1="626" y1="252" x2="1146" y2="252" stroke="rgba(124,58,237,0.25)" stroke-width="1"/>
+  <text x="626" y="272" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.5)" font-weight="600">오행 분포</text>
 
-    <!-- 토(土) -->
-    <text x="854" y="406" fill="#64748b">토(土)</text>
-    <rect x="854" y="412" width="80" height="14" rx="4" fill="#1c1200"/>
-    <rect x="854" y="412" width="10" height="14" rx="4" fill="#f59e0b"/>
+  <!-- Wood 목 -->
+  <text x="626" y="296" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#4ade80">목(木)</text>
+  <rect x="668" y="284" width="420" height="14" rx="7" fill="rgba(255,255,255,0.06)"/>
+  <rect x="668" y="284" width="50" height="14" rx="7" fill="url(#sj-woodBar)"/>
+  <text x="1096" y="296" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.4)" text-anchor="end">12%</text>
 
-    <!-- 금(金) -->
-    <text x="954" y="406" fill="#64748b">금(金)</text>
-    <rect x="954" y="412" width="80" height="14" rx="4" fill="#1a1800"/>
-    <rect x="954" y="412" width="72" height="14" rx="4" fill="#e2e8f0"/>
-    <text x="1022" y="424" text-anchor="end" fill="#0f172a" font-weight="700">强</text>
+  <!-- Fire 화 -->
+  <text x="626" y="318" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#f87171">화(火)</text>
+  <rect x="668" y="306" width="420" height="14" rx="7" fill="rgba(255,255,255,0.06)"/>
+  <rect x="668" y="306" width="40" height="14" rx="7" fill="url(#sj-fireBar)"/>
+  <text x="1096" y="318" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.4)" text-anchor="end">10%</text>
 
-    <!-- 수(水) -->
-    <text x="1054" y="406" fill="#64748b">수(水)</text>
-    <rect x="1054" y="412" width="80" height="14" rx="4" fill="#061428"/>
-    <rect x="1054" y="412" width="56" height="14" rx="4" fill="#3b82f6"/>
-  </g>
+  <!-- Earth 토 -->
+  <text x="626" y="340" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#fbbf24">토(土)</text>
+  <rect x="668" y="328" width="420" height="14" rx="7" fill="rgba(255,255,255,0.06)"/>
+  <rect x="668" y="328" width="63" height="14" rx="7" fill="url(#sj-earthBar)"/>
+  <text x="1096" y="340" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.4)" text-anchor="end">15%</text>
 
-  <!-- AI 분석 항목 그리드 -->
-  <line x1="634" y1="444" x2="1152" y2="444" stroke="#1e1b4b" stroke-width="1"/>
-  <text x="893" y="466" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#64748b">AI 해석 12항목</text>
+  <!-- Metal 금 -->
+  <text x="626" y="362" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#cbd5e1">금(金)</text>
+  <rect x="668" y="350" width="420" height="14" rx="7" fill="rgba(255,255,255,0.06)"/>
+  <rect x="668" y="350" width="252" height="14" rx="7" fill="url(#sj-metalBar)"/>
+  <text x="1096" y="362" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.4)" text-anchor="end">60%</text>
 
-  <g font-family="'Malgun Gothic',sans-serif" font-size="12">
-    <rect x="640" y="476" width="108" height="30" rx="8" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1"/>
-    <text x="694" y="496" text-anchor="middle" fill="#c4b5fd">🎭 성격·적성</text>
-    <rect x="756" y="476" width="108" height="30" rx="8" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1"/>
-    <text x="810" y="496" text-anchor="middle" fill="#c4b5fd">💼 직업운</text>
-    <rect x="872" y="476" width="108" height="30" rx="8" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1"/>
-    <text x="926" y="496" text-anchor="middle" fill="#c4b5fd">💰 재물운</text>
-    <rect x="988" y="476" width="108" height="30" rx="8" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1"/>
-    <text x="1042" y="496" text-anchor="middle" fill="#c4b5fd">❤️ 애정운</text>
-    <rect x="1104" y="476" width="40" height="30" rx="8" fill="#1e1b4b"/>
-    <text x="1124" y="496" text-anchor="middle" fill="#475569">+8</text>
+  <!-- Water 수 -->
+  <text x="626" y="384" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#60a5fa">수(水)</text>
+  <rect x="668" y="372" width="420" height="14" rx="7" fill="rgba(255,255,255,0.06)"/>
+  <rect x="668" y="372" width="12" height="14" rx="7" fill="url(#sj-waterBar)"/>
+  <text x="1096" y="384" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="10" fill="rgba(255,255,255,0.4)" text-anchor="end">3%</text>
 
-    <rect x="640" y="514" width="108" height="30" rx="8" fill="#0e0720" stroke="#1e1b4b" stroke-width="1"/>
-    <text x="694" y="534" text-anchor="middle" fill="#64748b">📅 연간운</text>
-    <rect x="756" y="514" width="108" height="30" rx="8" fill="#0e0720" stroke="#1e1b4b" stroke-width="1"/>
-    <text x="810" y="534" text-anchor="middle" fill="#64748b">⚕️ 건강운</text>
-    <rect x="872" y="514" width="108" height="30" rx="8" fill="#0e0720" stroke="#1e1b4b" stroke-width="1"/>
-    <text x="926" y="534" text-anchor="middle" fill="#64748b">✨ 용신</text>
-    <rect x="988" y="514" width="108" height="30" rx="8" fill="#0e0720" stroke="#1e1b4b" stroke-width="1"/>
-    <text x="1042" y="534" text-anchor="middle" fill="#64748b">🌟 대운</text>
-    <rect x="1104" y="514" width="40" height="30" rx="8" fill="#0e0720"/>
-    <text x="1124" y="534" text-anchor="middle" fill="#1e1b4b">...</text>
-  </g>
+  <!-- Section: 12 AI analysis tags -->
+  <line x1="626" y1="402" x2="1146" y2="402" stroke="rgba(124,58,237,0.25)" stroke-width="1"/>
+  <text x="626" y="422" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="rgba(255,255,255,0.5)" font-weight="600">AI 해석 항목</text>
 
-  <!-- 결제 후 잠금 해제 표시 -->
-  <rect x="634" y="552" width="518" height="44" rx="12" fill="url(#priceSj)" opacity="0.9"/>
-  <text x="893" y="579" text-anchor="middle" font-family="'Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#fff">🔓 4,900원으로 12항목 전체 리포트 잠금 해제</text>
+  <!-- Row 1: 4 active tags (purple border) -->
+  <rect x="626" y="430" width="112" height="28" rx="14" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="682" y="449" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#c4b5fd" text-anchor="middle">성격·적성</text>
 
-  <!-- 하단 바 -->
-  <rect x="0" y="638" width="1200" height="37" fill="#4c1d95"/>
-  <text x="600" y="662" text-anchor="middle" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="600" fill="#ddd6fe">전통 사주팔자 + AI 딥러닝 해석  ·  12항목 상세 분석  ·  jaengseung-made.com</text>
+  <rect x="746" y="430" width="112" height="28" rx="14" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="802" y="449" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#c4b5fd" text-anchor="middle">직업운</text>
+
+  <rect x="866" y="430" width="112" height="28" rx="14" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="922" y="449" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#c4b5fd" text-anchor="middle">재물운</text>
+
+  <rect x="986" y="430" width="112" height="28" rx="14" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="1042" y="449" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#c4b5fd" text-anchor="middle">애정운</text>
+
+  <!-- Row 2: locked (gray) -->
+  <rect x="626" y="466" width="112" height="28" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="682" y="485" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.35)" text-anchor="middle">가정운</text>
+
+  <rect x="746" y="466" width="112" height="28" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="802" y="485" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.35)" text-anchor="middle">건강운</text>
+
+  <rect x="866" y="466" width="112" height="28" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="922" y="485" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.35)" text-anchor="middle">연간운</text>
+
+  <rect x="986" y="466" width="112" height="28" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="1042" y="485" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.35)" text-anchor="middle">용신·기신</text>
+
+  <!-- Row 3: locked -->
+  <rect x="626" y="502" width="112" height="28" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="682" y="521" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.35)" text-anchor="middle">대운 흐름</text>
+
+  <rect x="746" y="502" width="112" height="28" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="802" y="521" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.35)" text-anchor="middle">인연 분석</text>
+
+  <rect x="866" y="502" width="112" height="28" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="922" y="521" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.35)" text-anchor="middle">주의 시기</text>
+
+  <rect x="986" y="502" width="112" height="28" rx="14" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+  <text x="1042" y="521" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.35)" text-anchor="middle">조언</text>
+
+  <!-- Lock CTA -->
+  <rect x="626" y="548" width="492" height="60" rx="14" fill="rgba(124,58,237,0.22)" stroke="#7c3aed" stroke-width="2"/>
+  <!-- Lock icon -->
+  <rect x="648" y="566" width="14" height="12" rx="2" fill="none" stroke="#c4b5fd" stroke-width="1.5"/>
+  <path d="M 651 566 C 651 561 661 561 661 566" stroke="#c4b5fd" stroke-width="1.5" fill="none"/>
+  <circle cx="655" cy="572" r="2" fill="#c4b5fd"/>
+  <text x="886" y="574" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13.5" fill="white" text-anchor="middle" font-weight="700">4,900원으로 12항목 전체 리포트 잠금 해제</text>
+  <text x="886" y="596" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="rgba(255,255,255,0.5)" text-anchor="middle">단 한번의 결제 · 평생 보관</text>
+
+  <!-- ===== BOTTOM BAR ===== -->
+  <rect x="0" y="638" width="1200" height="37" fill="url(#sj-bottomBar)"/>
+  <line x1="0" y1="638" x2="1200" y2="638" stroke="rgba(124,58,237,0.4)" stroke-width="1"/>
+  <text x="600" y="662" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="rgba(255,255,255,0.7)" text-anchor="middle" font-weight="600">jaengseungmade.vercel.app · 전통 사주 × AI 딥러닝 분석</text>
 </svg>
