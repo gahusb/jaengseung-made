@@ -44,6 +44,20 @@ export default function DashboardShell({ children }: { children: React.ReactNode
         {/* Main scrollable content */}
         <main className="main-content">
           {children}
+          {/* 토스페이먼츠 심사용 사업자 정보 푸터 */}
+          <footer className="border-t border-slate-200 bg-white px-6 py-6 text-slate-500 text-xs">
+            <div className="max-w-5xl">
+              <p className="font-semibold text-slate-700 mb-2">쟁승메이드</p>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 leading-relaxed">
+                <span>대표자: 박재오</span>
+                <span>사업자등록번호: 267-53-00822</span>
+                <span>주소: 서울시 동작구 여의대방로22아길 22</span>
+                <span>전화: 010-3907-1392</span>
+                <span>이메일: bgg8988@gmail.com</span>
+              </div>
+              <p className="mt-2 text-slate-400">© 2025 쟁승메이드. All rights reserved.</p>
+            </div>
+          </footer>
         </main>
       </div>
 
