@@ -63,10 +63,23 @@ export default function ContactModal({
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // GA4 이벤트 헬퍼
+  const trackEvent = (eventName: string, params?: Record<string, string>) => {
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const w = window as any;
+      if (typeof w.gtag === 'function') {
+        w.gtag('event', eventName, params);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
     setErrorMessage('');
+    // 문의 시도 이벤트
+    trackEvent('contact_attempt', { service: formData.service });
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -76,9 +89,16 @@ export default function ContactModal({
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || '문의 전송에 실패했습니다.');
       setStatus('success');
+      // 문의 성공 이벤트 (전환 추적 핵심)
+      trackEvent('generate_lead', {
+        event_category: 'contact',
+        event_label: formData.service,
+        value: '1',
+      });
     } catch (error) {
       setStatus('error');
       setErrorMessage(error instanceof Error ? error.message : '문의 전송에 실패했습니다.');
+      trackEvent('contact_error', { service: formData.service });
     }
   };
 

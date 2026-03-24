@@ -53,6 +53,45 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': 'https://jaengseung-made.com/#person',
+      name: '박재오',
+      url: 'https://jaengseung-made.com',
+      jobTitle: '백엔드 개발자 · AI 자동화 전문가',
+      worksFor: { '@type': 'Organization', name: '대기업 재직 중' },
+      email: 'bgg8988@gmail.com',
+      telephone: '010-3907-1392',
+      knowsAbout: ['Python', 'Java', 'Spring Boot', 'Next.js', 'RPA', 'AI 자동화', '업무 자동화'],
+      description: '현직 대기업 백엔드 개발자. 계약서 먼저, 납기 보장, 소스코드 100% 인도 원칙으로 외주 개발·AI 자동화·프롬프트 엔지니어링 서비스를 제공합니다.',
+    },
+    {
+      '@type': 'LocalBusiness',
+      '@id': 'https://jaengseung-made.com/#business',
+      name: '쟁승메이드',
+      url: 'https://jaengseung-made.com',
+      description: '현직 대기업 개발자가 운영하는 AI 자동화·외주 개발 서비스. 계약서 포함, 납기 패널티, 소스코드 인도.',
+      email: 'bgg8988@gmail.com',
+      telephone: '010-3907-1392',
+      priceRange: '₩₩',
+      areaServed: '대한민국',
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: '쟁승메이드 서비스 목록',
+        itemListElement: [
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '업무 자동화 개발', url: 'https://jaengseung-made.com/services/automation' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '외주 개발', url: 'https://jaengseung-made.com/freelance' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '프롬프트 엔지니어링', url: 'https://jaengseung-made.com/services/prompt' } },
+          { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '홈페이지 제작', url: 'https://jaengseung-made.com/services/website' } },
+        ],
+      },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -61,6 +100,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-WG77RNHXRK"
           strategy="afterInteractive"
@@ -70,7 +113,10 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-WG77RNHXRK');
+            gtag('config', 'G-WG77RNHXRK', {
+              send_page_view: true,
+              custom_map: { dimension1: 'service_type' }
+            });
           `}
         </Script>
       </head>

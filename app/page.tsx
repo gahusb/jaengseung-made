@@ -619,6 +619,47 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════
+          SECTION 5.5 — 콘텐츠 / 인사이트
+      ════════════════════════════════ */}
+      <section className="px-6 py-12 lg:px-12 bg-white border-y border-slate-100">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-end justify-between mb-6">
+            <div>
+              <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-1">INSIGHTS</p>
+              <h2 className="text-xl md:text-2xl font-extrabold text-[#04102b]">AI 자동화 실전 팁</h2>
+            </div>
+            <a
+              href="https://blog.naver.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold text-slate-400 hover:text-[#1a56db] transition flex items-center gap-1"
+            >
+              블로그 전체 보기 →
+            </a>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { tag: '업무 자동화', title: '업무 자동화 외주 맡기기 전에 반드시 확인할 5가지', desc: '계약서, 소스코드 인도, 납기 명시. 피해의 90%는 이 세 가지 없어서 생깁니다.', color: 'bg-cyan-50 border-cyan-100', tagColor: 'text-cyan-600 bg-cyan-100' },
+              { tag: 'ChatGPT 활용', title: 'ChatGPT 프롬프트 잘 쓰는 법 — RCTF 공식', desc: 'Role·Context·Task·Format 네 가지를 넣으면 답변 퀄리티가 3배 올라갑니다.', color: 'bg-violet-50 border-violet-100', tagColor: 'text-violet-600 bg-violet-100' },
+              { tag: '개발자 부업', title: '대기업 현직 개발자가 부업 6개월 해본 솔직한 후기', desc: '잘 된 점, 힘든 점, 현실적인 수익까지. 포장 없이 공유합니다.', color: 'bg-blue-50 border-blue-100', tagColor: 'text-blue-600 bg-blue-100' },
+            ].map((post) => (
+              <div key={post.title} className={`rounded-2xl border p-5 ${post.color} hover:-translate-y-0.5 transition-transform`}>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-md ${post.tagColor}`}>{post.tag}</span>
+                <h3 className="font-extrabold text-[#04102b] text-sm mt-3 mb-2 leading-snug" style={{ wordBreak: 'keep-all' }}>{post.title}</h3>
+                <p className="text-slate-500 text-xs leading-relaxed" style={{ wordBreak: 'keep-all' }}>{post.desc}</p>
+                <div className="mt-3 text-xs font-semibold text-[#1a56db] flex items-center gap-1">
+                  네이버 블로그에서 읽기 →
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-slate-400 text-xs mt-4">
+            블로그 준비 중 — 곧 업로드됩니다
+          </p>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════
           SECTION 6 — 최종 CTA
       ════════════════════════════════ */}
       <section className="px-6 py-16 lg:px-12 lg:py-20">
