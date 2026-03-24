@@ -109,16 +109,29 @@ const PROOF_SERVICES = [
 
 const SUBSCRIPTION_SERVICES = [
   {
-    id: 'lotto',
-    href: '/services/lotto',
-    color: '#d97706',
-    bg: '#fef3c7',
-    border: '#fde68a',
-    label: 'LOTTO ANALYTICS',
-    title: '로또 번호 추천',
-    price: '월 900원~',
-    type: '구독형',
+    id: 'automation',
+    href: '/services/automation',
+    color: '#0891b2',
+    bg: '#cffafe',
+    border: '#a5f3fc',
+    label: 'AI · RPA AUTOMATION',
+    title: '업무 자동화',
+    price: '5만원~',
+    type: '프로젝트',
     badge: 'HOT',
+    badgeColor: 'bg-cyan-600',
+  },
+  {
+    id: 'prompt',
+    href: '/services/prompt',
+    color: '#7c3aed',
+    bg: '#ede9fe',
+    border: '#ddd6fe',
+    label: 'PROMPT ENGINEERING',
+    title: '프롬프트 엔지니어링',
+    price: '9,900원~',
+    type: '패키지',
+    badge: 'SALE',
     badgeColor: 'bg-red-500',
   },
   {
@@ -131,32 +144,19 @@ const SUBSCRIPTION_SERVICES = [
     title: '주식 자동 매매',
     price: '설치 49,000원~',
     type: '설치형',
-    badge: 'NEW',
-    badgeColor: 'bg-emerald-500',
-  },
-  {
-    id: 'prompt',
-    href: '/services/prompt',
-    color: '#7c3aed',
-    bg: '#ede9fe',
-    border: '#ddd6fe',
-    label: 'PROMPT ENGINEERING',
-    title: '프롬프트 엔지니어링',
-    price: '건당 30,000원~',
-    type: '건별',
     badge: null,
     badgeColor: '',
   },
   {
-    id: 'automation',
-    href: '/services/automation',
-    color: '#0891b2',
-    bg: '#cffafe',
-    border: '#a5f3fc',
-    label: 'RPA AUTOMATION',
-    title: '업무 자동화',
-    price: '5만원~',
-    type: '프로젝트',
+    id: 'lotto',
+    href: '/services/lotto',
+    color: '#d97706',
+    bg: '#fef3c7',
+    border: '#fde68a',
+    label: 'LOTTO ANALYTICS',
+    title: '로또 번호 추천',
+    price: '월 900원~',
+    type: '구독형',
     badge: null,
     badgeColor: '',
   },
@@ -217,10 +217,16 @@ export default function Home() {
 
             {/* ── 좌측: 메인 카피 ── */}
             <div>
-              {/* 뱃지 */}
-              <div className="inline-flex items-center gap-2 bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-wide">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                현재 프로젝트 접수 가능
+              {/* 뱃지 라인 */}
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                <div className="inline-flex items-center gap-2 bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 text-xs font-semibold px-4 py-1.5 rounded-full tracking-wide">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  현재 프로젝트 접수 가능
+                </div>
+                <div className="inline-flex items-center gap-1.5 bg-cyan-400/10 border border-cyan-400/20 text-cyan-300 text-xs font-semibold px-3 py-1.5 rounded-full tracking-wide">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+                  AI 자동화 전문
+                </div>
               </div>
 
               <h1
@@ -241,12 +247,17 @@ export default function Home() {
               </h1>
 
               <p
-                className="text-blue-200/60 text-base md:text-lg leading-relaxed mb-8 max-w-lg"
+                className="text-blue-200/60 text-base md:text-lg leading-relaxed mb-4 max-w-lg"
                 style={{ wordBreak: 'keep-all' }}
               >
                 계약서, 중간 보고, 소스코드 인도, 1개월 무상 AS까지 — 단계마다 증거를 남기는 개발 방식으로 진행합니다.
-                이 사이트 자체가 제 포트폴리오입니다.
               </p>
+              <div className="flex items-start gap-2.5 bg-cyan-400/8 border border-cyan-400/15 rounded-xl px-4 py-3 mb-8 max-w-lg">
+                <svg className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+                <p className="text-cyan-200/70 text-sm leading-relaxed" style={{ wordBreak: 'keep-all' }}>
+                  <span className="text-cyan-300 font-bold">AI 자동화 전문 —</span> 반복 업무, 엑셀 처리, 이메일·보고서 자동화를 AI로 없애드립니다. 이 사이트 자체가 제 포트폴리오입니다.
+                </p>
+              </div>
 
               {/* CTA */}
               <div className="flex flex-wrap gap-3 mb-10">
@@ -534,6 +545,49 @@ export default function Home() {
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════
+          SECTION 4.5 — 무료 체험 후기 수집 배너
+      ════════════════════════════════ */}
+      <section className="px-6 py-6 lg:px-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="relative bg-gradient-to-r from-cyan-950 to-blue-950 border border-cyan-500/20 rounded-2xl px-7 py-5 overflow-hidden">
+            <div className="absolute right-0 top-0 w-64 h-full opacity-10 pointer-events-none">
+              <div className="w-full h-full bg-gradient-to-l from-cyan-400 to-transparent" />
+            </div>
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl bg-cyan-400/15 border border-cyan-400/25 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg className="w-4.5 h-4.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-xs font-extrabold bg-red-500 text-white px-2 py-0.5 rounded-md">한정 3팀</span>
+                    <span className="text-cyan-300 text-xs font-bold uppercase tracking-wider">무료 체험 · 후기 수집 중</span>
+                  </div>
+                  <p className="text-white font-extrabold text-base leading-snug" style={{ wordBreak: 'keep-all' }}>
+                    AI 자동화 세팅을 무료로 받고 솔직한 후기를 남겨주세요
+                  </p>
+                  <p className="text-cyan-200/50 text-xs mt-1" style={{ wordBreak: 'keep-all' }}>
+                    ChatGPT 프롬프트 세팅 또는 반복 업무 1건 자동화 — 후기 작성이 조건입니다. 현재 <span className="text-cyan-300 font-bold">2팀 남음</span>
+                  </p>
+                </div>
+              </div>
+              <a
+                href="https://open.kakao.com/o/s9stoNvb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-shrink-0 inline-flex items-center gap-2 bg-cyan-400 hover:bg-cyan-300 text-cyan-950 font-extrabold text-sm px-5 py-2.5 rounded-xl"
+                style={{ transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+              >
+                카카오로 신청 →
+              </a>
+            </div>
           </div>
         </div>
       </section>
