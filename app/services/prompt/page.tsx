@@ -26,6 +26,9 @@ const premiumProducts = [
     title: 'AI 이미지 생성 마스터 프롬프트 패키지',
     subtitle: 'Midjourney · DALL-E 3 · Stable Diffusion 전용',
     price: '45,000원',
+    salePrice: '12,900원',
+    discountRate: '72% OFF',
+    saleLabel: '런칭 기념 특가',
     priceNote: '/ 패키지 (즉시 다운로드)',
     desc: '수천 장의 이미지 생성 실험을 통해 검증된, 업종별·스타일별 고품질 프롬프트 50종 세트. 단순 키워드 나열이 아닌 구도·조명·분위기·카메라·후처리까지 세밀하게 설계된 전문가급 프롬프트입니다.',
     features: [
@@ -76,6 +79,9 @@ overexposed, blurry, plastic look, artificial lighting`,
     title: 'AI 자소서·이력서 첨삭 마스터 프롬프트',
     subtitle: 'ChatGPT · Claude 전용 · 대기업 HR 기준 적용',
     price: '35,000원',
+    salePrice: '9,900원',
+    discountRate: '72% OFF',
+    saleLabel: '런칭 기념 특가',
     priceNote: '/ 패키지 (즉시 다운로드)',
     desc: '대기업 현직 개발자의 실전 경험과 수십 명의 신입/경력 지원자 첨삭 경험을 바탕으로 설계한 자소서·이력서 최적화 프롬프트 세트. 합격률을 높이는 구체적인 표현과 구조로 AI가 전문 컨설턴트처럼 첨삭하도록 만들어드립니다.',
     features: [
@@ -268,7 +274,19 @@ export default function PromptPage() {
                       {product.badge}
                     </span>
                     <div className="text-right">
-                      <div className="text-2xl font-extrabold text-white">{product.price}</div>
+                      {/* 할인 배지 */}
+                      <div className="flex items-center justify-end gap-2 mb-1">
+                        <span className="text-xs font-extrabold bg-red-500 text-white px-2 py-0.5 rounded-md animate-pulse">
+                          {product.discountRate}
+                        </span>
+                        <span className="text-xs font-bold" style={{ color: product.accentColor }}>
+                          {product.saleLabel}
+                        </span>
+                      </div>
+                      {/* 원가 취소선 */}
+                      <div className="text-sm line-through opacity-40 text-right text-white mb-0.5">{product.price}</div>
+                      {/* 세일가 */}
+                      <div className="text-2xl font-extrabold text-white">{product.salePrice}</div>
                       <div className="text-xs" style={{ color: product.accentColor + '99' }}>{product.priceNote}</div>
                     </div>
                   </div>
