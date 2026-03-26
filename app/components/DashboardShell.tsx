@@ -51,7 +51,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
               <div className="flex flex-wrap gap-x-4 gap-y-1 leading-relaxed">
                 <span>대표자: 박재오</span>
                 <span>사업자등록번호: 267-53-00822</span>
-                <span>주소: 서울시 동작구 여의대방로22아길 22</span>
+                <span>주소: 서울시 동작구 여의대방로22아길 22, 1동 109호</span>
                 <span>전화: 010-3907-1392</span>
                 <span>이메일: bgg8988@gmail.com</span>
               </div>
