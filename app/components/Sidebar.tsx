@@ -49,6 +49,17 @@ const navItems = [
     desc: 'AI 최적화',
   },
   {
+    href: '/services/ai-kit',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    ),
+    label: 'AI 자동화 키트',
+    desc: '월 구독 자동화 도구',
+    badge: 'NEW',
+  },
+  {
     href: '/saju',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +68,6 @@ const navItems = [
     ),
     label: 'AI 사주 분석',
     desc: '사주팔자 + AI 해석',
-    badge: 'NEW',
   },
 ];
 

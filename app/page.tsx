@@ -91,6 +91,19 @@ const PROOF_SERVICES = [
 
 const SUBSCRIPTION_SERVICES = [
   {
+    id: 'ai-kit',
+    href: '/services/ai-kit',
+    color: '#4f46e5',
+    bg: '#eef2ff',
+    border: '#c7d2fe',
+    label: 'AI AUTOMATION KIT',
+    title: 'AI 자동화 키트',
+    price: '19,900원/월',
+    type: '월 구독',
+    badge: 'NEW',
+    badgeColor: 'bg-indigo-600',
+  },
+  {
     id: 'automation',
     href: '/services/automation',
     color: '#0891b2',

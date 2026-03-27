@@ -11,6 +11,8 @@ interface Stats {
   monthlyChart: Array<{ month: string; revenue: number }>;
 }
 
+const MONTHLY_GOAL = 1_000_000; // 월 100만원 목표
+
 function StatCard({ label, value, icon, color }: { label: string; value: string; icon: React.ReactNode; color: string }) {
   return (
     <div className="bg-slate-900 rounded-2xl p-5 border border-slate-700/50">
@@ -21,6 +23,68 @@ function StatCard({ label, value, icon, color }: { label: string; value: string;
         </div>
       </div>
       <p className="text-white text-2xl font-bold">{value}</p>
+    </div>
+  );
+}
+
+function MonthlyGoalCard({ currentRevenue }: { currentRevenue: number }) {
+  const progress = Math.min((currentRevenue / MONTHLY_GOAL) * 100, 100);
+  const remaining = Math.max(MONTHLY_GOAL - currentRevenue, 0);
+  const isAchieved = currentRevenue >= MONTHLY_GOAL;
+  const progressColor = progress >= 100 ? 'from-emerald-400 to-green-500' : progress >= 70 ? 'from-yellow-400 to-orange-400' : 'from-blue-500 to-violet-500';
+
+  return (
+    <div className="bg-slate-900 rounded-2xl p-5 border border-slate-700/50">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <p className="text-slate-400 text-sm">이번 달 수익 목표</p>
+          <p className="text-white font-extrabold text-lg mt-0.5">₩1,000,000 달성</p>
+        </div>
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isAchieved ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'}`}>
+          {isAchieved ? (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+          )}
+        </div>
+      </div>
+
+      {/* 프로그레스 바 */}
+      <div className="mb-3">
+        <div className="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+          <div
+            className={`h-full rounded-full bg-gradient-to-r ${progressColor} transition-all duration-700`}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div>
+          <span className="text-white font-bold text-xl">₩{currentRevenue.toLocaleString()}</span>
+          <span className="text-slate-500 text-sm ml-1">/ ₩1,000,000</span>
+        </div>
+        <div className="text-right">
+          {isAchieved ? (
+            <span className="text-emerald-400 text-sm font-bold">🎉 목표 달성!</span>
+          ) : (
+            <span className="text-slate-400 text-sm">
+              <span className="text-white font-semibold">₩{remaining.toLocaleString()}</span> 남음
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-slate-800">
+        <div className="flex items-center justify-between text-xs text-slate-500">
+          <span>달성률 <span className={`font-bold ${isAchieved ? 'text-emerald-400' : 'text-white'}`}>{progress.toFixed(1)}%</span></span>
+          <span>목표 <span className="text-white font-semibold">₩1,000,000</span></span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -53,6 +117,11 @@ export default function AdminDashboard() {
         </div>
       ) : (
         <>
+          {/* 월 목표 추적 */}
+          <div className="mb-6">
+            <MonthlyGoalCard currentRevenue={stats?.totalRevenue ?? 0} />
+          </div>
+
           {/* 통계 카드 */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             <StatCard

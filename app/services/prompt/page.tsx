@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+import PaymentButton from '../../components/PaymentButton';
 
 const CHECKLIST = [
   '주로 어떤 AI 도구를 사용하는지 (ChatGPT / Claude / Gemini)',
@@ -489,13 +490,14 @@ export default function PromptPage() {
                 </div>
                 {/* CTA */}
                 <div className="p-6">
-                  <button
-                    onClick={() => openModal(`프롬프트 엔지니어링 - ${product.title}`)}
+                  <PaymentButton
+                    productId={product.productId}
                     className="w-full py-3.5 rounded-xl text-sm font-extrabold transition-all hover:opacity-90 hover:scale-[1.01]"
                     style={{ background: product.accentColor, color: product.bgFrom }}
+                    returnUrl="/services/prompt"
                   >
-                    {product.cta}
-                  </button>
+                    지금 구매하기 →
+                  </PaymentButton>
                   <p className="text-center text-xs mt-2" style={{ color: 'rgba(255,255,255,0.3)' }}>
                     구매 문의 시 프롬프트 샘플 파일 미리 제공
                   </p>
