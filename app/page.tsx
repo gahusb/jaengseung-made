@@ -79,24 +79,6 @@ const TRUST_POINTS = [
 
 const PROOF_SERVICES = [
   {
-    name: '로또 번호 추천',
-    badge: '실운영 중',
-    desc: 'NAS 서버에서 24/7 운영. 1,100+회차 데이터 분석 엔진.',
-    href: '/services/lotto',
-    color: 'from-amber-500/20 to-amber-600/5',
-    dot: 'bg-amber-400',
-    tag: '구독형 · 월 900원~',
-  },
-  {
-    name: '주식 자동 매매',
-    badge: '실운영 중',
-    desc: 'RSI·MACD 기반 알고리즘 + 텔레그램 알림 연동.',
-    href: '/services/stock',
-    color: 'from-emerald-500/20 to-emerald-600/5',
-    dot: 'bg-emerald-400',
-    tag: '설치형 · 49,000원~',
-  },
-  {
     name: '쟁승메이드 (이 사이트)',
     badge: '지금 보시는 중',
     desc: '로그인·결제·AI 사주·관리자까지 1인 풀스택 개발.',
@@ -133,32 +115,6 @@ const SUBSCRIPTION_SERVICES = [
     type: '패키지',
     badge: 'SALE',
     badgeColor: 'bg-red-500',
-  },
-  {
-    id: 'stock',
-    href: '/services/stock',
-    color: '#059669',
-    bg: '#d1fae5',
-    border: '#a7f3d0',
-    label: 'ALGO TRADING',
-    title: '주식 자동 매매',
-    price: '설치 49,000원~',
-    type: '설치형',
-    badge: null,
-    badgeColor: '',
-  },
-  {
-    id: 'lotto',
-    href: '/services/lotto',
-    color: '#d97706',
-    bg: '#fef3c7',
-    border: '#fde68a',
-    label: 'LOTTO ANALYTICS',
-    title: '로또 번호 추천',
-    price: '월 900원~',
-    type: '구독형',
-    badge: null,
-    badgeColor: '',
   },
 ];
 
