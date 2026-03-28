@@ -6,30 +6,6 @@ import Link from 'next/link';
 /* ─────────────────────────── DATA ─────────────────────────── */
 const services = [
   {
-    id: 'lotto',
-    icon: 'lotto',
-    title: '로또 번호 추천',
-    tag: '구독형',
-    tagColor: '#7c3aed',
-    price: '월 9,900원~',
-    desc: '빅데이터·통계 기반 번호 분석. 실제 운영 중인 서버에서 매주 데이터를 갱신합니다.',
-    url: 'lotto.jaengseung-made.com',
-    href: '/services/lotto',
-    color: '#7c3aed',
-  },
-  {
-    id: 'stock',
-    icon: 'stock',
-    title: '주식 자동매매',
-    tag: '설치형',
-    tagColor: '#0ea5e9',
-    price: '설치비 49,000원~',
-    desc: '텔레그램 연동 자동 매매 프로그램. 조건 설정 후 24시간 무인 운영 가능.',
-    url: 'stock.jaengseung-made.com',
-    href: '/services/stock',
-    color: '#0ea5e9',
-  },
-  {
     id: 'automation',
     icon: 'automation',
     title: '업무 자동화',

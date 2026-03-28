@@ -39,32 +39,6 @@ function useCounter(target: number, duration = 1400) {
 /* ─── Data ─── */
 const portfolio = [
   {
-    title: '주식 자동 매매 프로그램',
-    category: '핀테크 · 알고트레이딩',
-    desc: '텔레그램 연동 주식 자동 매매 시스템. 기술적 분석 신호 기반 자동 매수/매도, 포트폴리오 관리 기능 포함.',
-    result: '매매 신호 알림 2,300+회 자동 발송 (직접 운영 중)',
-    tags: ['Python', 'Telegram API', '증권사 API', 'SQLite'],
-    status: '직접 운영 중',
-    statusType: 'live',
-    accentFrom: '#011225',
-    accentTo: '#01204a',
-    accentColor: 'text-emerald-400',
-    borderAccent: 'border-emerald-400/30',
-  },
-  {
-    title: '로또 번호 분석 서비스',
-    category: '데이터 분석 · 구독 서비스',
-    desc: '1,100+회차 로또 데이터 분석 플랫폼. 출현 빈도·핫/콜드 번호 통계 및 매주 번호 조합 자동 생성.',
-    result: '1,100+회차 데이터 자동 수집·분석, 구독자 매주 자동 발송',
-    tags: ['Python', 'FastAPI', 'PostgreSQL', 'Next.js'],
-    status: 'NAS 서버 운영 중',
-    statusType: 'live',
-    accentFrom: '#1a0a00',
-    accentTo: '#3d1a00',
-    accentColor: 'text-amber-400',
-    borderAccent: 'border-amber-400/30',
-  },
-  {
     title: 'Gmail 자동화 RPA',
     category: 'RPA · 업무 자동화',
     desc: '거래처 이메일 수신 시 자동 분류, 답장 초안 작성, 담당자 알림 전송하는 Gmail 자동화 시스템.',

@@ -36,16 +36,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${base}/services/stock`,
+      url: `${base}/services/ai-kit`,
       lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${base}/services/lotto`,
-      lastModified: now,
-      changeFrequency: 'monthly',
-      priority: 0.6,
+      changeFrequency: 'weekly',
+      priority: 0.9,
     },
     {
       url: `${base}/saju`,

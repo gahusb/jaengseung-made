@@ -262,12 +262,7 @@ export default function ContactModal({
                   >
                     <option>{service}</option>
                     <option>외주 개발 문의</option>
-                    <option>로또 번호 추천 - 기본 플랜</option>
-                    <option>로또 번호 추천 - 프리미엄 플랜</option>
-                    <option>로또 번호 추천 - 연간 플랜</option>
-                    <option>주식 자동 매매 - 스타터</option>
-                    <option>주식 자동 매매 - 프로</option>
-                    <option>주식 자동 매매 - 엔터프라이즈</option>
+                    <option>AI 자동화 키트 - 월 구독</option>
                     <option>프롬프트 엔지니어링 - 단건 설계</option>
                     <option>프롬프트 엔지니어링 - 비즈니스 패키지</option>
                     <option>프롬프트 엔지니어링 - 팀/기업 패키지</option>
