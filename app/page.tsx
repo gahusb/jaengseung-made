@@ -81,11 +81,32 @@ const PROOF_SERVICES = [
   {
     name: '쟁승메이드 (이 사이트)',
     badge: '지금 보시는 중',
-    desc: '로그인·결제·AI 사주·관리자까지 1인 풀스택 개발.',
+    desc: '로그인·결제·AI 사주·관리자까지 1인 풀스택 개발. 이 사이트 자체가 포트폴리오입니다.',
     href: '/freelance',
     color: 'from-blue-500/20 to-blue-600/5',
     dot: 'bg-blue-400',
-    tag: '직접 제작 · 포트폴리오',
+    tag: '풀스택 · Next.js · Supabase',
+    accentColor: 'text-blue-400',
+  },
+  {
+    name: 'AI 사주 분석 서비스',
+    badge: '운영 중',
+    desc: '생년월일 입력 → AI가 사주팔자 12가지 항목을 즉시 분석. 4,900원 단건 결제.',
+    href: '/saju',
+    color: 'from-violet-500/20 to-violet-600/5',
+    dot: 'bg-violet-400',
+    tag: 'AI · Gemini · 토스페이먼츠',
+    accentColor: 'text-violet-400',
+  },
+  {
+    name: 'AI 자동화 월 구독 키트',
+    badge: 'NEW',
+    desc: '업무 일지·이메일·SNS 등 6가지 자동화 도구 월 구독. 매달 새 도구 추가.',
+    href: '/services/ai-kit',
+    color: 'from-indigo-500/20 to-cyan-600/5',
+    dot: 'bg-indigo-400',
+    tag: '월 구독 · AI 자동화 · 19,900원',
+    accentColor: 'text-indigo-400',
   },
 ];
 
@@ -98,10 +119,16 @@ const SUBSCRIPTION_SERVICES = [
     border: '#c7d2fe',
     label: 'AI AUTOMATION KIT',
     title: 'AI 자동화 키트',
+    desc: '업무 일지·이메일·SNS 등 6종 도구로 월 27시간 되찾기',
     price: '19,900원/월',
     type: '월 구독',
     badge: 'NEW',
     badgeColor: 'bg-indigo-600',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    ),
   },
   {
     id: 'automation',
@@ -111,10 +138,17 @@ const SUBSCRIPTION_SERVICES = [
     border: '#a5f3fc',
     label: 'AI · RPA AUTOMATION',
     title: '업무 자동화',
+    desc: '엑셀·보고서·이메일 반복 업무를 코드로 없애드립니다',
     price: '5만원~',
     type: '프로젝트',
     badge: 'HOT',
     badgeColor: 'bg-cyan-600',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    ),
   },
   {
     id: 'prompt',
@@ -124,10 +158,35 @@ const SUBSCRIPTION_SERVICES = [
     border: '#ddd6fe',
     label: 'PROMPT ENGINEERING',
     title: '프롬프트 엔지니어링',
+    desc: 'ChatGPT·Claude 전용 업무 최적화 프롬프트 패키지',
     price: '9,900원~',
     type: '패키지',
     badge: 'SALE',
     badgeColor: 'bg-red-500',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'saju',
+    href: '/saju',
+    color: '#db2777',
+    bg: '#fdf2f8',
+    border: '#fbcfe8',
+    label: 'AI SAJU ANALYSIS',
+    title: 'AI 사주 분석',
+    desc: '생년월일 입력 → AI가 사주팔자 12항목 즉시 분석',
+    price: '4,900원/건',
+    type: '단건 구매',
+    badge: null,
+    badgeColor: '',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+      </svg>
+    ),
   },
 ];
 
@@ -273,20 +332,20 @@ export default function Home() {
                     LIVE
                   </span>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {PROOF_SERVICES.map((s) => (
                     <Link
                       key={s.name}
                       href={s.href}
-                      className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/8 rounded-xl p-3.5 group"
+                      className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/8 rounded-xl p-3 group"
                       style={{ transition: 'all 0.3s ease-out' }}
                     >
-                      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${s.dot}`} />
+                      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${s.dot} animate-pulse`} />
                       <div className="flex-1 min-w-0">
-                        <div className="text-white font-semibold text-sm leading-tight">{s.name}</div>
-                        <div className="text-white/30 text-[11px] mt-0.5 truncate">{s.tag}</div>
+                        <div className="text-white font-semibold text-xs leading-tight">{s.name}</div>
+                        <div className="text-white/30 text-[10px] mt-0.5 truncate">{s.tag}</div>
                       </div>
-                      <span className="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full flex-shrink-0">{s.badge}</span>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0 ${s.badge === 'NEW' ? 'text-indigo-300 bg-indigo-400/15 border border-indigo-400/25' : s.badge === '운영 중' ? 'text-violet-300 bg-violet-400/15 border border-violet-400/25' : 'text-emerald-400 bg-emerald-400/10 border border-emerald-400/20'}`}>{s.badge}</span>
                     </Link>
                   ))}
                 </div>
@@ -452,18 +511,25 @@ export default function Home() {
               <Link
                 key={s.name}
                 href={s.href}
-                className={`relative bg-gradient-to-br ${s.color} border border-white/10 rounded-2xl p-6 hover:border-white/25 group`}
+                className={`relative bg-gradient-to-br ${s.color} border border-white/10 rounded-2xl p-6 hover:border-white/30 hover:-translate-y-1 group overflow-hidden`}
                 style={{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
               >
-                <div className="flex items-center gap-2 mb-4">
-                  <div className={`w-2 h-2 rounded-full ${s.dot} animate-pulse`} />
-                  <span className="text-white/40 text-xs font-bold uppercase tracking-wider">{s.badge}</span>
-                </div>
-                <h3 className="text-white font-extrabold text-lg mb-2" style={{ wordBreak: 'keep-all' }}>{s.name}</h3>
-                <p className="text-white/40 text-sm leading-relaxed mb-4" style={{ wordBreak: 'keep-all' }}>{s.desc}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-white/30 text-xs">{s.tag}</span>
-                  <span className="text-white/50 group-hover:text-white text-sm font-semibold" style={{ transition: 'color 0.3s ease' }}>보러가기 →</span>
+                {/* 배경 글로우 */}
+                <div className={`absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl opacity-20 pointer-events-none ${s.dot}`}
+                  style={{ background: 'currentColor' }} />
+                <div className="relative">
+                  <div className="flex items-center gap-2 mb-5">
+                    <div className={`w-2 h-2 rounded-full ${s.dot} animate-pulse`} />
+                    <span className={`text-xs font-extrabold uppercase tracking-wider ${s.accentColor} opacity-70`}>{s.badge}</span>
+                  </div>
+                  <h3 className="text-white font-extrabold text-base mb-2 leading-snug" style={{ wordBreak: 'keep-all' }}>{s.name}</h3>
+                  <p className="text-white/40 text-xs leading-relaxed mb-5" style={{ wordBreak: 'keep-all' }}>{s.desc}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-white/30 text-[10px] font-medium">{s.tag}</span>
+                    <span className={`${s.accentColor} opacity-60 group-hover:opacity-100 text-xs font-bold flex items-center gap-1`} style={{ transition: 'opacity 0.3s ease' }}>
+                      보러가기 →
+                    </span>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -497,19 +563,31 @@ export default function Home() {
               <Link
                 key={svc.id}
                 href={svc.href}
-                className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md hover:-translate-y-0.5 relative group"
+                className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-lg hover:-translate-y-1 relative group flex flex-col"
                 style={{ transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
               >
                 {svc.badge && (
                   <span className={`absolute top-3 right-3 ${svc.badgeColor} text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md`}>{svc.badge}</span>
                 )}
-                <div className="text-[10px] font-bold mb-1.5 tracking-wider" style={{ color: svc.color }}>{svc.label}</div>
-                <div className="font-extrabold text-[#04102b] text-sm mb-3" style={{ wordBreak: 'keep-all' }}>{svc.title}</div>
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-sm" style={{ color: svc.color }}>{svc.price}</span>
-                  <span className="text-xs px-1.5 py-0.5 rounded-md font-medium" style={{ color: svc.color, backgroundColor: svc.bg, border: `1px solid ${svc.border}` }}>{svc.type}</span>
+                {/* 아이콘 */}
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 flex-shrink-0"
+                  style={{ backgroundColor: svc.bg, border: `1px solid ${svc.border}`, color: svc.color }}
+                >
+                  {svc.icon}
                 </div>
-                <div className="mt-3 pt-3 border-t border-slate-100 text-[#1a56db] text-xs font-semibold group-hover:gap-1.5 flex items-center gap-1" style={{ transition: 'gap 0.3s ease' }}>
+                {/* 라벨 */}
+                <div className="text-[10px] font-bold mb-1 tracking-wider" style={{ color: svc.color }}>{svc.label}</div>
+                {/* 제목 */}
+                <div className="font-extrabold text-[#04102b] text-sm mb-2" style={{ wordBreak: 'keep-all' }}>{svc.title}</div>
+                {/* 설명 */}
+                <p className="text-slate-400 text-[11px] leading-relaxed mb-3 flex-1" style={{ wordBreak: 'keep-all' }}>{svc.desc}</p>
+                {/* 가격 + 유형 */}
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-extrabold text-sm" style={{ color: svc.color }}>{svc.price}</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold" style={{ color: svc.color, backgroundColor: svc.bg, border: `1px solid ${svc.border}` }}>{svc.type}</span>
+                </div>
+                <div className="pt-3 border-t border-slate-100 text-[#1a56db] text-xs font-semibold group-hover:gap-2 flex items-center gap-1" style={{ transition: 'gap 0.3s ease' }}>
                   자세히 보기 <span>→</span>
                 </div>
               </Link>
