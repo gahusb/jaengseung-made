@@ -70,17 +70,17 @@ export default function AdminQuotesPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       {/* 헤더 */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6 md:mb-8 gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white">견적서 관리</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-white">견적서 관리</h1>
           <p className="text-slate-400 text-sm mt-1">고객에게 제시할 견적서를 작성하고 관리합니다</p>
         </div>
         <button
           onClick={handleCreate}
           disabled={creating}
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-semibold rounded-xl transition-all disabled:opacity-60"
+          className="flex-shrink-0 flex items-center gap-2 px-4 md:px-5 py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-semibold rounded-xl transition-all disabled:opacity-60 text-sm"
         >
           {creating ? (
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -89,7 +89,8 @@ export default function AdminQuotesPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
           )}
-          새 견적서 작성
+          <span className="hidden sm:inline">새 견적서 작성</span>
+          <span className="sm:hidden">새 견적서</span>
         </button>
       </div>
 
@@ -103,97 +104,193 @@ export default function AdminQuotesPage() {
           <p className="text-slate-600 text-sm mt-2">위 버튼을 눌러 첫 번째 견적서를 작성해보세요</p>
         </div>
       ) : (
-        <div className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-slate-800">
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">견적서명</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">고객</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">합계</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">상태</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">유효기간</th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">작성일</th>
-                <th className="px-6 py-4" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60">
-              {quotes.map((q) => {
-                const st = STATUS[q.status] ?? STATUS.draft;
-                const total = calcTotal(q.items ?? []);
-                return (
-                  <tr key={q.id} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4">
-                      <Link href={`/admin/quotes/${q.id}`} className="text-white font-medium hover:text-blue-400 transition-colors">
-                        {q.title}
-                      </Link>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-slate-300 text-sm">{q.client_name || '—'}</div>
-                      <div className="text-slate-500 text-xs">{q.client_email || ''}</div>
-                    </td>
-                    <td className="px-6 py-4 text-slate-300 text-sm font-mono">
-                      {total > 0 ? `${total.toLocaleString()}원` : '—'}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full ${st.color}`}>
-                        {st.label}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-slate-400 text-sm">
-                      {q.valid_until ? q.valid_until.slice(0, 10) : '—'}
-                    </td>
-                    <td className="px-6 py-4 text-slate-500 text-sm">
-                      {new Date(q.created_at).toLocaleDateString('ko-KR')}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 justify-end">
-                        {/* 공개 링크 복사 */}
-                        <button
-                          onClick={() => copyLink(q.public_token, q.id)}
-                          title="고객용 링크 복사"
-                          className="p-2 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-all"
-                        >
-                          {copied === q.id ? (
-                            <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                          ) : (
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                          )}
-                        </button>
-                        {/* 편집 */}
-                        <Link
-                          href={`/admin/quotes/${q.id}`}
-                          className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
+        <>
+          {/* PC 테이블 뷰 */}
+          <div className="hidden md:block bg-slate-900 rounded-2xl border border-slate-800 overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-slate-800">
+                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">견적서명</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">고객</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">합계</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">상태</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">유효기간</th>
+                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">작성일</th>
+                  <th className="px-6 py-4" />
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {quotes.map((q) => {
+                  const st = STATUS[q.status] ?? STATUS.draft;
+                  const total = calcTotal(q.items ?? []);
+                  return (
+                    <tr key={q.id} className="hover:bg-slate-800/30 transition-colors">
+                      <td className="px-6 py-4">
+                        <Link href={`/admin/quotes/${q.id}`} className="text-white font-medium hover:text-blue-400 transition-colors">
+                          {q.title}
                         </Link>
-                        {/* 삭제 */}
-                        <button
-                          onClick={() => handleDelete(q.id)}
-                          disabled={deleting === q.id}
-                          className="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-900/20 transition-all disabled:opacity-40"
-                        >
-                          {deleting === q.id ? (
-                            <span className="w-4 h-4 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin inline-block" />
-                          ) : (
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-slate-300 text-sm">{q.client_name || '—'}</div>
+                        <div className="text-slate-500 text-xs">{q.client_email || ''}</div>
+                      </td>
+                      <td className="px-6 py-4 text-slate-300 text-sm font-mono">
+                        {total > 0 ? `${total.toLocaleString()}원` : '—'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full ${st.color}`}>
+                          {st.label}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-slate-400 text-sm">
+                        {q.valid_until ? q.valid_until.slice(0, 10) : '—'}
+                      </td>
+                      <td className="px-6 py-4 text-slate-500 text-sm">
+                        {new Date(q.created_at).toLocaleDateString('ko-KR')}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2 justify-end">
+                          <button
+                            onClick={() => copyLink(q.public_token, q.id)}
+                            title="고객용 링크 복사"
+                            className="p-2 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-all"
+                          >
+                            {copied === q.id ? (
+                              <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            ) : (
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                            )}
+                          </button>
+                          <Link
+                            href={`/admin/quotes/${q.id}`}
+                            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+                          >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
-                          )}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(q.id)}
+                            disabled={deleting === q.id}
+                            className="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-900/20 transition-all disabled:opacity-40"
+                          >
+                            {deleting === q.id ? (
+                              <span className="w-4 h-4 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin inline-block" />
+                            ) : (
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            )}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 모바일 카드 뷰 */}
+          <div className="md:hidden space-y-3">
+            {quotes.map((q) => {
+              const st = STATUS[q.status] ?? STATUS.draft;
+              const total = calcTotal(q.items ?? []);
+              return (
+                <div key={q.id} className="bg-slate-900 rounded-xl border border-slate-800 p-4">
+                  {/* 제목 + 상태 */}
+                  <div className="flex items-start justify-between gap-2 mb-3">
+                    <Link href={`/admin/quotes/${q.id}`} className="text-white font-semibold text-sm hover:text-blue-400 transition-colors flex-1">
+                      {q.title}
+                    </Link>
+                    <span className={`flex-shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ${st.color}`}>
+                      {st.label}
+                    </span>
+                  </div>
+
+                  {/* 고객 정보 */}
+                  {(q.client_name || q.client_email) && (
+                    <div className="mb-3">
+                      {q.client_name && <p className="text-slate-300 text-xs">{q.client_name}</p>}
+                      {q.client_email && <p className="text-slate-500 text-xs">{q.client_email}</p>}
+                    </div>
+                  )}
+
+                  {/* 상세 정보 */}
+                  <div className="grid grid-cols-3 gap-2 pt-3 border-t border-slate-800 mb-3">
+                    <div>
+                      <p className="text-slate-500 text-xs mb-0.5">합계</p>
+                      <p className="text-slate-200 text-xs font-mono font-medium">
+                        {total > 0 ? `${total.toLocaleString()}원` : '—'}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-slate-500 text-xs mb-0.5">유효기간</p>
+                      <p className="text-slate-400 text-xs">{q.valid_until ? q.valid_until.slice(0, 10) : '—'}</p>
+                    </div>
+                    <div>
+                      <p className="text-slate-500 text-xs mb-0.5">작성일</p>
+                      <p className="text-slate-400 text-xs">{new Date(q.created_at).toLocaleDateString('ko-KR')}</p>
+                    </div>
+                  </div>
+
+                  {/* 액션 버튼 */}
+                  <div className="flex items-center gap-2 pt-3 border-t border-slate-800">
+                    <button
+                      onClick={() => copyLink(q.public_token, q.id)}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-all text-xs"
+                    >
+                      {copied === q.id ? (
+                        <>
+                          <svg className="w-3.5 h-3.5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span className="text-green-400">복사됨</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          링크 복사
+                        </>
+                      )}
+                    </button>
+                    <Link
+                      href={`/admin/quotes/${q.id}`}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all text-xs"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      편집
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(q.id)}
+                      disabled={deleting === q.id}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-900/20 transition-all disabled:opacity-40 text-xs"
+                    >
+                      {deleting === q.id ? (
+                        <span className="w-3.5 h-3.5 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin inline-block" />
+                      ) : (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          삭제
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
       )}
     </div>
   );
