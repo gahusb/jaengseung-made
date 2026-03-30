@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import AdminSidebar from './components/AdminSidebar';
+import AdminShell from './components/AdminShell';
 
 export const metadata: Metadata = {
   title: '관리자 패널 — 쟁승메이드',
@@ -7,12 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex h-screen bg-slate-950 overflow-hidden">
-      <AdminSidebar />
-      <main className="flex-1 overflow-y-auto">
-        {children}
-      </main>
-    </div>
-  );
+  return <AdminShell>{children}</AdminShell>;
 }

@@ -68,7 +68,12 @@ const NAV_ITEMS = [
   },
 ];
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export default function AdminSidebar({ isOpen = false, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [loggingOut, setLoggingOut] = useState(false);
@@ -80,17 +85,36 @@ export default function AdminSidebar() {
   }
 
   return (
-    <aside className="w-60 flex-shrink-0 bg-slate-900 flex flex-col h-screen sticky top-0">
+    <aside className={`
+      w-60 flex-shrink-0 bg-slate-900 flex flex-col h-screen
+      fixed top-0 left-0 z-30 transition-transform duration-300
+      lg:static lg:translate-x-0
+      ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+    `}>
       {/* 로고 */}
       <div className="px-5 py-5 border-b border-slate-700/60">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm">
-            관
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm">
+              관
+            </div>
+            <div>
+              <p className="text-white font-bold text-sm leading-tight">관리자 패널</p>
+              <p className="text-slate-400 text-xs">쟁승메이드</p>
+            </div>
           </div>
-          <div>
-            <p className="text-white font-bold text-sm leading-tight">관리자 패널</p>
-            <p className="text-slate-400 text-xs">쟁승메이드</p>
-          </div>
+          {/* 모바일 닫기 버튼 */}
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              aria-label="메뉴 닫기"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
 
