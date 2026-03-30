@@ -1,10 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // 로그인 페이지는 사이드바 없이 독립 렌더링
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
 
   return (
     <div className="flex h-screen bg-slate-950 overflow-hidden">

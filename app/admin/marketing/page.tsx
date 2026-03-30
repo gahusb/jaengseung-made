@@ -128,6 +128,7 @@ export default function MarketingPage() {
   const [checks, setChecks] = useState<Record<CheckKey, boolean>>({});
   const [showGuide, setShowGuide] = useState(false);
   const [activeTab, setActiveTab] = useState<'design' | 'pm' | 'quality' | 'marketing'>('design');
+  const [convertingPng, setConvertingPng] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('marketing_checks');
@@ -167,6 +168,45 @@ export default function MarketingPage() {
     a.href = file;
     a.download = name.replace(/\s/g, '_') + '.svg';
     a.click();
+  }
+
+  async function downloadAsPng(file: string, name: string, size: string) {
+    const [wStr, hStr] = size.split(' × ');
+    const w = parseInt(wStr);
+    const h = parseInt(hStr);
+    setConvertingPng(file);
+    try {
+      const resp = await fetch(file);
+      const svgText = await resp.text();
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d')!;
+      await new Promise<void>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0, w, h);
+          URL.revokeObjectURL(img.src);
+          canvas.toBlob((blob) => {
+            if (!blob) { reject(new Error('변환 실패')); return; }
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name.replace(/\s/g, '_') + '.png';
+            a.click();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            resolve();
+          }, 'image/png');
+        };
+        img.onerror = () => reject(new Error('SVG 로드 실패'));
+        const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+        img.src = URL.createObjectURL(blob);
+      });
+    } catch {
+      alert('PNG 변환에 실패했습니다. SVG를 브라우저에서 열어 우클릭 → 이미지로 저장을 시도해 주세요.');
+    } finally {
+      setConvertingPng(null);
+    }
   }
 
   const TABS = [
@@ -226,15 +266,14 @@ export default function MarketingPage() {
           </div>
           <div className="p-6 grid grid-cols-3 gap-6">
             <div>
-              <h3 className="text-blue-400 font-semibold text-sm mb-3 flex items-center gap-2"><span>1️⃣</span> SVG → PNG 변환</h3>
+              <h3 className="text-blue-400 font-semibold text-sm mb-3 flex items-center gap-2"><span>1️⃣</span> PNG 다운로드 방법</h3>
               <ol className="space-y-2 text-slate-400 text-sm">
-                <li className="flex gap-2"><span className="text-slate-600 shrink-0">①</span>SVG 파일 다운로드</li>
-                <li className="flex gap-2"><span className="text-slate-600 shrink-0">②</span>브라우저에서 SVG 파일 열기</li>
-                <li className="flex gap-2"><span className="text-slate-600 shrink-0">③</span>우클릭 → 이미지로 저장 (PNG)</li>
-                <li className="flex gap-2"><span className="text-slate-600 shrink-0">또는</span><span className="text-slate-300">Figma에 드래그 후 Export</span></li>
+                <li className="flex gap-2"><span className="text-emerald-400 shrink-0">✓</span><span><span className="text-white font-semibold">PNG 다운로드</span> 버튼 클릭 → 즉시 변환</span></li>
+                <li className="flex gap-2"><span className="text-slate-600 shrink-0">①</span>브라우저가 SVG를 직접 렌더링하여 PNG 생성</li>
+                <li className="flex gap-2"><span className="text-slate-600 shrink-0">②</span>한글 폰트(맑은 고딕)가 깨지지 않고 그대로 캡처됨</li>
               </ol>
-              <div className="mt-3 px-3 py-2 bg-amber-900/20 border border-amber-500/30 rounded-lg text-amber-300 text-xs">
-                크몽은 JPG/PNG만 허용합니다. SVG 직접 업로드 불가.
+              <div className="mt-3 px-3 py-2 bg-blue-900/20 border border-blue-500/30 rounded-lg text-blue-300 text-xs">
+                외부 변환 도구 불필요 — 브라우저에서 직접 PNG로 변환합니다.
               </div>
             </div>
             <div>
@@ -348,11 +387,28 @@ export default function MarketingPage() {
                 {/* 액션 버튼 */}
                 <div className="flex gap-2 mt-auto">
                   <button
-                    onClick={() => download(asset.file, asset.name)}
-                    className="flex-1 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white transition-all flex items-center justify-center gap-1.5"
+                    onClick={() => downloadAsPng(asset.file, asset.name, asset.size)}
+                    disabled={convertingPng === asset.file}
+                    className="flex-1 py-2 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white transition-all flex items-center justify-center gap-1.5"
                   >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    SVG 다운로드
+                    {convertingPng === asset.file ? (
+                      <>
+                        <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
+                        변환 중...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        PNG 다운로드
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => download(asset.file, asset.name)}
+                    className="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all"
+                    title="SVG 원본 다운로드"
+                  >
+                    SVG
                   </button>
                   <button
                     onClick={() => copyPath(asset.file)}
@@ -382,11 +438,28 @@ export default function MarketingPage() {
               </div>
               <div className="flex gap-3">
                 <button
-                  onClick={() => download(preview.file, preview.name)}
-                  className="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-all flex items-center gap-2"
+                  onClick={() => downloadAsPng(preview.file, preview.name, preview.size)}
+                  disabled={convertingPng === preview.file}
+                  className="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 hover:bg-blue-500 disabled:opacity-60 disabled:cursor-not-allowed text-white transition-all flex items-center gap-2"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-                  SVG 다운로드
+                  {convertingPng === preview.file ? (
+                    <>
+                      <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
+                      변환 중...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                      PNG 다운로드
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={() => download(preview.file, preview.name)}
+                  className="px-4 py-2 rounded-lg text-sm font-semibold bg-slate-700 hover:bg-slate-600 text-slate-300 transition-all"
+                  title="SVG 원본 다운로드"
+                >
+                  SVG
                 </button>
                 <button onClick={() => setPreview(null)} className="text-slate-400 hover:text-white w-10 h-10 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-all text-xl">
                   ×

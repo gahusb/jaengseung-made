@@ -90,7 +90,7 @@ export default function AdminLoginPage() {
         </form>
 
         <p className="text-center text-slate-600 text-xs mt-4">
-          .env.local의 ADMIN_ID / ADMIN_PASSWORD로 로그인
+          관리자 전용 페이지입니다.
         </p>
       </div>
     </div>
