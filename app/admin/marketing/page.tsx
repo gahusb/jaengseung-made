@@ -83,6 +83,16 @@ const ASSETS = [
     service: '홈페이지 제작',
     price: '스타터 50만원~',
   },
+  {
+    file: '/marketing/quote-cafe24.svg',
+    name: '카페24 리뉴얼 견적 비교표',
+    desc: '3옵션 가격 비교 — 숨고 견적 발송용',
+    size: '1200 × 700',
+    platform: '숨고 견적',
+    color: '#3b82f6',
+    service: '커머스 개발',
+    price: '150~450만원',
+  },
 ];
 
 const CHECKLIST_ITEMS = {

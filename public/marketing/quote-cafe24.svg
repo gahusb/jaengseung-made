@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="cardA" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="cardB" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1d3461"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="cardC" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="1200" height="700" fill="url(#bg)"/>
+  <circle cx="200" cy="150" r="300" fill="#3b82f6" opacity="0.04"/>
+  <circle cx="1000" cy="500" r="250" fill="#7c3aed" opacity="0.05"/>
+
+  <!-- 헤더 -->
+  <text x="600" y="58" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#94a3b8" text-anchor="middle" letter-spacing="3">카페24 자사몰 리뉴얼 · 3브랜드몰 구조 구현</text>
+  <text x="600" y="98" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="32" fill="white" font-weight="800" text-anchor="middle" letter-spacing="-0.5">서비스 옵션 견적</text>
+  <line x1="480" y1="116" x2="720" y2="116" stroke="#334155" stroke-width="1"/>
+
+  <!-- ── OPTION A 카드 ── -->
+  <rect x="60" y="140" width="330" height="480" rx="16" fill="url(#cardA)" stroke="#334155" stroke-width="1.5"/>
+  <rect x="60" y="140" width="330" height="5" rx="3" fill="#475569"/>
+
+  <text x="225" y="188" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#64748b" text-anchor="middle" letter-spacing="2">OPTION</text>
+  <text x="225" y="216" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="26" fill="white" font-weight="800" text-anchor="middle">A</text>
+  <text x="225" y="244" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">디자인 적용 기본형</text>
+
+  <line x1="90" y1="258" x2="360" y2="258" stroke="#1e293b" stroke-width="1.5"/>
+
+  <text x="225" y="294" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="34" fill="white" font-weight="800" text-anchor="middle">150<tspan font-size="16" fill="#94a3b8">만원</tspan></text>
+  <text x="225" y="320" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="#64748b" text-anchor="middle">작업기간 10일</text>
+
+  <line x1="90" y1="336" x2="360" y2="336" stroke="#1e293b" stroke-width="1.5"/>
+
+  <!-- A 포함 내용 -->
+  <g font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#94a3b8">
+    <text x="100" y="364">✓  완성 디자인 카페24 스킨 적용</text>
+    <text x="100" y="392">✓  PC + 모바일 반응형</text>
+    <text x="100" y="420">✓  단일 브랜드 기준</text>
+    <text x="100" y="448">✓  납품 후 14일 무상 AS</text>
+    <text x="100" y="476" fill="#475569">✗  브랜드몰 분기 구조</text>
+    <text x="100" y="504" fill="#475569">✗  기능 커스터마이징</text>
+    <text x="100" y="532" fill="#475569">✗  속도 최적화</text>
+  </g>
+
+  <rect x="90" y="574" width="270" height="38" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="225" y="598" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#64748b" text-anchor="middle" font-weight="600">기본 적용만 필요할 때</text>
+
+
+  <!-- ── OPTION B 카드 (추천) ── -->
+  <rect x="435" y="120" width="330" height="520" rx="16" fill="url(#cardB)" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="435" y="120" width="330" height="5" rx="3" fill="url(#badgeGrad)"/>
+
+  <!-- 추천 배지 -->
+  <rect x="530" y="104" width="110" height="26" rx="13" fill="url(#badgeGrad)"/>
+  <text x="585" y="121" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="white" text-anchor="middle" font-weight="800">✦ 추천 옵션</text>
+
+  <text x="600" y="172" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#93c5fd" text-anchor="middle" letter-spacing="2">OPTION</text>
+  <text x="600" y="200" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="26" fill="white" font-weight="800" text-anchor="middle">B</text>
+  <text x="600" y="228" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#93c5fd" text-anchor="middle">디자인 + 3브랜드몰 구조</text>
+
+  <line x1="465" y1="242" x2="735" y2="242" stroke="#1e3a8a" stroke-width="1.5"/>
+
+  <text x="600" y="280" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="34" fill="white" font-weight="800" text-anchor="middle">280<tspan font-size="16" fill="#93c5fd">만원</tspan></text>
+  <text x="600" y="306" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="#60a5fa" text-anchor="middle">작업기간 20일</text>
+
+  <line x1="465" y1="322" x2="735" y2="322" stroke="#1e3a8a" stroke-width="1.5"/>
+
+  <!-- B 포함 내용 -->
+  <g font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#bfdbfe">
+    <text x="475" y="350">✓  완성 디자인 카페24 스킨 적용</text>
+    <text x="475" y="378">✓  PC + 모바일 반응형</text>
+    <text x="475" y="406">✓  1사이트 → 3브랜드몰 분기 구조</text>
+    <text x="475" y="434">✓  브랜드별 독립 운영 환경</text>
+    <text x="475" y="462">✓  납품 후 14일 무상 AS</text>
+    <text x="475" y="490" fill="#64748b">✗  고급 기능 커스터마이징</text>
+    <text x="475" y="518" fill="#64748b">✗  속도 최적화 포함</text>
+  </g>
+
+  <rect x="465" y="574" width="270" height="46" rx="10" fill="#2563eb"/>
+  <text x="600" y="598" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="800">요청사항에 가장 적합</text>
+  <text x="600" y="614" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#bfdbfe" text-anchor="middle">빠른 진행 + 3브랜드 완성</text>
+
+
+  <!-- ── OPTION C 카드 ── -->
+  <rect x="810" y="140" width="330" height="480" rx="16" fill="url(#cardC)" stroke="#334155" stroke-width="1.5"/>
+  <rect x="810" y="140" width="330" height="5" rx="3" fill="#7c3aed"/>
+
+  <text x="975" y="188" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="11" fill="#64748b" text-anchor="middle" letter-spacing="2">OPTION</text>
+  <text x="975" y="216" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="26" fill="white" font-weight="800" text-anchor="middle">C</text>
+  <text x="975" y="244" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" fill="#a78bfa" text-anchor="middle">풀 리뉴얼 패키지</text>
+
+  <line x1="840" y1="258" x2="1110" y2="258" stroke="#1e293b" stroke-width="1.5"/>
+
+  <text x="975" y="294" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="34" fill="white" font-weight="800" text-anchor="middle">450<tspan font-size="16" fill="#a78bfa">만원</tspan></text>
+  <text x="975" y="320" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="#64748b" text-anchor="middle">작업기간 30일</text>
+
+  <line x1="840" y1="336" x2="1110" y2="336" stroke="#1e293b" stroke-width="1.5"/>
+
+  <!-- C 포함 내용 -->
+  <g font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#c4b5fd">
+    <text x="850" y="364">✓  Option B 전체 포함</text>
+    <text x="850" y="392">✓  상품 필터·검색 커스터마이징</text>
+    <text x="850" y="420">✓  장바구니·결제 흐름 최적화</text>
+    <text x="850" y="448">✓  관리자 편의 기능 추가</text>
+    <text x="850" y="476">✓  속도 최적화</text>
+    <text x="850" y="504">✓  배포 후 안정화 포함</text>
+    <text x="850" y="532">✓  납품 후 30일 무상 AS</text>
+  </g>
+
+  <rect x="840" y="574" width="270" height="38" rx="8" fill="#4c1d95" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="975" y="598" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="13" fill="#c4b5fd" text-anchor="middle" font-weight="600">완성도·확장성 최우선일 때</text>
+
+
+  <!-- 하단 공통 안내 -->
+  <rect x="60" y="648" width="1080" height="38" rx="8" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+  <text x="600" y="672" font-family="'Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="12" fill="#475569" text-anchor="middle">
+    계약서 필수 · 선금 50% / 잔금 50% · 납기 지연 시 1일당 1% 차감 · 결제 모듈·API 연동 등 추가 기능은 파일 검토 후 협의
+  </text>
+</svg>
