@@ -90,7 +90,7 @@ function LoginForm() {
             </div>
             <div className="text-left">
               <div className="text-white font-bold text-xl leading-tight">쟁승메이드</div>
-              <div className="text-blue-400 text-xs font-medium">Premium Dev Services</div>
+              <div className="text-blue-400 text-xs font-medium">박재오의 개발 공방</div>
             </div>
           </Link>
         </div>

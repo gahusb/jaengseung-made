@@ -44,7 +44,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
         {/* Main scrollable content */}
         <main className="main-content">
           {children}
-          {/* 토스페이먼츠 심사용 사업자 정보 푸터 */}
+          {/* 사업자 정보 푸터 */}
           <footer className="border-t border-slate-200 bg-white px-6 py-6 text-slate-500 text-xs">
             <div className="max-w-5xl">
               <p className="font-semibold text-slate-700 mb-2">쟁승메이드</p>

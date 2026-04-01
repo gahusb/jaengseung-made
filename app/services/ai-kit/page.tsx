@@ -414,32 +414,48 @@ export default function AiKitPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               {
-                icon: '🏪',
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                ),
                 title: '소상공인',
                 pain: '"매일 SNS, 이메일, 리뷰 답변에 2~3시간씩 쓰고 있어요."',
                 gain: '도구 3개만 써도 월 12시간 이상 확보',
               },
               {
-                icon: '💼',
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                ),
                 title: '직장인',
                 pain: '"보고서 쓰다가 퇴근 시간 넘기는 게 일상이에요."',
                 gain: '보고서·일지·회의록 시간 90% 감소',
               },
               {
-                icon: '🛍',
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                ),
                 title: '온라인 판매자',
                 pain: '"상품 50개 설명 쓰는 데 이틀이 걸렸어요."',
                 gain: '50개 상품 설명 → 25분 완성',
               },
               {
-                icon: '📣',
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                  </svg>
+                ),
                 title: '1인 마케터',
                 pain: '"콘텐츠 아이디어 고갈로 업로드를 자꾸 건너뛰어요."',
                 gain: '한 달치 콘텐츠 기획 → 10분 완성',
               },
             ].map((item, i) => (
               <div key={i} className="p-5 rounded-2xl bg-slate-50 border border-slate-100">
-                <div className="text-3xl mb-3">{item.icon}</div>
+                <div className="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mb-3">{item.icon}</div>
                 <p className="text-sm font-extrabold text-slate-800 mb-2">{item.title}</p>
                 <p className="text-xs text-slate-500 italic leading-relaxed mb-3">{item.pain}</p>
                 <p className="text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-lg px-2 py-1.5">

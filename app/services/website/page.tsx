@@ -593,14 +593,13 @@ export default function WebsiteServicePage() {
             <Link href="/freelance?service=website" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '14px 28px',
-              background: 'linear-gradient(135deg, #6366f1, #818cf8)',
+              background: '#6366f1',
               borderRadius: 12, color: 'white', fontWeight: 700, fontSize: 15,
               textDecoration: 'none',
-              boxShadow: '0 8px 32px rgba(99,102,241,0.4)',
-              transition: 'transform 0.3s, box-shadow 0.3s',
+              transition: 'background 0.2s',
             }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 48px rgba(99,102,241,0.5)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(99,102,241,0.4)'; }}>
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#4f46e5'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#6366f1'; }}>
               무료 상담 신청 →
             </Link>
             <a href="#samples" style={{
