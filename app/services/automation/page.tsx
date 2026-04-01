@@ -108,12 +108,42 @@ const CHECKLIST = [
 ];
 
 const automationTypes = [
-  { title: '엑셀 / 구글 시트 자동화', desc: '매일 반복되는 데이터 정리, 집계, 보고서 생성을 자동화합니다.', examples: ['일별 매출 집계 자동화', '데이터 형식 변환', '여러 시트 데이터 통합'], accentColor: 'border-emerald-200 bg-emerald-50', dotColor: 'bg-emerald-500', labelColor: 'text-emerald-700 bg-emerald-100 border-emerald-200' },
-  { title: '웹 스크래핑 · 데이터 수집', desc: '경쟁사 가격, 뉴스, 공공데이터 등을 자동 수집·정리합니다.', examples: ['쇼핑몰 가격 모니터링', '뉴스 기사 자동 수집', '공공 API 데이터 연동'], accentColor: 'border-blue-200 bg-blue-50', dotColor: 'bg-blue-500', labelColor: 'text-blue-700 bg-blue-100 border-blue-200' },
-  { title: '이메일 자동 발송', desc: '조건에 따라 고객/거래처에 이메일을 자동으로 발송합니다.', examples: ['발주 확인 이메일 자동화', '정기 보고서 자동 발송', '이메일 분류 및 자동 응답'], accentColor: 'border-violet-200 bg-violet-50', dotColor: 'bg-violet-500', labelColor: 'text-violet-700 bg-violet-100 border-violet-200' },
-  { title: '업무 프로세스 RPA', desc: 'PC에서 반복 실행하는 클릭·입력 작업을 자동화합니다.', examples: ['ERP 시스템 데이터 입력', '파일 이동·변환·백업', '웹사이트 폼 자동 제출'], accentColor: 'border-orange-200 bg-orange-50', dotColor: 'bg-orange-500', labelColor: 'text-orange-700 bg-orange-100 border-orange-200' },
-  { title: '텔레그램 봇 개발', desc: '특정 이벤트 발생 시 텔레그램으로 자동 알림을 보냅니다.', examples: ['서버 이상 알림 봇', '매출 현황 정기 보고 봇', '주문 접수 알림 봇'], accentColor: 'border-cyan-200 bg-cyan-50', dotColor: 'bg-cyan-500', labelColor: 'text-cyan-700 bg-cyan-100 border-cyan-200' },
-  { title: 'API 연동 · 시스템 통합', desc: '서로 다른 시스템을 API로 연결하여 데이터를 자동 동기화합니다.', examples: ['CRM ↔ ERP 데이터 동기화', '결제 시스템 자동 연동', '재고 관리 자동화'], accentColor: 'border-indigo-200 bg-indigo-50', dotColor: 'bg-indigo-500', labelColor: 'text-indigo-700 bg-indigo-100 border-indigo-200' },
+  {
+    title: '엑셀 / 구글 시트 자동화',
+    desc: '매일 2시간씩 엑셀에 손가락 아파하던 업무, 밤 11시에 자동 실행되도록 바꿔드립니다.',
+    examples: ['수작업 매출 집계 → 버튼 하나로 완료', '시트 간 데이터 복사 반복 → 전부 자동화', '보고서 양식이 매번 깨짐 → 서식 고정 자동화'],
+    accentColor: 'border-emerald-200 bg-emerald-50', dotColor: 'bg-emerald-500', labelColor: 'text-emerald-700 bg-emerald-100 border-emerald-200',
+  },
+  {
+    title: '웹 스크래핑 · 데이터 수집',
+    desc: '경쟁사 가격 확인하러 탭 10개 열어놓고 복사·붙여넣기 하던 그 시간을 되돌려 드립니다.',
+    examples: ['경쟁사 가격 변동 → 엑셀에 자동 수집', '상품 리뷰 수백 개 → 자동 취합 분석', '공공입찰 공고 → 조건 맞으면 카톡 알림'],
+    accentColor: 'border-blue-200 bg-blue-50', dotColor: 'bg-blue-500', labelColor: 'text-blue-700 bg-blue-100 border-blue-200',
+  },
+  {
+    title: '이메일 자동 발송',
+    desc: '"이 이메일 또 보내야 해?"라는 생각이 드는 모든 발송 업무를 없애드립니다.',
+    examples: ['주문 접수·발송 확인 이메일 자동 발송', '월말 보고서 관련자에게 자동 배포', '미수금 고객에게 단계별 안내 자동 발송'],
+    accentColor: 'border-violet-200 bg-violet-50', dotColor: 'bg-violet-500', labelColor: 'text-violet-700 bg-violet-100 border-violet-200',
+  },
+  {
+    title: '업무 프로세스 RPA',
+    desc: 'ERP에 데이터 입력하고, 파일 정리하고, 같은 버튼 수십 번 클릭하는 일을 대신 합니다.',
+    examples: ['ERP 입력 작업 → 완전 무인 자동화', '월말 파일 정리·백업 → 예약 실행', '발주서 웹 입력 → 로봇이 대신 클릭'],
+    accentColor: 'border-orange-200 bg-orange-50', dotColor: 'bg-orange-500', labelColor: 'text-orange-700 bg-orange-100 border-orange-200',
+  },
+  {
+    title: '텔레그램 봇 개발',
+    desc: '서버가 죽었는데 아무도 모르는 상황, 매출이 터졌는데 혼자만 아는 상황을 없애드립니다.',
+    examples: ['서버 다운·이상 → 즉시 카톡/텔레그램 알림', '하루 매출 현황 → 저녁 6시에 자동 리포트', '신규 주문 들어오면 → 담당자에게 즉시 알림'],
+    accentColor: 'border-cyan-200 bg-cyan-50', dotColor: 'bg-cyan-500', labelColor: 'text-cyan-700 bg-cyan-100 border-cyan-200',
+  },
+  {
+    title: 'API 연동 · 시스템 통합',
+    desc: '두 프로그램이 따로 놀아서 중간에 손으로 옮기고 있다면, 그 사이를 연결해드립니다.',
+    examples: ['CRM → ERP 고객 정보 자동 동기화', '결제 완료 → 재고 차감 자동 연동', '온라인몰 주문 → 배송 시스템 자동 등록'],
+    accentColor: 'border-indigo-200 bg-indigo-50', dotColor: 'bg-indigo-500', labelColor: 'text-indigo-700 bg-indigo-100 border-indigo-200',
+  },
 ];
 
 const plans = [

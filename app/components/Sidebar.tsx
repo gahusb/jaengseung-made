@@ -118,11 +118,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Brand */}
         <div className="px-5 pt-6 pb-5 flex-shrink-0">
           <Link href="/" onClick={onClose} className="block group">
-            <div className="flex items-baseline gap-2">
-              <span className="text-white font-bold text-lg tracking-tight leading-none">쟁승메이드</span>
-              <span className="text-slate-600 text-xs font-mono">v2</span>
-            </div>
-            <p className="text-slate-500 text-xs mt-1 font-mono tracking-tight">박재오 · 백엔드 7년</p>
+            <div className="text-white font-bold text-lg tracking-tight leading-none">쟁승메이드</div>
+            <p className="text-slate-500 text-xs mt-1 tracking-tight">박재오의 개발 공방</p>
           </Link>
         </div>
 
@@ -205,16 +202,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               </button>
             </div>
           ) : (
-            <Link
-              href="/login"
-              onClick={onClose}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-white/5 transition-all text-sm group"
-            >
-              <svg className="w-4 h-4 text-slate-600 group-hover:text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-              </svg>
-              <span className="font-medium">로그인 / 회원가입</span>
-            </Link>
+            <p className="px-3 text-slate-700 text-xs leading-relaxed">
+              AI 사주·키트 이용 시<br/>
+              <Link href="/login" onClick={onClose} className="text-slate-500 hover:text-slate-300 underline underline-offset-2 transition-colors">로그인이 필요합니다</Link>
+            </p>
           )}
         </div>
       </aside>
