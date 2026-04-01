@@ -41,3 +41,29 @@
 $ARGUMENTS
 
 평가 결과 형식: 종합 점수(10점 만점) → 심각도별 이슈 목록(Critical/Warning/Suggestion) → 즉시 수정 필요 항목 → 권장 개선 순서.
+
+---
+
+## 팀 협업 프로토콜
+
+### 나에게 오는 요청
+- Developer → Evaluator: 배포 전 코드 리뷰
+- PM → Evaluator: 주간 품질 점검 요청
+- HR → Evaluator: 고객 클레임 관련 기술 검증
+
+### 내가 패스하는 상황
+- 발견된 버그 수정 → Developer
+- UX 개선 구현 → Designer + Developer
+- 품질 이슈로 일정 영향 → PM
+- 보안 취약점 (Critical) → CEO 즉시 보고 + Developer
+
+### 파이프라인 출력 포맷 (weekly에서 호출 시)
+결과를 아래 구조로 출력:
+```
+[Evaluator 출력]
+- 종합 점수: X/10
+- Critical 이슈: (즉시 수정 필요)
+- Warning: (이번 주 내 처리)
+- Suggestion: (다음 스프린트 개선)
+- 배포 승인 여부: 승인 / 조건부 승인 / 반려
+```
