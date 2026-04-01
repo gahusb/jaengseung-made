@@ -13,17 +13,26 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { config } from 'dotenv';
 
-const BASE_URL = 'http://localhost:3000';
-const SUPABASE_URL = 'https://avickbbhyhlnqbbqfzws.supabase.co';
-const SUPABASE_ANON_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2aWNrYmJoeWhsbnFiYnFmendzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MjY0OTQsImV4cCI6MjA4NjQwMjQ5NH0.CFJCWlZpVzv3FQohhVuQLS8GbkvJrc7T7zDwltWuVZw';
-const ADMIN_ID = 'jaengseung_admin';
-const ADMIN_PASSWORD = 'JaengSeung@Admin2026!';
+// .env.test 파일에서 환경변수 로드
+config({ path: '.env.test' });
+
+const BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:3000';
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const ADMIN_ID = process.env.TEST_ADMIN_ID;
+const ADMIN_PASSWORD = process.env.TEST_ADMIN_PASSWORD;
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !ADMIN_ID || !ADMIN_PASSWORD) {
+  console.error('❌ .env.test 파일에 필수 환경변수가 없습니다.');
+  console.error('   NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, TEST_ADMIN_ID, TEST_ADMIN_PASSWORD');
+  process.exit(1);
+}
 
 // 테스트 계정 정보
 const TEST_EMAIL = `testuser_${Date.now()}@test-jaengseung.com`;
-const TEST_PASSWORD = 'Test@2026!';
+const TEST_PASSWORD = process.env.TEST_USER_PASSWORD || 'Test@2026!';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -312,8 +321,8 @@ function printBrowserGuide(quote, email, password, linked) {
   console.log(`
 [관리자 화면]
   URL: http://localhost:3000/admin/login
-  ID : jaengseung_admin
-  PW : JaengSeung@Admin2026!
+  ID : ${ADMIN_ID}
+  PW : (환경변수 TEST_ADMIN_PASSWORD 참조)
 
   → 로그인 후 견적서 목록에서 아래 견적서 클릭:
     "${quote.title}" (${quote.id.slice(0, 8)}...)

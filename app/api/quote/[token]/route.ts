@@ -15,7 +15,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
     .single();
 
   if (error || !data) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  return NextResponse.json({ quote: data });
+
+  // 만료 검증: valid_until이 현재 시간보다 과거이면 expired 플래그 추가
+  const expired = data.valid_until
+    ? new Date(data.valid_until).getTime() < Date.now()
+    : false;
+
+  return NextResponse.json({ quote: data, expired });
 }
 
 // 고객이 견적 수락

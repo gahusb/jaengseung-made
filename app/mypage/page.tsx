@@ -48,14 +48,6 @@ interface Order {
   status: string;
 }
 
-interface LottoHistoryItem {
-  id: number;
-  numbers: number[];
-  source: string;
-  plan_id: string;
-  created_at: string;
-}
-
 interface ProjectMilestone {
   id: string;
   step_number: number;
@@ -85,22 +77,15 @@ interface ActiveSubscription {
   cancelled_at: string | null;
 }
 
-const PLAN_LABELS: Record<string, { label: string; emoji: string; color: string }> = {
-  lotto_gold:     { label: '골드', emoji: '🥇', color: 'amber' },
-  lotto_platinum: { label: '플래티넘', emoji: '💎', color: 'sky' },
-  lotto_diamond:  { label: '다이아', emoji: '👑', color: 'violet' },
-};
-
 export default function MyPage() {
   const router = useRouter();
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<Tab>('profile');
+  const [tab, setTab] = useState<Tab>('projects');
   const [sajuRecords, setSajuRecords] = useState<SajuRecord[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [lottoHistory, setLottoHistory] = useState<LottoHistoryItem[]>([]);
   const [activeSubscriptions, setActiveSubscriptions] = useState<ActiveSubscription[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [linkToken, setLinkToken] = useState('');
@@ -171,15 +156,6 @@ export default function MyPage() {
         const projData = await projRes.json();
         setProjects(projData.projects ?? []);
       }
-
-      // 로또 히스토리 조회
-      const { data: history } = await supabase
-        .from('lotto_history')
-        .select('id, numbers, source, plan_id, created_at')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(50);
-      setLottoHistory(history ?? []);
 
       setLoading(false);
     }
@@ -308,12 +284,12 @@ export default function MyPage() {
   const activeSubs = activeSubscriptions.filter((s) => s.status === 'active' || s.status === 'cancelled');
 
   const tabs: { key: Tab; label: string; count?: number }[] = [
-    { key: 'profile', label: '내 정보' },
     { key: 'projects', label: '프로젝트 현황', count: projects.length || undefined },
+    { key: 'orders', label: '의뢰 내역', count: orders.length || undefined },
+    { key: 'payments', label: '결제 내역', count: payments.length || undefined },
+    { key: 'profile', label: '내 정보' },
     { key: 'subscription', label: '구독 관리', count: activeSubs.length || undefined },
     { key: 'saju', label: '사주 기록', count: sajuRecords.length || undefined },
-    { key: 'payments', label: '결제 내역', count: payments.length || undefined },
-    { key: 'orders', label: '의뢰 내역', count: orders.length || undefined },
   ];
 
   return (
@@ -405,21 +381,21 @@ export default function MyPage() {
 
             {/* 구독 중인 서비스 - 요약 (탭으로 유도) */}
             {activeSubs.length > 0 && (
-              <div className="bg-amber-50 rounded-2xl border border-amber-200 p-5 flex items-center justify-between gap-3">
+              <div className="bg-blue-50 rounded-2xl border border-blue-200 p-5 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{PLAN_LABELS[activeSubs[0].product_id]?.emoji ?? '🎟'}</span>
+                  <span className="text-2xl">🎟</span>
                   <div>
                     <div className="text-sm font-bold text-[#04102b]">
-                      로또 {PLAN_LABELS[activeSubs[0].product_id]?.label} 구독 중
+                      서비스 구독 중
                     </div>
-                    <div className="text-xs text-amber-600 mt-0.5">
+                    <div className="text-xs text-blue-600 mt-0.5">
                       {Math.max(0, Math.ceil((new Date(activeSubs[0].expires_at).getTime() - Date.now()) / 86400000))}일 후 만료
                       {activeSubs[0].status === 'cancelled' && ' · 해지 예정'}
                     </div>
                   </div>
                 </div>
                 <button onClick={() => setTab('subscription')}
-                  className="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition">
+                  className="text-xs font-bold text-blue-700 bg-blue-100 hover:bg-blue-200 px-3 py-1.5 rounded-lg transition">
                   구독 관리 →
                 </button>
               </div>
@@ -574,7 +550,6 @@ export default function MyPage() {
               />
             ) : (
               activeSubscriptions.map((sub) => {
-                const info = PLAN_LABELS[sub.product_id];
                 const expiresDate = new Date(sub.expires_at);
                 const daysLeft = Math.max(0, Math.ceil((expiresDate.getTime() - Date.now()) / 86400000));
                 const isExpired = sub.status === 'expired';
@@ -586,10 +561,10 @@ export default function MyPage() {
                     {/* 헤더 */}
                     <div className="flex items-start justify-between mb-5">
                       <div className="flex items-center gap-3">
-                        <span className="text-3xl">{info?.emoji ?? '🎟'}</span>
+                        <span className="text-3xl">🎟</span>
                         <div>
                           <div className="font-bold text-[#04102b] text-base">
-                            로또 번호 추천 {info?.label ?? sub.product_id}
+                            {sub.product_id}
                           </div>
                           <div className="text-xs text-slate-500 mt-0.5">
                             {new Date(sub.started_at).toLocaleDateString('ko-KR')} 시작

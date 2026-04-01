@@ -60,6 +60,8 @@ export default function QuotePage() {
       .finally(() => setLoading(false));
   }, [token]);
 
+  const isExpired = quote?.valid_until ? new Date(quote.valid_until) < new Date() : false;
+
   const requiredItems = quote?.items.filter((i) => !i.optional) ?? [];
   const optionalItems = quote?.items.filter((i) => i.optional) ?? [];
 
@@ -226,6 +228,19 @@ export default function QuotePage() {
           </div>
         </div>
       </div>
+
+      {/* 만료 배너 */}
+      {isExpired && (
+        <div style={{ maxWidth: 900, margin: '0 auto', padding: '16px 24px 0' }}>
+          <div style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 12, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: 18 }}>&#9888;</span>
+            <div>
+              <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 14 }}>이 견적서는 만료되었습니다</div>
+              <div style={{ color: '#92400e', fontSize: 13 }}>유효기간({quote.valid_until?.slice(0, 10)})이 지났습니다. 새 견적이 필요하시면 문의해 주세요.</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 본문 */}
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '32px 24px' }}>
@@ -445,7 +460,7 @@ export default function QuotePage() {
       </div>
 
       {/* 하단 고정 바 — 견적 수락 */}
-      {quote.status !== 'accepted' && quote.status !== 'rejected' && (
+      {quote.status !== 'accepted' && quote.status !== 'rejected' && !isExpired && (
         <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(10,15,30,0.95)', backdropFilter: 'blur(12px)', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '16px 24px' }}>
           <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
             <div>

@@ -13,6 +13,7 @@ const portfolio = [
     tags: ['Next.js', 'Tailwind CSS', 'Vercel', 'SEO'],
     status: '납품 완료',
     statusType: 'done',
+    priceRange: '50~200만원',
     accentColor: 'text-indigo-400',
     accentBg: 'bg-[#0d0a2e]',
     borderAccent: 'border-indigo-400/20',
@@ -25,6 +26,7 @@ const portfolio = [
     tags: ['Python', 'Gmail API', 'Google Apps Script'],
     status: '납품 완료',
     statusType: 'done',
+    priceRange: '30~150만원',
     accentColor: 'text-red-400',
     accentBg: 'bg-[#200a0a]',
     borderAccent: 'border-red-400/20',
@@ -37,6 +39,7 @@ const portfolio = [
     tags: ['Python', 'Selenium', 'Telegram Bot'],
     status: '납품 완료',
     statusType: 'done',
+    priceRange: '30~150만원',
     accentColor: 'text-violet-400',
     accentBg: 'bg-[#0d0a2e]',
     borderAccent: 'border-violet-400/20',
@@ -49,6 +52,7 @@ const portfolio = [
     tags: ['Python', 'OpenPyXL', 'ReportLab'],
     status: '납품 완료',
     statusType: 'done',
+    priceRange: '30~150만원',
     accentColor: 'text-cyan-400',
     accentBg: 'bg-[#012030]',
     borderAccent: 'border-cyan-400/20',
@@ -61,6 +65,7 @@ const portfolio = [
     tags: ['Python', '공공데이터 API', 'PostgreSQL', 'Telegram'],
     status: '납품 완료',
     statusType: 'done',
+    priceRange: '30~150만원',
     accentColor: 'text-blue-400',
     accentBg: 'bg-[#04102b]',
     borderAccent: 'border-blue-400/20',
@@ -341,6 +346,12 @@ export default function FreelancePage() {
                       </span>
                     ))}
                   </div>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+                    <span className="text-xs text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-full">{item.priceRange}</span>
+                    <a href="#contact-form" className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 font-medium transition">
+                      비슷한 서비스 의뢰하기 →
+                    </a>
+                  </div>
                 </div>
               </div>
             ))}
@@ -408,6 +419,13 @@ export default function FreelancePage() {
           <p className="text-center text-slate-400 text-xs mt-5">
             * 의뢰인 동의 하에 게시된 후기입니다. 전체 대화 내역 공개 요청 시 제공 가능합니다.
           </p>
+
+          <div className="text-center py-6">
+            <a href="#contact-form" className="inline-flex items-center gap-2 px-6 py-3 bg-[#1a56db] text-white font-semibold rounded-xl hover:bg-blue-700 transition shadow-sm">
+              무료 상담 시작하기
+            </a>
+            <p className="text-sm text-slate-400 mt-2">24시간 내 답변 · 상담은 무료입니다</p>
+          </div>
         </div>
       </div>
 
@@ -581,7 +599,7 @@ export default function FreelancePage() {
       </div>
 
       {/* ─── 문의 폼 ─── */}
-      <div className="px-6 pb-14 lg:px-12">
+      <div id="contact-form" className="px-6 pb-14 lg:px-12">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
             <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">CONTACT</p>

@@ -1,29 +1,12 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
-import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
-  // Cookie 기반 또는 Bearer 토큰 기반 인증 모두 지원
-  const authHeader = request.headers.get('authorization');
-  let user = null;
-
-  if (authHeader?.startsWith('Bearer ')) {
-    const token = authHeader.slice(7);
-    const client = createSupabaseClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    );
-    const { data } = await client.auth.getUser(token);
-    user = data?.user ?? null;
-  } else {
-    const supabase = await createClient();
-    const { data } = await supabase.auth.getUser();
-    user = data?.user ?? null;
-  }
-
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
@@ -56,7 +39,10 @@ export async function POST(request: Request) {
     .update({ user_id: user.id, updated_at: new Date().toISOString() })
     .eq('id', quote.id);
 
-  if (updateErr) return NextResponse.json({ error: updateErr.message }, { status: 500 });
+  if (updateErr) {
+    console.error('[Projects/Link] DB update error:', updateErr.message);
+    return NextResponse.json({ error: '견적서 연결에 실패했습니다. 다시 시도해주세요.' }, { status: 500 });
+  }
 
   return NextResponse.json({ success: true, quoteId: quote.id });
 }
