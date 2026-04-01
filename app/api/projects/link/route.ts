@@ -1,12 +1,29 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
 export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  // Cookie 기반 또는 Bearer 토큰 기반 인증 모두 지원
+  const authHeader = request.headers.get('authorization');
+  let user = null;
+
+  if (authHeader?.startsWith('Bearer ')) {
+    const token = authHeader.slice(7);
+    const client = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    );
+    const { data } = await client.auth.getUser(token);
+    user = data?.user ?? null;
+  } else {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data?.user ?? null;
+  }
+
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();

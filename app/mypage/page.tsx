@@ -15,7 +15,7 @@ function buildSajuResultUrl(rec: SajuRecord) {
   return url;
 }
 
-type Tab = 'profile' | 'projects' | 'subscription' | 'lotto' | 'saju' | 'payments' | 'orders';
+type Tab = 'profile' | 'projects' | 'subscription' | 'saju' | 'payments' | 'orders';
 type TelegramLinkState = 'idle' | 'generating' | 'waiting' | 'disconnecting';
 
 interface SajuRecord {
@@ -311,7 +311,6 @@ export default function MyPage() {
     { key: 'profile', label: '내 정보' },
     { key: 'projects', label: '프로젝트 현황', count: projects.length || undefined },
     { key: 'subscription', label: '구독 관리', count: activeSubs.length || undefined },
-    { key: 'lotto', label: '로또 기록', count: lottoHistory.length || undefined },
     { key: 'saju', label: '사주 기록', count: sajuRecords.length || undefined },
     { key: 'payments', label: '결제 내역', count: payments.length || undefined },
     { key: 'orders', label: '의뢰 내역', count: orders.length || undefined },
@@ -546,17 +545,6 @@ export default function MyPage() {
                     <div className="text-xs text-slate-500">새 사주 보기</div>
                   </div>
                 </Link>
-                <Link href="/services/lotto/recommend" className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-amber-300 hover:bg-amber-50/50 transition group">
-                  <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-[#04102b]">로또 번호 추천</div>
-                    <div className="text-xs text-slate-500">구독자 전용</div>
-                  </div>
-                </Link>
                 <Link href="/freelance" className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-blue-300 hover:bg-blue-50/50 transition group">
                   <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -580,9 +568,9 @@ export default function MyPage() {
               <EmptyState
                 icon="📦"
                 title="활성 구독이 없습니다"
-                desc="로또 번호 추천 서비스를 구독하면 여기서 관리할 수 있습니다"
-                linkHref="/services/lotto"
-                linkLabel="구독 플랜 보기"
+                desc="구독 중인 서비스가 없습니다"
+                linkHref="/services/prompt"
+                linkLabel="서비스 둘러보기"
               />
             ) : (
               activeSubscriptions.map((sub) => {
@@ -662,9 +650,9 @@ export default function MyPage() {
 
                     {/* 액션 버튼 */}
                     <div className="flex gap-2 flex-wrap">
-                      <a href="/services/lotto/recommend"
-                        className="flex-1 text-center py-2 text-sm font-bold text-white bg-amber-500 hover:bg-amber-400 rounded-xl transition shadow-sm">
-                        번호 추천받기
+                      <a href="/freelance"
+                        className="flex-1 text-center py-2 text-sm font-bold text-white bg-[#1a56db] hover:bg-blue-700 rounded-xl transition shadow-sm">
+                        외주 의뢰하기
                       </a>
                       {isActive && (
                         <button
@@ -680,62 +668,12 @@ export default function MyPage() {
               })
             )}
 
-            {/* 구독 플랜 이동 */}
+            {/* 서비스 이동 */}
             <div className="text-center py-2">
-              <a href="/services/lotto" className="text-sm text-slate-400 hover:text-slate-600 transition">
-                다른 플랜 보기 →
+              <a href="/services/prompt" className="text-sm text-slate-400 hover:text-slate-600 transition">
+                다른 서비스 보기 →
               </a>
             </div>
-          </div>
-        )}
-
-        {/* 로또 번호 기록 */}
-        {tab === 'lotto' && (
-          <div>
-            {lottoHistory.length === 0 ? (
-              <EmptyState
-                icon="🎰"
-                title="생성된 번호 기록이 없습니다"
-                desc="로또 번호 추천 페이지에서 번호를 생성하면 여기에 기록됩니다"
-                linkHref="/services/lotto/recommend"
-                linkLabel="번호 추천받기"
-              />
-            ) : (
-              <div className="space-y-3">
-                <div className="text-xs text-slate-400 mb-1">총 {lottoHistory.length}개 조합 생성</div>
-                {lottoHistory.map((item) => {
-                  const info = PLAN_LABELS[item.plan_id];
-                  return (
-                    <div key={item.id} className="bg-white rounded-2xl border border-[#dbe8ff] px-5 py-4 flex items-center justify-between flex-wrap gap-3">
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <div className="flex gap-1.5 flex-wrap">
-                          {item.numbers.map((n) => {
-                            const color =
-                              n <= 10 ? 'bg-yellow-400 text-yellow-900' :
-                              n <= 20 ? 'bg-blue-500 text-white' :
-                              n <= 30 ? 'bg-red-500 text-white' :
-                              n <= 40 ? 'bg-slate-500 text-white' :
-                                        'bg-green-500 text-white';
-                            return (
-                              <span key={n} className={`w-8 h-8 rounded-full ${color} flex items-center justify-center text-xs font-black shadow-sm`}>
-                                {n}
-                              </span>
-                            );
-                          })}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 flex-shrink-0">
-                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${item.source === 'nas' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-slate-100 text-slate-500'}`}>
-                          {item.source === 'nas' ? 'NAS 추천' : '로컬 생성'}
-                        </span>
-                        <span className="text-xs text-amber-600 font-semibold">{info?.emoji} {info?.label}</span>
-                        <span className="text-xs text-slate-400">{new Date(item.created_at).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
           </div>
         )}
 

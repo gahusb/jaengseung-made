@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 652px; font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: #0f172a; }
+
+  .hero {
+    padding: 40px 40px 28px;
+    text-align: center;
+  }
+  .badge {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #60a5fa;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .hero h1 span { color: #f59e0b; }
+  .hero p { font-size: 13px; color: #64748b; }
+
+  .grid { padding: 8px 40px 40px; display: flex; flex-direction: column; gap: 12px; }
+
+  .diff-card {
+    background: #1e293b;
+    border: 1px solid #2d3f55;
+    border-radius: 14px;
+    padding: 20px 22px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .diff-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #0f172a;
+    border: 1.5px solid #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: #60a5fa;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .diff-body {}
+  .diff-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 6px;
+  }
+  .diff-desc {
+    font-size: 12.5px;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+  .diff-desc strong { color: #60a5fa; font-weight: 600; }
+
+  .compare {
+    margin: 0 40px 32px;
+    background: #1e293b;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #2d3f55;
+  }
+  .compare-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background: #0f172a;
+    border-bottom: 1px solid #2d3f55;
+  }
+  .compare-header div {
+    padding: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .compare-header .col-label { color: #475569; }
+  .compare-header .col-bad { color: #f87171; }
+  .compare-header .col-good { color: #34d399; }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid #1e293b;
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row div {
+    padding: 11px 12px;
+    font-size: 11.5px;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .col-label { color: #94a3b8; background: #131f2e; }
+  .col-bad { color: #fca5a5; background: #1e293b; }
+  .col-good { color: #6ee7b7; background: #0d2318; }
+  .col-good strong { color: #34d399; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">왜 쟁승메이드인가</div>
+  <h1>외주 개발, 한 번이라도<br><span>실망한 적 있으신가요?</span></h1>
+  <p>자주 들리는 불만을 직접 해소하는 방식으로 운영합니다</p>
+</div>
+
+<div class="compare">
+  <div class="compare-header">
+    <div class="col-label">항목</div>
+    <div class="col-bad">일반 외주</div>
+    <div class="col-good">쟁승메이드</div>
+  </div>
+  <div class="compare-row">
+    <div class="col-label">개발 주체</div>
+    <div class="col-bad">재하청 가능</div>
+    <div class="col-good"><strong>대표가 직접</strong></div>
+  </div>
+  <div class="compare-row">
+    <div class="col-label">중간 연락</div>
+    <div class="col-bad">답변 지연 잦음</div>
+    <div class="col-good"><strong>매일 현황 공유</strong></div>
+  </div>
+  <div class="compare-row">
+    <div class="col-label">소스코드</div>
+    <div class="col-bad">미제공 / 일부만</div>
+    <div class="col-good"><strong>전체 인도</strong></div>
+  </div>
+  <div class="compare-row">
+    <div class="col-label">포트폴리오</div>
+    <div class="col-bad">예시만 제공</div>
+    <div class="col-good"><strong>실운영 서비스</strong></div>
+  </div>
+  <div class="compare-row">
+    <div class="col-label">납품 이후</div>
+    <div class="col-bad">연락 두절</div>
+    <div class="col-good"><strong>유지보수 포함</strong></div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="diff-card">
+    <div class="diff-num">1</div>
+    <div class="diff-body">
+      <div class="diff-title">직접 개발, 재하청 없음</div>
+      <div class="diff-desc">외주를 또 외주 주는 구조 없이 <strong>제가 직접 개발</strong>합니다. 소통 단절과 품질 저하 문제가 발생하지 않습니다.</div>
+    </div>
+  </div>
+  <div class="diff-card">
+    <div class="diff-num">2</div>
+    <div class="diff-body">
+      <div class="diff-title">실제 운영 서비스 보유</div>
+      <div class="diff-desc">현재 운영 중인 AI 분석 시스템·자동화 솔루션을 포트폴리오로 확인하실 수 있습니다. <strong>"만들어만 주고 끝"이 아닌 운영자의 시각</strong>으로 개발합니다.</div>
+    </div>
+  </div>
+  <div class="diff-card">
+    <div class="diff-num">3</div>
+    <div class="diff-body">
+      <div class="diff-title">소스코드 전체 인도</div>
+      <div class="diff-desc">납품 후 소스코드 전량을 제공합니다. <strong>유지보수 종속 없이</strong> 자유롭게 활용하거나 다른 개발자에게 이어서 맡길 수 있습니다.</div>
+    </div>
+  </div>
+  <div class="diff-card">
+    <div class="diff-num">4</div>
+    <div class="diff-body">
+      <div class="diff-title">투명한 일일 커뮤니케이션</div>
+      <div class="diff-desc">작업 진행 현황을 <strong>매일 카카오톡으로 공유</strong>합니다. 중간에 연락이 끊기는 일은 없습니다.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

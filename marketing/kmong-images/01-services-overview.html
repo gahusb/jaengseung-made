@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 652px; font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: #0f172a; }
+
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    padding: 48px 40px 36px;
+    text-align: center;
+    border-bottom: 1px solid #1e3a5f;
+  }
+  .badge {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #60a5fa;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: #60a5fa; }
+  .hero p {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  .section { padding: 36px 40px; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #60a5fa;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .service-card {
+    background: #1e293b;
+    border: 1px solid #2d3f55;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 14px;
+  }
+  .service-card:last-child { margin-bottom: 0; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-right: 14px;
+    flex-shrink: 0;
+  }
+  .icon-blue { background: #1e3a5f; }
+  .icon-violet { background: #2d1b69; }
+  .icon-teal { background: #0f3460; }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 2px;
+  }
+  .card-sub {
+    font-size: 11px;
+    color: #64748b;
+  }
+  .card-desc {
+    font-size: 12.5px;
+    color: #94a3b8;
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+
+  .footer {
+    background: #1e293b;
+    padding: 20px 40px;
+    text-align: center;
+  }
+  .footer-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+  .footer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .footer-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #60a5fa;
+  }
+  .footer-label {
+    font-size: 10px;
+    color: #64748b;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">쟁승메이드 · 7년 경력 백엔드 개발자</div>
+  <h1>아이디어를 <span>실제 서비스</span>로<br>직접 만들어 드립니다</h1>
+  <p>웹·앱 개발부터 업무 자동화, AI 프롬프트까지<br>기획-개발-배포 원스톱으로 진행합니다</p>
+</div>
+
+<div class="section">
+  <div class="section-title">제공 서비스</div>
+
+  <div class="service-card">
+    <div class="card-header">
+      <div class="card-icon icon-blue">🌐</div>
+      <div>
+        <div class="card-title">웹 서비스 / MVP 개발</div>
+        <div class="card-sub">홈페이지 · 서비스 플랫폼 · 관리자 대시보드</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      아이디어를 실제로 작동하는 서비스로 만들어 드립니다.<br>
+      기획부터 디자인, 개발, 배포까지 혼자 맡겨도 됩니다.
+    </div>
+    <div class="tag-list">
+      <span class="tag">Next.js</span>
+      <span class="tag">React</span>
+      <span class="tag">FastAPI</span>
+      <span class="tag">PostgreSQL</span>
+      <span class="tag">Supabase</span>
+      <span class="tag">Vercel 배포</span>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <div class="card-header">
+      <div class="card-icon icon-teal">⚙️</div>
+      <div>
+        <div class="card-title">업무 자동화 개발</div>
+        <div class="card-sub">반복 업무 제거 · 엑셀·이메일·크롤링 자동화</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      매일 반복하는 업무를 자동화해 시간을 되돌려 드립니다.<br>
+      주문 수집, 알림 발송, 데이터 정리 등 모두 가능합니다.
+    </div>
+    <div class="tag-list">
+      <span class="tag">Python</span>
+      <span class="tag">Selenium</span>
+      <span class="tag">Playwright</span>
+      <span class="tag">API 연동</span>
+      <span class="tag">카카오 알림톡</span>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <div class="card-header">
+      <div class="card-icon icon-violet">🤖</div>
+      <div>
+        <div class="card-title">AI 프롬프트 엔지니어링</div>
+        <div class="card-sub">업무 특화 AI 활용 · GPT API 연동 챗봇</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      ChatGPT·Claude를 실무에 제대로 활용하도록 설계해 드립니다.<br>
+      업종별 맞춤 프롬프트 패키지와 API 연동 자동화까지 가능합니다.
+    </div>
+    <div class="tag-list">
+      <span class="tag">GPT-4o</span>
+      <span class="tag">Claude</span>
+      <span class="tag">Gemini</span>
+      <span class="tag">API 챗봇</span>
+      <span class="tag">프롬프트 패키지</span>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-row">
+    <div class="footer-item">
+      <div class="footer-value">7년</div>
+      <div class="footer-label">개발 경력</div>
+    </div>
+    <div class="footer-item">
+      <div class="footer-value">직접 개발</div>
+      <div class="footer-label">재하청 없음</div>
+    </div>
+    <div class="footer-item">
+      <div class="footer-value">소스코드</div>
+      <div class="footer-label">전체 제공</div>
+    </div>
+    <div class="footer-item">
+      <div class="footer-value">실운영</div>
+      <div class="footer-label">포트폴리오</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

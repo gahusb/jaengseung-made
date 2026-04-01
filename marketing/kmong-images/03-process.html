@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 652px; font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: #0f172a; }
+
+  .hero {
+    padding: 40px 40px 28px;
+    text-align: center;
+  }
+  .badge {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #60a5fa;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .hero p { font-size: 13px; color: #64748b; }
+
+  .steps { padding: 8px 40px 40px; }
+
+  .step {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+  }
+
+  .step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48px;
+    flex-shrink: 0;
+  }
+  .step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .step-line {
+    width: 2px;
+    flex: 1;
+    min-height: 20px;
+    margin: 0 auto;
+  }
+
+  .step-right {
+    flex: 1;
+    padding-bottom: 24px;
+    padding-top: 6px;
+    padding-left: 12px;
+  }
+  .step:last-child .step-right { padding-bottom: 0; }
+
+  .step-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 6px;
+  }
+  .step-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+  .step-desc strong { color: #60a5fa; }
+
+  /* Step colors */
+  .s1 .step-circle { background: #1e3a5f; color: #60a5fa; }
+  .s1 .step-line { background: linear-gradient(#1e3a5f, #1a2d4a); }
+  .s1 .step-label { color: #60a5fa; }
+
+  .s2 .step-circle { background: #1a2d4a; color: #93c5fd; }
+  .s2 .step-line { background: linear-gradient(#1a2d4a, #1e2d42); }
+  .s2 .step-label { color: #93c5fd; }
+
+  .s3 .step-circle { background: #1e2d42; color: #7dd3fc; }
+  .s3 .step-line { background: linear-gradient(#1e2d42, #1a3040); }
+  .s3 .step-label { color: #7dd3fc; }
+
+  .s4 .step-circle { background: #1a3040; color: #34d399; }
+  .s4 .step-line { background: linear-gradient(#1a3040, #0d2318); }
+  .s4 .step-label { color: #34d399; }
+
+  .s5 .step-circle { background: #0d2318; color: #34d399; }
+  .s5 .step-line { background: linear-gradient(#0d2318, #1e293b); }
+  .s5 .step-label { color: #34d399; }
+
+  .s6 .step-circle { background: #1e293b; color: #a78bfa; }
+  .s6 .step-line { background: linear-gradient(#1e293b, #2d1b69); }
+  .s6 .step-label { color: #a78bfa; }
+
+  .s7 .step-circle { background: #2d1b69; color: #c4b5fd; }
+  .s7 .step-label { color: #c4b5fd; }
+
+  .note {
+    margin: 0 40px 32px;
+    background: #1e293b;
+    border: 1px solid #2d3f55;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+  .note strong { color: #60a5fa; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">진행 절차</div>
+  <h1>문의부터 납품까지<br>7단계로 투명하게 진행합니다</h1>
+  <p>구매 전 상담은 무료입니다 · 착수금 50% → 잔금 50%</p>
+</div>
+
+<div class="steps">
+
+  <div class="step s1">
+    <div class="step-left">
+      <div class="step-circle">1</div>
+      <div class="step-line"></div>
+    </div>
+    <div class="step-right">
+      <div class="step-label">STEP 01 · 무료</div>
+      <div class="step-title">사전 상담</div>
+      <div class="step-desc">크몽 채팅으로 요구사항을 보내주세요.<br><strong>24시간 내 답변</strong>, 상담은 100% 무료입니다.</div>
+    </div>
+  </div>
+
+  <div class="step s2">
+    <div class="step-left">
+      <div class="step-circle">2</div>
+      <div class="step-line"></div>
+    </div>
+    <div class="step-right">
+      <div class="step-label">STEP 02</div>
+      <div class="step-title">요구사항 분석 및 견적 확정</div>
+      <div class="step-desc">작업 범위·기간·금액을 확정하고 <strong>문서로 공유</strong>합니다.<br>필요 시 화상 미팅(30분) 진행합니다.</div>
+    </div>
+  </div>
+
+  <div class="step s3">
+    <div class="step-left">
+      <div class="step-circle">3</div>
+      <div class="step-line"></div>
+    </div>
+    <div class="step-right">
+      <div class="step-label">STEP 03</div>
+      <div class="step-title">계약 및 착수금 결제</div>
+      <div class="step-desc">크몽 시스템으로 결제합니다. (착수금 50%)<br>결제 후 <strong>영업일 1~2일 내 작업 착수</strong>합니다.</div>
+    </div>
+  </div>
+
+  <div class="step s4">
+    <div class="step-left">
+      <div class="step-circle">4</div>
+      <div class="step-line"></div>
+    </div>
+    <div class="step-right">
+      <div class="step-label">STEP 04</div>
+      <div class="step-title">개발 진행</div>
+      <div class="step-desc"><strong>매일 진행 현황을 카카오톡으로 공유</strong>합니다.<br>중간 완성본은 스테이징 URL로 확인하실 수 있습니다.</div>
+    </div>
+  </div>
+
+  <div class="step s5">
+    <div class="step-left">
+      <div class="step-circle">5</div>
+      <div class="step-line"></div>
+    </div>
+    <div class="step-right">
+      <div class="step-label">STEP 05</div>
+      <div class="step-title">중간 검토 및 수정</div>
+      <div class="step-desc">1차 결과물 공유 후 피드백을 반영합니다.<br>패키지 내 <strong>수정 횟수(2~5회)</strong> 내에서 조율합니다.</div>
+    </div>
+  </div>
+
+  <div class="step s6">
+    <div class="step-left">
+      <div class="step-circle">6</div>
+      <div class="step-line"></div>
+    </div>
+    <div class="step-right">
+      <div class="step-label">STEP 06</div>
+      <div class="step-title">최종 납품</div>
+      <div class="step-desc"><strong>소스코드 전체 + 배포 URL + 운영 가이드</strong> 제공<br>잔금(50%) 결제 후 최종 인도합니다.</div>
+    </div>
+  </div>
+
+  <div class="step s7">
+    <div class="step-left">
+      <div class="step-circle">7</div>
+    </div>
+    <div class="step-right">
+      <div class="step-label">STEP 07 · 무상</div>
+      <div class="step-title">유지보수 기간</div>
+      <div class="step-desc">납품 후 <strong>1~3개월</strong> 동안 버그 수정을 무상 지원합니다.<br>기능 추가·변경은 별도 견적으로 진행합니다.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="note">
+  💡 <strong>착수금 구조</strong>: 착수금 50% 결제 → 작업 착수 → 최종 납품 후 잔금 50% 결제<br>
+  범위 외 추가 요청은 사전 협의 후 별도 견적이 발생할 수 있습니다.
+</div>
+
+</body>
+</html>
