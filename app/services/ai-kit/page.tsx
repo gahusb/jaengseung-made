@@ -159,45 +159,31 @@ export default function AiKitPage() {
     <div className="min-h-full bg-[#f0f4ff]">
 
       {/* ─── Hero ─── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#0a0f2e] via-[#0f1a5c] to-[#0a0f2e] px-6 py-14 lg:px-12">
-        {/* 배경 그리드 */}
-        <div className="absolute inset-0 opacity-5 pointer-events-none" style={{
-          backgroundImage: 'linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }} />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] opacity-20 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse, #6366f1, transparent 70%)' }} />
+      <div className="relative overflow-hidden bg-[#0a0f2e] px-6 py-14 lg:px-12" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px)' }}>
 
-        <div className="relative max-w-3xl mx-auto text-center">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-indigo-300/60 hover:text-indigo-300 text-sm mb-6 transition">
+        <div className="relative max-w-3xl mx-auto">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-indigo-300/60 hover:text-indigo-300 text-sm mb-8 transition">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
             홈으로
           </Link>
 
-          <div className="inline-flex items-center gap-2 bg-indigo-400/10 border border-indigo-400/25 text-indigo-300 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest mb-5">
-            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            AI AUTOMATION KIT · 월 구독
-          </div>
+          <p className="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-4 font-mono">AI 자동화 키트 · 월 구독</p>
 
-          {/* 핵심 카피: "낭비되는 시간"으로 시작 */}
+          {/* 핵심 카피 */}
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight leading-tight">
             오늘도 반복 업무에<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">
-              {totalMonthlySaving}시간을 낭비하고 있습니다
-            </span>
+            <span className="text-red-400">{totalMonthlySaving}시간을 낭비하고 있습니다</span>
           </h1>
 
-          <p className="text-indigo-100/60 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-6">
+          <p className="text-indigo-100/60 text-base md:text-lg leading-relaxed max-w-2xl mb-8">
             일지 작성, 이메일 답장, 보고서, SNS 기획…<br />
             <strong className="text-white">혼자 하면 월 {totalMonthlySaving}시간 이상 소비되는 일들,</strong> AI로 90% 줄일 수 있습니다.
           </p>
 
           {/* 가격 카드 */}
-          <div className="inline-flex flex-col items-center bg-white/5 border border-white/10 rounded-2xl px-8 py-5 backdrop-blur-sm mb-6">
+          <div className="inline-flex flex-col bg-white/5 border border-white/10 rounded-xl px-8 py-5 mb-6">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-extrabold bg-red-500 text-white px-2 py-0.5 rounded-md">런칭 특가</span>
+              <span className="text-xs font-bold bg-red-500 text-white px-2 py-0.5 rounded">런칭 특가</span>
               <span className="text-sm line-through text-white/30">월 39,900원</span>
             </div>
             <div className="text-4xl font-extrabold text-white">
@@ -207,10 +193,10 @@ export default function AiKitPage() {
             <p className="text-indigo-300/60 text-xs mt-1">언제든 해지 가능 · 해지 후 월말까지 이용</p>
           </div>
 
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col gap-3">
             <PaymentButton
               productId="ai_kit_monthly"
-              className="bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-base font-extrabold px-8 py-4 rounded-xl hover:opacity-90 hover:scale-[1.02] transition-all shadow-lg shadow-indigo-500/25 w-full max-w-xs"
+              className="bg-blue-600 hover:bg-blue-500 text-white text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-xs"
               returnUrl="/services/ai-kit"
             >
               월 {totalMonthlySaving}시간 되찾기 →

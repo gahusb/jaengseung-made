@@ -557,46 +557,27 @@ export default function WebsiteServicePage() {
       `}} />
 
       {/* ── Hero ── */}
-      <section style={{ padding: '80px 24px 60px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        {/* Animated grid */}
+      <section style={{ padding: '80px 24px 60px', position: 'relative', overflow: 'hidden' }}>
+        {/* Diagonal pattern */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
-          backgroundImage: 'linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
-          animation: 'ws-gridScroll 10s linear infinite',
-        }} />
-        {/* Radial glow */}
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 75% 55% at 50% 0%, rgba(99,102,241,0.15) 0%, transparent 70%)',
-        }} />
-        {/* Ambient dot */}
-        <div style={{
-          position: 'absolute', top: '60%', left: '15%', width: 300, height: 300,
-          background: 'radial-gradient(circle, rgba(129,140,248,0.06) 0%, transparent 70%)',
-          borderRadius: '50%', pointerEvents: 'none', animation: 'ws-glow 5s ease-in-out infinite',
-        }} />
-        <div style={{
-          position: 'absolute', top: '30%', right: '10%', width: 200, height: 200,
-          background: 'radial-gradient(circle, rgba(244,114,182,0.05) 0%, transparent 70%)',
-          borderRadius: '50%', pointerEvents: 'none', animation: 'ws-glow 7s ease-in-out infinite 2s',
+          backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px)',
         }} />
 
         <div style={{ maxWidth: 820, margin: '0 auto', position: 'relative', animation: 'ws-fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) both' }}>
-          <span style={{
-            display: 'inline-block', fontSize: 11, fontWeight: 700, letterSpacing: '0.2em',
-            color: '#818cf8', textTransform: 'uppercase',
-            border: '1px solid rgba(129,140,248,0.3)', padding: '5px 16px', borderRadius: 100,
-            marginBottom: 32,
+          <p style={{
+            fontSize: 11, fontWeight: 700, letterSpacing: '0.18em',
+            color: '#6366f1', textTransform: 'uppercase',
+            fontFamily: 'monospace',
+            marginBottom: 24,
           }}>
-            Homepage Development Service
-          </span>
+            홈페이지 제작 서비스
+          </p>
           <h1 style={{
             fontSize: 'clamp(28px, 4.5vw, 54px)', fontWeight: 800,
             lineHeight: 1.2, marginBottom: 20,
             letterSpacing: '-0.02em',
-            background: 'linear-gradient(135deg, #ffffff 0%, #c7d2fe 50%, #818cf8 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            color: '#ffffff',
             wordBreak: 'keep-all',
           }}>
             홈페이지 맡겼다가<br/>연락 끊긴 경험, 여기선 없습니다
@@ -655,39 +636,46 @@ export default function WebsiteServicePage() {
         </div>
       </section>
 
-      {/* ── Marquee ── */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.04)', overflow: 'hidden', padding: '12px 0' }}>
-        <div className="ws-marquee-track" style={{ gap: 0 }}>
-          {[...Array(2)].map((_, i) => (
-            <div key={i} style={{ display: 'flex', gap: 0, whiteSpace: 'nowrap', flexShrink: 0 }}>
-              {['반응형 디자인', 'SEO 최적화', '빠른 납품', '계약서 작성', '소스코드 제공', '1년 AS 보장', '도메인 배포'].map((t, j) => (
-                <span key={j} style={{ padding: '0 2rem', fontSize: '0.75rem', color: '#1e293b', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                  {t} <span style={{ color: 'rgba(99,102,241,0.3)', margin: '0 0.5rem' }}>·</span>
-                </span>
-              ))}
-            </div>
+      {/* ── Feature tags ── */}
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '14px 24px' }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+          {['반응형 디자인', 'SEO 최적화', '빠른 납품', '계약서 작성', '소스코드 제공', '1년 AS 보장', '도메인 배포'].map((t) => (
+            <span key={t} style={{ padding: '4px 12px', fontSize: '11px', color: '#475569', letterSpacing: '0.06em', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 4, fontFamily: 'monospace' }}>
+              {t}
+            </span>
           ))}
         </div>
       </div>
 
       {/* ── Trust badges ── */}
       <section style={{ padding: '48px 24px', maxWidth: 1000, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 1, border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, overflow: 'hidden' }}>
           {[
-            { icon: '📋', title: '계약서 필수 작성', desc: '모든 프로젝트 계약서 체결 후 진행' },
-            { icon: '📊', title: '주간 진행 보고', desc: '매주 작업 현황 공유, 연락 두절 없음' },
-            { icon: '💾', title: '소스코드 전액 제공', desc: '완성 후 전체 소스코드 인도' },
-            { icon: '🔒', title: '납기 지연 패널티', desc: '지연 1일당 10만원 자동 감면' },
+            {
+              title: '계약서 필수 작성', desc: '모든 프로젝트 계약서 체결 후 진행',
+              icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} style={{ width: 20, height: 20 }}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" /></svg>,
+            },
+            {
+              title: '주간 진행 보고', desc: '매주 작업 현황 공유, 연락 두절 없음',
+              icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} style={{ width: 20, height: 20 }}><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>,
+            },
+            {
+              title: '소스코드 전액 제공', desc: '완성 후 전체 소스코드 인도',
+              icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} style={{ width: 20, height: 20 }}><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>,
+            },
+            {
+              title: '납기 지연 패널티', desc: '지연 1일당 10만원 자동 감면',
+              icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} style={{ width: 20, height: 20 }}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>,
+            },
           ].map((b) => (
             <div key={b.title} style={{
-              padding: '20px 22px', borderRadius: 14,
+              padding: '20px 22px',
               background: 'rgba(255,255,255,0.02)',
-              border: '1px solid rgba(255,255,255,0.05)',
               display: 'flex', gap: 14, alignItems: 'flex-start',
             }}>
-              <span style={{ fontSize: 24, flexShrink: 0 }}>{b.icon}</span>
+              <span style={{ color: '#6366f1', flexShrink: 0, marginTop: 2 }}>{b.icon}</span>
               <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0', marginBottom: 4, wordBreak: 'keep-all' }}>{b.title}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#e2e8f0', marginBottom: 4, wordBreak: 'keep-all' }}>{b.title}</div>
                 <div style={{ fontSize: 12, color: '#475569', lineHeight: 1.6, wordBreak: 'keep-all' }}>{b.desc}</div>
               </div>
             </div>
@@ -769,9 +757,8 @@ export default function WebsiteServicePage() {
                   background: '#080d1a', borderRadius: 16,
                   border: '1px solid rgba(255,255,255,0.05)',
                 }}>
-                  <div style={{ fontSize: 28, marginBottom: 12 }}>{p.icon}</div>
-                  <div style={{ fontSize: 10, color: '#6366f1', fontWeight: 700, letterSpacing: '0.12em', marginBottom: 7 }}>
-                    STEP {p.step}
+                  <div style={{ fontSize: 22, fontWeight: 800, color: '#6366f1', fontFamily: 'monospace', marginBottom: 12, letterSpacing: '-0.02em' }}>
+                    {p.step}
                   </div>
                   <div style={{ fontSize: 14, fontWeight: 700, color: 'white', marginBottom: 6, wordBreak: 'keep-all' }}>
                     {p.title}

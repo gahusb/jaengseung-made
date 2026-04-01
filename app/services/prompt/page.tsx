@@ -366,35 +366,17 @@ export default function PromptPage() {
       />
 
       {/* ─── Hero ─── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#0d0a2e] via-[#1a0f5c] to-[#0d0a2e] px-6 py-14 lg:px-12">
-        <div className="absolute top-0 right-0 w-[480px] h-full opacity-10 pointer-events-none hidden lg:block">
-          <div className="font-mono text-xs text-violet-300 p-8 leading-7">
-            <div><span className="text-pink-400">const</span> <span className="text-blue-300">optimizePrompt</span> <span className="text-white">=</span> <span className="text-yellow-300">(task)</span> <span className="text-white">{'=> {'}</span></div>
-            <div className="ml-4"><span className="text-pink-400">return</span> <span className="text-white">{'{'}</span></div>
-            <div className="ml-8"><span className="text-green-300">role</span><span className="text-white">:</span> <span className="text-orange-300">&apos;expert analyst&apos;</span><span className="text-white">,</span></div>
-            <div className="ml-8"><span className="text-green-300">context</span><span className="text-white">:</span> <span className="text-orange-300">`{'{task.context}'}`</span><span className="text-white">,</span></div>
-            <div className="ml-8"><span className="text-green-300">format</span><span className="text-white">:</span> <span className="text-orange-300">&apos;structured&apos;</span><span className="text-white">,</span></div>
-            <div className="ml-8"><span className="text-green-300">output</span><span className="text-white">:</span> <span className="text-orange-300">&apos;actionable&apos;</span></div>
-            <div className="ml-4"><span className="text-white">{'}'}</span></div>
-            <div><span className="text-white">{'};'}</span></div>
-            <div className="mt-4"><span className="text-slate-500">// efficiency: 94% ↑</span></div>
-          </div>
-        </div>
+      <div className="relative overflow-hidden bg-[#0d0a2e] px-6 py-14 lg:px-12" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px)' }}>
 
-        <div className="relative max-w-3xl mx-auto text-center">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-violet-300/60 hover:text-violet-300 text-sm mb-6 transition">
+        <div className="relative max-w-3xl mx-auto">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-violet-300/60 hover:text-violet-300 text-sm mb-8 transition">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
             홈으로
           </Link>
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-violet-400/15 border border-violet-400/25 flex items-center justify-center mb-5">
-            <svg className="w-9 h-9 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
-          </div>
-          <p className="text-violet-400/70 text-xs font-bold uppercase tracking-widest mb-2">PROMPT ENGINEERING · AI 활용 극대화</p>
+          <p className="text-violet-400 text-xs font-bold uppercase tracking-widest mb-4 font-mono">프롬프트 엔지니어링 · AI 활용 극대화</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight leading-tight">
             AI를 제대로<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-blue-400">100% 활용하기</span>
+            100% 활용하기
           </h1>
           <p className="text-violet-100/50 text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-6">
             ChatGPT·Claude를 쓰는데 결과가 항상 애매하신가요?<br />
