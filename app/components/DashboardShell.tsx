@@ -33,7 +33,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
             </svg>
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white font-bold text-xs">
+            <div className="w-7 h-7 rounded-lg bg-[#1a56db] flex items-center justify-center text-white font-bold text-xs">
               쟁
             </div>
             <span className="text-white font-bold text-base">쟁승메이드</span>

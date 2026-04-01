@@ -12,7 +12,7 @@ const faqItems = [
   },
   {
     q: 'AI 해석은 어떻게 동작하나요?',
-    a: '전통 명리학 계산 로직(오행, 신강/신약, 용신/희신 등)으로 산출된 데이터를 GPT-4o에 전달하여 12개 항목의 상세 해석을 생성합니다. 기본 원국 분석은 무료이며, AI 상세 해석은 유료(₩4,900)로 제공됩니다.',
+    a: '전통 명리학 계산 로직(오행, 신강/신약, 용신/희신 등)으로 산출된 데이터를 Gemini AI에 전달하여 12개 항목의 상세 해석을 생성합니다. 현재 기본 원국 분석과 AI 상세 해석 모두 무료로 제공됩니다.',
   },
   {
     q: '태어난 시간을 모르면 어떻게 하나요?',
@@ -98,7 +98,7 @@ export default function SajuPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/saju/input"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#1a56db] to-[#7c3aed] hover:from-[#1e4fc2] hover:to-[#6d28d9] text-white px-7 py-3.5 rounded-xl font-semibold text-base transition-all shadow-lg shadow-violet-900/40"
+                className="inline-flex items-center gap-2 bg-[#1a56db] hover:bg-[#1e4fc2] text-white px-7 py-3.5 rounded-xl font-semibold text-base transition-all"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -169,7 +169,7 @@ export default function SajuPage() {
                     )}
                     <Link
                       href={buildResultUrl(rec)}
-                      className="block w-full text-center py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-[#04102b] to-[#0a2060] text-white hover:from-[#0a1f5c] hover:to-[#1a3a7a] transition"
+                      className="block w-full text-center py-2 rounded-xl text-sm font-bold bg-[#04102b] hover:bg-[#0a1f5c] text-white border border-[#1a3a7a] transition"
                     >
                       다시 보기 →
                     </Link>
@@ -180,28 +180,29 @@ export default function SajuPage() {
           )}
 
           {/* ─── 바로 시작하기 CTA ─── */}
-          <div className="bg-gradient-to-r from-[#04102b] via-[#0a1f5c] to-[#0d2d8a] rounded-2xl border border-[#1a3a7a] p-8 text-center relative overflow-hidden">
-            <div className="absolute inset-0 opacity-[0.04]"
-              style={{ backgroundImage: 'radial-gradient(circle, #a78bfa 1px, transparent 1px)', backgroundSize: '25px 25px' }} />
-            <div className="relative">
-              <div className="text-3xl mb-3">✨</div>
-              <h3 className="text-2xl font-extrabold text-white mb-2">지금 무료로 시작하세요</h3>
-              <p className="text-blue-200/60 text-sm mb-6">회원가입 없이, 생년월일만 입력하면 바로 확인 가능합니다</p>
-              <Link
-                href="/saju/input"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#1a56db] to-[#7c3aed] text-white px-8 py-3.5 rounded-xl font-semibold text-base hover:from-[#1e4fc2] hover:to-[#6d28d9] transition-all shadow-lg shadow-violet-900/40"
-              >
-                사주 입력하러 가기 →
-              </Link>
-            </div>
+          <div
+            className="rounded-2xl border border-[#1a3a7a] p-8 text-center"
+            style={{
+              background: '#04102b',
+              backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 30px)',
+            }}
+          >
+            <h3 className="text-2xl font-extrabold text-white mb-2">지금 무료로 시작하세요</h3>
+            <p className="text-blue-200/60 text-sm mb-6">회원가입 없이, 생년월일만 입력하면 바로 확인 가능합니다</p>
+            <Link
+              href="/saju/input"
+              className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-[#04102b] px-8 py-3.5 rounded-xl font-bold text-base transition-all"
+            >
+              사주 입력하러 가기 →
+            </Link>
           </div>
 
           {/* ─── 무료 vs 유료 비교표 ─── */}
           <div>
             <div className="text-center mb-8">
               <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">PRICING</p>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b] tracking-tight">무료 vs 유료 비교</h2>
-              <p className="text-slate-500 text-sm mt-2">기본 원국은 무료로, AI 상세 해석은 단 ₩4,900에</p>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b] tracking-tight">무엇을 분석해드리나요</h2>
+              <p className="text-slate-500 text-sm mt-2">기본 원국부터 AI 상세 해석까지 — 현재 전부 무료</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -247,12 +248,17 @@ export default function SajuPage() {
                 </div>
               </div>
 
-              {/* 유료 */}
-              <div className="bg-gradient-to-br from-[#04102b] to-[#0a2060] rounded-2xl border border-[#1a3a7a] p-6 shadow-lg relative overflow-hidden">
-                <div className="absolute top-4 right-4 bg-amber-400 text-[#04102b] text-xs font-bold px-2 py-0.5 rounded-lg">
-                  ₩4,900
+              {/* AI 해석 (현재 무료) */}
+              <div
+                className="rounded-2xl border border-[#1a3a7a] p-6 shadow-lg relative overflow-hidden"
+                style={{
+                  background: '#04102b',
+                  backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 30px)',
+                }}
+              >
+                <div className="absolute top-4 right-4 bg-emerald-400 text-[#04102b] text-xs font-bold px-2 py-0.5 rounded-lg">
+                  현재 무료
                 </div>
-                <div className="absolute bottom-0 right-0 w-32 h-32 rounded-full bg-violet-500/10 blur-2xl" />
                 <div className="flex items-center gap-3 mb-5 relative">
                   <div className="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-400/30 flex items-center justify-center">
                     <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

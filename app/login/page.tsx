@@ -76,18 +76,16 @@ function LoginForm() {
   return (
     <div className="min-h-screen bg-[#04102b] flex items-center justify-center p-4">
       {/* 배경 장식 */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 opacity-[0.03]"
-          style={{ backgroundImage: 'linear-gradient(#4f8ef7 1px, transparent 1px), linear-gradient(90deg, #4f8ef7 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-blue-500/10 blur-3xl -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-violet-500/10 blur-3xl translate-y-1/2 -translate-x-1/4" />
-      </div>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}
+      />
 
       <div className="relative w-full max-w-md">
         {/* 로고 */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-3 group">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/25">
+            <div className="w-12 h-12 rounded-xl bg-[#1a56db] flex items-center justify-center text-white font-bold text-xl">
               쟁
             </div>
             <div className="text-left">
@@ -153,7 +151,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#1a56db] hover:bg-[#1e4fc2] text-white font-bold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? '처리 중...' : (isSignUp ? '회원가입' : '로그인')}
             </button>

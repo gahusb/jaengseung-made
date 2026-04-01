@@ -268,10 +268,10 @@ export default function MyPage() {
       )}
 
       {/* 헤더 */}
-      <div className="bg-gradient-to-br from-[#04102b] via-[#0a1f5c] to-[#04102b] px-6 py-10">
+      <div className="bg-[#04102b] px-6 py-10" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px)' }}>
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center text-white text-xl font-bold shadow-lg flex-shrink-0">
+            <div className="w-14 h-14 rounded-full bg-[#1a56db] flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
               {user.email?.[0].toUpperCase()}
             </div>
             <div>

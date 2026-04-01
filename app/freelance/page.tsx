@@ -1,40 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import ContactForm from '../components/ContactForm';
-
-/* ─── Counter Hook ─── */
-function useCounter(target: number, duration = 1400) {
-  const [count, setCount] = useState(0);
-  const started = useRef(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          const step = target / (duration / 16);
-          let current = 0;
-          const timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-              setCount(target);
-              clearInterval(timer);
-            } else {
-              setCount(Math.floor(current));
-            }
-          }, 16);
-        }
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target, duration]);
-
-  return { count, ref };
-}
 
 /* ─── Data ─── */
 const portfolio = [
@@ -46,9 +13,8 @@ const portfolio = [
     tags: ['Python', 'Gmail API', 'Google Apps Script'],
     status: '납품 완료',
     statusType: 'done',
-    accentFrom: '#200a0a',
-    accentTo: '#4a1010',
     accentColor: 'text-red-400',
+    accentBg: 'bg-[#200a0a]',
     borderAccent: 'border-red-400/20',
   },
   {
@@ -59,9 +25,8 @@ const portfolio = [
     tags: ['Python', 'Selenium', 'Telegram Bot'],
     status: '납품 완료',
     statusType: 'done',
-    accentFrom: '#0d0a2e',
-    accentTo: '#1a0f5c',
     accentColor: 'text-violet-400',
+    accentBg: 'bg-[#0d0a2e]',
     borderAccent: 'border-violet-400/20',
   },
   {
@@ -72,9 +37,8 @@ const portfolio = [
     tags: ['Python', 'OpenPyXL', 'ReportLab'],
     status: '납품 완료',
     statusType: 'done',
-    accentFrom: '#012030',
-    accentTo: '#013d50',
     accentColor: 'text-cyan-400',
+    accentBg: 'bg-[#012030]',
     borderAccent: 'border-cyan-400/20',
   },
   {
@@ -85,9 +49,8 @@ const portfolio = [
     tags: ['Python', '공공데이터 API', 'PostgreSQL', 'Telegram'],
     status: '납품 완료',
     statusType: 'done',
-    accentFrom: '#04102b',
-    accentTo: '#0a2060',
     accentColor: 'text-blue-400',
+    accentBg: 'bg-[#04102b]',
     borderAccent: 'border-blue-400/20',
   },
 ];
@@ -195,90 +158,106 @@ const process = [
   },
 ];
 
-/* ─── Sub-components ─── */
-function StatCard({
-  target,
-  suffix = '',
-  label,
-  sublabel,
-  pulse = false,
-  accentClass,
-}: {
-  target: number;
-  suffix?: string;
-  label: string;
-  sublabel: string;
-  pulse?: boolean;
-  accentClass: string;
-}) {
-  const { count, ref } = useCounter(target);
-  return (
-    <div ref={ref} className="bg-[#04102b]/60 border border-[#1a3a7a]/50 rounded-2xl p-6 text-center backdrop-blur">
-      <div className={`text-4xl font-extrabold tracking-tight mb-1 ${accentClass}`}>
-        {count}{suffix}
-      </div>
-      <div className="text-white font-bold text-sm mb-1 flex items-center justify-center gap-2">
-        {pulse && <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />}
-        {label}
-      </div>
-      <div className="text-[#5ba4ff]/50 text-xs">{sublabel}</div>
-    </div>
-  );
-}
+const guarantees = [
+  {
+    label: '계약서 필수',
+    detail: '구두 약속 없음 — 착수 전 계약서 발송',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+    ),
+    accentText: 'text-sky-400',
+    accentBorder: 'border-sky-400/20',
+  },
+  {
+    label: '납기 지연 패널티',
+    detail: '하루 지연 = 10만원 감면 — 그래서 안 늦습니다',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+    accentText: 'text-amber-400',
+    accentBorder: 'border-amber-400/20',
+  },
+  {
+    label: '소스코드 100% 인도',
+    detail: '납품 후 전체 소스코드 + 배포 가이드 제공',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+      </svg>
+    ),
+    accentText: 'text-emerald-400',
+    accentBorder: 'border-emerald-400/20',
+  },
+  {
+    label: '1개월 무상 AS',
+    detail: '납품 후 한 달 — 버그·수정 무상 대응',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+    ),
+    accentText: 'text-violet-400',
+    accentBorder: 'border-violet-400/20',
+  },
+];
 
 /* ─── Main Page ─── */
 export default function FreelancePage() {
+  const [_contactPreset] = useState('');
+
   return (
     <div className="min-h-full bg-[#f0f5ff]">
 
       {/* ─── Hero ─── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#04102b] via-[#071a4a] to-[#04102b] px-6 py-14 lg:px-12">
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: 'linear-gradient(#4f8ef7 1px, transparent 1px), linear-gradient(90deg, #4f8ef7 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-        <div className="absolute right-0 top-0 w-[500px] h-[500px] rounded-full bg-blue-500/5 blur-3xl" />
-
+      <div
+        className="relative overflow-hidden bg-[#04102b] px-6 py-14 lg:px-12"
+        style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px), repeating-linear-gradient(45deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}
+      >
         <div className="relative max-w-5xl mx-auto">
-          <div className="text-center mb-10">
+          <div className="mb-10">
             <div className="inline-flex items-center gap-2 bg-emerald-400/10 border border-emerald-400/20 text-emerald-300 text-xs font-semibold px-4 py-2 rounded-full mb-5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               현재 프로젝트 접수 가능
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
               연락 두절? 그런 거 없습니다.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5ba4ff] to-[#818cf8]">
-                납기 지키고, 끝까지 책임집니다
-              </span>
+              <span className="text-[#5ba4ff]">납기 지키고, 끝까지 책임집니다</span>
             </h1>
-            <p className="text-blue-200/60 text-base md:text-lg max-w-xl mx-auto leading-relaxed mb-2">
+            <p className="text-blue-200/60 text-base md:text-lg max-w-xl leading-relaxed mb-2">
               개발자에게 맡겼다가 연락 두절된 경험 있으신가요?<br />
               계약서 작성, 중간 보고, 소스코드 인도까지 — 단계마다 증거를 남깁니다.
             </p>
           </div>
 
-          {/* ─ Live Counters ─ */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard target={2} label="진행 중" sublabel="현재 개발 중인 프로젝트" pulse accentClass="text-emerald-400" />
-            <StatCard target={3} label="상담 중" sublabel="검토 및 견적 협의 중" pulse accentClass="text-amber-400" />
-            <StatCard target={47} suffix="+" label="최종 납품" sublabel="자동화 28 · 웹개발 14 · 기타 5" accentClass="text-[#5ba4ff]" />
-            <StatCard target={98} suffix="%" label="고객 만족도" sublabel="재의뢰·소개 고객 비율 포함" accentClass="text-violet-400" />
+          {/* Developer tag */}
+          <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-6 py-3 mb-8 w-fit">
+            <div className="w-10 h-10 rounded-full bg-[#1a56db] flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0">
+              박
+            </div>
+            <div>
+              <div className="text-white font-bold text-sm">쟁토리 (박재오)</div>
+              <div className="text-blue-300/50 text-xs">대기업 백엔드 7년 · Python / Java / Next.js</div>
+            </div>
+            <div className="hidden sm:flex gap-2">
+              {['Python', 'Java', 'Next.js', 'Docker'].map(t => (
+                <span key={t} className="bg-[#1a56db]/20 border border-[#1a56db]/30 text-[#5ba4ff] text-xs px-2 py-0.5 rounded-md font-mono">{t}</span>
+              ))}
+            </div>
           </div>
 
-          {/* developer tag */}
-          <div className="mt-8 flex justify-center">
-            <div className="inline-flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-6 py-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a56db] to-[#4338ca] flex items-center justify-center text-white font-extrabold text-sm flex-shrink-0">
-                박
+          {/* 보증 카드 4개 */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {guarantees.map((g) => (
+              <div key={g.label} className={`bg-[#04102b]/60 border ${g.accentBorder} rounded-xl p-4`}>
+                <div className={`${g.accentText} mb-2`}>{g.icon}</div>
+                <div className="text-white font-bold text-sm mb-1">{g.label}</div>
+                <div className="text-blue-300/40 text-xs leading-relaxed">{g.detail}</div>
               </div>
-              <div>
-                <div className="text-white font-bold text-sm">쟁토리</div>
-                <div className="text-blue-300/50 text-xs">시니어 백엔드 개발자 · Python / Java / Next.js</div>
-              </div>
-              <div className="hidden sm:flex gap-2">
-                {['Python', 'Java', 'Next.js', 'Docker'].map(t => (
-                  <span key={t} className="bg-[#1a56db]/20 border border-[#1a56db]/30 text-[#5ba4ff] text-xs px-2 py-0.5 rounded-md font-mono">{t}</span>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -299,14 +278,8 @@ export default function FreelancePage() {
                 className="bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden hover:shadow-xl hover:shadow-blue-100 hover:-translate-y-1 transition-all duration-200 group"
               >
                 {/* card header */}
-                <div
-                  className="px-5 pt-5 pb-8 relative overflow-hidden"
-                  style={{ background: `linear-gradient(135deg, ${item.accentFrom}, ${item.accentTo})` }}
-                >
-                  {/* grid texture */}
-                  <div className="absolute inset-0 opacity-[0.06]"
-                    style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-                  <div className="relative flex items-start justify-between">
+                <div className={`px-5 pt-5 pb-8 ${item.accentBg}`}>
+                  <div className="flex items-start justify-between">
                     <div>
                       <div className={`text-xs font-bold mb-2 uppercase tracking-wider ${item.accentColor}`}>{item.category}</div>
                       <h3 className="text-white font-extrabold text-sm leading-snug">{item.title}</h3>
@@ -427,26 +400,32 @@ export default function FreelancePage() {
           {/* Vertical timeline */}
           <div className="relative">
             {/* connecting line */}
-            <div className="absolute left-6 top-6 bottom-6 w-px bg-gradient-to-b from-[#1a56db] via-[#dbe8ff] to-[#1a56db]" />
+            <div className="absolute left-6 top-6 bottom-6 w-px bg-[#dbe8ff]" />
 
             <div className="space-y-4">
               {process.map((p) => (
-                <div key={p.num} className={`relative flex gap-5 ${p.highlight ? '' : ''}`}>
+                <div key={p.num} className="relative flex gap-5">
                   {/* step circle */}
                   <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg ${
                     p.highlight
-                      ? 'bg-gradient-to-br from-[#1a56db] to-[#4338ca] shadow-blue-500/30 border border-[#1a56db]/50'
+                      ? 'bg-[#1a56db] shadow-blue-500/30 border border-[#1a56db]/50'
                       : 'bg-white border-2 border-[#dbe8ff]'
                   }`}>
                     <span className={p.highlight ? 'text-white' : 'text-[#1a56db]'}>{p.icon}</span>
                   </div>
 
                   {/* content */}
-                  <div className={`flex-1 rounded-2xl border p-5 mb-0 ${
-                    p.highlight
-                      ? 'bg-gradient-to-br from-[#04102b] to-[#0a2060] border-[#1a56db]/40 shadow-lg shadow-blue-900/20'
-                      : 'bg-white border-[#dbe8ff]'
-                  }`}>
+                  <div
+                    className={`flex-1 rounded-2xl border p-5 mb-0 ${
+                      p.highlight
+                        ? 'border-[#1a56db]/40'
+                        : 'bg-white border-[#dbe8ff]'
+                    }`}
+                    style={p.highlight ? {
+                      background: '#04102b',
+                      backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 30px)',
+                    } : {}}
+                  >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
@@ -474,14 +453,14 @@ export default function FreelancePage() {
         </div>
       </div>
 
-      {/* ─── 기술 스택 & 강점 ─── */}
+      {/* ─── 기술 스택 & 신뢰 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-5">
 
           {/* Tech Stack */}
           <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-1 h-5 bg-gradient-to-b from-[#1a56db] to-[#4338ca] rounded-full" />
+              <div className="w-1 h-5 bg-[#1a56db] rounded-full" />
               <h3 className="font-bold text-[#04102b] text-sm">개발 가능 기술 스택</h3>
             </div>
             <div className="space-y-3">
@@ -506,21 +485,67 @@ export default function FreelancePage() {
           </div>
 
           {/* 신뢰 포인트 */}
-          <div className="bg-gradient-to-br from-[#04102b] to-[#0a2060] rounded-2xl border border-[#1a3a7a] p-6">
+          <div
+            className="rounded-2xl border border-[#1a3a7a] p-6"
+            style={{
+              background: '#04102b',
+              backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 30px)',
+            }}
+          >
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-1 h-5 bg-gradient-to-b from-[#5ba4ff] to-[#818cf8] rounded-full" />
+              <div className="w-1 h-5 bg-[#5ba4ff] rounded-full" />
               <h3 className="font-bold text-white text-sm">신뢰할 수 있는 이유</h3>
             </div>
             <ul className="space-y-3.5">
               {[
-                { icon: '🌐', title: '지금 URL로 직접 확인', desc: 'jaengseung-made.com — 로또 분석, 주식 자동매매 지금도 운영 중' },
-                { icon: '📋', title: '계약서 먼저, 개발 나중', desc: '구두 약속 없음 — 견적서·계약서 발송 후 착수' },
-                { icon: '🔒', title: '납품 전 전액 환불 보장', desc: '마음에 안 드시면 이유 불문 전액 환불' },
-                { icon: '📦', title: '소스코드 100% 인도', desc: '완성 후 전체 소스코드 + 배포 가이드 제공' },
-                { icon: '⚡', title: '납기 지연 시 패널티', desc: '하루 늦을 때마다 10만원 감면 — 그래서 안 늦습니다' },
+                {
+                  title: '지금 URL로 직접 확인',
+                  desc: 'jaengseung-made.com — 로또 분석, 주식 자동매매 지금도 운영 중',
+                  icon: (
+                    <svg className="w-4 h-4 text-[#5ba4ff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                    </svg>
+                  ),
+                },
+                {
+                  title: '계약서 먼저, 개발 나중',
+                  desc: '구두 약속 없음 — 견적서·계약서 발송 후 착수',
+                  icon: (
+                    <svg className="w-4 h-4 text-[#5ba4ff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                  ),
+                },
+                {
+                  title: '납품 전 전액 환불 보장',
+                  desc: '마음에 안 드시면 이유 불문 전액 환불',
+                  icon: (
+                    <svg className="w-4 h-4 text-[#5ba4ff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  ),
+                },
+                {
+                  title: '소스코드 100% 인도',
+                  desc: '완성 후 전체 소스코드 + 배포 가이드 제공',
+                  icon: (
+                    <svg className="w-4 h-4 text-[#5ba4ff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                  ),
+                },
+                {
+                  title: '납기 지연 시 패널티',
+                  desc: '하루 늦을 때마다 10만원 감면 — 그래서 안 늦습니다',
+                  icon: (
+                    <svg className="w-4 h-4 text-[#5ba4ff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  ),
+                },
               ].map((item) => (
                 <li key={item.title} className="flex items-start gap-3">
-                  <span className="text-base flex-shrink-0 mt-0.5">{item.icon}</span>
+                  {item.icon}
                   <div>
                     <div className="text-white text-sm font-bold">{item.title}</div>
                     <div className="text-blue-300/50 text-xs">{item.desc}</div>
@@ -583,7 +608,10 @@ export default function FreelancePage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-[#04102b] to-[#0a2060] rounded-2xl border border-[#1a3a7a] p-5 text-center">
+              <div
+                className="rounded-2xl border border-[#1a3a7a] p-5 text-center"
+                style={{ background: '#04102b' }}
+              >
                 <div className="text-2xl font-extrabold text-white mb-0.5">24h</div>
                 <div className="text-[#5ba4ff] text-xs font-bold mb-1">이내 답변 보장</div>
                 <div className="text-blue-300/40 text-xs">영업일 기준 · 주말 포함</div>

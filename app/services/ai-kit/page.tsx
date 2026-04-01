@@ -253,7 +253,7 @@ export default function AiKitPage() {
           </div>
 
           {/* 총합 카드 */}
-          <div className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-2xl p-6 mb-8">
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 mb-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-bold text-red-600 mb-1">6가지 반복 업무를 혼자 할 때</p>
@@ -342,7 +342,7 @@ export default function AiKitPage() {
             ))}
           </div>
 
-          <div className="mt-8 bg-gradient-to-r from-indigo-900/50 to-violet-900/50 border border-indigo-500/30 rounded-2xl p-6 text-center">
+          <div className="mt-8 bg-[#0a0f2e] border border-indigo-500/30 rounded-2xl p-6 text-center">
             <p className="text-white text-lg font-extrabold mb-1">
               실수 1번이 계약 1건을 날립니다.
             </p>
@@ -391,7 +391,7 @@ export default function AiKitPage() {
           </div>
 
           {/* 업데이트 알림 */}
-          <div className="mt-6 bg-gradient-to-r from-indigo-50 to-cyan-50 border border-indigo-200 rounded-2xl p-5 flex items-start gap-4">
+          <div className="mt-6 bg-indigo-50 border border-indigo-200 rounded-2xl p-5 flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -496,13 +496,13 @@ export default function AiKitPage() {
       </div>
 
       {/* ─── 최하단 CTA ─── */}
-      <div className="px-6 py-14 lg:px-12 bg-gradient-to-br from-[#0a0f2e] to-[#0f1a5c]">
+      <div className="px-6 py-14 lg:px-12 bg-[#0a0f2e]" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}>
         <div className="max-w-2xl mx-auto text-center">
           {/* 마지막 카피: 기회비용 프레이밍 */}
           <p className="text-indigo-300/60 text-sm font-bold uppercase tracking-widest mb-3">구독 안 하면 내일도 동일합니다</p>
           <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">
             월 19,900원 vs<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">
+            <span className="text-red-400">
               월 409,000원어치 시간 낭비
             </span>
           </h2>

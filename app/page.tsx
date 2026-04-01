@@ -88,8 +88,8 @@ const LIVE_SERVICES = [
     name: '쟁승메이드',
     label: '이 사이트',
     url: '/freelance',
-    desc: '기획·디자인·개발·배포·결제·관리자까지 혼자 만들고 직접 운영 중. 이 사이트 자체가 포트폴리오.',
-    tech: ['Next.js 16', 'Supabase', 'Tailwind', 'Vercel', '토스페이먼츠'],
+    desc: '기획·디자인·개발·배포·관리자까지 혼자 만들고 직접 운영 중. 이 사이트 자체가 포트폴리오.',
+    tech: ['Next.js 16', 'Supabase', 'Tailwind', 'Vercel'],
     status: 'live',
     color: '#1a56db',
   },
@@ -155,7 +155,7 @@ const SERVICE_LIST = [
     category: 'AI',
     title: 'AI 사주 분석',
     desc: '생년월일 입력 → AI가 성격·직업·관계·운세를 즉시 분석',
-    from: '4,900원/건',
+    from: '무료',
     duration: '즉시',
     hot: false,
   },
@@ -218,12 +218,7 @@ export default function Home() {
             <br />
             만드는 것부터
             <br />
-            <span
-              className="text-transparent bg-clip-text"
-              style={{ backgroundImage: 'linear-gradient(90deg, #5ba4ff 0%, #a78bfa 100%)' }}
-            >
-              운영까지 맡기세요.
-            </span>
+            <span className="text-[#5ba4ff]">운영까지 맡기세요.</span>
           </h1>
 
           {/* 서브텍스트 */}

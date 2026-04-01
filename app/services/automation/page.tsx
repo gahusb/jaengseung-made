@@ -244,11 +244,11 @@ export default function AutomationPage() {
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">진행 프로세스</h2>
           </div>
           <div className="relative">
-            <div className="hidden sm:block absolute top-10 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-cyan-200 via-[#dbe8ff] to-cyan-200" />
+            <div className="hidden sm:block absolute top-10 left-[10%] right-[10%] h-0.5 bg-[#dbe8ff]" />
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
               {process.map((p) => (
                 <div key={p.step} className="relative text-center">
-                  <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-[#012030] to-[#013d50] border border-cyan-400/20 flex flex-col items-center justify-center mb-3 shadow-lg shadow-cyan-900/20">
+                  <div className="w-20 h-20 mx-auto rounded-2xl bg-[#012030] border border-cyan-400/20 flex flex-col items-center justify-center mb-3">
                     <span className="text-cyan-400 text-xs font-bold">STEP</span>
                     <span className="text-white font-extrabold text-lg leading-none">{p.step}</span>
                   </div>
@@ -272,7 +272,7 @@ export default function AutomationPage() {
             {plans.map((plan) => (
               <div key={plan.name} className={`rounded-2xl border p-6 relative flex flex-col ${
                 plan.highlight
-                  ? 'bg-gradient-to-br from-[#012030] to-[#013d50] border-cyan-400/30 shadow-2xl shadow-cyan-900/20 scale-105'
+                  ? 'bg-[#012030] border-cyan-400/30 shadow-2xl shadow-cyan-900/20 scale-105'
                   : 'bg-white border-[#dbe8ff]'
               }`}>
                 {plan.highlight && (
@@ -411,7 +411,7 @@ export default function AutomationPage() {
       {/* ─── CTA ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-gradient-to-r from-[#012030] to-[#013d50] rounded-2xl border border-cyan-400/20 p-8 text-center">
+          <div className="bg-[#012030] rounded-2xl border border-cyan-400/20 p-8 text-center" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 30px)' }}>
             <p className="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-2">FREE CONSULTATION</p>
             <h3 className="text-white text-2xl font-extrabold mb-2">어떤 업무든 상담해보세요</h3>
             <p className="text-cyan-100/40 text-sm mb-6">자동화 가능한 업무라면 무엇이든 도와드립니다</p>
