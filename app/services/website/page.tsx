@@ -798,7 +798,7 @@ export default function WebsiteServicePage() {
             {plans.map((plan) => (
               <div key={plan.name} className="ws-plan-card" style={{
                 padding: 32, borderRadius: 20,
-                background: plan.featured ? 'linear-gradient(135deg, #1e1b4b, #312e81)' : '#080d1a',
+                background: plan.featured ? '#0d1240' : '#080d1a',
                 border: `1px solid ${plan.featured ? plan.color + '40' : 'rgba(255,255,255,0.05)'}`,
                 position: 'relative', overflow: 'hidden',
                 boxShadow: plan.featured ? `0 24px 64px ${plan.color}12` : 'none',

@@ -4,10 +4,8 @@ export default function SajuInputPage() {
   return (
     <div className="min-h-full bg-[#f0f5ff]">
       {/* Hero */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#04102b] via-[#0a1f5c] to-[#04102b] px-6 py-12">
-        <div className="absolute inset-0 opacity-[0.05]"
-          style={{ backgroundImage: 'radial-gradient(circle, #a78bfa 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
-        <div className="absolute right-0 top-0 w-72 h-72 rounded-full bg-violet-500/10 blur-3xl -translate-y-1/2 translate-x-1/3" />
+      <div className="relative overflow-hidden px-6 py-12"
+        style={{ background: '#04102b', backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}>
 
         <div className="relative max-w-xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-violet-400/10 border border-violet-400/25 text-violet-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-4 tracking-wide">

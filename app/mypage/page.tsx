@@ -301,7 +301,7 @@ export default function MyPage() {
               onClick={() => setTab(t.key)}
               className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                 tab === t.key
-                  ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow'
+                  ? 'bg-[#1a56db] text-white shadow'
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -324,7 +324,7 @@ export default function MyPage() {
           <div className="space-y-4">
             <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
               <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
-                <div className="w-1 h-5 bg-gradient-to-b from-blue-600 to-violet-600 rounded-full" />
+                <div className="w-1 h-5 bg-[#1a56db] rounded-full" />
                 계정 정보
               </h2>
               <div className="space-y-3">
@@ -349,7 +349,7 @@ export default function MyPage() {
 
             {/* 구독 중인 서비스 - 요약 (탭으로 유도) */}
             {activeSubs.length > 0 && (
-              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-5 flex items-center justify-between gap-3">
+              <div className="bg-amber-50 rounded-2xl border border-amber-200 p-5 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{PLAN_LABELS[activeSubs[0].product_id]?.emoji ?? '🎟'}</span>
                   <div>
@@ -372,7 +372,7 @@ export default function MyPage() {
             {/* 텔레그램 연동 카드 */}
             <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
               <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
-                <div className="w-1 h-5 bg-gradient-to-b from-sky-500 to-blue-600 rounded-full" />
+                <div className="w-1 h-5 bg-[#1a56db] rounded-full" />
                 텔레그램 알림 연동
                 <button
                   onClick={() => setShowTelegramGuide(true)}
@@ -464,7 +464,7 @@ export default function MyPage() {
                   <button
                     onClick={handleTelegramConnect}
                     disabled={telegramLinkState === 'generating'}
-                    className="px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 rounded-xl shadow-sm shadow-sky-200 transition disabled:opacity-60"
+                    className="px-5 py-2.5 text-sm font-bold text-white bg-[#1a56db] hover:bg-[#1e4fc2] rounded-xl shadow-sm shadow-sky-200 transition disabled:opacity-60"
                   >
                     {telegramLinkState === 'generating' ? '생성 중...' : '텔레그램 연결하기'}
                   </button>
@@ -474,7 +474,7 @@ export default function MyPage() {
 
             <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
               <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
-                <div className="w-1 h-5 bg-gradient-to-b from-blue-600 to-violet-600 rounded-full" />
+                <div className="w-1 h-5 bg-[#1a56db] rounded-full" />
                 빠른 메뉴
               </h2>
               <div className="grid grid-cols-2 gap-3">
@@ -606,7 +606,7 @@ export default function MyPage() {
                     {/* 액션 버튼 */}
                     <div className="flex gap-2 flex-wrap">
                       <a href="/services/lotto/recommend"
-                        className="flex-1 text-center py-2 text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 rounded-xl transition shadow-sm">
+                        className="flex-1 text-center py-2 text-sm font-bold text-white bg-amber-500 hover:bg-amber-400 rounded-xl transition shadow-sm">
                         번호 추천받기
                       </a>
                       {isActive && (
@@ -721,7 +721,7 @@ export default function MyPage() {
                     )}
                     <Link
                       href={buildSajuResultUrl(rec)}
-                      className="block w-full text-center py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#04102b] to-[#0a2060] text-white hover:from-[#0a1f5c] hover:to-[#1a3a7a] transition"
+                      className="block w-full text-center py-2 rounded-xl text-xs font-bold bg-[#04102b] hover:bg-[#0a1f5c] text-white transition"
                     >
                       {rec.is_paid && rec.interpretation ? 'AI 해석 다시 보기 →' : '결과 보기 →'}
                     </Link>
@@ -828,7 +828,7 @@ function EmptyState({
       <div className="text-slate-500 text-sm mb-6">{desc}</div>
       <Link
         href={linkHref}
-        className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-violet-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-lg shadow-blue-600/20"
+        className="inline-flex items-center gap-2 bg-[#1a56db] hover:bg-[#1e4fc2] text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-blue-600/20"
       >
         {linkLabel} →
       </Link>
