@@ -9,7 +9,9 @@
       "Read(//c/Users/jaeoh/.claude/skills/taste-skill//**)",
       "Read(//c/Users/jaeoh/.claude/skills/soft-skill//**)",
       "Bash(git push:*)",
-      "WebFetch(domain:jaengseung-made.com)"
+      "WebFetch(domain:jaengseung-made.com)",
+      "Bash(npx vercel:*)",
+      "Bash(1:*)"
     ]
   }
 }

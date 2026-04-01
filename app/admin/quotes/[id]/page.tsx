@@ -32,8 +32,18 @@ const STATUS_OPTIONS = [
 
 const ITEM_CATEGORIES = ['기획', '디자인', '개발', '인프라', '유지보수', '기타'];
 
-const TABS = ['기본정보', 'WBS', '견적항목', '향후관리', '특이사항'] as const;
+const TABS = ['기본정보', 'WBS', '견적항목', '향후관리', '특이사항', '진행 단계'] as const;
 type Tab = typeof TABS[number];
+
+interface Milestone {
+  id: string;
+  step_number: number;
+  title: string;
+  description: string;
+  status: 'pending' | 'in_progress' | 'completed';
+  note: string;
+  completed_at: string | null;
+}
 
 /* ─── 컴포넌트 ─────────────────────────────────────────── */
 export default function QuoteEditorPage() {
@@ -52,6 +62,8 @@ export default function QuoteEditorPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [milestones, setMilestones] = useState<Milestone[]>([]);
+  const [mileSaving, setMileSaving] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/admin/quotes/${id}`)
@@ -80,6 +92,38 @@ export default function QuoteEditorPage() {
     });
     if (!silent) { setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000); }
   }, [id, form]);
+
+  // ── Milestones ──────────────────────────
+  async function fetchMilestones() {
+    const res = await fetch(`/api/admin/milestones?quoteId=${id}`);
+    const d = await res.json();
+    setMilestones(d.milestones ?? []);
+  }
+
+  async function initDefaultMilestones() {
+    if (!confirm('기존 단계를 삭제하고 기본 7단계로 초기화할까요?')) return;
+    const res = await fetch('/api/admin/milestones', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ useDefaults: true, quoteId: id }),
+    });
+    const d = await res.json();
+    setMilestones(d.milestones ?? []);
+  }
+
+  async function updateMilestone(mid: string, field: string, value: string) {
+    setMileSaving(mid);
+    const res = await fetch(`/api/admin/milestones/${mid}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ [field]: value }),
+    });
+    const d = await res.json();
+    if (d.milestone) {
+      setMilestones((prev) => prev.map((m) => m.id === mid ? d.milestone : m));
+    }
+    setMileSaving(null);
+  }
 
   // ── helpers ────────────────────────────
   const setField = (k: keyof QuoteForm, v: unknown) => setForm((f) => ({ ...f, [k]: v }));
@@ -224,7 +268,7 @@ export default function QuoteEditorPage() {
       <div className="border-b border-slate-800 px-8">
         <div className="flex gap-0">
           {TABS.map((t) => (
-            <button key={t} onClick={() => setTab(t)}
+            <button key={t} onClick={() => { setTab(t); if (t === '진행 단계') fetchMilestones(); }}
               className={`px-5 py-3 text-sm font-medium border-b-2 transition-all ${tab === t ? 'border-blue-500 text-blue-400' : 'border-transparent text-slate-500 hover:text-slate-300'}`}>
               {t}
             </button>
@@ -489,6 +533,68 @@ export default function QuoteEditorPage() {
                 placeholder="계약 조건, 주의사항, 면책 조항 등을 입력하세요&#10;&#10;예: 본 견적서는 발행일로부터 30일간 유효합니다..."
               />
             </Field>
+          </div>
+        )}
+
+        {/* ── 진행 단계 ── */}
+        {tab === '진행 단계' && (
+          <div className="max-w-2xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-white font-bold">프로젝트 진행 단계 관리</h3>
+                <p className="text-slate-500 text-xs mt-0.5">고객 마이페이지에 실시간으로 표시됩니다</p>
+              </div>
+              <button
+                onClick={initDefaultMilestones}
+                className="px-4 py-2 rounded-lg text-sm font-medium bg-blue-600/20 hover:bg-blue-600/40 text-blue-400 border border-blue-600/30 transition-all"
+              >
+                기본 7단계 초기화
+              </button>
+            </div>
+
+            {milestones.length === 0 ? (
+              <div className="text-center py-12 bg-slate-900 rounded-xl border border-slate-800">
+                <p className="text-slate-400 text-sm mb-3">진행 단계가 없습니다</p>
+                <p className="text-slate-600 text-xs">위의 &apos;기본 7단계 초기화&apos; 버튼으로 표준 단계를 추가하세요</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {milestones.map((m) => (
+                  <div key={m.id} className="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+                    <div className="flex items-center gap-3">
+                      <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                        m.status === 'completed'   ? 'bg-emerald-600 text-white' :
+                        m.status === 'in_progress' ? 'bg-blue-600 text-white' :
+                        'bg-slate-700 text-slate-400'
+                      }`}>{m.step_number}</span>
+                      <span className="text-white font-semibold text-sm flex-1">{m.title}</span>
+                      <select
+                        value={m.status}
+                        onChange={(e) => updateMilestone(m.id, 'status', e.target.value)}
+                        disabled={mileSaving === m.id}
+                        className="bg-slate-800 border border-slate-700 text-xs text-white rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
+                      >
+                        <option value="pending">대기</option>
+                        <option value="in_progress">진행 중</option>
+                        <option value="completed">완료</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs text-slate-500 mb-1">고객에게 보여줄 메모 (선택)</label>
+                      <input
+                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                        value={m.note}
+                        onChange={(e) => updateMilestone(m.id, 'note', e.target.value)}
+                        placeholder="예: 디자인 시안 2종 검토 중, 내일 공유 예정입니다"
+                      />
+                    </div>
+                    {m.completed_at && (
+                      <p className="text-xs text-emerald-600">완료: {new Date(m.completed_at).toLocaleString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

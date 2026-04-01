@@ -81,6 +81,14 @@ const PROMISES = [
     color: 'border-violet-500/40',
     accent: 'text-violet-400',
   },
+  {
+    number: '04',
+    title: '진행 현황을 마이페이지에서 직접 확인하세요',
+    detail: '의뢰 접수부터 납품까지 7단계 진행 상황이 고객 마이페이지에 실시간 업데이트됩니다. 오늘 뭐가 진행되는지 물어볼 필요가 없습니다.',
+    enforce: '단계 전환 시 마이페이지 즉시 반영 보장',
+    color: 'border-cyan-500/40',
+    accent: 'text-cyan-400',
+  },
 ];
 
 const LIVE_SERVICES = [

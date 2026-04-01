@@ -15,7 +15,7 @@ function buildSajuResultUrl(rec: SajuRecord) {
   return url;
 }
 
-type Tab = 'profile' | 'subscription' | 'lotto' | 'saju' | 'payments' | 'orders';
+type Tab = 'profile' | 'projects' | 'subscription' | 'lotto' | 'saju' | 'payments' | 'orders';
 type TelegramLinkState = 'idle' | 'generating' | 'waiting' | 'disconnecting';
 
 interface SajuRecord {
@@ -56,6 +56,25 @@ interface LottoHistoryItem {
   created_at: string;
 }
 
+interface ProjectMilestone {
+  id: string;
+  step_number: number;
+  title: string;
+  description: string;
+  status: 'pending' | 'in_progress' | 'completed';
+  note: string;
+  completed_at: string | null;
+}
+
+interface Project {
+  id: string;
+  title: string;
+  status: string;
+  total: number;
+  created_at: string;
+  milestones: ProjectMilestone[];
+}
+
 interface ActiveSubscription {
   id: string;
   product_id: string;
@@ -83,6 +102,10 @@ export default function MyPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [lottoHistory, setLottoHistory] = useState<LottoHistoryItem[]>([]);
   const [activeSubscriptions, setActiveSubscriptions] = useState<ActiveSubscription[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [linkToken, setLinkToken] = useState('');
+  const [linking, setLinking] = useState(false);
+  const [linkMessage, setLinkMessage] = useState('');
 
   // 텔레그램 연동 상태
   const [telegramChatId, setTelegramChatId] = useState<string | null>(null);
@@ -140,6 +163,13 @@ export default function MyPage() {
       if (subRes.ok) {
         const subData = await subRes.json();
         setActiveSubscriptions(subData.subscriptions ?? []);
+      }
+
+      // 프로젝트 진행 현황 조회
+      const projRes = await fetch('/api/projects');
+      if (projRes.ok) {
+        const projData = await projRes.json();
+        setProjects(projData.projects ?? []);
       }
 
       // 로또 히스토리 조회
@@ -239,6 +269,32 @@ export default function MyPage() {
     setTelegramLinkState('idle');
   };
 
+  const handleLinkProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!linkToken.trim()) return;
+    setLinking(true);
+    setLinkMessage('');
+    try {
+      const res = await fetch('/api/projects/link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: linkToken.trim() }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setLinkMessage('프로젝트가 연결되었습니다!');
+        setLinkToken('');
+        const projRes = await fetch('/api/projects');
+        if (projRes.ok) setProjects((await projRes.json()).projects ?? []);
+      } else {
+        setLinkMessage(data.error ?? '연결 중 오류가 발생했습니다.');
+      }
+    } catch {
+      setLinkMessage('연결 중 오류가 발생했습니다.');
+    }
+    setLinking(false);
+  };
+
   if (loading) {
     return (
       <div className="min-h-full flex items-center justify-center bg-[#f0f5ff]">
@@ -253,6 +309,7 @@ export default function MyPage() {
 
   const tabs: { key: Tab; label: string; count?: number }[] = [
     { key: 'profile', label: '내 정보' },
+    { key: 'projects', label: '프로젝트 현황', count: projects.length || undefined },
     { key: 'subscription', label: '구독 관리', count: activeSubs.length || undefined },
     { key: 'lotto', label: '로또 기록', count: lottoHistory.length || undefined },
     { key: 'saju', label: '사주 기록', count: sajuRecords.length || undefined },
@@ -775,6 +832,164 @@ export default function MyPage() {
                 </table>
               </div>
             )}
+          </div>
+        )}
+
+        {/* 프로젝트 진행 현황 */}
+        {tab === 'projects' && (
+          <div className="space-y-4">
+            {projects.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-[#dbe8ff] p-8 text-center">
+                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-[#1a56db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                </div>
+                <h3 className="font-bold text-[#04102b] text-lg mb-2">진행 중인 프로젝트가 없습니다</h3>
+                <p className="text-slate-500 text-sm mb-6 max-w-sm mx-auto">외주 개발을 의뢰하시면 이곳에서 단계별 진행 현황을 실시간으로 확인할 수 있습니다.</p>
+                <Link href="/freelance" className="inline-flex items-center gap-2 bg-[#1a56db] hover:bg-[#1e4fc2] text-white px-6 py-3 rounded-xl font-semibold text-sm transition">
+                  개발 의뢰하기 →
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {projects.map((project) => {
+                  const totalSteps = project.milestones.length;
+                  const completedSteps = project.milestones.filter((m) => m.status === 'completed').length;
+                  const currentStep = project.milestones.find((m) => m.status === 'in_progress');
+                  const progressPct = totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
+
+                  return (
+                    <div key={project.id} className="bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden">
+                      {/* 헤더 */}
+                      <div className="bg-[#04102b] px-6 py-4 flex items-center justify-between" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}>
+                        <div>
+                          <h3 className="font-bold text-white text-base">{project.title}</h3>
+                          <p className="text-blue-300/60 text-xs mt-0.5">
+                            {project.total > 0 ? `총 ${project.total.toLocaleString()}원` : '금액 협의 중'} · {new Date(project.created_at).toLocaleDateString('ko-KR')}
+                          </p>
+                        </div>
+                        <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${
+                          project.status === 'accepted'    ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30' :
+                          project.status === 'in_progress' ? 'bg-blue-400/20 text-blue-300 border border-blue-400/30' :
+                          project.status === 'completed'   ? 'bg-violet-400/20 text-violet-300 border border-violet-400/30' :
+                          'bg-slate-400/20 text-slate-300 border border-slate-400/30'
+                        }`}>
+                          {project.status === 'sent'        ? '견적 검토 중' :
+                           project.status === 'accepted'    ? '계약 완료' :
+                           project.status === 'in_progress' ? '개발 진행 중' :
+                           project.status === 'completed'   ? '납품 완료' : project.status}
+                        </span>
+                      </div>
+
+                      <div className="p-6">
+                        {/* 진행률 바 */}
+                        {totalSteps > 0 && (
+                          <div className="mb-6">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-xs font-semibold text-slate-500">전체 진행률</span>
+                              <span className="text-xs font-bold text-[#1a56db]">{progressPct}% ({completedSteps}/{totalSteps}단계)</span>
+                            </div>
+                            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-[#1a56db] rounded-full transition-all duration-500"
+                                style={{ width: `${progressPct}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 현재 진행 단계 */}
+                        {currentStep && (
+                          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-5">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                              <span className="text-xs font-bold text-blue-600">현재 진행 중</span>
+                            </div>
+                            <p className="font-bold text-[#04102b] text-sm">{currentStep.title}</p>
+                            {currentStep.note && (
+                              <p className="text-slate-600 text-xs mt-1 leading-relaxed">{currentStep.note}</p>
+                            )}
+                          </div>
+                        )}
+
+                        {/* 단계별 타임라인 */}
+                        {project.milestones.length > 0 && (
+                          <div className="space-y-2">
+                            {project.milestones.map((m, idx) => (
+                              <div key={m.id} className="flex items-start gap-3">
+                                {/* 아이콘 */}
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold border-2 ${
+                                  m.status === 'completed'  ? 'bg-emerald-500 border-emerald-500 text-white' :
+                                  m.status === 'in_progress'? 'bg-[#1a56db] border-[#1a56db] text-white' :
+                                  'bg-white border-slate-200 text-slate-400'
+                                }`}>
+                                  {m.status === 'completed' ? (
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  ) : m.status === 'in_progress' ? (
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3" />
+                                      <circle cx="12" cy="12" r="9" />
+                                    </svg>
+                                  ) : m.step_number}
+                                </div>
+
+                                {/* 수직 연결선 */}
+                                <div className="flex flex-col flex-1 min-w-0" style={{ marginTop: idx === project.milestones.length - 1 ? 0 : undefined }}>
+                                  <div className="flex items-center gap-2 py-1">
+                                    <span className={`text-sm font-semibold ${
+                                      m.status === 'completed'  ? 'text-emerald-700' :
+                                      m.status === 'in_progress'? 'text-[#1a56db]' :
+                                      'text-slate-400'
+                                    }`}>{m.title}</span>
+                                    {m.status === 'completed' && m.completed_at && (
+                                      <span className="text-xs text-slate-400 ml-auto flex-shrink-0">
+                                        {new Date(m.completed_at).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
+                                      </span>
+                                    )}
+                                  </div>
+                                  {m.note && m.status !== 'pending' && (
+                                    <p className="text-xs text-slate-500 leading-relaxed pb-1">{m.note}</p>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* 견적서 연결 폼 */}
+            <div className="bg-[#f0f5ff] rounded-2xl border border-[#dbe8ff] p-5">
+              <p className="text-sm font-bold text-[#04102b] mb-1">견적서 코드로 프로젝트 연결</p>
+              <p className="text-xs text-slate-500 mb-3">견적서 링크를 받으셨나요? URL 끝의 코드를 입력하면 이 계정에서 진행 현황을 확인할 수 있습니다.</p>
+              <form onSubmit={handleLinkProject} className="flex gap-2">
+                <input
+                  value={linkToken}
+                  onChange={(e) => setLinkToken(e.target.value)}
+                  placeholder="예: abc123xyz"
+                  className="flex-1 px-4 py-2 bg-white border border-[#dbe8ff] rounded-xl text-sm focus:outline-none focus:border-blue-400 min-w-0"
+                />
+                <button
+                  type="submit"
+                  disabled={linking || !linkToken.trim()}
+                  className="px-4 py-2 bg-[#1a56db] hover:bg-[#1e4fc2] text-white rounded-xl font-semibold text-sm disabled:opacity-50 transition flex-shrink-0"
+                >
+                  {linking ? '연결 중...' : '연결'}
+                </button>
+              </form>
+              {linkMessage && (
+                <p className={`text-xs mt-2 font-medium ${linkMessage.includes('연결되었') ? 'text-emerald-600' : 'text-red-500'}`}>
+                  {linkMessage}
+                </p>
+              )}
+            </div>
           </div>
         )}
 

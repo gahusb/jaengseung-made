@@ -215,6 +215,17 @@ const guarantees = [
     accentText: 'text-violet-400',
     accentBorder: 'border-violet-400/20',
   },
+  {
+    label: '실시간 진행 현황',
+    detail: '마이페이지에서 7단계 진행 상황 직접 확인',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      </svg>
+    ),
+    accentText: 'text-cyan-400',
+    accentBorder: 'border-cyan-400/20',
+  },
 ];
 
 /* ─── Main Page ─── */
@@ -262,7 +273,7 @@ export default function FreelancePage() {
           </div>
 
           {/* 보증 카드 4개 */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             {guarantees.map((g) => (
               <div key={g.label} className={`bg-[#04102b]/60 border ${g.accentBorder} rounded-xl p-4`}>
                 <div className={`${g.accentText} mb-2`}>{g.icon}</div>
