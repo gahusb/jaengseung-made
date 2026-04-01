@@ -76,7 +76,8 @@ export default async function SajuResultPage({ searchParams }: PageProps) {
   const solarTermName = getSolarTermName(solarTermIndex);
 
   // ── 결제 여부 + 저장된 AI 해석 + 로또 구독 확인 ─────────────────────
-  let hasPaid = false;
+  // 토스페이먼츠 결제 일시 중단 — AI 사주 해석 무료 제공 중
+  let hasPaid = true;
   let savedInterpretation: string | null = null;
   let hasLottoSubscription = false;
   try {

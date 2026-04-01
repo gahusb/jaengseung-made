@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
-import PaymentButton from '../../components/PaymentButton';
+const KAKAO_CHANNEL_URL = process.env.NEXT_PUBLIC_KAKAO_CHANNEL_URL ?? null;
 
 const CHECKLIST = [
   '주로 어떤 AI 도구를 사용하는지 (ChatGPT / Claude / Gemini)',
@@ -472,16 +472,28 @@ export default function PromptPage() {
                 </div>
                 {/* CTA */}
                 <div className="p-6">
-                  <PaymentButton
-                    productId={product.productId}
-                    className="w-full py-3.5 rounded-xl text-sm font-extrabold transition-all hover:opacity-90 hover:scale-[1.01]"
-                    style={{ background: product.accentColor, color: product.bgFrom }}
-                    returnUrl="/services/prompt"
-                  >
-                    지금 구매하기 →
-                  </PaymentButton>
+                  {KAKAO_CHANNEL_URL ? (
+                    <a
+                      href={KAKAO_CHANNEL_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-sm font-extrabold transition-all hover:opacity-90"
+                      style={{ background: '#FEE500', color: '#3A1D1D' }}
+                    >
+                      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.438 1.418 4.6 3.584 5.977l-.916 3.41c-.086.32.283.573.56.38l4.014-2.674A11.29 11.29 0 0012 18c5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/></svg>
+                      카카오로 구매 문의
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => openModal(`프롬프트 패키지 — ${product.title}`)}
+                      className="w-full py-3.5 rounded-xl text-sm font-extrabold transition-all hover:opacity-90"
+                      style={{ background: product.accentColor, color: product.bgFrom }}
+                    >
+                      구매 문의하기 →
+                    </button>
+                  )}
                   <p className="text-center text-xs mt-2" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                    구매 문의 시 프롬프트 샘플 파일 미리 제공
+                    문의 시 프롬프트 샘플 파일 미리 제공
                   </p>
                 </div>
               </div>

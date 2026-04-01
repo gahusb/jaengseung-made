@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import PaymentButton from '@/app/components/PaymentButton';
+// PaymentButton 비활성화 — 토스페이먼츠 결제 일시 중단, 무료 제공 중
 
 interface BirthKey {
   birth_year: number;
@@ -313,13 +313,13 @@ export default function SajuAISection({
             ))}
           </div>
 
-          <PaymentButton
-            productId="saju_detail"
-            returnUrl={currentUrl}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-[#04102b] font-bold px-7 py-3 rounded-xl transition-all shadow-lg"
+          {/* 결제 일시 중단 — hasPaid=true이므로 이 분기는 표시되지 않음 */}
+          <a
+            href={process.env.NEXT_PUBLIC_KAKAO_CHANNEL_URL ?? '/freelance?service=AI사주분석'}
+            className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-[#04102b] font-bold px-7 py-3 rounded-xl transition-all"
           >
-            AI 해석 구매하기 · ₩4,900
-          </PaymentButton>
+            AI 해석 무료로 보기
+          </a>
         </div>
       </div>
     );

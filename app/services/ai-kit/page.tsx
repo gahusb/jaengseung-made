@@ -1,7 +1,17 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import PaymentButton from '../../components/PaymentButton';
+import ContactModal from '../../components/ContactModal';
+
+const KAKAO_CHANNEL_URL = process.env.NEXT_PUBLIC_KAKAO_CHANNEL_URL ?? null;
+
+const AI_KIT_CHECKLIST = [
+  '주로 반복하는 업무 종류 (일지, 이메일, 보고서 등)',
+  '현재 주로 사용하는 AI 도구 (ChatGPT / Claude / Gemini 등)',
+  '하루 또는 주 단위로 같은 작업을 몇 번이나 반복하는지',
+  '사용 목적 (개인 효율화 / 팀 도입 / 소상공인 업무 등)',
+];
 
 /* ──────────────────────────────────────────────────────────────
    Before / After 데이터 — 각 도구별 실제 시간 비교
@@ -153,10 +163,20 @@ const FAQ = [
 ];
 
 export default function AiKitPage() {
-  const totalMonthlySaving = 27; // 도구 합산 월 절약 시간(추정)
+  const totalMonthlySaving = 27;
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <div className="min-h-full bg-[#f0f4ff]">
+      <ContactModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        service="AI 자동화 키트 — 월 19,900원"
+        checklist={AI_KIT_CHECKLIST}
+        accentColor="text-indigo-400"
+        headerFrom="#0a0f2e"
+        headerTo="#0f1a5c"
+      />
 
       {/* ─── Hero ─── */}
       <div className="relative overflow-hidden bg-[#0a0f2e] px-6 py-14 lg:px-12" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px)' }}>
@@ -194,14 +214,30 @@ export default function AiKitPage() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <PaymentButton
-              productId="ai_kit_monthly"
-              className="bg-blue-600 hover:bg-blue-500 text-white text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-xs"
-              returnUrl="/services/ai-kit"
+            {KAKAO_CHANNEL_URL ? (
+              <a
+                href={KAKAO_CHANNEL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-[#FEE500] hover:bg-[#F5DC00] text-[#3A1D1D] text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-xs"
+              >
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor"><path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.438 1.418 4.6 3.584 5.977l-.916 3.41c-.086.32.283.573.56.38l4.014-2.674A11.29 11.29 0 0012 18c5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/></svg>
+                카카오로 구독 문의
+              </a>
+            ) : (
+              <button
+                onClick={() => setModalOpen(true)}
+                className="bg-blue-600 hover:bg-blue-500 text-white text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-xs"
+              >
+                월 {totalMonthlySaving}시간 되찾기 — 문의하기 →
+              </button>
+            )}
+            <button
+              onClick={() => setModalOpen(true)}
+              className="text-indigo-300/60 hover:text-indigo-300 text-sm underline underline-offset-2 transition-colors"
             >
-              월 {totalMonthlySaving}시간 되찾기 →
-            </PaymentButton>
-            <p className="text-white/25 text-xs">로그인 후 즉시 이용 · 토스페이먼츠 카드 결제</p>
+              이메일로 문의하기
+            </button>
           </div>
         </div>
       </div>
@@ -475,14 +511,25 @@ export default function AiKitPage() {
             <br />언제든 해지 가능하니 한 달만 써보세요.
           </p>
           <div className="flex flex-col items-center gap-3">
-            <PaymentButton
-              productId="ai_kit_monthly"
-              className="bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-base font-extrabold px-8 py-4 rounded-xl hover:opacity-90 hover:scale-[1.02] transition-all shadow-lg shadow-indigo-500/25 w-full max-w-sm"
-              returnUrl="/services/ai-kit"
-            >
-              월 {totalMonthlySaving}시간 되찾기 — 19,900원 →
-            </PaymentButton>
-            <p className="text-white/25 text-xs">로그인 후 즉시 이용 · 카드 정기결제 · 언제든 해지</p>
+            {KAKAO_CHANNEL_URL ? (
+              <a
+                href={KAKAO_CHANNEL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-[#FEE500] hover:bg-[#F5DC00] text-[#3A1D1D] text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-sm"
+              >
+                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor"><path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.438 1.418 4.6 3.584 5.977l-.916 3.41c-.086.32.283.573.56.38l4.014-2.674A11.29 11.29 0 0012 18c5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/></svg>
+                카카오로 구독 문의 — 19,900원/월
+              </a>
+            ) : (
+              <button
+                onClick={() => setModalOpen(true)}
+                className="bg-indigo-600 hover:bg-indigo-500 text-white text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-sm"
+              >
+                월 {totalMonthlySaving}시간 되찾기 — 문의하기 →
+              </button>
+            )}
+            <p className="text-white/25 text-xs">카카오 또는 이메일 문의 · 월 19,900원 · 언제든 해지 가능</p>
           </div>
         </div>
       </div>

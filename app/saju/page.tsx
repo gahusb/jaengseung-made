@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import PaymentButton from '../components/PaymentButton';
+// PaymentButton 비활성화 — 토스페이먼츠 결제 일시 중단
 import { createClient } from '@/lib/supabase/client';
 
 const faqItems = [
@@ -77,22 +77,16 @@ export default function SajuPage() {
   return (
     <div className="min-h-full bg-[#f0f5ff]">
       {/* ─── Hero ─── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#04102b] via-[#0a1f5c] to-[#04102b] px-6 py-14 lg:px-12">
-        <div className="absolute inset-0 opacity-[0.06]"
-          style={{ backgroundImage: 'radial-gradient(circle, #a78bfa 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-        <div className="absolute right-0 top-0 w-96 h-96 rounded-full bg-violet-500/10 blur-3xl -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute left-1/3 bottom-0 w-64 h-64 rounded-full bg-amber-400/8 blur-3xl translate-y-1/2" />
+      <div className="relative overflow-hidden bg-[#04102b] px-6 py-14 lg:px-12" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px)' }}>
 
-        <div className="relative max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-violet-400/10 border border-violet-400/25 text-violet-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wide">
+        <div className="relative max-w-3xl mx-auto">
+          <div className="flex items-center gap-2 mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-            전통 명리학 × AI 해석 · 무료 기본 분석 제공
+            <span className="text-violet-300/70 text-xs font-mono tracking-widest uppercase">전통 명리학 × AI 해석 · 무료</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-5 tracking-tight">
             AI가 분석하는<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c4b5fd] to-[#fbbf24]">
-              사주팔자
-            </span>
+            <span className="text-amber-400">사주팔자</span>
           </h1>
           <p className="text-blue-200/70 text-base md:text-lg leading-relaxed mb-8 max-w-xl mx-auto">
             수천 년의 동양 명리학과 최신 AI 기술의 만남.<br />
@@ -288,23 +282,14 @@ export default function SajuPage() {
                   ))}
                 </ul>
                 <div className="mt-6 pt-5 border-t border-white/10 relative">
-                  <div className="text-2xl font-extrabold text-amber-400">₩4,900</div>
-                  <div className="text-xs text-blue-300/70 mt-1 mb-4">1회 결제 · 영구 열람</div>
-                  {hasPaid ? (
-                    <Link
-                      href="/saju/input"
-                      className="block w-full text-center py-3 rounded-xl text-sm font-bold transition bg-amber-400 text-[#04102b] hover:bg-amber-300"
-                    >
-                      새 사주 입력하기 →
-                    </Link>
-                  ) : (
-                    <PaymentButton
-                      productId="saju_detail"
-                      className="block w-full text-center py-3 rounded-xl text-sm font-bold transition bg-amber-400 text-[#04102b] hover:bg-amber-300"
-                    >
-                      AI 상세 해석 구매하기
-                    </PaymentButton>
-                  )}
+                  <div className="text-lg font-bold text-emerald-400 mb-1">현재 무료 제공 중</div>
+                  <div className="text-xs text-blue-300/70 mt-1 mb-4">로그인 없이 즉시 분석 · 12가지 항목 AI 해석</div>
+                  <Link
+                    href="/saju/input"
+                    className="block w-full text-center py-3 rounded-xl text-sm font-bold transition bg-amber-400 text-[#04102b] hover:bg-amber-300"
+                  >
+                    무료로 사주 분석하기 →
+                  </Link>
                 </div>
               </div>
             </div>
