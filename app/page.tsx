@@ -588,8 +588,8 @@ export default function Home() {
                 </div>
 
                 {/* 가격 + 기간 */}
-                <div className="hidden sm:flex flex-col items-end flex-shrink-0">
-                  <span className="text-[#0f172a] font-extrabold text-sm">{s.from}</span>
+                <div className="flex flex-col items-end flex-shrink-0">
+                  <span className="text-[#0f172a] font-extrabold text-xs sm:text-sm">{s.from}</span>
                   <span className="text-[#94a3b8] text-xs font-mono">{s.duration}</span>
                 </div>
 

@@ -507,10 +507,6 @@ export default function WebsiteServicePage() {
           from { background-position: 0 0; }
           to { background-position: 48px 48px; }
         }
-        @keyframes ws-marquee {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
         @keyframes ws-glow {
           0%,100% { opacity: 0.5; }
           50% { opacity: 1; }
@@ -548,7 +544,20 @@ export default function WebsiteServicePage() {
           box-shadow: 0 16px 48px rgba(0,0,0,0.3);
         }
 
-        .ws-marquee-track { animation: ws-marquee 30s linear infinite; display: flex; }
+        /* 모바일 반응형 */
+        @media (max-width: 640px) {
+          .ws-portfolio-grid { grid-template-columns: 1fr !important; }
+          .ws-process-steps { flex-direction: column !important; align-items: stretch !important; }
+          .ws-process-divider { display: none !important; }
+          .ws-pricing-grid { grid-template-columns: 1fr !important; }
+          .ws-hero-stats { gap: 0 !important; flex-wrap: nowrap !important; }
+          .ws-hero-stats > div { padding: 0 16px !important; }
+          .ws-cta-box { padding: 36px 24px !important; }
+        }
+        @media (max-width: 480px) {
+          .ws-hero-buttons { flex-direction: column !important; align-items: stretch !important; }
+          .ws-hero-buttons a, .ws-hero-buttons button { text-align: center !important; justify-content: center !important; }
+        }
 
         /* scrollbar */
         ::-webkit-scrollbar { width: 4px; }
@@ -580,16 +589,16 @@ export default function WebsiteServicePage() {
             color: '#ffffff',
             wordBreak: 'keep-all',
           }}>
-            홈페이지 맡겼다가<br/>연락 끊긴 경험, 여기선 없습니다
+            홈페이지·웹앱·앱 개발,<br/>연락 끊기는 일 없습니다
           </h1>
           <p style={{
             fontSize: 16, color: '#64748b', lineHeight: 1.85, marginBottom: 36,
             wordBreak: 'keep-all',
           }}>
-            계약서 작성 → 중간 보고 → 소스코드 인도까지 단계마다 증거를 남깁니다.<br/>
-            납기 지연 시 하루당 10만원 감면 — 그래서 안 늦습니다.
+            소개 사이트부터 SaaS·쇼핑몰·모바일웹까지 — 계약서부터 소스코드 인도까지<br/>
+            단계마다 증거를 남깁니다. 납기 지연 시 하루당 10만원 감면.
           </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div className="ws-hero-buttons" style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/freelance?service=website" style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '14px 28px',
@@ -617,7 +626,7 @@ export default function WebsiteServicePage() {
           </div>
 
           {/* Stats */}
-          <div style={{ display: 'flex', gap: 0, justifyContent: 'center', marginTop: 56, flexWrap: 'wrap' }}>
+          <div className="ws-hero-stats" style={{ display: 'flex', gap: 0, justifyContent: 'center', marginTop: 56, flexWrap: 'wrap' }}>
             {[
               { num: '3~5일', label: '최단 납품 (스타터)' },
               { num: '20만원~', label: '시작 가격' },
@@ -638,7 +647,7 @@ export default function WebsiteServicePage() {
       {/* ── Feature tags ── */}
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '14px 24px' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-          {['반응형 디자인', 'SEO 최적화', '빠른 납품', '계약서 작성', '소스코드 제공', '1년 AS 보장', '도메인 배포'].map((t) => (
+          {['반응형 디자인', 'SEO 최적화', '웹앱·모바일웹', '계약서 작성', '소스코드 제공', '납기 패널티 보장', '도메인 배포'].map((t) => (
             <span key={t} style={{ padding: '4px 12px', fontSize: '11px', color: '#475569', letterSpacing: '0.06em', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 4, fontFamily: 'monospace' }}>
               {t}
             </span>
@@ -694,7 +703,7 @@ export default function WebsiteServicePage() {
               카드를 클릭하면 실제 완성 화면을 미리 확인할 수 있습니다
             </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
+          <div className="ws-portfolio-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
             {samples.map((s) => (
               <Link key={s.type} href={`/services/website/samples/${s.type}`} style={{ textDecoration: 'none' }}>
                 <div className="ws-sample-card">
@@ -748,7 +757,7 @@ export default function WebsiteServicePage() {
             </h2>
             <p style={{ color: '#475569', fontSize: 14 }}>투명하고 체계적인 5단계로 진행됩니다</p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'stretch', flexWrap: 'wrap', justifyContent: 'center', gap: 0 }}>
+          <div className="ws-process-steps" style={{ display: 'flex', alignItems: 'stretch', flexWrap: 'wrap', justifyContent: 'center', gap: 0 }}>
             {processSteps.map((p, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="ws-step-card" style={{
@@ -767,7 +776,7 @@ export default function WebsiteServicePage() {
                   </div>
                 </div>
                 {i < processSteps.length - 1 && (
-                  <div style={{ color: '#1e293b', fontSize: 20, padding: '0 4px', flexShrink: 0 }}>›</div>
+                  <div className="ws-process-divider" style={{ color: '#1e293b', fontSize: 20, padding: '0 4px', flexShrink: 0 }}>›</div>
                 )}
               </div>
             ))}
@@ -785,7 +794,7 @@ export default function WebsiteServicePage() {
             </h2>
             <p style={{ color: '#475569', fontSize: 14 }}>프로젝트 규모에 맞는 플랜을 선택하세요</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: 20 }}>
+          <div className="ws-pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: 20 }}>
             {plans.map((plan) => (
               <div key={plan.name} className="ws-plan-card" style={{
                 padding: 32, borderRadius: 20,
@@ -879,33 +888,31 @@ export default function WebsiteServicePage() {
       {/* ── CTA ── */}
       <section style={{ padding: '0 24px 80px', textAlign: 'center' }}>
         <div ref={ctaRef} className="ws-reveal">
-          <div style={{
+          <div className="ws-cta-box" style={{
             maxWidth: 640, margin: '0 auto',
             padding: '56px 44px', borderRadius: 24,
-            background: 'linear-gradient(135deg, #1e1b4b, #312e81)',
-            border: '1px solid rgba(129,140,248,0.25)',
-            boxShadow: '0 24px 80px rgba(99,102,241,0.18)',
-            position: 'relative', overflow: 'hidden',
+            background: '#04102b',
+            backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)',
+            border: '1px solid rgba(99,102,241,0.3)',
+            boxShadow: '0 24px 80px rgba(0,0,0,0.3)',
           }}>
-            <div style={{ position: 'absolute', top: -60, right: -60, width: 200, height: 200, background: 'radial-gradient(circle, rgba(129,140,248,0.15) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
-            <h2 style={{ fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 14, letterSpacing: '-0.02em', wordBreak: 'keep-all', position: 'relative' }}>
-              지금 바로 시작하세요
+            <h2 style={{ fontSize: 28, fontWeight: 800, color: 'white', marginBottom: 14, letterSpacing: '-0.02em', wordBreak: 'keep-all' }}>
+              내일도 고민만 하실 건가요?
             </h2>
-            <p style={{ color: '#a5b4fc', fontSize: 15, lineHeight: 1.75, marginBottom: 32, wordBreak: 'keep-all', position: 'relative' }}>
-              무료 상담은 24시간 이내 답변드립니다.<br/>
-              어떤 규모의 프로젝트든 환영합니다.
+            <p style={{ color: '#94a3b8', fontSize: 15, lineHeight: 1.75, marginBottom: 32, wordBreak: 'keep-all' }}>
+              상담 신청 후 24시간 이내 답변드립니다.<br/>
+              소개 사이트·웹앱·쇼핑몰·모바일앱, 규모 무관하게 검토해드립니다.
             </p>
             <Link href="/freelance?service=website" style={{
               display: 'inline-block', padding: '15px 40px',
-              background: 'linear-gradient(135deg, #818cf8, #6366f1)',
+              background: '#6366f1',
               borderRadius: 12, color: 'white', fontWeight: 700, fontSize: 15,
               textDecoration: 'none',
-              boxShadow: '0 8px 32px rgba(99,102,241,0.5)',
-              position: 'relative',
+              boxShadow: '0 8px 24px rgba(99,102,241,0.4)',
               transition: 'transform 0.3s, box-shadow 0.3s',
             }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 48px rgba(99,102,241,0.6)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(99,102,241,0.5)'; }}>
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 16px 40px rgba(99,102,241,0.5)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(99,102,241,0.4)'; }}>
               무료 상담 신청하기 →
             </Link>
           </div>
@@ -921,7 +928,7 @@ export default function WebsiteServicePage() {
         style={{
           position: 'fixed', bottom: '5.5rem', right: '2rem', zIndex: 200,
           width: 48, height: 48, borderRadius: '50%',
-          background: 'linear-gradient(135deg, #6366f1, #818cf8)',
+          background: '#6366f1',
           border: 'none', cursor: 'pointer',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           boxShadow: '0 8px 32px rgba(99,102,241,0.4)',

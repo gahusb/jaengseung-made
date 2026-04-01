@@ -242,7 +242,7 @@ export default function FreelancePage() {
               <div className="text-white font-bold text-sm">쟁토리 (박재오)</div>
               <div className="text-blue-300/50 text-xs">대기업 백엔드 7년 · Python / Java / Next.js</div>
             </div>
-            <div className="hidden sm:flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {['Python', 'Java', 'Next.js', 'Docker'].map(t => (
                 <span key={t} className="bg-[#1a56db]/20 border border-[#1a56db]/30 text-[#5ba4ff] text-xs px-2 py-0.5 rounded-md font-mono">{t}</span>
               ))}
@@ -342,7 +342,7 @@ export default function FreelancePage() {
             <p className="text-slate-500 text-sm mt-2" style={{ wordBreak: 'keep-all' }}>숫자보다 실제 말이 더 정직합니다</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
             {testimonials.map((t) => (
               <div
                 key={t.name}
