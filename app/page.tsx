@@ -119,8 +119,8 @@ const SERVICE_LIST = [
     category: 'WEB',
     title: '홈페이지 / 쇼핑몰 제작',
     desc: '랜딩 페이지, 기업 소개 사이트, 쇼핑몰 신규 구축 및 리뉴얼',
-    from: '50만원~',
-    duration: '7일~',
+    from: '20만원~',
+    duration: '3일~',
     hot: true,
   },
   {
@@ -616,10 +616,10 @@ export default function Home() {
                 선착순 3팀 한정
               </div>
               <h3 className="text-white font-extrabold text-xl mb-1" style={{ wordBreak: 'keep-all' }}>
-                AI 자동화 세팅을 무료로 받아보세요
+                스타터 플랜, 선착순 3팀 20% 할인
               </h3>
               <p className="text-[#8ba5cc] text-sm" style={{ wordBreak: 'keep-all' }}>
-                반복 업무 자동화 셋업 + 솔직한 리뷰 한 줄이 조건입니다.
+                소개 사이트·랜딩 페이지 제작 문의 시 할인 적용. 이 배너 언급 필수.
               </p>
             </div>
             <button

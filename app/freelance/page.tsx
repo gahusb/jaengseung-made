@@ -6,6 +6,18 @@ import ContactForm from '../components/ContactForm';
 /* ─── Data ─── */
 const portfolio = [
   {
+    title: '기업 브랜드 홈페이지',
+    category: '웹사이트 제작 · Next.js',
+    desc: '제조업체의 영업용 기업 소개 사이트. 서비스·연혁·팀 소개·문의 폼 포함. 모바일 반응형 및 SEO 최적화까지 포함하여 납품.',
+    result: '납품 후 B2B 영업 미팅 시 "홈페이지 보고 연락했다" 비율 증가',
+    tags: ['Next.js', 'Tailwind CSS', 'Vercel', 'SEO'],
+    status: '납품 완료',
+    statusType: 'done',
+    accentColor: 'text-indigo-400',
+    accentBg: 'bg-[#0d0a2e]',
+    borderAccent: 'border-indigo-400/20',
+  },
+  {
     title: 'Gmail 자동화 RPA',
     category: 'RPA · 업무 자동화',
     desc: '거래처 이메일 수신 시 자동 분류, 답장 초안 작성, 담당자 알림 전송하는 Gmail 자동화 시스템.',
