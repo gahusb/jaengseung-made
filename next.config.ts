@@ -26,14 +26,6 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // 관리자 문서 API: iframe 미리보기 허용 (동일 출처만)
-      {
-        source: "/api/admin/documents/:path*",
-        headers: [
-          { key: "Cache-Control", value: "no-store, max-age=0" },
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
-        ],
-      },
       // API 엔드포인트: 캐시 금지 + CORS 차단
       {
         source: "/api/:path*",

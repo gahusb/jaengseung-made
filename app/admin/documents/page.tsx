@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Document {
   id: string;
@@ -47,6 +47,19 @@ const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
 
 export default function AdminDocumentsPage() {
   const [previewDoc, setPreviewDoc] = useState<Document | null>(null);
+  const [previewHtml, setPreviewHtml] = useState<string>('');
+  const [previewLoading, setPreviewLoading] = useState(false);
+
+  // iframe src 대신 fetch + srcdoc 방식으로 X-Frame-Options 우회
+  useEffect(() => {
+    if (!previewDoc) { setPreviewHtml(''); return; }
+    setPreviewLoading(true);
+    fetch(`/api/admin/documents/${previewDoc.fileName}`)
+      .then(res => res.ok ? res.text() : Promise.reject('문서를 불러올 수 없습니다'))
+      .then(html => setPreviewHtml(html))
+      .catch(() => setPreviewHtml('<p style="padding:2rem;color:red;">문서를 불러올 수 없습니다.</p>'))
+      .finally(() => setPreviewLoading(false));
+  }, [previewDoc]);
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -126,13 +139,20 @@ export default function AdminDocumentsPage() {
             </button>
           </div>
 
-          {/* iframe */}
-          <iframe
-            src={`/api/admin/documents/${previewDoc.fileName}`}
-            className="w-full bg-white"
-            style={{ height: '80vh' }}
-            title={previewDoc.title}
-          />
+          {/* 문서 미리보기 (fetch + srcdoc 방식) */}
+          {previewLoading ? (
+            <div className="flex items-center justify-center bg-white" style={{ height: '80vh' }}>
+              <div className="text-slate-400 text-sm">문서를 불러오는 중...</div>
+            </div>
+          ) : (
+            <iframe
+              srcDoc={previewHtml}
+              className="w-full bg-white"
+              style={{ height: '80vh' }}
+              title={previewDoc.title}
+              sandbox="allow-same-origin"
+            />
+          )}
         </div>
       )}
     </div>

@@ -127,6 +127,94 @@
     padding-bottom: 2px;
   }
 
+  .client-info .field-input {
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid #cbd5e1;
+    min-height: 24px;
+    padding: 2px 4px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #1e293b;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .client-info .field-input:focus {
+    border-bottom-color: #1a56db;
+  }
+
+  .client-info .field-input::placeholder {
+    color: #cbd5e1;
+  }
+
+  /* ── Submit Section ── */
+  .submit-section {
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 48px;
+    background: #1a56db;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .submit-btn:hover {
+    background: #1e40af;
+  }
+
+  .submit-btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+  }
+
+  .submit-msg {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .submit-msg.success {
+    color: #16a34a;
+  }
+
+  .submit-msg.error {
+    color: #dc2626;
+  }
+
+  .save-draft-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 24px;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 12px;
+    transition: background 0.2s;
+  }
+
+  .save-draft-btn:hover {
+    background: #e2e8f0;
+  }
+
   /* ── Section ── */
   .section {
     margin-bottom: 32px;
@@ -412,20 +500,20 @@
   <!-- Client Info -->
   <div class="client-info">
     <div class="field">
-      <span class="field-label">고객명</span>
-      <span class="field-value"></span>
+      <span class="field-label">고객명 <span style="color:#ef4444">*</span></span>
+      <input type="text" id="clientName" class="field-input" placeholder="홍길동" required>
     </div>
     <div class="field">
       <span class="field-label">연락처</span>
-      <span class="field-value"></span>
+      <input type="tel" id="clientPhone" class="field-input" placeholder="010-0000-0000">
     </div>
     <div class="field">
-      <span class="field-label">이메일</span>
-      <span class="field-value"></span>
+      <span class="field-label">이메일 <span style="color:#ef4444">*</span></span>
+      <input type="email" id="clientEmail" class="field-input" placeholder="example@email.com" required>
     </div>
     <div class="field">
       <span class="field-label">작성일</span>
-      <span class="field-value"></span>
+      <span class="field-value" id="fillDate"></span>
     </div>
   </div>
 
@@ -690,6 +778,17 @@
     </div>
   </div>
 
+  <!-- Submit Section -->
+  <div class="submit-section">
+    <button type="button" class="save-draft-btn" onclick="saveDraft()">
+      임시 저장
+    </button>
+    <button type="button" class="submit-btn" id="submitBtn" onclick="submitQuestionnaire()">
+      질문지 제출하기
+    </button>
+    <div id="submitMsg" class="submit-msg"></div>
+  </div>
+
   <!-- Footer Notice -->
   <div class="footer-notice">
     <strong>안내사항</strong><br>
@@ -714,6 +813,161 @@
   </div>
 
 </div>
+
+<script>
+// 작성일 자동 채우기
+document.getElementById('fillDate').textContent = new Date().toLocaleDateString('ko-KR', {
+  year: 'numeric', month: '2-digit', day: '2-digit'
+});
+
+// 모든 응답 수집
+function collectResponses() {
+  const responses = {};
+
+  // 텍스트 질문 (textarea)
+  document.querySelectorAll('.question').forEach((q, idx) => {
+    const num = idx + 1;
+    const textarea = q.querySelector('textarea');
+    const radios = q.querySelectorAll('input[type="radio"]');
+    const checkboxes = q.querySelectorAll('input[type="checkbox"]');
+
+    if (radios.length > 0) {
+      const checked = q.querySelector('input[type="radio"]:checked');
+      if (checked) {
+        responses['q' + num] = checked.closest('.q-option').textContent.trim();
+      }
+    }
+
+    if (checkboxes.length > 0) {
+      const selected = [];
+      checkboxes.forEach(cb => {
+        if (cb.checked) selected.push(cb.closest('.q-option').textContent.trim());
+      });
+      if (selected.length > 0) {
+        responses['q' + num + '_selected'] = selected;
+      }
+    }
+
+    if (textarea) {
+      const val = textarea.value.trim();
+      if (val) {
+        responses['q' + num + (radios.length > 0 || checkboxes.length > 0 ? '_detail' : '')] = val;
+      }
+    }
+  });
+
+  // 추가 요청사항 (마지막 textarea)
+  const lastSection = document.querySelectorAll('.section');
+  const additionalTextarea = lastSection[lastSection.length - 1]?.querySelector('textarea');
+  if (additionalTextarea && additionalTextarea.value.trim()) {
+    responses['additional'] = additionalTextarea.value.trim();
+  }
+
+  return responses;
+}
+
+// 유효성 검사
+function validate() {
+  const name = document.getElementById('clientName').value.trim();
+  const email = document.getElementById('clientEmail').value.trim();
+
+  if (!name) {
+    alert('고객명을 입력해주세요.');
+    document.getElementById('clientName').focus();
+    return false;
+  }
+  if (!email) {
+    alert('이메일을 입력해주세요.');
+    document.getElementById('clientEmail').focus();
+    return false;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('올바른 이메일 형식을 입력해주세요.');
+    document.getElementById('clientEmail').focus();
+    return false;
+  }
+  return true;
+}
+
+// 임시 저장 (로컬)
+function saveDraft() {
+  const data = {
+    clientName: document.getElementById('clientName').value,
+    clientEmail: document.getElementById('clientEmail').value,
+    clientPhone: document.getElementById('clientPhone').value,
+    responses: collectResponses(),
+    savedAt: new Date().toISOString()
+  };
+  localStorage.setItem('questionnaire_draft_ebay', JSON.stringify(data));
+
+  const msg = document.getElementById('submitMsg');
+  msg.className = 'submit-msg success';
+  msg.textContent = '임시 저장 완료! (브라우저에 저장됨)';
+  setTimeout(() => { msg.textContent = ''; }, 3000);
+}
+
+// 임시 저장 복원
+function loadDraft() {
+  const saved = localStorage.getItem('questionnaire_draft_ebay');
+  if (!saved) return;
+
+  try {
+    const data = JSON.parse(saved);
+    if (data.clientName) document.getElementById('clientName').value = data.clientName;
+    if (data.clientEmail) document.getElementById('clientEmail').value = data.clientEmail;
+    if (data.clientPhone) document.getElementById('clientPhone').value = data.clientPhone;
+  } catch (e) {
+    // 복원 실패 시 무시
+  }
+}
+
+// 제출
+async function submitQuestionnaire() {
+  if (!validate()) return;
+
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('submitMsg');
+
+  btn.disabled = true;
+  btn.textContent = '제출 중...';
+  msg.textContent = '';
+
+  const payload = {
+    clientName: document.getElementById('clientName').value.trim(),
+    clientEmail: document.getElementById('clientEmail').value.trim(),
+    clientPhone: document.getElementById('clientPhone').value.trim() || null,
+    responses: collectResponses(),
+    type: 'ebay-tool'
+  };
+
+  try {
+    const res = await fetch('/api/questionnaire/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json();
+
+    if (res.ok && result.success) {
+      msg.className = 'submit-msg success';
+      msg.innerHTML = '질문지가 성공적으로 제출되었습니다!<br>담당자가 확인 후 연락드리겠습니다. 감사합니다.';
+      btn.textContent = '제출 완료';
+      localStorage.removeItem('questionnaire_draft_ebay');
+    } else {
+      throw new Error(result.error || '제출에 실패했습니다.');
+    }
+  } catch (err) {
+    msg.className = 'submit-msg error';
+    msg.textContent = err.message || '서버 오류가 발생했습니다. 이메일(bgg8988@gmail.com)로 직접 보내주세요.';
+    btn.disabled = false;
+    btn.textContent = '질문지 제출하기';
+  }
+}
+
+// 페이지 로드 시 임시 저장 복원
+loadDraft();
+</script>
 
 </body>
 </html>
