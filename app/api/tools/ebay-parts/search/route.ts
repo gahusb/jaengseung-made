@@ -1,6 +1,14 @@
 import { NextResponse } from 'next/server';
+import { crawlAll } from '@/lib/ebay-tools/crawler';
+import { analyzeWithAI } from '@/lib/ebay-tools/ai-analyzer';
+import { calculatePricing } from '@/lib/ebay-tools/pricing';
+import type { SearchResult, PriceSource } from '@/lib/ebay-tools/types';
+
+export const maxDuration = 60; // Vercel Pro timeout
 
 export async function POST(request: Request) {
+  const startTime = Date.now();
+
   try {
     const body = await request.json();
     const { partNumber, partName } = body;
@@ -12,69 +20,70 @@ export async function POST(request: Request) {
       );
     }
 
-    // MVP: 1.5초 딜레이로 실제 크롤링 소요 시간 시뮬레이션
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
     const trimmedPart = partNumber.trim();
-    const trimmedName = partName?.trim() || 'Fuel Pump Assembly';
 
-    const mockData = {
-      basicInfo: {
-        partNumber: trimmedPart,
-        partName: trimmedName,
-        brand: 'Toyota / Denso',
-        oemNumbers: [trimmedPart, '23220-0H040'],
-        category:
-          'eBay Motors > Parts & Accessories > Car & Truck Parts > Fuel System > Fuel Pumps',
-      },
-      listing: {
-        title: `${trimmedName} For Toyota Camry 2007-2011 2.4L ${trimmedPart} OEM Denso`,
-        category: '33549',
-        itemSpecifics: {
-          Brand: 'Denso',
-          'Manufacturer Part Number': trimmedPart,
-          Type: trimmedName,
-          'Placement on Vehicle': 'In-Tank',
-          Voltage: '12V',
-          Warranty: '1 Year',
+    if (trimmedPart.length > 50) {
+      return NextResponse.json(
+        { success: false, error: '품번은 50자 이내로 입력해주세요.' },
+        { status: 400 }
+      );
+    }
+
+    if (!/^[a-zA-Z0-9\s\-_.\/]+$/.test(trimmedPart)) {
+      return NextResponse.json(
+        { success: false, error: '품번에 허용되지 않는 문자가 포함되어 있습니다.' },
+        { status: 400 }
+      );
+    }
+
+    const trimmedName = partName?.trim() || undefined;
+
+    // 1. 크롤링 (RockAuto + eBay)
+    const crawlResults = await crawlAll(trimmedPart);
+
+    // 2. AI 분석 (Claude API)
+    let aiResult;
+    const hasApiKey = !!process.env.ANTHROPIC_API_KEY;
+
+    if (hasApiKey) {
+      try {
+        aiResult = await analyzeWithAI(trimmedPart, trimmedName, crawlResults);
+      } catch (aiError) {
+        console.error('[EbayParts] AI analysis failed, using fallback:', aiError);
+      }
+    }
+
+    // AI 실패 또는 API 키 없으면 크롤링 데이터에서 기본 추출
+    if (!aiResult) {
+      aiResult = buildFallbackResult(trimmedPart, trimmedName, crawlResults);
+    }
+
+    // 3. 가격 비교 + 환율/관세 계산
+    const priceSources: PriceSource[] = extractPrices(crawlResults);
+    const pricing = await calculatePricing(priceSources, aiResult.basicInfo.partName);
+
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+    const result: SearchResult = {
+      success: true,
+      data: {
+        basicInfo: aiResult.basicInfo,
+        listing: aiResult.listing,
+        fitment: aiResult.fitment,
+        pricing,
+        rawData: Object.fromEntries(
+          crawlResults.map(r => [r.source, { success: r.success, data: r.data, error: r.error }])
+        ),
+        meta: {
+          searchedAt: new Date().toISOString(),
+          sourcesChecked: crawlResults.map(r => r.source),
+          processingTime: `${elapsed}s`,
+          aiModel: hasApiKey ? 'claude-sonnet-4-20250514' : 'fallback (no API key)',
         },
-      },
-      fitment: [
-        { year: '2007', make: 'Toyota', model: 'Camry', engine: '2.4L L4', confidence: 'high' },
-        { year: '2008', make: 'Toyota', model: 'Camry', engine: '2.4L L4', confidence: 'high' },
-        { year: '2009', make: 'Toyota', model: 'Camry', engine: '2.4L L4', confidence: 'high' },
-        { year: '2010', make: 'Toyota', model: 'Camry', engine: '2.4L L4', confidence: 'high' },
-        { year: '2011', make: 'Toyota', model: 'Camry', engine: '2.4L L4', confidence: 'high' },
-        { year: '2007', make: 'Toyota', model: 'Camry', engine: '3.5L V6', confidence: 'medium' },
-      ],
-      pricing: {
-        sources: [
-          { site: 'RockAuto', price: 89.99, currency: 'USD', url: 'https://www.rockauto.com/en/catalog/toyota,2009,camry,2.4l+l4,1443745,fuel+&+air,fuel+pump+&+housing+assembly,6256' },
-          { site: 'AutoZone', price: 129.99, currency: 'USD', url: 'https://www.autozone.com/fuel-delivery/fuel-pump-assembly' },
-          { site: 'Amazon', price: 95.5, currency: 'USD', url: 'https://www.amazon.com/dp/B07EXAMPLE' },
-        ],
-        exchangeRate: { rate: 1380, source: '한국은행', date: '2026-04-02' },
-        customs: { hsCode: '8413.30', dutyRate: '8%', estimatedDuty: 9920 },
-      },
-      rawData: {
-        crawledSources: ['RockAuto', 'AutoZone', 'Amazon'],
-        rawResults: {
-          rockauto: { found: true, listings: 3, avgPrice: 89.99 },
-          autozone: { found: true, listings: 1, avgPrice: 129.99 },
-          amazon: { found: true, listings: 5, avgPrice: 95.5 },
-        },
-        fitmentSources: ['PartsFinder DB', 'eBay Catalog'],
-        timestamp: new Date().toISOString(),
-      },
-      meta: {
-        searchedAt: new Date().toISOString(),
-        sourcesChecked: ['RockAuto', 'AutoZone', 'Amazon'],
-        processingTime: '12.3s',
-        aiModel: 'claude-sonnet-4-20250514',
       },
     };
 
-    return NextResponse.json({ success: true, data: mockData }, { status: 200 });
+    return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error('[EbayParts] Search error:', error);
     return NextResponse.json(
@@ -82,4 +91,77 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+}
+
+// 크롤링 결과에서 가격 추출
+function extractPrices(crawlResults: Awaited<ReturnType<typeof crawlAll>>): PriceSource[] {
+  const prices: PriceSource[] = [];
+
+  for (const result of crawlResults) {
+    if (!result.success) continue;
+
+    if (result.source === 'RockAuto') {
+      const parts = (result.data.parts as Array<{ price?: string; name?: string }>) || [];
+      for (const part of parts) {
+        if (part.price) {
+          const numericPrice = parseFloat(part.price.replace(/[^0-9.]/g, ''));
+          if (!isNaN(numericPrice) && numericPrice > 0) {
+            prices.push({
+              site: 'RockAuto',
+              price: numericPrice,
+              currency: 'USD',
+              url: String(result.data.searchUrl || ''),
+            });
+            break; // 첫 번째 가격만
+          }
+        }
+      }
+    }
+
+    if (result.source === 'eBay') {
+      const listings = (result.data.listings as Array<{ price?: string; url?: string }>) || [];
+      for (const listing of listings.slice(0, 2)) {
+        if (listing.price) {
+          const numericPrice = parseFloat(listing.price.replace(/[^0-9.]/g, ''));
+          if (!isNaN(numericPrice) && numericPrice > 0) {
+            prices.push({
+              site: 'eBay (참고)',
+              price: numericPrice,
+              currency: 'USD',
+              url: listing.url || '',
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return prices;
+}
+
+// AI 없이 기본 결과 생성
+function buildFallbackResult(
+  partNumber: string,
+  partName: string | undefined,
+  crawlResults: Awaited<ReturnType<typeof crawlAll>>
+) {
+  const name = partName || partNumber;
+
+  return {
+    basicInfo: {
+      partNumber,
+      partName: name,
+      brand: '',
+      oemNumbers: [partNumber],
+      category: 'eBay Motors > Parts & Accessories > Car & Truck Parts',
+    },
+    listing: {
+      title: `${name} ${partNumber} Auto Part`,
+      category: '',
+      itemSpecifics: {
+        'Manufacturer Part Number': partNumber,
+      },
+    },
+    fitment: [],
+  };
 }

@@ -15,6 +15,7 @@
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.99.0",
     "@tosspayments/tosspayments-sdk": "^2.6.0",
+    "cheerio": "^1.2.0",
     "dotenv": "^17.3.1",
     "lunar-javascript": "^1.7.7",
     "next": "16.1.6",

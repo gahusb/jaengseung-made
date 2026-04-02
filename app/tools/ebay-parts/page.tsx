@@ -1,50 +1,11 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import type { SearchResult as FullSearchResult, FitmentEntry, PriceSource } from '@/lib/ebay-tools/types';
 
-/* ── Types ──────────────────────────────────────────────────── */
-interface FitmentEntry {
-  year: string;
-  make: string;
-  model: string;
-  engine: string;
-  confidence: 'high' | 'medium' | 'low';
-}
-
-interface PricingSource {
-  site: string;
-  price: number;
-  currency: string;
-  url: string;
-}
-
-interface SearchResult {
-  basicInfo: {
-    partNumber: string;
-    partName: string;
-    brand: string;
-    oemNumbers: string[];
-    category: string;
-  };
-  listing: {
-    title: string;
-    category: string;
-    itemSpecifics: Record<string, string>;
-  };
-  fitment: FitmentEntry[];
-  pricing: {
-    sources: PricingSource[];
-    exchangeRate: { rate: number; source: string; date: string };
-    customs: { hsCode: string; dutyRate: string; estimatedDuty: number };
-  };
-  rawData: Record<string, unknown>;
-  meta: {
-    searchedAt: string;
-    sourcesChecked: string[];
-    processingTime: string;
-    aiModel: string;
-  };
-}
+/* ── Types (페이지 전용) ──────────────────────────────────── */
+// SearchResult['data']에 해당하는 타입 (API 응답의 data 필드)
+type PageSearchResult = FullSearchResult['data'];
 
 interface HistoryItem {
   partNumber: string;
@@ -96,7 +57,7 @@ export default function EbayPartsPage() {
   const [partName, setPartName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<SearchResult | null>(null);
+  const [result, setResult] = useState<PageSearchResult | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>('basic');
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [copied, setCopied] = useState(false);
@@ -360,7 +321,12 @@ export default function EbayPartsPage() {
             </p>
           </div>
           <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
-            <p className="text-xs text-slate-500 font-medium mb-2">관세 참고</p>
+            <p className="text-xs text-slate-500 font-medium mb-2">관세/부가세 참고</p>
+            {pricing.customs.isExempt && (
+              <p className="text-sm text-emerald-700 font-semibold mb-2">
+                $150 이하 소액면세 대상
+              </p>
+            )}
             <p className="text-sm text-slate-900">
               HS Code: <span className="font-mono font-bold">{pricing.customs.hsCode}</span>
             </p>
@@ -370,6 +336,13 @@ export default function EbayPartsPage() {
             <p className="text-sm text-slate-900">
               예상 관세: <span className="font-bold text-blue-700">{pricing.customs.estimatedDuty.toLocaleString()}원</span>
             </p>
+            <p className="text-sm text-slate-900">
+              부가세 (VAT 10%): <span className="font-bold text-blue-700">{pricing.customs.vat.toLocaleString()}원</span>
+            </p>
+            <p className="text-sm text-slate-900 mt-1">
+              총 수입 비용: <span className="font-bold text-blue-800 text-base">{pricing.customs.totalImportCost.toLocaleString()}원</span>
+            </p>
+            <p className="text-xs text-slate-400 mt-2">{pricing.customs.disclaimer}</p>
           </div>
         </div>
       </div>
