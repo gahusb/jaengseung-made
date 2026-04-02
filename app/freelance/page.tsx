@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ContactForm from '../components/ContactForm';
 
 /* ─── Data ─── */
@@ -233,12 +233,52 @@ const guarantees = [
   },
 ];
 
+/* ─── Scroll Reveal ─── */
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    el.querySelectorAll('.reveal').forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
 /* ─── Main Page ─── */
 export default function FreelancePage() {
   const [_contactPreset] = useState('');
+  const containerRef = useScrollReveal();
 
   return (
-    <div className="min-h-full bg-[#f0f5ff]">
+    <div ref={containerRef} className="min-h-full bg-[#f0f5ff]">
+      <style>{`
+        .reveal {
+          opacity: 0;
+          transform: translateY(1.5rem);
+          transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .reveal-d1 { transition-delay: 80ms; }
+        .reveal-d2 { transition-delay: 160ms; }
+        .reveal-d3 { transition-delay: 240ms; }
+        .reveal-d4 { transition-delay: 320ms; }
+      `}</style>
 
       {/* ─── Hero ─── */}
       <div
@@ -293,13 +333,13 @@ export default function FreelancePage() {
       {/* ─── 포트폴리오 ─── */}
       <div className="px-6 py-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="reveal text-center mb-8">
             <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">PORTFOLIO</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">직접 개발한 프로젝트</h2>
             <p className="text-slate-500 text-sm mt-2">실제 운영 중인 서비스와 납품 완료 프로젝트입니다</p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="reveal grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {portfolio.map((item) => (
               <div
                 key={item.title}
@@ -358,7 +398,7 @@ export default function FreelancePage() {
           </div>
 
           {/* 추가 문구 */}
-          <div className="mt-6 text-center">
+          <div className="reveal mt-6 text-center">
             <p className="text-slate-400 text-sm">
               위 프로젝트 외에도 다양한 프로젝트 경험이 있습니다 ·{' '}
               <a href="mailto:bgg8988@gmail.com" className="text-[#1a56db] hover:underline font-medium">포트폴리오 전체 요청</a>
@@ -370,13 +410,13 @@ export default function FreelancePage() {
       {/* ─── 고객 후기 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="reveal text-center mb-8">
             <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">REVIEWS</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">실제 의뢰인 후기</h2>
             <p className="text-slate-500 text-sm mt-2" style={{ wordBreak: 'keep-all' }}>숫자보다 실제 말이 더 정직합니다</p>
           </div>
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+          <div className="reveal grid sm:grid-cols-2 md:grid-cols-3 gap-5">
             {testimonials.map((t) => (
               <div
                 key={t.name}
@@ -420,7 +460,7 @@ export default function FreelancePage() {
             * 의뢰인 동의 하에 게시된 후기입니다. 전체 대화 내역 공개 요청 시 제공 가능합니다.
           </p>
 
-          <div className="text-center py-6">
+          <div className="reveal text-center py-6">
             <a href="#contact-form" className="inline-flex items-center gap-2 px-6 py-3 bg-[#1a56db] text-white font-semibold rounded-xl hover:bg-blue-700 transition shadow-sm">
               무료 상담 시작하기
             </a>
@@ -432,14 +472,14 @@ export default function FreelancePage() {
       {/* ─── 진행 프로세스 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
+          <div className="reveal text-center mb-10">
             <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">PROCESS</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">진행 프로세스</h2>
             <p className="text-slate-500 text-sm mt-2">투명하고 체계적인 6단계로 진행됩니다</p>
           </div>
 
           {/* Vertical timeline */}
-          <div className="relative">
+          <div className="reveal relative">
             {/* connecting line */}
             <div className="absolute left-6 top-6 bottom-6 w-px bg-[#dbe8ff]" />
 
@@ -499,7 +539,7 @@ export default function FreelancePage() {
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-5">
 
           {/* Tech Stack */}
-          <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
+          <div className="reveal reveal-d1 bg-white rounded-2xl border border-[#dbe8ff] p-6">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-1 h-5 bg-[#1a56db] rounded-full" />
               <h3 className="font-bold text-[#04102b] text-sm">개발 가능 기술 스택</h3>
@@ -527,7 +567,7 @@ export default function FreelancePage() {
 
           {/* 신뢰 포인트 */}
           <div
-            className="rounded-2xl border border-[#1a3a7a] p-6"
+            className="reveal reveal-d2 rounded-2xl border border-[#1a3a7a] p-6"
             style={{
               background: '#04102b',
               backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 30px)',
@@ -601,13 +641,13 @@ export default function FreelancePage() {
       {/* ─── 문의 폼 ─── */}
       <div id="contact-form" className="px-6 pb-14 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="reveal text-center mb-8">
             <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">CONTACT</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">프로젝트 문의</h2>
             <p className="text-slate-500 text-sm mt-2">개발사 연락 두절로 손해 본 경험 있으신가요? 여기선 계약서부터 시작합니다.</p>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-6">
+          <div className="reveal grid md:grid-cols-5 gap-6">
             {/* 왼쪽: 간단 안내 */}
             <div className="md:col-span-2 space-y-4">
               <div className="bg-white rounded-2xl border border-[#dbe8ff] p-5">

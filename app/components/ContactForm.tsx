@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { trackEvent } from '../../lib/gtag';
 
 function ContactFormInner() {
   const searchParams = useSearchParams();
@@ -36,6 +37,10 @@ function ContactFormInner() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || '문의 전송에 실패했습니다.');
       setStatus('success');
+      trackEvent('generate_lead', {
+        event_category: 'contact',
+        event_label: formData.service,
+      });
       setFormData({ name: '', phone: '', email: '', service: '외주 개발 문의', message: '' });
       setTimeout(() => setStatus('idle'), 5000);
     } catch (error) {

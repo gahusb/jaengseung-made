@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import ContactModal from '../../components/ContactModal';
+import { trackCTAClick } from '../../../lib/gtag';
 
 const samples = [
   {
@@ -451,6 +452,7 @@ export default function WebsiteServicePage() {
   const [modalService, setModalService] = useState('홈페이지 제작');
 
   const openModal = (service: string) => {
+    trackCTAClick(service, '/services/website');
     setModalService(service);
     setModalOpen(true);
   };

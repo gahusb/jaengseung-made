@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+import { trackCTAClick } from '../../../lib/gtag';
 const KAKAO_CHANNEL_URL = process.env.NEXT_PUBLIC_KAKAO_CHANNEL_URL ?? null;
 
 function useScrollReveal() {
@@ -372,6 +373,7 @@ export default function PromptPage() {
   const containerRef = useScrollReveal();
 
   const openModal = (service: string) => {
+    trackCTAClick(service, '/services/prompt');
     setModalService(service);
     setModalOpen(true);
   };

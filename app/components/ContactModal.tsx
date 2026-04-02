@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { trackEvent } from '../../lib/gtag';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -61,17 +62,6 @@ export default function ContactModal({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  // GA4 이벤트 헬퍼
-  const trackEvent = (eventName: string, params?: Record<string, string>) => {
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const w = window as any;
-      if (typeof w.gtag === 'function') {
-        w.gtag('event', eventName, params);
-      }
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { trackToolDemo, trackCTAClick } from '../../lib/gtag';
 
 /* ═══════════════════════════════════════════════════
    도구 쇼케이스 — 리디자인 v2
@@ -205,6 +206,7 @@ export default function ToolsShowcasePage() {
               <Link
                 key={tool.id}
                 href={tool.href}
+                onClick={() => trackToolDemo(tool.title)}
                 className={`group block tool-card bg-white rounded-2xl border border-slate-200 overflow-hidden active:scale-[0.99] reveal reveal-delay-${idx + 1}`}
               >
                 <div className={`flex flex-col ${isEven ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
@@ -341,6 +343,7 @@ export default function ToolsShowcasePage() {
             </div>
             <Link
               href="/freelance#contact-form"
+              onClick={() => trackCTAClick('무료 상담 신청하기', '/tools')}
               className="group inline-flex items-center gap-3 px-7 py-4 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white text-sm font-bold transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-blue-500/30 flex-shrink-0"
             >
               무료 상담 신청하기

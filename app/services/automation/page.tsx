@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+import { trackCTAClick } from '../../../lib/gtag';
 
 function useScrollReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -188,6 +189,7 @@ export default function AutomationPage() {
   const containerRef = useScrollReveal();
 
   const openModal = (service: string) => {
+    trackCTAClick(service, '/services/automation');
     setModalService(service);
     setModalOpen(true);
   };

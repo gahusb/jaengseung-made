@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
 
@@ -162,12 +162,51 @@ const FAQ = [
   },
 ];
 
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    el.querySelectorAll('.reveal').forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
 export default function AiKitPage() {
   const totalMonthlySaving = 27;
   const [modalOpen, setModalOpen] = useState(false);
+  const containerRef = useScrollReveal();
 
   return (
-    <div className="min-h-full bg-[#f0f4ff]">
+    <div ref={containerRef} className="min-h-full bg-[#f0f4ff]">
+      <style>{`
+        .reveal {
+          opacity: 0;
+          transform: translateY(1.5rem);
+          transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .reveal-d1 { transition-delay: 80ms; }
+        .reveal-d2 { transition-delay: 160ms; }
+        .reveal-d3 { transition-delay: 240ms; }
+        .reveal-d4 { transition-delay: 320ms; }
+      `}</style>
       <ContactModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -245,7 +284,7 @@ export default function AiKitPage() {
       {/* ─── 시간 낭비 가시화 섹션 ─── */}
       <div className="bg-white px-6 py-12 lg:px-12 border-b border-slate-100">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="reveal text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-extrabold text-slate-800 mb-2">
               지금 이 순간도 낭비되고 있는 당신의 시간
             </h2>
@@ -253,7 +292,7 @@ export default function AiKitPage() {
           </div>
 
           {/* 총합 카드 */}
-          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 mb-8">
+          <div className="reveal bg-red-50 border border-red-200 rounded-2xl p-6 mb-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-bold text-red-600 mb-1">6가지 반복 업무를 혼자 할 때</p>
@@ -273,7 +312,7 @@ export default function AiKitPage() {
           </div>
 
           {/* 개별 도구 Before/After 바 차트 */}
-          <div className="space-y-3">
+          <div className="reveal space-y-3">
             {TOOLS.map((tool, i) => {
               const beforeVal = tool.before;
               const afterVal = tool.after;
@@ -313,7 +352,7 @@ export default function AiKitPage() {
       {/* ─── "안 쓰면 생기는 실패 비용" 섹션 ─── */}
       <div className="px-6 py-12 lg:px-12 bg-[#0a0f2e]">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="reveal text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-red-500/15 border border-red-500/30 text-red-400 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest mb-3">
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /></svg>
               AI를 안 쓸 때 생기는 실패 비용
@@ -324,7 +363,7 @@ export default function AiKitPage() {
             <p className="text-slate-400 text-sm">반복 업무를 수작업으로 할 때 실제로 발생하는 손실들</p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="reveal grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {TOOLS.map((tool, i) => (
               <div key={i} className="bg-slate-900/60 border border-red-900/40 rounded-2xl p-5">
                 <div className="flex items-start gap-3 mb-3">
@@ -342,7 +381,7 @@ export default function AiKitPage() {
             ))}
           </div>
 
-          <div className="mt-8 bg-[#0a0f2e] border border-indigo-500/30 rounded-2xl p-6 text-center">
+          <div className="reveal mt-8 bg-[#0a0f2e] border border-indigo-500/30 rounded-2xl p-6 text-center">
             <p className="text-white text-lg font-extrabold mb-1">
               실수 1번이 계약 1건을 날립니다.
             </p>
@@ -356,7 +395,7 @@ export default function AiKitPage() {
       {/* ─── 포함 도구 ─── */}
       <div className="px-6 py-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="reveal text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 text-indigo-500 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest mb-3">
               6가지 AI 자동화 도구 포함
             </div>
@@ -366,7 +405,7 @@ export default function AiKitPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {TOOLS.map((tool, i) => (
-              <div key={i} className="bg-white rounded-2xl p-5 border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all group">
+              <div key={i} className={`reveal reveal-d${(i % 3) + 1} bg-white rounded-2xl p-5 border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all group`}>
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-11 h-11 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-500 group-hover:bg-indigo-100 transition-colors">
                     {tool.icon}
@@ -391,7 +430,7 @@ export default function AiKitPage() {
           </div>
 
           {/* 업데이트 알림 */}
-          <div className="mt-6 bg-indigo-50 border border-indigo-200 rounded-2xl p-5 flex items-start gap-4">
+          <div className="reveal mt-6 bg-indigo-50 border border-indigo-200 rounded-2xl p-5 flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -408,7 +447,7 @@ export default function AiKitPage() {
       {/* ─── 누구에게 필요한가 ─── */}
       <div className="px-6 py-10 lg:px-12 bg-white">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="reveal text-center mb-8">
             <h2 className="text-2xl font-extrabold text-slate-800">이런 분들이 가장 많이 씁니다</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -454,7 +493,7 @@ export default function AiKitPage() {
                 gain: '한 달치 콘텐츠 기획 → 10분 완성',
               },
             ].map((item, i) => (
-              <div key={i} className="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+              <div key={i} className={`reveal reveal-d${i + 1} p-5 rounded-2xl bg-slate-50 border border-slate-100`}>
                 <div className="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mb-3">{item.icon}</div>
                 <p className="text-sm font-extrabold text-slate-800 mb-2">{item.title}</p>
                 <p className="text-xs text-slate-500 italic leading-relaxed mb-3">{item.pain}</p>
@@ -470,12 +509,12 @@ export default function AiKitPage() {
       {/* ─── 사용 후기 ─── */}
       <div className="px-6 py-10 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="reveal text-center mb-8">
             <h2 className="text-2xl font-extrabold text-slate-800">실제 사용 후기</h2>
           </div>
           <div className="grid sm:grid-cols-3 gap-4">
             {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+              <div key={i} className={`reveal reveal-d${i + 1} bg-white rounded-2xl p-5 border border-slate-200 shadow-sm`}>
                 <div className="flex gap-0.5 mb-3">
                   {Array.from({ length: t.rating }).map((_, j) => (
                     <svg key={j} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -497,10 +536,10 @@ export default function AiKitPage() {
       {/* ─── FAQ ─── */}
       <div className="px-6 py-10 lg:px-12 bg-white">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="reveal text-center mb-8">
             <h2 className="text-2xl font-extrabold text-slate-800">자주 묻는 질문</h2>
           </div>
-          <div className="space-y-3">
+          <div className="reveal space-y-3">
             {FAQ.map((item, i) => (
               <div key={i} className="border border-slate-200 rounded-xl p-5">
                 <p className="text-sm font-bold text-slate-800 mb-2">Q. {item.q}</p>
@@ -513,7 +552,7 @@ export default function AiKitPage() {
 
       {/* ─── 최하단 CTA ─── */}
       <div className="px-6 py-14 lg:px-12 bg-[#0a0f2e]" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}>
-        <div className="max-w-2xl mx-auto text-center">
+        <div className="reveal max-w-2xl mx-auto text-center">
           {/* 마지막 카피: 기회비용 프레이밍 */}
           <p className="text-indigo-300/60 text-sm font-bold uppercase tracking-widest mb-3">구독 안 하면 내일도 동일합니다</p>
           <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3">

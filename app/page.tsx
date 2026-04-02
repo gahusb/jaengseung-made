@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactModal from './components/ContactModal';
+import { trackCTAClick } from '../lib/gtag';
 
 /* ═══════════════════════════════════════════════════
    쟁승메이드 홈페이지 — 리뉴얼 v2
@@ -169,11 +170,50 @@ const SERVICE_LIST = [
   },
 ];
 
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    el.querySelectorAll('.reveal').forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
+  const containerRef = useScrollReveal();
 
   return (
-    <div className="min-h-full">
+    <div className="min-h-full" ref={containerRef}>
+      <style>{`
+        .reveal {
+          opacity: 0;
+          transform: translateY(1.5rem);
+          transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .reveal-d1 { transition-delay: 80ms; }
+        .reveal-d2 { transition-delay: 160ms; }
+        .reveal-d3 { transition-delay: 240ms; }
+        .reveal-d4 { transition-delay: 320ms; }
+      `}</style>
       <ContactModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -248,7 +288,7 @@ export default function Home() {
           {/* CTA */}
           <div className="flex flex-wrap gap-3 mb-14">
             <button
-              onClick={() => setModalOpen(true)}
+              onClick={() => { trackCTAClick('무료 상담 신청', '/'); setModalOpen(true); }}
               className="inline-flex items-center gap-2 bg-[#1a56db] hover:bg-[#1e4fc2] text-white px-8 py-4 rounded-xl font-bold text-sm transition-colors"
             >
               무료 상담 신청
@@ -292,7 +332,7 @@ export default function Home() {
       ══════════════════════════════════════ */}
       <section className="bg-white px-6 py-16 lg:px-14 lg:py-20">
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+          <div className="reveal flex items-end justify-between mb-10 flex-wrap gap-4">
             <div>
               <p className="font-mono text-xs text-[#1a56db]/60 tracking-widest uppercase mb-2">
                 Client Pain Points
@@ -310,10 +350,10 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {PAIN_POINTS.map((p) => (
+            {PAIN_POINTS.map((p, i) => (
               <div
                 key={p.problem}
-                className="border border-[#e2e8f0] rounded-2xl p-6 hover:border-[#cbd5e1] hover:shadow-sm transition-all bg-white"
+                className={`reveal reveal-d${i + 1} border border-[#e2e8f0] rounded-2xl p-6 hover:border-[#cbd5e1] hover:shadow-sm transition-all bg-white`}
               >
                 <div className="flex items-start gap-4">
                   <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${p.color}`}>
@@ -338,10 +378,10 @@ export default function Home() {
       ══════════════════════════════════════ */}
       <section className="bg-[#04102b] px-6 py-16 lg:px-14 lg:py-20">
         <div className="max-w-5xl mx-auto">
-          <p className="font-mono text-xs text-[#5ba4ff]/40 tracking-widest uppercase mb-3">
+          <p className="reveal font-mono text-xs text-[#5ba4ff]/40 tracking-widest uppercase mb-3">
             About
           </p>
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+          <div className="reveal grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             {/* 좌측: 스토리 */}
             <div>
               <h2
@@ -432,7 +472,7 @@ export default function Home() {
       ══════════════════════════════════════ */}
       <section className="bg-[#f8faff] px-6 py-16 lg:px-14 lg:py-20">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-10">
+          <div className="reveal mb-10">
             <p className="font-mono text-xs text-[#1a56db]/60 tracking-widest uppercase mb-2">
               Guarantee
             </p>
@@ -444,7 +484,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="space-y-px">
+          <div className="reveal space-y-px">
             {PROMISES.map((p, i) => (
               <div
                 key={p.number}
@@ -481,7 +521,7 @@ export default function Home() {
       ══════════════════════════════════════ */}
       <section className="bg-[#04102b] px-6 py-16 lg:px-14 lg:py-20">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-10">
+          <div className="reveal mb-10">
             <p className="font-mono text-xs text-[#5ba4ff]/40 tracking-widest uppercase mb-2">
               Live Portfolio
             </p>
@@ -497,11 +537,11 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-4">
-            {LIVE_SERVICES.map((s) => (
+            {LIVE_SERVICES.map((s, i) => (
               <Link
                 key={s.name}
                 href={s.url}
-                className="group relative flex flex-col border border-white/8 hover:border-white/20 rounded-2xl p-6 transition-all hover:bg-white/3"
+                className={`reveal reveal-d${i + 1} group relative flex flex-col border border-white/8 hover:border-white/20 rounded-2xl p-6 transition-all hover:bg-white/3`}
               >
                 {/* 상단 */}
                 <div className="flex items-center justify-between mb-4">
@@ -551,7 +591,7 @@ export default function Home() {
       ══════════════════════════════════════ */}
       <section className="bg-white px-6 py-16 lg:px-14 lg:py-20">
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
+          <div className="reveal flex items-end justify-between flex-wrap gap-4 mb-8">
             <div>
               <p className="font-mono text-xs text-[#1a56db]/60 tracking-widest uppercase mb-2">Services</p>
               <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]" style={{ wordBreak: 'keep-all' }}>
@@ -566,7 +606,7 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="divide-y divide-[#f1f5f9]">
+          <div className="reveal divide-y divide-[#f1f5f9]">
             {SERVICE_LIST.map((s) => (
               <Link
                 key={s.href}
@@ -617,7 +657,7 @@ export default function Home() {
       <section className="bg-[#04102b] px-6 py-20 lg:px-14">
         <div className="max-w-5xl mx-auto">
           {/* 무료 이벤트 배너 */}
-          <div className="border border-white/8 rounded-2xl p-6 md:p-8 mb-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="reveal border border-white/8 rounded-2xl p-6 md:p-8 mb-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 bg-red-500/15 border border-red-500/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full mb-3">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
@@ -639,7 +679,7 @@ export default function Home() {
           </div>
 
           {/* 메인 CTA */}
-          <div className="text-center">
+          <div className="reveal text-center">
             <p className="font-mono text-xs text-[#5ba4ff]/40 tracking-widest uppercase mb-4">Get Started</p>
             <h2
               className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight"
