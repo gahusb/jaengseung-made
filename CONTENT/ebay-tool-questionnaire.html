@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이베이 자동차 부품 AI 리스팅 자동화 — 사전 요구사항 질문지</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1e293b;
+    background: #f8fafc;
+    line-height: 1.7;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 48px 56px;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid #1a56db;
+    padding-bottom: 20px;
+    margin-bottom: 12px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand-icon {
+    width: 44px;
+    height: 44px;
+    background: #1a56db;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .brand-icon svg {
+    width: 26px;
+    height: 26px;
+    fill: #ffffff;
+  }
+
+  .brand-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+  }
+
+  .brand-sub {
+    font-size: 12px;
+    font-weight: 400;
+    color: #64748b;
+  }
+
+  .doc-date {
+    font-size: 13px;
+    color: #94a3b8;
+    text-align: right;
+  }
+
+  .doc-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+
+  .doc-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 32px;
+  }
+
+  /* ── Client Info ── */
+  .client-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 24px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 36px;
+  }
+
+  .client-info .field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .client-info .field-label {
+    font-weight: 600;
+    color: #475569;
+    white-space: nowrap;
+  }
+
+  .client-info .field-value {
+    flex: 1;
+    border-bottom: 1px solid #cbd5e1;
+    min-height: 24px;
+    padding-bottom: 2px;
+  }
+
+  /* ── Section ── */
+  .section {
+    margin-bottom: 32px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .section-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .badge-required {
+    background: #1a56db;
+    color: #ffffff;
+  }
+
+  .badge-optional {
+    background: #e2e8f0;
+    color: #475569;
+  }
+
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .section-desc {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 16px;
+    padding-left: 2px;
+  }
+
+  /* ── Question Card ── */
+  .question {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    page-break-inside: avoid;
+  }
+
+  .question:last-child {
+    margin-bottom: 0;
+  }
+
+  .q-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .q-num {
+    width: 28px;
+    height: 28px;
+    background: #1a56db;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .badge-optional + .section-title ~ .question .q-num,
+  .section.optional .q-num {
+    background: #64748b;
+  }
+
+  .q-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.5;
+  }
+
+  .q-hint {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-top: 4px;
+    padding-left: 40px;
+    font-weight: 400;
+  }
+
+  .q-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    padding-left: 40px;
+  }
+
+  .q-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #475569;
+    cursor: pointer;
+  }
+
+  .q-option input[type="checkbox"],
+  .q-option input[type="radio"] {
+    accent-color: #1a56db;
+  }
+
+  .answer-area {
+    margin-top: 12px;
+    padding-left: 40px;
+  }
+
+  .answer-area textarea {
+    width: 100%;
+    min-height: 64px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #1e293b;
+    resize: vertical;
+    background: #fafbfc;
+    transition: border-color 0.2s;
+  }
+
+  .answer-area textarea:focus {
+    outline: none;
+    border-color: #1a56db;
+    background: #ffffff;
+  }
+
+  .answer-area textarea.large {
+    min-height: 96px;
+  }
+
+  .answer-line {
+    margin-top: 12px;
+    padding-left: 40px;
+    border-bottom: 1px solid #cbd5e1;
+    min-height: 28px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 40px;
+    border-top: 2px solid #e2e8f0;
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .footer-left {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.8;
+  }
+
+  .footer-left strong {
+    color: #0f172a;
+  }
+
+  .footer-right {
+    text-align: right;
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.8;
+  }
+
+  .footer-notice {
+    margin-top: 20px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.7;
+  }
+
+  .footer-notice strong {
+    color: #475569;
+  }
+
+  /* ── Print Styles ── */
+  @media print {
+    body {
+      background: #ffffff;
+    }
+
+    .page {
+      padding: 24px 32px;
+      max-width: none;
+      box-shadow: none;
+    }
+
+    .question {
+      border: 1px solid #d1d5db;
+      break-inside: avoid;
+    }
+
+    .answer-area textarea {
+      border: none;
+      border-bottom: 1px solid #999;
+      border-radius: 0;
+      background: transparent;
+      min-height: 48px;
+    }
+
+    .q-option {
+      border-color: #999;
+    }
+
+    .header {
+      border-bottom-color: #1a56db;
+    }
+
+    .q-num {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .section-badge {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .footer-notice {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+
+  @page {
+    margin: 16mm 12mm;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">쟁승메이드</div>
+        <div class="brand-sub">JaengseungMade Co.</div>
+      </div>
+    </div>
+    <div class="doc-date">문서 작성일: 2026. 04. 02.</div>
+  </div>
+
+  <div style="height: 24px;"></div>
+
+  <div class="doc-title">이베이 자동차 부품 AI 리스팅 자동화 — 사전 요구사항 질문지</div>
+  <div class="doc-subtitle">프로젝트 착수 전, 아래 질문에 답변해 주시면 최적의 솔루션을 설계할 수 있습니다.</div>
+
+  <!-- Client Info -->
+  <div class="client-info">
+    <div class="field">
+      <span class="field-label">고객명</span>
+      <span class="field-value"></span>
+    </div>
+    <div class="field">
+      <span class="field-label">연락처</span>
+      <span class="field-value"></span>
+    </div>
+    <div class="field">
+      <span class="field-label">이메일</span>
+      <span class="field-value"></span>
+    </div>
+    <div class="field">
+      <span class="field-label">작성일</span>
+      <span class="field-value"></span>
+    </div>
+  </div>
+
+  <!-- Section 1: Required -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-badge badge-required">REQUIRED</span>
+      <span class="section-title">필수 항목 (착수 전 반드시 필요)</span>
+    </div>
+    <div class="section-desc">아래 9개 항목은 개발 범위 확정과 견적 산출에 필수적인 정보입니다. 빠짐없이 작성 부탁드립니다.</div>
+
+    <!-- Q1 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num">1</span>
+        <span class="q-text">주로 사용하시는 자동차 부품 사이트 URL을 알려주세요 (최소 3개)</span>
+      </div>
+      <div class="q-hint">예: RockAuto, AutoZone, PartsGeek, partsouq.com 등</div>
+      <div class="answer-area">
+        <textarea class="large" placeholder="사이트명과 URL을 함께 작성해주세요"></textarea>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num">2</span>
+        <span class="q-text">주요 취급 부품 카테고리는 무엇인가요?</span>
+      </div>
+      <div class="q-hint">예: 브레이크, 엔진, 서스펜션, 전기장치, 외장 등</div>
+      <div class="answer-area">
+        <textarea placeholder="취급하시는 부품 카테고리를 나열해주세요"></textarea>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num">3</span>
+        <span class="q-text">테스트용 샘플 품번(Part Number) 10~20개를 작성해주세요</span>
+      </div>
+      <div class="q-hint">예: 16610-0H040, 04465-33471 등 — 실제 리스팅에 사용하실 품번이면 더 좋습니다</div>
+      <div class="answer-area">
+        <textarea class="large" placeholder="품번을 줄바꿈 또는 쉼표로 구분하여 작성해주세요"></textarea>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num">4</span>
+        <span class="q-text">현재 운영 중인 eBay 리스팅 URL을 3~5개 공유해주세요</span>
+      </div>
+      <div class="q-hint">현재 리스팅 스타일과 구조를 파악하여 최적화 방향을 설정합니다</div>
+      <div class="answer-area">
+        <textarea class="large" placeholder="eBay 리스팅 URL을 줄바꿈으로 구분하여 작성해주세요"></textarea>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num">5</span>
+        <span class="q-text">eBay 셀러 계정 등급은 무엇인가요?</span>
+      </div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q5"> Basic</label>
+        <label class="q-option"><input type="radio" name="q5"> Premium</label>
+        <label class="q-option"><input type="radio" name="q5"> Anchor</label>
+        <label class="q-option"><input type="radio" name="q5"> Enterprise</label>
+        <label class="q-option"><input type="radio" name="q5"> 잘 모르겠음</label>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num">6</span>
+        <span class="q-text">주 판매 카테고리를 알려주세요</span>
+      </div>
+      <div class="q-hint">eBay Motors &gt; Parts &amp; Accessories 하위 카테고리 기준</div>
+      <div class="answer-area">
+        <textarea placeholder="예: Car & Truck Parts > Brakes & Brake Parts"></textarea>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num">7</span>
+        <span class="q-text">예상 월간 리스팅 건수는 몇 건인가요?</span>
+      </div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q7"> 100건 미만</label>
+        <label class="q-option"><input type="radio" name="q7"> 100~500건</label>
+        <label class="q-option"><input type="radio" name="q7"> 500~1,000건</label>
+        <label class="q-option"><input type="radio" name="q7"> 1,000~5,000건</label>
+        <label class="q-option"><input type="radio" name="q7"> 5,000건 이상</label>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num">8</span>
+        <span class="q-text">Fitment(호환 차종) 데이터의 정확도 기대치는?</span>
+      </div>
+      <div class="q-hint">정확도 요구 수준에 따라 데이터 소스와 검증 로직의 설계가 달라집니다</div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q8"> (A) 참고용이면 충분</label>
+        <label class="q-option"><input type="radio" name="q8"> (B) 정확해야 함 — 틀리면 eBay 계정에 영향</label>
+      </div>
+      <div class="answer-area">
+        <textarea placeholder="추가 의견이 있으시면 작성해주세요 (선택)" style="min-height: 48px;"></textarea>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num">9</span>
+        <span class="q-text">타겟 마켓은 어디인가요?</span>
+      </div>
+      <div class="q-options">
+        <label class="q-option"><input type="checkbox"> US (미국)</label>
+        <label class="q-option"><input type="checkbox"> UK (영국)</label>
+        <label class="q-option"><input type="checkbox"> DE (독일)</label>
+        <label class="q-option"><input type="checkbox"> AU (호주)</label>
+        <label class="q-option"><input type="checkbox"> 기타</label>
+      </div>
+      <div class="answer-area">
+        <textarea placeholder="기타를 선택하신 경우 국가명을 작성해주세요" style="min-height: 48px;"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Optional -->
+  <div class="section optional">
+    <div class="section-header">
+      <span class="section-badge badge-optional">OPTIONAL</span>
+      <span class="section-title">권장 항목 (있으면 도움)</span>
+    </div>
+    <div class="section-desc">아래 항목은 필수는 아니지만, 답변해 주시면 더 정밀한 솔루션 설계에 도움이 됩니다.</div>
+
+    <!-- Q10 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num" style="background: #64748b;">10</span>
+        <span class="q-text">현재 리스팅 1건 작성에 소요되는 시간은?</span>
+      </div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q10"> 5분 미만</label>
+        <label class="q-option"><input type="radio" name="q10"> 5~15분</label>
+        <label class="q-option"><input type="radio" name="q10"> 15~30분</label>
+        <label class="q-option"><input type="radio" name="q10"> 30분 이상</label>
+      </div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num" style="background: #64748b;">11</span>
+        <span class="q-text">기존 리스팅 관리 방식은?</span>
+      </div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q11"> 수동 (eBay 웹에서 직접)</label>
+        <label class="q-option"><input type="radio" name="q11"> CSV 파일 업로드</label>
+        <label class="q-option"><input type="radio" name="q11"> eBay Seller Hub</label>
+        <label class="q-option"><input type="radio" name="q11"> 서드파티 툴</label>
+      </div>
+      <div class="answer-area">
+        <textarea placeholder="서드파티 툴을 사용 중이시면 이름을 알려주세요" style="min-height: 48px;"></textarea>
+      </div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num" style="background: #64748b;">12</span>
+        <span class="q-text">관세/통관 계산 시 참고하는 사이트나 방식은?</span>
+      </div>
+      <div class="answer-area">
+        <textarea placeholder="사용 중인 관세 계산 방식이나 참고 사이트가 있으면 작성해주세요"></textarea>
+      </div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num" style="background: #64748b;">13</span>
+        <span class="q-text">eBay Developer Program API 키를 보유하고 계신가요?</span>
+      </div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q13"> 예, 보유하고 있음</label>
+        <label class="q-option"><input type="radio" name="q13"> 아니오, 없음</label>
+        <label class="q-option"><input type="radio" name="q13"> 잘 모르겠음</label>
+      </div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num" style="background: #64748b;">14</span>
+        <span class="q-text">선호하는 AI 모델이 있나요?</span>
+      </div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q14"> OpenAI (GPT)</label>
+        <label class="q-option"><input type="radio" name="q14"> Anthropic (Claude)</label>
+        <label class="q-option"><input type="radio" name="q14"> 상관없음</label>
+      </div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num" style="background: #64748b;">15</span>
+        <span class="q-text">현재 사용 중인 자동화 도구가 있나요?</span>
+      </div>
+      <div class="answer-area">
+        <textarea placeholder="사용 중인 도구명과 용도를 작성해주세요 (없으면 '없음')"></textarea>
+      </div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num" style="background: #64748b;">16</span>
+        <span class="q-text">OpenAI 또는 Anthropic API 키를 보유하고 계신가요?</span>
+      </div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q16"> 예, OpenAI</label>
+        <label class="q-option"><input type="radio" name="q16"> 예, Anthropic</label>
+        <label class="q-option"><input type="radio" name="q16"> 둘 다 보유</label>
+        <label class="q-option"><input type="radio" name="q16"> 없음</label>
+      </div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="question">
+      <div class="q-top">
+        <span class="q-num" style="background: #64748b;">17</span>
+        <span class="q-text">완성된 프로젝트를 쟁승메이드 포트폴리오(사례)로 활용해도 괜찮으신가요?</span>
+      </div>
+      <div class="q-hint">고객사명은 비공개 처리 가능합니다</div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q17"> 괜찮습니다</label>
+        <label class="q-option"><input type="radio" name="q17"> 고객사명 비공개 시 가능</label>
+        <label class="q-option"><input type="radio" name="q17"> 불가합니다</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Notes -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">추가 요청사항</span>
+    </div>
+    <div class="question" style="border-color: #cbd5e1;">
+      <div class="answer-area" style="padding-left: 0;">
+        <textarea class="large" placeholder="위 항목 외에 추가로 전달하고 싶은 내용이 있으시면 자유롭게 작성해주세요" style="min-height: 120px;"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Notice -->
+  <div class="footer-notice">
+    <strong>안내사항</strong><br>
+    본 질문지는 프로젝트 범위 확정 및 정확한 견적 산출을 위한 자료입니다.<br>
+    작성하신 정보는 프로젝트 진행 목적 외에 사용되지 않으며, 프로젝트 종료 후 안전하게 폐기됩니다.<br>
+    작성 후 이메일(<strong>bgg8988@gmail.com</strong>)로 회신하시거나, 인쇄 후 스캔본을 보내주셔도 됩니다.
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-left">
+      <strong>쟁승메이드 (JaengseungMade Co.)</strong><br>
+      담당: 박재오<br>
+      이메일: bgg8988@gmail.com<br>
+      연락처: 010-3907-1392
+    </div>
+    <div class="footer-right">
+      본 문서는 고객 맞춤형 프로젝트<br>
+      사전 조사를 위해 작성되었습니다.<br>
+      &copy; 2026 JaengseungMade
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

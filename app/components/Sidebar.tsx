@@ -63,6 +63,17 @@ const navItems = [
       </svg>
     ),
   },
+  {
+    href: '/tools/ebay-parts',
+    label: '이베이 부품 검색',
+    badge: 'NEW',
+    icon: (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 11h4m-2-2v4" />
+      </svg>
+    ),
+  },
 ];
 
 interface SidebarProps {
