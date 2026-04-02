@@ -79,6 +79,7 @@ app/
 | 커맨드 | 실행 파이프라인 | 사용 시점 |
 |--------|----------------|-----------|
 | `/intake [문의내용]` | HR → PM → Developer → HR | 신규 고객 문의 접수 시 |
+| `/followup [컨택내용]` | HR → PM → Developer → HR | 지원서에 클라이언트가 컨택 시 |
 | `/kickoff [프로젝트정보]` | PM → Developer → Designer → HR | 계약 확정 후 프로젝트 시작 시 |
 | `/weekly [이번주현황]` | PM → Evaluator → Marketing → PM | 매주 금요일 주간 리뷰 |
 | `/campaign [목적/아이디어]` | Marketing → Marketing(카피) → Designer → Marketing(실행) | 마케팅 캠페인 기획·실행 시 |

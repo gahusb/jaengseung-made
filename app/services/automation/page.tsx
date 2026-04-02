@@ -1,8 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    el.querySelectorAll('.reveal').forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
 
 const tools = [
   {
@@ -163,6 +185,7 @@ const process = [
 export default function AutomationPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalService, setModalService] = useState('업무 자동화');
+  const containerRef = useScrollReveal();
 
   const openModal = (service: string) => {
     setModalService(service);
@@ -170,7 +193,22 @@ export default function AutomationPage() {
   };
 
   return (
-    <div className="min-h-full bg-[#f0f5ff]">
+    <div ref={containerRef} className="min-h-full bg-[#f0f5ff]">
+      <style>{`
+        .reveal {
+          opacity: 0;
+          transform: translateY(1.5rem);
+          transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .reveal-d1 { transition-delay: 80ms; }
+        .reveal-d2 { transition-delay: 160ms; }
+        .reveal-d3 { transition-delay: 240ms; }
+      `}</style>
       <ContactModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -212,13 +250,13 @@ export default function AutomationPage() {
       {/* ─── 자동화 유형 ─── */}
       <div className="px-6 py-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 reveal">
             <p className="text-cyan-600 text-xs font-bold uppercase tracking-widest mb-2">AUTOMATION TYPES</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">자동화 유형</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {automationTypes.map((at) => (
-              <div key={at.title} className={`bg-white rounded-2xl border-2 ${at.accentColor} p-5`}>
+            {automationTypes.map((at, idx) => (
+              <div key={at.title} className={`bg-white rounded-2xl border-2 ${at.accentColor} p-5 reveal reveal-d${(idx % 3) + 1}`}>
                 <span className={`inline-block text-xs font-bold px-2 py-0.5 rounded-md border mb-3 ${at.labelColor}`}>{at.title.split(' ')[0]}</span>
                 <h3 className="font-bold text-[#04102b] text-sm mb-2">{at.title}</h3>
                 <p className="text-slate-500 text-xs leading-relaxed mb-3">{at.desc}</p>
@@ -239,15 +277,15 @@ export default function AutomationPage() {
       {/* ─── 프로세스 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 reveal">
             <p className="text-cyan-600 text-xs font-bold uppercase tracking-widest mb-2">PROCESS</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">진행 프로세스</h2>
           </div>
           <div className="relative">
             <div className="hidden sm:block absolute top-10 left-[10%] right-[10%] h-0.5 bg-[#dbe8ff]" />
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
-              {process.map((p) => (
-                <div key={p.step} className="relative text-center">
+              {process.map((p, idx) => (
+                <div key={p.step} className={`relative text-center reveal reveal-d${(idx % 3) + 1}`}>
                   <div className="w-20 h-20 mx-auto rounded-2xl bg-[#012030] border border-cyan-400/20 flex flex-col items-center justify-center mb-3">
                     <span className="text-cyan-400 text-xs font-bold">STEP</span>
                     <span className="text-white font-extrabold text-lg leading-none">{p.step}</span>
@@ -264,13 +302,13 @@ export default function AutomationPage() {
       {/* ─── 예상 비용 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 reveal">
             <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">PRICING</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">예상 비용</h2>
           </div>
           <div className="grid sm:grid-cols-3 gap-5">
-            {plans.map((plan) => (
-              <div key={plan.name} className={`rounded-2xl border p-6 relative flex flex-col ${
+            {plans.map((plan, idx) => (
+              <div key={plan.name} className={`rounded-2xl border p-6 relative flex flex-col reveal reveal-d${idx + 1} ${
                 plan.highlight
                   ? 'bg-[#012030] border-cyan-400/30 shadow-2xl shadow-cyan-900/20 scale-105'
                   : 'bg-white border-[#dbe8ff]'
@@ -304,7 +342,7 @@ export default function AutomationPage() {
       {/* ─── 프리미엄 툴 ─── */}
       <div className="px-6 pb-4 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 reveal">
             <span className="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-400/30 text-amber-700 text-xs font-bold px-3 py-1 rounded-full mb-3">
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
               PREMIUM TOOLS
@@ -313,9 +351,9 @@ export default function AutomationPage() {
             <p className="text-slate-500 text-sm">전문 분야별 고급 자동화 프로그램. 구매 후 소스코드 전달 + 1개월 무상 지원.</p>
           </div>
           <div className="grid sm:grid-cols-2 gap-6">
-            {premiumTools.map((tool) => (
+            {premiumTools.map((tool, idx) => (
               <div key={tool.id}
-                className="rounded-2xl overflow-hidden border border-white/10 shadow-xl flex flex-col"
+                className={`rounded-2xl overflow-hidden border border-white/10 shadow-xl flex flex-col reveal reveal-d${idx + 1}`}
                 style={{ background: `linear-gradient(145deg, ${tool.bgFrom}, ${tool.bgTo})` }}>
                 {/* 카드 헤더 */}
                 <div className="p-6 pb-4">
@@ -368,15 +406,15 @@ export default function AutomationPage() {
       {/* ─── 자동화 툴 무료 다운로드 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 reveal">
             <p className="text-cyan-600 text-xs font-bold uppercase tracking-widest mb-2">FREE TOOLS</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b] mb-2">자동화 도구 무료 다운로드</h2>
             <p className="text-slate-500 text-sm">직접 만들어 사용 중인 자동화 도구를 무료로 공유합니다.<br />필요에 맞게 수정해서 쓰실 수 있어요.</p>
           </div>
           <div className="grid sm:grid-cols-3 gap-5">
-            {tools.map((tool) => (
+            {tools.map((tool, idx) => (
               <div key={tool.id} style={{ borderColor: tool.borderColor, backgroundColor: tool.bgColor }}
-                className="rounded-2xl border-2 p-5 flex flex-col relative">
+                className={`rounded-2xl border-2 p-5 flex flex-col relative reveal reveal-d${idx + 1}`}>
                 {!tool.ready && (
                   <div className="absolute top-3 right-3 bg-slate-200 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full">준비중</div>
                 )}
@@ -411,7 +449,7 @@ export default function AutomationPage() {
       {/* ─── CTA ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-[#012030] rounded-2xl border border-cyan-400/20 p-8 text-center" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 30px)' }}>
+          <div className="bg-[#012030] rounded-2xl border border-cyan-400/20 p-8 text-center reveal" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 30px)' }}>
             <p className="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-2">FREE CONSULTATION</p>
             <h3 className="text-white text-2xl font-extrabold mb-2">어떤 업무든 상담해보세요</h3>
             <p className="text-cyan-100/40 text-sm mb-6">자동화 가능한 업무라면 무엇이든 도와드립니다</p>

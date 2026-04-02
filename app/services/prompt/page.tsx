@@ -1,9 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
 const KAKAO_CHANNEL_URL = process.env.NEXT_PUBLIC_KAKAO_CHANNEL_URL ?? null;
+
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    el.querySelectorAll('.reveal').forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
 
 const CHECKLIST = [
   '주로 어떤 AI 도구를 사용하는지 (ChatGPT / Claude / Gemini)',
@@ -347,6 +369,7 @@ const examples = [
 export default function PromptPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalService, setModalService] = useState('프롬프트 엔지니어링');
+  const containerRef = useScrollReveal();
 
   const openModal = (service: string) => {
     setModalService(service);
@@ -354,7 +377,32 @@ export default function PromptPage() {
   };
 
   return (
-    <div className="min-h-full bg-[#f0f5ff]">
+    <div ref={containerRef} className="min-h-full bg-[#f0f5ff]">
+      <style>{`
+        .reveal {
+          opacity: 0;
+          transform: translateY(1.5rem);
+          transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .reveal-d1 { transition-delay: 80ms; }
+        .reveal-d2 { transition-delay: 160ms; }
+        .reveal-d3 { transition-delay: 240ms; }
+        .reveal-d4 { transition-delay: 320ms; }
+        .reveal-d5 { transition-delay: 400ms; }
+        .prompt-card {
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                      box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .prompt-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+        }
+      `}</style>
       <ContactModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -396,7 +444,7 @@ export default function PromptPage() {
       {/* ─── 프리미엄 상품 ─── */}
       <div className="px-6 py-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 reveal">
             <div className="inline-flex items-center gap-2 bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-400 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
               PREMIUM PRODUCTS
@@ -405,10 +453,10 @@ export default function PromptPage() {
             <p className="text-slate-500 text-sm mt-2">전문가가 직접 설계하고 검증한 완성형 프롬프트 패키지 — 구매 즉시 사용 가능</p>
           </div>
           <div className="grid lg:grid-cols-2 gap-6">
-            {premiumProducts.map((product) => (
+            {premiumProducts.map((product, idx) => (
               <div
                 key={product.id}
-                className="rounded-2xl overflow-hidden border"
+                className={`rounded-2xl overflow-hidden border prompt-card reveal reveal-d${(idx % 4) + 1}`}
                 style={{ borderColor: product.accentBorder, background: `linear-gradient(135deg, ${product.bgFrom}, ${product.bgTo})` }}
               >
                 {/* 헤더 */}
@@ -505,13 +553,13 @@ export default function PromptPage() {
       {/* ─── Before/After ─── */}
       <div className="px-6 py-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 reveal">
             <p className="text-violet-600 text-xs font-bold uppercase tracking-widest mb-2">BEFORE vs AFTER</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">이런 차이가 납니다</h2>
           </div>
           <div className="space-y-5">
-            {examples.map((ex) => (
-              <div key={ex.type} className="bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden">
+            {examples.map((ex, idx) => (
+              <div key={ex.type} className={`bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden reveal reveal-d${idx + 1}`}>
                 <div className="bg-[#04102b] px-5 py-3 flex items-center justify-between">
                   <span className="text-white/60 text-xs font-semibold font-mono">{ex.type} 예시</span>
                   <span className="bg-violet-400/20 border border-violet-400/30 text-violet-300 text-xs px-3 py-1 rounded-full">{ex.improvement}</span>
@@ -543,13 +591,13 @@ export default function PromptPage() {
       {/* ─── 활용 분야 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 reveal">
             <p className="text-violet-600 text-xs font-bold uppercase tracking-widest mb-2">USE CASES</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">활용 분야</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {useCases.map((uc, i) => (
-              <div key={uc.label} className="bg-white rounded-2xl border border-[#dbe8ff] p-5 hover:border-violet-200 transition-colors">
+              <div key={uc.label} className={`bg-white rounded-2xl border border-[#dbe8ff] p-5 hover:border-violet-200 transition-all duration-300 reveal reveal-d${(i % 3) + 1}`}>
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-lg bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
                     <span className="text-violet-600 font-extrabold text-xs">{String(i + 1).padStart(2, '0')}</span>
@@ -568,13 +616,13 @@ export default function PromptPage() {
       {/* ─── 요금제 ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-8 reveal">
             <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">PRICING</p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b]">요금제</h2>
           </div>
           <div className="grid sm:grid-cols-3 gap-5">
-            {plans.map((plan) => (
-              <div key={plan.name} className={`rounded-2xl border p-6 relative flex flex-col ${
+            {plans.map((plan, idx) => (
+              <div key={plan.name} className={`rounded-2xl border p-6 relative flex flex-col reveal reveal-d${idx + 1} ${
                 plan.highlight
                   ? 'bg-gradient-to-br from-[#0d0a2e] to-[#1a0f5c] border-violet-400/30 shadow-2xl shadow-violet-900/20 scale-105'
                   : 'bg-white border-[#dbe8ff]'
@@ -615,7 +663,7 @@ export default function PromptPage() {
       {/* ─── CTA ─── */}
       <div className="px-6 pb-12 lg:px-12">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-gradient-to-r from-[#0d0a2e] to-[#1a0f5c] rounded-2xl border border-violet-400/20 p-8 text-center">
+          <div className="bg-gradient-to-r from-[#0d0a2e] to-[#1a0f5c] rounded-2xl border border-violet-400/20 p-8 text-center reveal">
             <p className="text-violet-400 text-xs font-bold uppercase tracking-widest mb-2">GET STARTED</p>
             <h3 className="text-white text-2xl font-extrabold mb-2">AI를 제대로 활용하고 싶다면</h3>
             <p className="text-violet-100/40 text-sm mb-6">업무 분석 인터뷰 → 맞춤 설계 → 가이드 제공</p>
