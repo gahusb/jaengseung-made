@@ -55,6 +55,11 @@ export default function DashboardShell({ children }: { children: React.ReactNode
                 <span>전화: 010-3907-1392</span>
                 <span>이메일: bgg8988@gmail.com</span>
               </div>
+              <div className="flex flex-wrap gap-x-3 mt-3">
+                <a href="/legal/terms" className="text-slate-400 hover:text-[#1a56db] transition underline underline-offset-2">이용약관</a>
+                <a href="/legal/privacy" className="text-slate-400 hover:text-[#1a56db] transition underline underline-offset-2">개인정보처리방침</a>
+                <a href="/legal/refund" className="text-slate-400 hover:text-[#1a56db] transition underline underline-offset-2">환불 정책</a>
+              </div>
               <p className="mt-2 text-slate-400">© 2025 쟁승메이드. All rights reserved.</p>
             </div>
           </footer>

@@ -17,10 +17,10 @@ function FailContent() {
         </svg>
       </div>
       <div className="inline-block bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold px-3 py-1 rounded-full mb-4">
-        {code === 'PAY_PROCESS_CANCELED' ? '결제 취소' : '결제 실패'}
+        {code === 'USER_CANCEL' || code === 'PAY_PROCESS_CANCELED' ? '결제 취소' : '결제 실패'}
       </div>
       <h2 className="text-xl font-bold text-[#04102b] mb-2">
-        {code === 'PAY_PROCESS_CANCELED' ? '결제를 취소하셨습니다' : '결제에 실패했습니다'}
+        {code === 'USER_CANCEL' || code === 'PAY_PROCESS_CANCELED' ? '결제를 취소하셨습니다' : '결제에 실패했습니다'}
       </h2>
       <p className="text-slate-500 text-sm mb-8 max-w-xs mx-auto leading-relaxed">{message}</p>
       <div className="flex justify-center gap-3 flex-wrap">
