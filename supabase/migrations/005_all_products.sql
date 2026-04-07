@@ -3,7 +3,12 @@
 -- Supabase SQL Editor에서 실행하세요
 -- ============================================================
 
+-- 로또 상품 비공개 처리 (PG 심사 정책)
+delete from public.products where category = 'lotto';
+
 insert into public.products (id, name, description, price, category) values
+  -- 사주
+  ('saju_detail',              'AI 사주 상세 리포트',            'AI 12가지 항목 상세 해석',                           1000, 'saju'),
   -- 주식
   ('stock_starter_install',  '주식 스타터 설치',              '1개 종목 자동 매매 설치',                        99000, 'stock'),
   ('stock_pro_install',      '주식 프로 설치',                '5개 종목 + 전략 커스터마이징 설치',              199000, 'stock'),

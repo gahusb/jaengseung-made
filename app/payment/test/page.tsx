@@ -5,10 +5,7 @@ import { PRODUCTS } from '@/lib/products';
 
 // DB products 테이블에 등록된 상품만 테스트 가능
 const TEST_PRODUCTS = [
-  'saju_detail',     // 4,900원
-  'lotto_gold',      // 900원/월
-  'lotto_platinum',  // 2,900원/월
-  'lotto_diamond',   // 9,900원/월
+  'saju_detail',     // 1,000원
 ];
 
 export default function PaymentTestPage() {
