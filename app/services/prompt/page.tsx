@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+import PaymentButton from '../../components/PaymentButton';
 import { trackCTAClick } from '../../../lib/gtag';
 const KAKAO_CHANNEL_URL = process.env.NEXT_PUBLIC_KAKAO_CHANNEL_URL ?? null;
 
@@ -381,21 +382,6 @@ export default function PromptPage() {
   return (
     <div ref={containerRef} className="min-h-full bg-[#f0f5ff]">
       <style>{`
-        .reveal {
-          opacity: 0;
-          transform: translateY(1.5rem);
-          transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.is-visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        .reveal-d1 { transition-delay: 80ms; }
-        .reveal-d2 { transition-delay: 160ms; }
-        .reveal-d3 { transition-delay: 240ms; }
-        .reveal-d4 { transition-delay: 320ms; }
-        .reveal-d5 { transition-delay: 400ms; }
         .prompt-card {
           transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
                       box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -522,28 +508,15 @@ export default function PromptPage() {
                 </div>
                 {/* CTA */}
                 <div className="p-6">
-                  {KAKAO_CHANNEL_URL ? (
-                    <a
-                      href={KAKAO_CHANNEL_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-sm font-extrabold transition-all hover:opacity-90"
-                      style={{ background: '#FEE500', color: '#3A1D1D' }}
-                    >
-                      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.438 1.418 4.6 3.584 5.977l-.916 3.41c-.086.32.283.573.56.38l4.014-2.674A11.29 11.29 0 0012 18c5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/></svg>
-                      카카오로 구매 문의
-                    </a>
-                  ) : (
-                    <button
-                      onClick={() => openModal(`프롬프트 패키지 — ${product.title}`)}
-                      className="w-full py-3.5 rounded-xl text-sm font-extrabold transition-all hover:opacity-90"
-                      style={{ background: product.accentColor, color: product.bgFrom }}
-                    >
-                      구매 문의하기 →
-                    </button>
-                  )}
+                  <PaymentButton
+                    productId={product.productId}
+                    className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-sm font-extrabold transition-all hover:opacity-90"
+                    style={{ background: product.accentColor, color: product.bgFrom }}
+                  >
+                    지금 구매하기 →
+                  </PaymentButton>
                   <p className="text-center text-xs mt-2" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                    문의 시 프롬프트 샘플 파일 미리 제공
+                    결제 즉시 다운로드 · 로그인 필요
                   </p>
                 </div>
               </div>

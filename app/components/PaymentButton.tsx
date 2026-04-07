@@ -38,7 +38,7 @@ export default function PaymentButton({ productId, className, style, children, r
       await supabase.from('profiles').upsert({ id: user.id, email: user.email }, { onConflict: 'id' });
 
       // 3. Supabase에 order 생성
-      const paymentId = `order_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
+      const paymentId = crypto.randomUUID();
       const { error: orderError } = await supabase
         .from('orders')
         .insert({
@@ -53,10 +53,8 @@ export default function PaymentButton({ productId, className, style, children, r
       if (orderError) throw new Error('주문 생성 실패: ' + orderError.message);
 
       // 4. 포트원 V2 결제 요청
-      const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID!;
-
       const response = await PortOne.requestPayment({
-        storeId,
+        storeId: process.env.NEXT_PUBLIC_PORTONE_STORE_ID ?? '',
         channelKey: channel.channelKey,
         paymentId,
         orderName: product.name,
@@ -122,7 +120,7 @@ export default function PaymentButton({ productId, className, style, children, r
 
   if (!product) return null;
 
-  const isTestMode = process.env.NEXT_PUBLIC_PORTONE_STORE_ID?.includes('test')
+  const isTestMode = !process.env.NEXT_PUBLIC_PORTONE_STORE_ID
     || process.env.NODE_ENV === 'development';
 
   return (

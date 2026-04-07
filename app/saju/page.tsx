@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-// PaymentButton 비활성화 — 토스페이먼츠 결제 일시 중단
+import PaymentButton from '@/app/components/PaymentButton';
 import { createClient } from '@/lib/supabase/client';
 
 const faqItems = [
@@ -202,7 +202,7 @@ export default function SajuPage() {
             <div className="text-center mb-8">
               <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">PRICING</p>
               <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b] tracking-tight">무엇을 분석해드리나요</h2>
-              <p className="text-slate-500 text-sm mt-2">기본 원국부터 AI 상세 해석까지 — 현재 전부 무료</p>
+              <p className="text-slate-500 text-sm mt-2">기본 원국은 무료, AI 상세 해석은 4,900원</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -256,8 +256,8 @@ export default function SajuPage() {
                   backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 30px)',
                 }}
               >
-                <div className="absolute top-4 right-4 bg-emerald-400 text-[#04102b] text-xs font-bold px-2 py-0.5 rounded-lg">
-                  현재 무료
+                <div className="absolute top-4 right-4 bg-amber-400 text-[#04102b] text-xs font-bold px-2 py-0.5 rounded-lg">
+                  4,900원
                 </div>
                 <div className="flex items-center gap-3 mb-5 relative">
                   <div className="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-400/30 flex items-center justify-center">
@@ -277,7 +277,7 @@ export default function SajuPage() {
                     '용신·희신·기신 추정',
                     '대운 (10년 주기) 분석',
                     '올해 세운 흐름',
-                    'GPT-4o AI 12가지 상세 해석',
+                    'Gemini 2.5 Pro AI 12가지 상세 해석',
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-2.5 text-sm text-blue-200">
                       <div className="w-4 h-4 rounded-full bg-amber-400/20 border border-amber-400/40 flex items-center justify-center flex-shrink-0">
@@ -288,13 +288,16 @@ export default function SajuPage() {
                   ))}
                 </ul>
                 <div className="mt-6 pt-5 border-t border-white/10 relative">
-                  <div className="text-lg font-bold text-emerald-400 mb-1">현재 무료 제공 중</div>
-                  <div className="text-xs text-blue-300/70 mt-1 mb-4">로그인 없이 즉시 분석 · 12가지 항목 AI 해석</div>
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-2xl font-extrabold text-white">4,900원</span>
+                    <span className="text-xs text-blue-300/50">/ 1회</span>
+                  </div>
+                  <div className="text-xs text-blue-300/70 mt-1 mb-4">로그인 후 결제 · 12가지 항목 AI 해석</div>
                   <Link
                     href="/saju/input"
                     className="block w-full text-center py-3 rounded-xl text-sm font-bold transition bg-amber-400 text-[#04102b] hover:bg-amber-300"
                   >
-                    무료로 사주 분석하기 →
+                    사주 분석 시작하기 →
                   </Link>
                 </div>
               </div>

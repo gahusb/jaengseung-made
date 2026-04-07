@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ContactModal from '../../components/ContactModal';
+import PaymentButton from '../../components/PaymentButton';
 
 const KAKAO_CHANNEL_URL = process.env.NEXT_PUBLIC_KAKAO_CHANNEL_URL ?? null;
 
@@ -252,30 +253,18 @@ export default function AiKitPage() {
             <p className="text-indigo-300/60 text-xs mt-1">언제든 해지 가능 · 해지 후 월말까지 이용</p>
           </div>
 
-          <div className="flex flex-col gap-3">
-            {KAKAO_CHANNEL_URL ? (
-              <a
-                href={KAKAO_CHANNEL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-[#FEE500] hover:bg-[#F5DC00] text-[#3A1D1D] text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-xs"
-              >
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor"><path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.438 1.418 4.6 3.584 5.977l-.916 3.41c-.086.32.283.573.56.38l4.014-2.674A11.29 11.29 0 0012 18c5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/></svg>
-                카카오로 구독 문의
-              </a>
-            ) : (
-              <button
-                onClick={() => setModalOpen(true)}
-                className="bg-blue-600 hover:bg-blue-500 text-white text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-xs"
-              >
-                월 {totalMonthlySaving}시간 되찾기 — 문의하기 →
-              </button>
-            )}
+          <div className="flex flex-col gap-3 items-center">
+            <PaymentButton
+              productId="ai_kit_monthly"
+              className="inline-flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-xs"
+            >
+              월 구독 시작하기 — 19,900원/월
+            </PaymentButton>
             <button
               onClick={() => setModalOpen(true)}
               className="text-indigo-300/60 hover:text-indigo-300 text-sm underline underline-offset-2 transition-colors"
             >
-              이메일로 문의하기
+              문의 후 구독하기
             </button>
           </div>
         </div>
@@ -566,25 +555,13 @@ export default function AiKitPage() {
             <br />언제든 해지 가능하니 한 달만 써보세요.
           </p>
           <div className="flex flex-col items-center gap-3">
-            {KAKAO_CHANNEL_URL ? (
-              <a
-                href={KAKAO_CHANNEL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-[#FEE500] hover:bg-[#F5DC00] text-[#3A1D1D] text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-sm"
-              >
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor"><path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.438 1.418 4.6 3.584 5.977l-.916 3.41c-.086.32.283.573.56.38l4.014-2.674A11.29 11.29 0 0012 18c5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/></svg>
-                카카오로 구독 문의 — 19,900원/월
-              </a>
-            ) : (
-              <button
-                onClick={() => setModalOpen(true)}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-sm"
-              >
-                월 {totalMonthlySaving}시간 되찾기 — 문의하기 →
-              </button>
-            )}
-            <p className="text-white/25 text-xs">카카오 또는 이메일 문의 · 월 19,900원 · 언제든 해지 가능</p>
+            <PaymentButton
+              productId="ai_kit_monthly"
+              className="inline-flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white text-base font-bold px-8 py-4 rounded-xl transition-colors w-full max-w-sm"
+            >
+              지금 구독 시작하기 — 19,900원/월
+            </PaymentButton>
+            <p className="text-white/25 text-xs">로그인 필요 · 월 19,900원 · 언제든 해지 가능</p>
           </div>
         </div>
       </div>
