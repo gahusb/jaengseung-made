@@ -317,7 +317,7 @@ export default function SajuAISection({
             productId="saju_detail"
             className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-[#04102b] font-bold px-7 py-3 rounded-xl transition-all"
           >
-            AI 상세 해석 받기 — 4,900원
+            AI 상세 해석 받기 — 1,000원
           </PaymentButton>
           <p className="text-blue-200/40 text-xs mt-3">결제 후 즉시 AI 분석 시작 · 로그인 필요</p>
         </div>

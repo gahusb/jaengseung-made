@@ -202,7 +202,7 @@ export default function SajuPage() {
             <div className="text-center mb-8">
               <p className="text-[#1a56db] text-xs font-bold uppercase tracking-widest mb-2">PRICING</p>
               <h2 className="text-2xl md:text-3xl font-extrabold text-[#04102b] tracking-tight">무엇을 분석해드리나요</h2>
-              <p className="text-slate-500 text-sm mt-2">기본 원국은 무료, AI 상세 해석은 4,900원</p>
+              <p className="text-slate-500 text-sm mt-2">기본 원국은 무료, AI 상세 해석은 1,000원</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -257,7 +257,7 @@ export default function SajuPage() {
                 }}
               >
                 <div className="absolute top-4 right-4 bg-amber-400 text-[#04102b] text-xs font-bold px-2 py-0.5 rounded-lg">
-                  4,900원
+                  1,000원
                 </div>
                 <div className="flex items-center gap-3 mb-5 relative">
                   <div className="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-400/30 flex items-center justify-center">
@@ -289,7 +289,7 @@ export default function SajuPage() {
                 </ul>
                 <div className="mt-6 pt-5 border-t border-white/10 relative">
                   <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-2xl font-extrabold text-white">4,900원</span>
+                    <span className="text-2xl font-extrabold text-white">1,000원</span>
                     <span className="text-xs text-blue-300/50">/ 1회</span>
                   </div>
                   <div className="text-xs text-blue-300/70 mt-1 mb-4">로그인 후 결제 · 12가지 항목 AI 해석</div>

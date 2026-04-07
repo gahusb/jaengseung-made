@@ -66,7 +66,7 @@ create table public.products (
 
 -- 초기 상품 데이터
 insert into public.products (id, name, description, price, category) values
-  ('saju_detail',    'AI 사주 상세 리포트',  '신강/신약, 용신, 대운, AI 12가지 항목 해석',        4900, 'saju'),
+  ('saju_detail',    'AI 사주 상세 리포트',  '신강/신약, 용신, 대운, AI 12가지 항목 해석',        1000, 'saju'),
   ('lotto_gold',     '로또 골드 플랜',       '매주 1회 번호 추천 · 이메일 발송',                   900, 'lotto'),
   ('lotto_platinum', '로또 플래티넘 플랜',   '매주 3회 번호 + 상세 분석 + 텔레그램 알림',          2900, 'lotto'),
   ('lotto_diamond',  '로또 다이아 플랜',     '횟수 무제한 + 전체 기능 + 연간 패턴 리포트',         9900, 'lotto');

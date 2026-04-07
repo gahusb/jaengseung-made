@@ -59,7 +59,7 @@ export const PRODUCTS: Record<string, Product> = {
   saju_detail: {
     id: 'saju_detail',
     name: 'AI 사주 상세 리포트',
-    price: 4900,
+    price: 1000,
     type: 'one_time',
     description: 'AI 12가지 항목 상세 해석',
   },
