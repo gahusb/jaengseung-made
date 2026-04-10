@@ -37,6 +37,7 @@ export default function QuotePage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'wbs' | 'quote' | 'maintenance'>('overview');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false);
 
   useEffect(() => {
     fetch(`/api/quote/${token}`)
@@ -53,7 +54,10 @@ export default function QuotePage() {
         else if (d.quote.maintenance.length > 0) setSelectedMaintenance(d.quote.maintenance[0].id);
         // ?print=1 파라미터 시 자동 인쇄 다이얼로그
         if (searchParams.get('print') === '1') {
-          setTimeout(() => window.print(), 800);
+          setTimeout(() => {
+            setIsPrinting(true);
+            setTimeout(() => window.print(), 300);
+          }, 800);
         }
       })
       .catch(() => setNotFound(true))
@@ -145,14 +149,18 @@ export default function QuotePage() {
         input[type=checkbox] { accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer; }
         input[type=radio] { accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer; }
         @media print {
-          body { background: white !important; color: #1e293b !important; }
+          body { background: white !important; color: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           .no-print { display: none !important; }
           .print-break { page-break-before: always; }
+          .print-section-title { display: block !important; }
           [style*="background: #0a0f1e"], [style*="background: #0f172a"] {
             background: white !important;
             color: #1e293b !important;
           }
+          table { page-break-inside: auto; }
+          tr { page-break-inside: avoid; }
         }
+        .print-section-title { display: none; }
       `}</style>
 
       {/* 헤더 */}
@@ -171,7 +179,13 @@ export default function QuotePage() {
               </span>
               <button
                 className="no-print"
-                onClick={() => window.print()}
+                onClick={() => {
+                  setIsPrinting(true);
+                  setTimeout(() => {
+                    window.print();
+                    setIsPrinting(false);
+                  }, 300);
+                }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)',
@@ -213,7 +227,7 @@ export default function QuotePage() {
           </div>
 
           {/* 탭 */}
-          <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="no-print" style={{ display: isPrinting ? 'none' : 'flex', gap: 0, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
             {tabs.map((t) => (
               <button key={t.key} onClick={() => setActiveTab(t.key as typeof activeTab)}
                 style={{
@@ -246,8 +260,10 @@ export default function QuotePage() {
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '32px 24px' }}>
 
         {/* ── 개요 ── */}
-        {activeTab === 'overview' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, animation: 'fadeUp 0.4s ease' }}>
+        {(isPrinting || activeTab === 'overview') && (
+          <div style={{ animation: 'fadeUp 0.4s ease' }}>
+          {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: '#818cf8', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid rgba(99,102,241,0.3)' }}>개요</h2>}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
             <StatCard label="총 필수 항목" value={requiredItems.length + '개'} sub="반드시 포함" color="#60a5fa" />
             <StatCard label="총 선택 항목" value={optionalItems.length + '개'} sub="고객 선택 가능" color="#a78bfa" />
             <StatCard label="필수 견적 합계" value={requiredTotal.toLocaleString() + '원'} sub="VAT 별도" color="#34d399" />
@@ -258,11 +274,13 @@ export default function QuotePage() {
               color="#f59e0b"
             />
           </div>
+          </div>
         )}
 
         {/* ── WBS ── */}
-        {activeTab === 'wbs' && (
-          <div style={{ animation: 'fadeUp 0.4s ease' }}>
+        {(isPrinting || activeTab === 'wbs') && quote.wbs.length > 0 && (
+          <div style={{ animation: 'fadeUp 0.4s ease', marginTop: isPrinting ? 40 : 0 }}>
+            {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: '#818cf8', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid rgba(99,102,241,0.3)' }}>WBS (작업 분류 체계)</h2>}
             {quote.wbs.map((phase, pi) => (
               <div key={phase.id} style={{ marginBottom: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
@@ -302,8 +320,9 @@ export default function QuotePage() {
         )}
 
         {/* ── 견적 항목 ── */}
-        {activeTab === 'quote' && (
-          <div style={{ animation: 'fadeUp 0.4s ease' }}>
+        {(isPrinting || activeTab === 'quote') && (
+          <div style={{ animation: 'fadeUp 0.4s ease', marginTop: isPrinting ? 40 : 0 }}>
+            {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: '#818cf8', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid rgba(99,102,241,0.3)' }}>견적 항목</h2>}
             {/* 필수 항목 */}
             {requiredItems.length > 0 && (
               <section style={{ marginBottom: 32 }}>
@@ -430,8 +449,9 @@ export default function QuotePage() {
         )}
 
         {/* ── 향후 관리 ── */}
-        {activeTab === 'maintenance' && (
-          <div style={{ animation: 'fadeUp 0.4s ease' }}>
+        {(isPrinting || activeTab === 'maintenance') && quote.maintenance.length > 0 && (
+          <div style={{ animation: 'fadeUp 0.4s ease', marginTop: isPrinting ? 40 : 0 }}>
+            {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: '#818cf8', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid rgba(99,102,241,0.3)' }}>향후 관리</h2>}
             <p style={{ color: '#64748b', fontSize: 14, marginBottom: 20 }}>납품 후 유지보수 플랜을 선택해주세요 (선택 사항)</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 16 }}>
               {quote.maintenance.map((plan) => {
