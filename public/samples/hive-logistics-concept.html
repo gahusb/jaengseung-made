@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HIVE LOGISTICS KOREA — 국경을 넘어, 세계를 잇다</title>
+  <meta name="description" content="하이브로지스틱스코리아 — 유럽, 중동, 남미 해상운송 전문 물류 파트너. FCL, LCL, 벌크, 컨테이너 서비스.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'system-ui', 'sans-serif'],
+            display: ['Outfit', 'Pretendard', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              50: '#e8ecf4',
+              100: '#c5cee3',
+              200: '#9eaed0',
+              300: '#768ebd',
+              400: '#5876ae',
+              500: '#3a5f9f',
+              600: '#345797',
+              700: '#2c4d8d',
+              800: '#1a3358',
+              900: '#0f2042',
+              950: '#0a1628',
+            },
+            teal: {
+              400: '#2dd4bf',
+              500: '#0891b2',
+              600: '#0e7490',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Pretendard', system-ui, sans-serif; background: #0a1628; color: #e2e8f0; overflow-x: hidden; }
+
+    /* ── Transitions ── */
+    .ease-expo { transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+
+    /* ── Scroll Animations ── */
+    .reveal { opacity: 0; transform: translateY(2.5rem); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-3rem); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(3rem); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.92); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+    .stagger-1 { transition-delay: 0.08s; }
+    .stagger-2 { transition-delay: 0.16s; }
+    .stagger-3 { transition-delay: 0.24s; }
+    .stagger-4 { transition-delay: 0.32s; }
+    .stagger-5 { transition-delay: 0.40s; }
+    .stagger-6 { transition-delay: 0.48s; }
+
+    /* ── Glass Nav ── */
+    .glass-nav {
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      background: rgba(10, 22, 40, 0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .glass-nav.scrolled {
+      background: rgba(10, 22, 40, 0.92);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+    }
+
+    /* ── CTA Button Physics ── */
+    .cta-pill {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+    .cta-pill:hover { transform: scale(1.02); }
+    .cta-pill:active { transform: scale(0.98); }
+
+    /* ── Double-Bezel Card ── */
+    .double-bezel {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .double-bezel::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border-radius: inherit;
+      border: 1px solid rgba(255,255,255,0.04);
+      pointer-events: none;
+    }
+
+    /* ── Service Card Hover ── */
+    .service-card {
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(8, 145, 178, 0.3);
+      box-shadow: 0 24px 64px -16px rgba(8, 145, 178, 0.15), 0 0 0 1px rgba(8, 145, 178, 0.1);
+    }
+
+    /* ── Gradient Mesh BG ── */
+    .mesh-bg-hero {
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(8,145,178,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 75% 20%, rgba(14,116,144,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 60% at 90% 80%, rgba(245,158,11,0.06) 0%, transparent 50%),
+        linear-gradient(170deg, #0a1628 0%, #0f2042 40%, #0a1628 100%);
+    }
+    .mesh-bg-dark {
+      background:
+        radial-gradient(ellipse 70% 50% at 30% 50%, rgba(8,145,178,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 80% 30%, rgba(245,158,11,0.04) 0%, transparent 50%),
+        #0a1628;
+    }
+
+    /* ── Marquee ── */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .marquee-track {
+      animation: marquee 25s linear infinite;
+      width: max-content;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    /* ── Grid pattern ── */
+    .grid-pattern {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 0H0v60' fill='none' stroke='%23ffffff' stroke-width='0.3'/%3E%3C/svg%3E");
+      background-size: 60px 60px;
+    }
+
+    /* ── Dot pattern ── */
+    .dot-pattern {
+      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='0.8' fill='%23ffffff'/%3E%3C/svg%3E");
+      background-size: 40px 40px;
+    }
+
+    /* ── Floating Animations ── */
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes float-med {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.6; box-shadow: 0 0 8px rgba(8,145,178,0.3); }
+      50% { opacity: 1; box-shadow: 0 0 20px rgba(8,145,178,0.6); }
+    }
+    .float-slow { animation: float-slow 5s ease-in-out infinite; }
+    .float-med { animation: float-med 3.5s ease-in-out infinite; }
+    .pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+    /* ── Route Lines ── */
+    @keyframes dash-flow {
+      0% { stroke-dashoffset: 200; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .route-line {
+      stroke-dasharray: 8, 8;
+      animation: dash-flow 4s linear infinite;
+    }
+
+    /* ── Eyebrow tag ── */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.375rem 0.875rem;
+      border-radius: 9999px;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Stat divider ── */
+    .stat-divider { position: relative; }
+    .stat-divider::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 1px; height: 2.5rem;
+      background: rgba(255,255,255,0.1);
+    }
+    .stat-divider:last-child::after { display: none; }
+
+    /* ── Korean typography ── */
+    .break-keep { word-break: keep-all; overflow-wrap: break-word; }
+
+    /* ── Form styling ── */
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border-radius: 0.75rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #e2e8f0;
+      font-size: 0.875rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.25); }
+    .form-input:focus {
+      border-color: rgba(8, 145, 178, 0.5);
+      box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+      background: rgba(255,255,255,0.06);
+    }
+    select.form-input { appearance: none; cursor: pointer; }
+
+    /* ── Mobile nav ── */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mobile-menu.open { transform: translateX(0); }
+    .mobile-overlay {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .mobile-overlay.open { opacity: 1; pointer-events: all; }
+
+    /* ── Gradient Text ── */
+    .text-gradient-teal {
+      background: linear-gradient(135deg, #0891b2, #2dd4bf);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .text-gradient-amber {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Select arrow ── */
+    .select-wrapper { position: relative; }
+    .select-wrapper::after {
+      content: '';
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid rgba(255,255,255,0.3);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SECTION 1 — FLOATING GLASS NAVIGATION
+       ══════════════════════════════════════════════════════════════ -->
+  <nav id="mainNav" class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 h-[4.25rem] flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center shadow-lg shadow-teal-500/20 transition-transform duration-300 group-hover:scale-105">
+          <iconify-icon icon="solar:box-bold" width="18" height="18" style="color: white;"></iconify-icon>
+        </div>
+        <div class="leading-none">
+          <span class="font-display font-extrabold text-[0.9375rem] text-white tracking-[0.04em]">HIVE LOGISTICS</span>
+          <span class="block text-[0.5625rem] text-white/35 tracking-[0.2em] font-medium -mt-px">KOREA CO., LTD.</span>
+        </div>
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden lg:flex items-center gap-7">
+        <a href="#about" class="text-white/55 hover:text-white text-[0.8125rem] font-medium transition-colors duration-300">회사소개</a>
+        <a href="#services" class="text-white/55 hover:text-white text-[0.8125rem] font-medium transition-colors duration-300">서비스 안내</a>
+        <a href="#network" class="text-white/55 hover:text-white text-[0.8125rem] font-medium transition-colors duration-300">파트너 네트워크</a>
+        <a href="#contact" class="text-white/55 hover:text-white text-[0.8125rem] font-medium transition-colors duration-300">문의하기</a>
+
+        <!-- Language Toggle Pills -->
+        <div class="flex items-center bg-white/[0.06] rounded-full p-[3px] ml-3 border border-white/[0.06]">
+          <button class="px-3.5 py-[5px] text-[0.6875rem] font-bold rounded-full bg-teal-500 text-white shadow-sm shadow-teal-500/30 transition-all duration-300">KO</button>
+          <button class="px-3.5 py-[5px] text-[0.6875rem] font-medium rounded-full text-white/40 hover:text-white/70 transition-all duration-300">EN</button>
+        </div>
+
+        <a href="#contact" class="cta-pill ml-2 inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-[0.8125rem] px-6 py-2.5 rounded-full shadow-lg shadow-teal-500/20">
+          견적 문의
+          <iconify-icon icon="solar:arrow-right-up-linear" width="14" height="14"></iconify-icon>
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger -->
+      <button id="mobileToggle" class="lg:hidden w-10 h-10 flex items-center justify-center text-white/70 hover:text-white transition-colors">
+        <iconify-icon icon="solar:hamburger-menu-linear" width="24" height="24"></iconify-icon>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobileOverlay" class="mobile-overlay fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm lg:hidden"></div>
+  <!-- Mobile Menu Drawer -->
+  <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 bottom-0 z-[70] w-72 bg-navy-950/95 backdrop-blur-2xl border-l border-white/5 lg:hidden">
+    <div class="flex items-center justify-between px-6 h-[4.25rem] border-b border-white/5">
+      <span class="font-display font-bold text-white text-sm">MENU</span>
+      <button id="mobileClose" class="w-9 h-9 flex items-center justify-center text-white/60 hover:text-white">
+        <iconify-icon icon="solar:close-circle-linear" width="20" height="20"></iconify-icon>
+      </button>
+    </div>
+    <div class="flex flex-col gap-1 px-4 py-6">
+      <a href="#about" class="mobile-link block px-4 py-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl text-sm font-medium transition-all">회사소개</a>
+      <a href="#services" class="mobile-link block px-4 py-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl text-sm font-medium transition-all">서비스 안내</a>
+      <a href="#network" class="mobile-link block px-4 py-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl text-sm font-medium transition-all">파트너 네트워크</a>
+      <a href="#contact" class="mobile-link block px-4 py-3 text-white/70 hover:text-white hover:bg-white/5 rounded-xl text-sm font-medium transition-all">문의하기</a>
+      <div class="flex items-center gap-2 px-4 mt-4">
+        <button class="px-4 py-1.5 text-xs font-bold rounded-full bg-teal-500 text-white">KO</button>
+        <button class="px-4 py-1.5 text-xs font-medium rounded-full bg-white/5 text-white/50">EN</button>
+      </div>
+      <a href="#contact" class="mt-4 mx-4 cta-pill inline-flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold text-sm px-6 py-3 rounded-full">
+        견적 문의
+        <iconify-icon icon="solar:arrow-right-up-linear" width="16" height="16"></iconify-icon>
+      </a>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SECTION 2 — HERO (Split Layout)
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="min-h-[100dvh] flex items-center relative overflow-hidden">
+    <!-- Full-bleed background image -->
+    <div class="absolute inset-0">
+      <img src="https://i.pinimg.com/736x/e7/88/a9/e788a9582f0d8fd8393b9623f045bcdf.jpg" alt="" class="w-full h-full object-cover" loading="eager">
+      <!-- Dark gradient overlay for text readability -->
+      <div class="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/80 to-navy-950/50"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-transparent to-navy-950/40"></div>
+    </div>
+
+    <!-- Subtle grid overlay -->
+    <div class="absolute inset-0 grid-pattern opacity-[0.02]"></div>
+
+    <!-- Ambient teal glow -->
+    <div class="absolute top-[20%] right-[15%] w-96 h-96 bg-teal-500/[0.08] rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-[15%] left-[10%] w-72 h-72 bg-amber-500/[0.05] rounded-full blur-[100px]"></div>
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 pt-28 pb-16 md:pt-32 md:pb-20 relative z-10 w-full">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <!-- Left: Text Content -->
+        <div class="reveal">
+          <div class="eyebrow bg-teal-500/10 text-teal-400 border border-teal-500/20">
+            <span class="w-1.5 h-1.5 bg-teal-400 rounded-full animate-pulse"></span>
+            GLOBAL FREIGHT FORWARDING
+          </div>
+
+          <h1 class="text-[2.5rem] sm:text-5xl md:text-[3.5rem] lg:text-[3.75rem] font-black text-white leading-[1.1] tracking-tight break-keep">
+            국경을 넘어,<br>
+            <span class="text-gradient-teal">세계를 잇다</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-white/60 mt-7 leading-relaxed max-w-[28rem] break-keep">
+            주식회사 하이브로지스틱스코리아는 유럽, 중동, 남미 시장을 대상으로 다수 기업체의 물류를 담당하고 있으며, 세계 각국의 파트너를 보유하여 고객이 만족할 수 있는 물류 운송을 위해 최선을 다하고 있습니다.
+          </p>
+
+          <div class="flex flex-wrap gap-4 mt-10">
+            <a href="#contact" class="cta-pill inline-flex items-center gap-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-navy-950 font-bold px-8 py-4 rounded-full shadow-lg shadow-amber-500/20 text-[0.9375rem]">
+              견적 문의하기
+              <iconify-icon icon="solar:arrow-right-up-bold" width="16" height="16"></iconify-icon>
+            </a>
+            <a href="#services" class="cta-pill inline-flex items-center gap-2 bg-white/[0.08] hover:bg-white/[0.14] border border-white/15 text-white/90 font-medium px-8 py-4 rounded-full text-[0.9375rem] backdrop-blur-sm">
+              <iconify-icon icon="solar:play-circle-bold" width="16" height="16" style="color: #2dd4bf;"></iconify-icon>
+              서비스 둘러보기
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Floating Info Cards (overlay on photo) -->
+        <div class="reveal stagger-2 relative hidden lg:flex flex-col items-end gap-5 pr-4">
+          <!-- Card 1 -->
+          <div class="bg-navy-900/70 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl shadow-black/30 float-slow max-w-[280px]">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-teal-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <iconify-icon icon="solar:ship-bold-duotone" width="24" height="24" style="color: #2dd4bf;"></iconify-icon>
+              </div>
+              <div>
+                <p class="text-xs text-white/40 font-medium">해상운송</p>
+                <p class="text-sm font-bold text-white">FCL / LCL / Bulk</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-navy-900/70 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl shadow-black/30 float-med max-w-[280px] mr-12">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <iconify-icon icon="solar:airplane-bold-duotone" width="24" height="24" style="color: #fbbf24;"></iconify-icon>
+              </div>
+              <div>
+                <p class="text-xs text-white/40 font-medium">항공운송</p>
+                <p class="text-sm font-bold text-white">Express Air Cargo</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-navy-900/70 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl shadow-black/30 float-slow max-w-[280px]" style="animation-delay: 1s;">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-teal-500/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <iconify-icon icon="solar:verified-check-bold" width="24" height="24" style="color: #2dd4bf;"></iconify-icon>
+              </div>
+              <div>
+                <p class="text-xs text-white/40 font-medium">고객 만족도</p>
+                <p class="text-sm font-bold text-teal-400">99%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="mt-16 lg:mt-20 reveal stagger-3">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-0 bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] rounded-2xl overflow-hidden">
+          <div class="stat-divider text-center px-4 py-7 md:py-8">
+            <p class="font-display text-3xl sm:text-4xl font-extrabold text-white">2024</p>
+            <p class="text-white/35 text-xs sm:text-[0.8125rem] mt-1.5 font-medium">설립연도</p>
+          </div>
+          <div class="stat-divider text-center px-4 py-7 md:py-8">
+            <p class="font-display text-2xl sm:text-3xl font-extrabold text-white">유럽<span class="text-teal-400">·</span>중동<span class="text-teal-400">·</span>남미</p>
+            <p class="text-white/35 text-xs sm:text-[0.8125rem] mt-1.5 font-medium">주요 시장</p>
+          </div>
+          <div class="stat-divider text-center px-4 py-7 md:py-8">
+            <p class="font-display text-3xl sm:text-4xl font-extrabold text-white">Global</p>
+            <p class="text-white/35 text-xs sm:text-[0.8125rem] mt-1.5 font-medium">파트너 네트워크</p>
+          </div>
+          <div class="stat-divider text-center px-4 py-7 md:py-8">
+            <p class="font-display text-3xl sm:text-4xl font-extrabold text-white">99<span class="text-teal-400">%</span></p>
+            <p class="text-white/35 text-xs sm:text-[0.8125rem] mt-1.5 font-medium">고객 만족도</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom gradient fade -->
+    <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a1628] to-transparent"></div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SECTION 3 — 회사소개 (Zig-Zag Editorial Layout)
+       ══════════════════════════════════════════════════════════════ -->
+  <section id="about" class="py-24 md:py-32 lg:py-40 relative overflow-hidden" style="background: linear-gradient(180deg, #0a1628 0%, #0d1b32 50%, #0a1628 100%);">
+    <div class="absolute inset-0 dot-pattern opacity-[0.025]"></div>
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
+      <!-- Row 1: Text Left, Image Right -->
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="reveal-left">
+          <div class="eyebrow bg-teal-500/10 text-teal-400 border border-teal-500/15">
+            <iconify-icon icon="solar:buildings-bold" width="12" height="12"></iconify-icon>
+            ABOUT US
+          </div>
+          <h2 class="text-3xl sm:text-4xl md:text-[2.75rem] font-black text-white leading-snug tracking-tight break-keep">
+            국경과 문화의 장벽을 넘어<br>세계 무대를 향해
+          </h2>
+          <div class="text-white/40 mt-6 text-[0.9375rem] leading-[1.9] break-keep max-w-lg space-y-4">
+            <p>안녕하세요, 하이브로지스틱스코리아 홈페이지를 방문해 주셔서 감사드립니다.</p>
+            <p>주식회사 하이브로지스틱스코리아는 2024년 설립하여, 국경과 언어, 문화의 장벽을 넘어 세계 무대를 향해 쉼 없이 도전하여 왔습니다.</p>
+            <p>유럽 및 중동, 남미시장을 대상으로 다수의 기업체의 물류를 담당하고 있으며, 세계 각국에 파트너들을 보유함으로써, 고객이 만족 할 수 있는 물류 운송을 위해 최선을 다하고 있습니다.</p>
+          </div>
+        </div>
+
+        <div class="reveal-right stagger-2">
+          <div class="relative">
+            <div class="aspect-[4/3] rounded-3xl overflow-hidden border border-white/[0.06]">
+              <img src="https://cdn-optimized.imweb.me/upload/S202504284cca458d585e5/cACB95fIQGG0.jpg?w=1920" alt="하이브로지스틱스코리아 회사 소개" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-br from-navy-950/30 to-transparent"></div>
+            </div>
+            <!-- Floating badge -->
+            <div class="absolute -bottom-5 -left-3 sm:-left-6 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-bold text-sm px-6 py-3.5 rounded-2xl shadow-xl shadow-teal-500/25">
+              <span class="flex items-center gap-2">
+                <iconify-icon icon="solar:routing-bold" width="16" height="16"></iconify-icon>
+                Since 2024
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Values — 3 Cards -->
+      <div class="mt-24 lg:mt-32">
+        <div class="text-center mb-12 reveal">
+          <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight break-keep">핵심 가치</h3>
+          <p class="text-white/30 mt-3 text-[0.9375rem]">하이브로지스틱스코리아가 추구하는 세 가지 핵심 가치</p>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-5">
+          <!-- Card 1: 글로벌 네트워크 -->
+          <div class="reveal stagger-1 group">
+            <div class="service-card double-bezel rounded-3xl p-8 h-full text-center">
+              <div class="w-16 h-16 bg-teal-500/10 border border-teal-500/15 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:bg-teal-500/20 group-hover:scale-105">
+                <iconify-icon icon="solar:earth-bold-duotone" width="32" height="32" style="color: #2dd4bf;"></iconify-icon>
+              </div>
+              <h4 class="font-display text-lg font-bold text-white">글로벌 네트워크</h4>
+              <p class="text-white/30 text-sm mt-3 leading-relaxed break-keep">
+                전 세계 주요 항만과 공항에 걸친 파트너 네트워크로 유럽, 중동, 남미 어디든 연결합니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 2: 신속 정확한 운송 -->
+          <div class="reveal stagger-2 group">
+            <div class="service-card double-bezel rounded-3xl p-8 h-full text-center">
+              <div class="w-16 h-16 bg-amber-500/10 border border-amber-500/15 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:bg-amber-500/20 group-hover:scale-105">
+                <iconify-icon icon="solar:delivery-bold-duotone" width="32" height="32" style="color: #fbbf24;"></iconify-icon>
+              </div>
+              <h4 class="font-display text-lg font-bold text-white">신속 정확한 운송</h4>
+              <p class="text-white/30 text-sm mt-3 leading-relaxed break-keep">
+                정확한 스케줄 관리와 실시간 모니터링으로 화물을 안전하고 빠르게 배송합니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- Card 3: 신뢰할 수 있는 파트너 -->
+          <div class="reveal stagger-3 group">
+            <div class="service-card double-bezel rounded-3xl p-8 h-full text-center">
+              <div class="w-16 h-16 bg-teal-500/10 border border-teal-500/15 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:bg-teal-500/20 group-hover:scale-105">
+                <iconify-icon icon="solar:handshake-bold-duotone" width="32" height="32" style="color: #2dd4bf;"></iconify-icon>
+              </div>
+              <h4 class="font-display text-lg font-bold text-white">신뢰할 수 있는 파트너</h4>
+              <p class="text-white/30 text-sm mt-3 leading-relaxed break-keep">
+                고객의 비즈니스를 깊이 이해하고, 단순 운송을 넘어 진정한 물류 파트너로 함께합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SECTION 4 — 서비스 안내 (해상운송)
+       ══════════════════════════════════════════════════════════════ -->
+  <section id="services" class="py-24 md:py-32 lg:py-40 mesh-bg-dark relative overflow-hidden">
+    <div class="absolute inset-0 grid-pattern opacity-[0.02]"></div>
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
+      <!-- Header -->
+      <div class="text-center mb-16 md:mb-20 reveal">
+        <div class="eyebrow bg-teal-500/10 text-teal-400 border border-teal-500/15 mx-auto w-fit">
+          <iconify-icon icon="solar:ship-bold" width="12" height="12"></iconify-icon>
+          OCEAN FREIGHT SERVICE
+        </div>
+        <h2 class="text-3xl sm:text-4xl md:text-[2.75rem] font-black text-white tracking-tight break-keep">
+          해상운송 서비스
+        </h2>
+        <p class="text-white/35 mt-5 max-w-xl mx-auto text-[0.9375rem] break-keep leading-relaxed">
+          화물의 특성과 물량에 맞는 최적의 해상운송 솔루션을 제공합니다.
+        </p>
+      </div>
+
+      <!-- ── FCL vs LCL Comparison ── -->
+      <div class="grid md:grid-cols-2 gap-6 mb-16">
+        <!-- FCL Card -->
+        <div class="reveal-left stagger-1 group">
+          <div class="service-card double-bezel rounded-3xl p-8 md:p-9 h-full">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 bg-teal-500/10 border border-teal-500/15 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-teal-500/20">
+                <iconify-icon icon="solar:box-bold-duotone" width="28" height="28" style="color: #2dd4bf;"></iconify-icon>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-1">
+                  <h3 class="font-display text-xl font-bold text-white">FCL</h3>
+                  <span class="text-[0.625rem] font-bold text-teal-400 bg-teal-500/10 border border-teal-500/15 px-3 py-1 rounded-full">Full Container Load</span>
+                </div>
+                <p class="text-white/35 text-sm mt-3 leading-relaxed break-keep">
+                  충분한 화물량을 보유한 고객을 위한 전용 컨테이너 운송 서비스입니다. 컨테이너 한 대를 단독으로 사용하여 화물의 안전성을 극대화하고, 중간 환적 없이 목적지까지 직송합니다.
+                </p>
+                <div class="flex flex-wrap gap-2 mt-5">
+                  <span class="text-[0.625rem] font-bold text-teal-400 bg-teal-500/10 border border-teal-500/15 px-3 py-1.5 rounded-full">전용 컨테이너</span>
+                  <span class="text-[0.625rem] font-bold text-teal-400 bg-teal-500/10 border border-teal-500/15 px-3 py-1.5 rounded-full">대량 화물</span>
+                  <span class="text-[0.625rem] font-bold text-teal-400 bg-teal-500/10 border border-teal-500/15 px-3 py-1.5 rounded-full">직송 운송</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LCL Card -->
+        <div class="reveal-right stagger-2 group">
+          <div class="service-card double-bezel rounded-3xl p-8 md:p-9 h-full">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/15 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-amber-500/20">
+                <iconify-icon icon="solar:inbox-bold-duotone" width="28" height="28" style="color: #fbbf24;"></iconify-icon>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-1">
+                  <h3 class="font-display text-xl font-bold text-white">LCL</h3>
+                  <span class="text-[0.625rem] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/15 px-3 py-1 rounded-full">Less than Container Load</span>
+                </div>
+                <p class="text-white/35 text-sm mt-3 leading-relaxed break-keep">
+                  소량 화물을 위한 혼적 컨테이너 운송 서비스입니다. 컨테이너 하나를 가득 채울 만큼의 물량이 되지 않는 경우, 다른 화주의 화물과 함께 적재하여 비용 효율적으로 운송합니다.
+                </p>
+                <div class="flex flex-wrap gap-2 mt-5">
+                  <span class="text-[0.625rem] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/15 px-3 py-1.5 rounded-full">혼적 운송</span>
+                  <span class="text-[0.625rem] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/15 px-3 py-1.5 rounded-full">소량 화물</span>
+                  <span class="text-[0.625rem] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/15 px-3 py-1.5 rounded-full">비용 효율</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 컨테이너 서비스 4종 (Bento Grid) ── -->
+      <div class="mb-16">
+        <div class="text-center mb-10 reveal">
+          <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight">컨테이너 서비스</h3>
+          <p class="text-white/30 mt-3 text-[0.9375rem]">다양한 화물 유형에 맞는 전문 컨테이너를 제공합니다</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Dry Container -->
+          <div class="reveal stagger-1 group">
+            <div class="service-card double-bezel rounded-3xl p-7 h-full">
+              <div class="w-12 h-12 bg-teal-500/10 border border-teal-500/15 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:bg-teal-500/20">
+                <iconify-icon icon="solar:box-minimalistic-bold-duotone" width="24" height="24" style="color: #2dd4bf;"></iconify-icon>
+              </div>
+              <h4 class="font-display text-base font-bold text-white">건화물 컨테이너</h4>
+              <span class="text-white/20 text-xs font-medium">Dry Container</span>
+              <p class="text-white/30 text-sm mt-3 leading-relaxed break-keep">
+                일반 건조 화물 운송용으로 가장 범용적인 컨테이너입니다. 20ft, 40ft 등 다양한 사이즈를 제공합니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- Reefer Container -->
+          <div class="reveal stagger-2 group">
+            <div class="service-card double-bezel rounded-3xl p-7 h-full">
+              <div class="w-12 h-12 bg-teal-500/10 border border-teal-500/15 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:bg-teal-500/20">
+                <iconify-icon icon="solar:snowflake-bold-duotone" width="24" height="24" style="color: #2dd4bf;"></iconify-icon>
+              </div>
+              <h4 class="font-display text-base font-bold text-white">냉동 컨테이너</h4>
+              <span class="text-white/20 text-xs font-medium">Reefer Container</span>
+              <p class="text-white/30 text-sm mt-3 leading-relaxed break-keep">
+                온도 조절이 필요한 식품, 의약품 등의 화물을 위한 냉장/냉동 컨테이너입니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- Open Top Container -->
+          <div class="reveal stagger-3 group">
+            <div class="service-card double-bezel rounded-3xl p-7 h-full">
+              <div class="w-12 h-12 bg-amber-500/10 border border-amber-500/15 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:bg-amber-500/20">
+                <iconify-icon icon="solar:upload-square-bold-duotone" width="24" height="24" style="color: #fbbf24;"></iconify-icon>
+              </div>
+              <h4 class="font-display text-base font-bold text-white">오픈탑 컨테이너</h4>
+              <span class="text-white/20 text-xs font-medium">Open Top Container</span>
+              <p class="text-white/30 text-sm mt-3 leading-relaxed break-keep">
+                높이 초과 화물이나 중장비 등 상부 적재가 필요한 화물을 위한 컨테이너입니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- Flat Rack Container -->
+          <div class="reveal stagger-4 group">
+            <div class="service-card double-bezel rounded-3xl p-7 h-full">
+              <div class="w-12 h-12 bg-amber-500/10 border border-amber-500/15 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:bg-amber-500/20">
+                <iconify-icon icon="solar:ruler-cross-pen-bold-duotone" width="24" height="24" style="color: #fbbf24;"></iconify-icon>
+              </div>
+              <h4 class="font-display text-base font-bold text-white">플랫 랙 컨테이너</h4>
+              <span class="text-white/20 text-xs font-medium">Flat Rack Container</span>
+              <p class="text-white/30 text-sm mt-3 leading-relaxed break-keep">
+                폭 초과 또는 중량 화물을 위한 접이식/고정식 컨테이너입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 벌크 서비스 2종 ── -->
+      <div>
+        <div class="text-center mb-10 reveal">
+          <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight">벌크 서비스</h3>
+          <p class="text-white/30 mt-3 text-[0.9375rem]">컨테이너에 담기 어려운 대량 화물을 위한 전문 벌크 운송</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Dry Bulk -->
+          <div class="reveal-left stagger-1 group">
+            <div class="service-card double-bezel rounded-3xl p-8 md:p-9 h-full">
+              <div class="flex items-start gap-5">
+                <div class="w-14 h-14 bg-teal-500/10 border border-teal-500/15 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-teal-500/20">
+                  <iconify-icon icon="solar:mountain-bold-duotone" width="28" height="28" style="color: #2dd4bf;"></iconify-icon>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-display text-lg font-bold text-white">건화물 벌크</h3>
+                  <span class="text-white/20 text-xs font-medium">Dry Bulk</span>
+                  <p class="text-white/35 text-sm mt-3 leading-relaxed break-keep">
+                    곡물, 광물, 시멘트 등 포장하지 않은 상태의 건조 산적 화물을 대형 벌크선을 통해 효율적으로 운송합니다.
+                  </p>
+                  <div class="flex flex-wrap gap-2 mt-5">
+                    <span class="text-[0.625rem] font-bold text-teal-400 bg-teal-500/10 border border-teal-500/15 px-3 py-1.5 rounded-full">곡물</span>
+                    <span class="text-[0.625rem] font-bold text-teal-400 bg-teal-500/10 border border-teal-500/15 px-3 py-1.5 rounded-full">광물</span>
+                    <span class="text-[0.625rem] font-bold text-teal-400 bg-teal-500/10 border border-teal-500/15 px-3 py-1.5 rounded-full">시멘트</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chemical / Gas Bulk -->
+          <div class="reveal-right stagger-2 group">
+            <div class="service-card double-bezel rounded-3xl p-8 md:p-9 h-full">
+              <div class="flex items-start gap-5">
+                <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/15 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-amber-500/20">
+                  <iconify-icon icon="solar:test-tube-bold-duotone" width="28" height="28" style="color: #fbbf24;"></iconify-icon>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-display text-lg font-bold text-white">액체/가스 벌크</h3>
+                  <span class="text-white/20 text-xs font-medium">Chemical / Gas Bulk</span>
+                  <p class="text-white/35 text-sm mt-3 leading-relaxed break-keep">
+                    석유, 화학물질, LNG 등 액체 및 가스 상태의 화물을 전문 탱커선을 통해 안전하게 운송합니다.
+                  </p>
+                  <div class="flex flex-wrap gap-2 mt-5">
+                    <span class="text-[0.625rem] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/15 px-3 py-1.5 rounded-full">석유</span>
+                    <span class="text-[0.625rem] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/15 px-3 py-1.5 rounded-full">화학물질</span>
+                    <span class="text-[0.625rem] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/15 px-3 py-1.5 rounded-full">LNG</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SECTION 5 — 파트너 네트워크
+       ══════════════════════════════════════════════════════════════ -->
+  <section id="network" class="py-24 md:py-32 lg:py-40 relative overflow-hidden" style="background: linear-gradient(180deg, #0a1628 0%, #071220 50%, #0a1628 100%);">
+    <!-- Ambient glow -->
+    <div class="absolute top-[20%] left-[10%] w-[32rem] h-[32rem] bg-teal-500/[0.04] rounded-full blur-[150px]"></div>
+    <div class="absolute bottom-[10%] right-[15%] w-[24rem] h-[24rem] bg-teal-600/[0.03] rounded-full blur-[120px]"></div>
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
+      <!-- Header -->
+      <div class="text-center mb-16 md:mb-20 reveal">
+        <div class="eyebrow bg-teal-500/10 text-teal-400 border border-teal-500/15 mx-auto w-fit">
+          <iconify-icon icon="solar:earth-bold" width="12" height="12"></iconify-icon>
+          PARTNER NETWORK
+        </div>
+        <h2 class="text-3xl sm:text-4xl md:text-[2.75rem] font-black text-white tracking-tight break-keep">
+          글로벌 파트너 네트워크
+        </h2>
+        <p class="text-white/35 mt-5 max-w-xl mx-auto text-[0.9375rem] break-keep leading-relaxed">
+          전 세계에 걸친 신뢰할 수 있는 파트너 네트워크로<br class="hidden md:block">
+          어디든 최적의 물류 솔루션을 제공합니다
+        </p>
+      </div>
+
+      <!-- Network Hero Image -->
+      <div class="reveal-scale mb-16">
+        <div class="relative aspect-[16/7] rounded-3xl overflow-hidden border border-white/[0.06]">
+          <img src="https://cdn-optimized.imweb.me/upload/S202504284cca458d585e5/7hGDnxtWEMcC.jpg?w=1920" alt="글로벌 파트너 네트워크" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-navy-950/40"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-4 text-center">
+              <div>
+                <p class="font-display text-lg sm:text-xl font-extrabold text-white">아시아</p>
+                <p class="text-white/30 text-[0.6875rem] mt-0.5">Asia</p>
+              </div>
+              <div>
+                <p class="font-display text-lg sm:text-xl font-extrabold text-white">유럽</p>
+                <p class="text-white/30 text-[0.6875rem] mt-0.5">Europe</p>
+              </div>
+              <div>
+                <p class="font-display text-lg sm:text-xl font-extrabold text-white">미주</p>
+                <p class="text-white/30 text-[0.6875rem] mt-0.5">Americas</p>
+              </div>
+              <div>
+                <p class="font-display text-lg sm:text-xl font-extrabold text-white">중동</p>
+                <p class="text-white/30 text-[0.6875rem] mt-0.5">Middle East</p>
+              </div>
+              <div>
+                <p class="font-display text-lg sm:text-xl font-extrabold text-white">아프리카</p>
+                <p class="text-white/30 text-[0.6875rem] mt-0.5">Africa</p>
+              </div>
+              <div>
+                <p class="font-display text-lg sm:text-xl font-extrabold text-white">오세아니아</p>
+                <p class="text-white/30 text-[0.6875rem] mt-0.5">Oceania</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 파트너 네트워크 장점 4가지 ── -->
+      <div class="mb-20">
+        <div class="max-w-xl mb-12 reveal">
+          <div class="eyebrow bg-amber-500/10 text-amber-400 border border-amber-500/15">
+            <iconify-icon icon="solar:star-bold" width="12" height="12"></iconify-icon>
+            ADVANTAGES
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-black text-white leading-snug tracking-tight break-keep">
+            파트너 네트워크의 강점
+          </h3>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Advantage 1 -->
+          <div class="reveal stagger-1 group">
+            <div class="double-bezel rounded-3xl p-7 h-full transition-all duration-500 hover:border-teal-500/20">
+              <div class="w-14 h-14 bg-teal-500/10 border border-teal-500/15 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-teal-500/15 group-hover:scale-105">
+                <iconify-icon icon="solar:globe-bold-duotone" width="28" height="28" style="color: #2dd4bf;"></iconify-icon>
+              </div>
+              <h4 class="text-base font-bold text-white">전 세계적 커버리지</h4>
+              <p class="text-white/30 text-sm mt-2 leading-relaxed break-keep">
+                아시아, 유럽, 미주, 중동, 아프리카, 오세아니아 전역에 파트너를 보유하고 있습니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- Advantage 2 -->
+          <div class="reveal stagger-2 group">
+            <div class="double-bezel rounded-3xl p-7 h-full transition-all duration-500 hover:border-teal-500/20">
+              <div class="w-14 h-14 bg-teal-500/10 border border-teal-500/15 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-teal-500/15 group-hover:scale-105">
+                <iconify-icon icon="solar:diploma-verified-bold-duotone" width="28" height="28" style="color: #2dd4bf;"></iconify-icon>
+              </div>
+              <h4 class="text-base font-bold text-white">현지 전문성 확보</h4>
+              <p class="text-white/30 text-sm mt-2 leading-relaxed break-keep">
+                각국 관세, 규정, 시장 상황에 정통한 현지 파트너를 통해 전문적인 서비스를 제공합니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- Advantage 3 -->
+          <div class="reveal stagger-3 group">
+            <div class="double-bezel rounded-3xl p-7 h-full transition-all duration-500 hover:border-amber-500/20">
+              <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/15 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-amber-500/15 group-hover:scale-105">
+                <iconify-icon icon="solar:shield-check-bold-duotone" width="28" height="28" style="color: #fbbf24;"></iconify-icon>
+              </div>
+              <h4 class="text-base font-bold text-white">신뢰할 수 있는 파트너사</h4>
+              <p class="text-white/30 text-sm mt-2 leading-relaxed break-keep">
+                엄격한 검증 절차를 거쳐 선별된 파트너사만을 네트워크에 포함합니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- Advantage 4 -->
+          <div class="reveal stagger-4 group">
+            <div class="double-bezel rounded-3xl p-7 h-full transition-all duration-500 hover:border-amber-500/20">
+              <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/15 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-amber-500/15 group-hover:scale-105">
+                <iconify-icon icon="solar:settings-bold-duotone" width="28" height="28" style="color: #fbbf24;"></iconify-icon>
+              </div>
+              <h4 class="text-base font-bold text-white">맞춤형 물류 솔루션</h4>
+              <p class="text-white/30 text-sm mt-2 leading-relaxed break-keep">
+                고객별 화물 특성과 요구사항에 맞는 맞춤 물류 솔루션을 설계하여 제공합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 파트너 네트워크 서비스 4종 (2x2 Bento) ── -->
+      <div>
+        <div class="text-center mb-12 reveal">
+          <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight break-keep">파트너 네트워크 서비스</h3>
+          <p class="text-white/30 mt-3 text-[0.9375rem]">글로벌 파트너를 통해 제공하는 주요 서비스</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <!-- Service 1: 항공 및 해상 운송 -->
+          <div class="reveal stagger-1 group">
+            <div class="service-card double-bezel rounded-3xl p-8 h-full">
+              <div class="flex items-start gap-5">
+                <div class="w-14 h-14 bg-teal-500/10 border border-teal-500/15 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-teal-500/20">
+                  <iconify-icon icon="solar:airplane-bold-duotone" width="28" height="28" style="color: #2dd4bf;"></iconify-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-display text-lg font-bold text-white">항공 및 해상 운송</h4>
+                  <p class="text-white/35 text-sm mt-3 leading-relaxed break-keep">
+                    글로벌 파트너 네트워크를 통해 경쟁력 있는 운임과 안정적인 스케줄을 확보하여 항공 및 해상 운송 서비스를 제공합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service 2: 현지 통관 및 물류 서비스 -->
+          <div class="reveal stagger-2 group">
+            <div class="service-card double-bezel rounded-3xl p-8 h-full">
+              <div class="flex items-start gap-5">
+                <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/15 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-amber-500/20">
+                  <iconify-icon icon="solar:document-text-bold-duotone" width="28" height="28" style="color: #fbbf24;"></iconify-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-display text-lg font-bold text-white">현지 통관 및 물류 서비스</h4>
+                  <p class="text-white/35 text-sm mt-3 leading-relaxed break-keep">
+                    각국의 통관 절차와 라스트마일 배송까지, 현지 파트너를 통해 원활한 통관 및 물류 서비스를 제공합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service 3: 창고 및 보관 서비스 -->
+          <div class="reveal stagger-3 group">
+            <div class="service-card double-bezel rounded-3xl p-8 h-full">
+              <div class="flex items-start gap-5">
+                <div class="w-14 h-14 bg-teal-500/10 border border-teal-500/15 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-teal-500/20">
+                  <iconify-icon icon="solar:garage-bold-duotone" width="28" height="28" style="color: #2dd4bf;"></iconify-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-display text-lg font-bold text-white">창고 및 보관 서비스</h4>
+                  <p class="text-white/35 text-sm mt-3 leading-relaxed break-keep">
+                    파트너가 운영하는 물류 창고를 활용하여 화물의 임시 보관, 재포장, 분류 등 부가 물류 서비스를 제공합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service 4: Door-to-Door 서비스 -->
+          <div class="reveal stagger-4 group">
+            <div class="service-card double-bezel rounded-3xl p-8 h-full">
+              <div class="flex items-start gap-5">
+                <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/15 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:bg-amber-500/20">
+                  <iconify-icon icon="solar:map-arrow-right-bold-duotone" width="28" height="28" style="color: #fbbf24;"></iconify-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-display text-lg font-bold text-white">Door-to-Door 서비스</h4>
+                  <p class="text-white/35 text-sm mt-3 leading-relaxed break-keep">
+                    픽업부터 최종 배송까지 완벽한 일괄 물류 서비스를 제공합니다. 고객은 물류에 대한 걱정 없이 비즈니스에만 집중할 수 있습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       MARQUEE STRIP — Global Regions
+       ══════════════════════════════════════════════════════════════ -->
+  <section class="py-12 md:py-16 bg-[#0a1628] border-y border-white/[0.04] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 mb-8">
+      <p class="text-center text-white/20 text-xs font-bold tracking-[0.2em] uppercase">Global Partner Regions</p>
+    </div>
+    <div class="relative overflow-hidden">
+      <div class="marquee-track flex items-center gap-16 px-8">
+        <!-- Set 1 -->
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">EUROPE</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">MIDDLE EAST</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">SOUTH AMERICA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">SOUTHEAST ASIA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">AFRICA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">OCEANIA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">NORTH AMERICA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">EAST ASIA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">CENTRAL ASIA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">INDIA</span>
+        <!-- Set 2 (seamless loop) -->
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">EUROPE</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">MIDDLE EAST</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">SOUTH AMERICA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">SOUTHEAST ASIA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">AFRICA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">OCEANIA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">NORTH AMERICA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">EAST ASIA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">CENTRAL ASIA</span>
+        <span class="font-display text-xl font-bold text-white/[0.08] whitespace-nowrap tracking-wide">INDIA</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SECTION 6 — 문의하기 (Contact Form)
+       ══════════════════════════════════════════════════════════════ -->
+  <section id="contact" class="py-24 md:py-32 lg:py-40 relative overflow-hidden" style="background: linear-gradient(180deg, #0a1628 0%, #0d1b32 50%, #0a1628 100%);">
+    <div class="absolute inset-0 dot-pattern opacity-[0.02]"></div>
+    <!-- Ambient -->
+    <div class="absolute top-[30%] right-[5%] w-[28rem] h-[28rem] bg-teal-500/[0.04] rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-[20%] left-[10%] w-[20rem] h-[20rem] bg-amber-500/[0.03] rounded-full blur-[100px]"></div>
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
+      <div class="grid lg:grid-cols-5 gap-12 lg:gap-16">
+        <!-- Left: Info -->
+        <div class="lg:col-span-2 reveal-left">
+          <div class="eyebrow bg-amber-500/10 text-amber-400 border border-amber-500/15">
+            <iconify-icon icon="solar:letter-bold" width="12" height="12"></iconify-icon>
+            CONTACT US
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-black text-white leading-snug tracking-tight break-keep">
+            물류 견적 및<br>서비스 문의
+          </h2>
+          <p class="text-white/40 mt-6 text-[0.9375rem] leading-[1.8] break-keep">
+            하이브로지스틱스코리아에 문의해 주시면, 전문 담당자가 신속하게 최적의 물류 솔루션을 안내해 드립니다.
+          </p>
+
+          <!-- Contact Info Cards -->
+          <div class="mt-10 space-y-4">
+            <div class="double-bezel rounded-2xl p-5">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-teal-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <iconify-icon icon="solar:phone-bold-duotone" width="20" height="20" style="color: #2dd4bf;"></iconify-icon>
+                </div>
+                <div>
+                  <p class="text-xs text-white/30 font-medium">전화</p>
+                  <p class="text-sm font-bold text-white">02-786-9506</p>
+                </div>
+              </div>
+            </div>
+            <div class="double-bezel rounded-2xl p-5">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-teal-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <iconify-icon icon="solar:mailbox-bold-duotone" width="20" height="20" style="color: #2dd4bf;"></iconify-icon>
+                </div>
+                <div>
+                  <p class="text-xs text-white/30 font-medium">이메일</p>
+                  <p class="text-sm font-bold text-white">ann@hivelog.co.kr</p>
+                </div>
+              </div>
+            </div>
+            <div class="double-bezel rounded-2xl p-5">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <iconify-icon icon="solar:map-point-bold-duotone" width="20" height="20" style="color: #fbbf24;"></iconify-icon>
+                </div>
+                <div>
+                  <p class="text-xs text-white/30 font-medium">주소</p>
+                  <p class="text-sm font-bold text-white break-keep">서울시 영등포구 여의대방로 65길 20, 508호</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="lg:col-span-3 reveal-right stagger-2">
+          <div class="double-bezel rounded-3xl p-8 md:p-10">
+            <h3 class="font-display text-xl font-bold text-white mb-8">문의 양식</h3>
+            <form class="space-y-5">
+              <div class="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label class="text-xs text-white/40 font-semibold mb-2 block">회사명</label>
+                  <input type="text" placeholder="회사명을 입력해 주세요" class="form-input">
+                </div>
+                <div>
+                  <label class="text-xs text-white/40 font-semibold mb-2 block">담당자명</label>
+                  <input type="text" placeholder="담당자명을 입력해 주세요" class="form-input">
+                </div>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label class="text-xs text-white/40 font-semibold mb-2 block">연락처</label>
+                  <input type="tel" placeholder="010-0000-0000" class="form-input">
+                </div>
+                <div>
+                  <label class="text-xs text-white/40 font-semibold mb-2 block">이메일</label>
+                  <input type="email" placeholder="email@example.com" class="form-input">
+                </div>
+              </div>
+              <div>
+                <label class="text-xs text-white/40 font-semibold mb-2 block">운송 유형</label>
+                <div class="select-wrapper">
+                  <select class="form-input">
+                    <option value="" disabled selected>운송 유형을 선택해 주세요</option>
+                    <option value="ocean">해상운송</option>
+                    <option value="air">항공운송</option>
+                    <option value="express">국제특송</option>
+                    <option value="inland">내륙운송</option>
+                    <option value="etc">기타</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="text-xs text-white/40 font-semibold mb-2 block">문의 내용</label>
+                <textarea rows="5" placeholder="화물 정보, 출발지/도착지, 예상 물량 등을 상세히 적어주시면 더 정확한 견적을 안내해 드립니다." class="form-input resize-none"></textarea>
+              </div>
+              <button type="submit" class="cta-pill w-full inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-navy-950 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/20 text-[0.9375rem] mt-2">
+                문의 보내기
+                <iconify-icon icon="solar:arrow-right-up-bold" width="16" height="16"></iconify-icon>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SECTION 7 — FOOTER
+       ══════════════════════════════════════════════════════════════ -->
+  <footer class="border-t border-white/[0.04] bg-[#070e1a]">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-16 md:py-20">
+      <div class="grid md:grid-cols-3 gap-12 md:gap-8">
+        <!-- Col 1: Logo + Info -->
+        <div class="md:col-span-1">
+          <a href="#" class="flex items-center gap-3 group mb-6">
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center shadow-lg shadow-teal-500/20">
+              <iconify-icon icon="solar:box-bold" width="18" height="18" style="color: white;"></iconify-icon>
+            </div>
+            <div class="leading-none">
+              <span class="font-display font-extrabold text-[0.9375rem] text-white tracking-[0.04em]">HIVE LOGISTICS</span>
+              <span class="block text-[0.5625rem] text-white/35 tracking-[0.2em] font-medium -mt-px">KOREA CO., LTD.</span>
+            </div>
+          </a>
+          <p class="text-white/25 text-sm leading-relaxed break-keep">
+            국경을 넘어 세계를 잇는<br>프리미엄 물류 포워딩 파트너
+          </p>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div>
+          <h4 class="text-white font-bold text-sm mb-5">바로가기</h4>
+          <ul class="space-y-3">
+            <li><a href="#about" class="text-white/30 hover:text-white/60 text-sm transition-colors">회사소개</a></li>
+            <li><a href="#services" class="text-white/30 hover:text-white/60 text-sm transition-colors">서비스 안내</a></li>
+            <li><a href="#network" class="text-white/30 hover:text-white/60 text-sm transition-colors">파트너 네트워크</a></li>
+            <li><a href="#contact" class="text-white/30 hover:text-white/60 text-sm transition-colors">문의하기</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Company Info -->
+        <div>
+          <h4 class="text-white font-bold text-sm mb-5">회사 정보</h4>
+          <div class="space-y-2.5 text-sm text-white/25 leading-relaxed">
+            <p><span class="text-white/40">상호</span> &nbsp;(주) 하이브로지스틱스코리아</p>
+            <p><span class="text-white/40">대표</span> &nbsp;김정화</p>
+            <p><span class="text-white/40">사업자등록번호</span> &nbsp;629-87-03056</p>
+            <p><span class="text-white/40">주소</span> &nbsp;서울시 영등포구 여의대방로 65길 20, 508호</p>
+            <p><span class="text-white/40">전화</span> &nbsp;02-786-9506</p>
+            <p><span class="text-white/40">이메일</span> &nbsp;ann@hivelog.co.kr</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="mt-14 pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-white/15 text-xs">&copy; 2024 HIVE LOGISTICS KOREA. All rights reserved.</p>
+        <div class="flex items-center gap-4 text-white/15 text-xs">
+          <span>개인정보처리방침</span>
+          <span>이용약관</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SCRIPTS
+       ══════════════════════════════════════════════════════════════ -->
+  <script>
+    /* ── Glass Nav scroll state ── */
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* ── Mobile menu toggle ── */
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileClose = document.getElementById('mobileClose');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    function openMobile() {
+      mobileMenu.classList.add('open');
+      mobileOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobile() {
+      mobileMenu.classList.remove('open');
+      mobileOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    mobileToggle.addEventListener('click', openMobile);
+    mobileClose.addEventListener('click', closeMobile);
+    mobileOverlay.addEventListener('click', closeMobile);
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', closeMobile);
+    });
+
+    /* ── IntersectionObserver scroll reveal ── */
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+
+    /* ── Smooth scroll for anchor links ── */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

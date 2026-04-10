@@ -388,7 +388,7 @@ export default function QuoteEditorPage() {
 
         {/* ── 견적항목 ── */}
         {tab === '견적항목' && (
-          <div className="max-w-5xl space-y-3">
+          <div className="max-w-6xl space-y-3">
             <div className="flex items-center justify-between mb-2">
               <p className="text-slate-400 text-sm">선택 항목(optional)은 고객이 직접 선택/해제할 수 있습니다</p>
               <button onClick={addItem} className={addBtn}>+ 항목 추가</button>
@@ -396,39 +396,39 @@ export default function QuoteEditorPage() {
 
             {/* 헤더 */}
             {form.items.length > 0 && (
-              <div className="grid grid-cols-12 gap-3 px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                <div className="col-span-2">카테고리</div>
-                <div className="col-span-3">항목명</div>
-                <div className="col-span-3">설명</div>
-                <div className="col-span-1 text-right">수량</div>
-                <div className="col-span-1 text-right">단가</div>
-                <div className="col-span-1 text-center">선택</div>
-                <div className="col-span-1" />
+              <div className="flex gap-3 px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <div className="w-[100px] flex-shrink-0">카테고리</div>
+                <div className="w-[200px] flex-shrink-0">항목명</div>
+                <div className="flex-1 min-w-[200px]">설명</div>
+                <div className="w-[60px] flex-shrink-0 text-right">수량</div>
+                <div className="w-[120px] flex-shrink-0 text-right">단가</div>
+                <div className="w-[50px] flex-shrink-0 text-center">선택</div>
+                <div className="w-[32px] flex-shrink-0" />
               </div>
             )}
 
             {form.items.length === 0 && <EmptyState icon="💰" msg="항목을 추가해 견적을 구성해보세요" />}
 
             {form.items.map((item) => (
-              <div key={item.id} className={`grid grid-cols-12 gap-3 px-4 py-3 rounded-xl border items-center transition-all ${item.optional ? 'bg-violet-900/10 border-violet-800/30' : 'bg-slate-900 border-slate-800'}`}>
-                <div className="col-span-2">
+              <div key={item.id} className={`flex gap-3 px-4 py-3 rounded-xl border items-center transition-all ${item.optional ? 'bg-violet-900/10 border-violet-800/30' : 'bg-slate-900 border-slate-800'}`}>
+                <div className="w-[100px] flex-shrink-0">
                   <select className={inpSm} value={item.category} onChange={(e) => updateItem(item.id, 'category', e.target.value)}>
                     {ITEM_CATEGORIES.map((c) => <option key={c}>{c}</option>)}
                   </select>
                 </div>
-                <div className="col-span-3">
+                <div className="w-[200px] flex-shrink-0">
                   <input className={inpSm} value={item.name} onChange={(e) => updateItem(item.id, 'name', e.target.value)} placeholder="항목명" />
                 </div>
-                <div className="col-span-3">
+                <div className="flex-1 min-w-[200px]">
                   <input className={inpSm} value={item.description} onChange={(e) => updateItem(item.id, 'description', e.target.value)} placeholder="상세 설명" />
                 </div>
-                <div className="col-span-1">
+                <div className="w-[60px] flex-shrink-0">
                   <input className={`${inpSm} text-right`} type="number" min={1} value={item.quantity} onChange={(e) => updateItem(item.id, 'quantity', Number(e.target.value))} />
                 </div>
-                <div className="col-span-1">
+                <div className="w-[120px] flex-shrink-0">
                   <input className={`${inpSm} text-right`} type="number" min={0} step={10000} value={item.unitPrice} onChange={(e) => updateItem(item.id, 'unitPrice', Number(e.target.value))} />
                 </div>
-                <div className="col-span-1 flex justify-center">
+                <div className="w-[50px] flex-shrink-0 flex justify-center">
                   <button
                     onClick={() => updateItem(item.id, 'optional', !item.optional)}
                     title={item.optional ? '선택 항목 (클릭시 필수로)' : '필수 항목 (클릭시 선택으로)'}
@@ -436,7 +436,7 @@ export default function QuoteEditorPage() {
                     <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${item.optional ? 'left-5' : 'left-0.5'}`} />
                   </button>
                 </div>
-                <div className="col-span-1 flex justify-end">
+                <div className="w-[32px] flex-shrink-0 flex justify-end">
                   <button onClick={() => removeItem(item.id)} className="text-slate-600 hover:text-red-400 transition-colors">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>

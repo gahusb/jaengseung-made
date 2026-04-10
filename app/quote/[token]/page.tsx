@@ -272,19 +272,24 @@ export default function QuotePage() {
                   <h3 style={{ fontSize: 18, fontWeight: 700, color: 'white' }}>{phase.phase}</h3>
                 </div>
                 <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+                    <colgroup>
+                      <col style={{ width: '28%' }} />
+                      <col style={{ width: '12%' }} />
+                      <col style={{ width: '60%' }} />
+                    </colgroup>
                     <thead>
                       <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                         <th style={thStyle}>작업명</th>
-                        <th style={{ ...thStyle, width: 100 }}>기간</th>
+                        <th style={thStyle}>기간</th>
                         <th style={thStyle}>설명</th>
                       </tr>
                     </thead>
                     <tbody>
                       {phase.tasks.map((task) => (
                         <tr key={task.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                          <td style={tdStyle}>{task.name}</td>
-                          <td style={{ ...tdStyle, color: '#818cf8', fontWeight: 600 }}>{task.duration}</td>
+                          <td style={{ ...tdStyle, wordBreak: 'keep-all' }}>{task.name}</td>
+                          <td style={{ ...tdStyle, color: '#818cf8', fontWeight: 600, whiteSpace: 'nowrap' }}>{task.duration}</td>
                           <td style={{ ...tdStyle, color: '#64748b' }}>{task.description || '—'}</td>
                         </tr>
                       ))}
@@ -306,8 +311,16 @@ export default function QuotePage() {
                   <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#60a5fa', display: 'inline-block' }} />
                   필수 항목
                 </h3>
-                <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)', overflowX: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: 700 }}>
+                    <colgroup>
+                      <col style={{ width: '10%' }} />
+                      <col style={{ width: '18%' }} />
+                      <col style={{ width: '42%' }} />
+                      <col style={{ width: '6%' }} />
+                      <col style={{ width: '12%' }} />
+                      <col style={{ width: '12%' }} />
+                    </colgroup>
                     <thead>
                       <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                         <th style={thStyle}>카테고리</th>
@@ -322,15 +335,15 @@ export default function QuotePage() {
                       {requiredItems.map((item) => (
                         <tr key={item.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                           <td style={tdStyle}>
-                            <span style={{ background: (CATEGORY_COLORS[item.category] || '#94a3b8') + '20', color: CATEGORY_COLORS[item.category] || '#94a3b8', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 100 }}>
+                            <span style={{ background: (CATEGORY_COLORS[item.category] || '#94a3b8') + '20', color: CATEGORY_COLORS[item.category] || '#94a3b8', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 100, whiteSpace: 'nowrap', display: 'inline-block' }}>
                               {item.category}
                             </span>
                           </td>
                           <td style={{ ...tdStyle, fontWeight: 600, color: 'white' }}>{item.name}</td>
                           <td style={{ ...tdStyle, color: '#64748b' }}>{item.description || '—'}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', color: '#94a3b8' }}>{item.quantity}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', color: '#94a3b8', fontFamily: 'monospace' }}>{item.unitPrice.toLocaleString()}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 700, color: 'white', fontFamily: 'monospace' }}>{(item.unitPrice * item.quantity).toLocaleString()}원</td>
+                          <td style={{ ...tdStyle, textAlign: 'right', color: '#94a3b8', whiteSpace: 'nowrap' }}>{item.quantity}</td>
+                          <td style={{ ...tdStyle, textAlign: 'right', color: '#94a3b8', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{item.unitPrice.toLocaleString()}</td>
+                          <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 700, color: 'white', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{(item.unitPrice * item.quantity).toLocaleString()}원</td>
                         </tr>
                       ))}
                     </tbody>
@@ -347,11 +360,19 @@ export default function QuotePage() {
                   선택 항목
                 </h3>
                 <p style={{ color: '#475569', fontSize: 13, marginBottom: 12 }}>아래 항목 중 원하시는 것을 선택하세요 — 총 금액에 실시간으로 반영됩니다</p>
-                <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid rgba(167,139,250,0.2)', overflow: 'hidden' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid rgba(167,139,250,0.2)', overflowX: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: 700 }}>
+                    <colgroup>
+                      <col style={{ width: '6%' }} />
+                      <col style={{ width: '10%' }} />
+                      <col style={{ width: '16%' }} />
+                      <col style={{ width: '42%' }} />
+                      <col style={{ width: '6%' }} />
+                      <col style={{ width: '12%' }} />
+                    </colgroup>
                     <thead>
                       <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                        <th style={{ ...thStyle, width: 50 }}>선택</th>
+                        <th style={thStyle}>선택</th>
                         <th style={thStyle}>카테고리</th>
                         <th style={thStyle}>항목명</th>
                         <th style={thStyle}>설명</th>
@@ -368,14 +389,14 @@ export default function QuotePage() {
                             <input type="checkbox" checked={!!checkedOptional[item.id]} onChange={() => {}} />
                           </td>
                           <td style={tdStyle}>
-                            <span style={{ background: (CATEGORY_COLORS[item.category] || '#94a3b8') + '20', color: CATEGORY_COLORS[item.category] || '#94a3b8', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 100 }}>
+                            <span style={{ background: (CATEGORY_COLORS[item.category] || '#94a3b8') + '20', color: CATEGORY_COLORS[item.category] || '#94a3b8', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 100, whiteSpace: 'nowrap', display: 'inline-block' }}>
                               {item.category}
                             </span>
                           </td>
                           <td style={{ ...tdStyle, fontWeight: 600, color: checkedOptional[item.id] ? 'white' : '#64748b' }}>{item.name}</td>
                           <td style={{ ...tdStyle, color: '#475569' }}>{item.description || '—'}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', color: '#64748b' }}>{item.quantity}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 700, color: checkedOptional[item.id] ? '#a78bfa' : '#475569', fontFamily: 'monospace' }}>
+                          <td style={{ ...tdStyle, textAlign: 'right', color: '#64748b', whiteSpace: 'nowrap' }}>{item.quantity}</td>
+                          <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 700, color: checkedOptional[item.id] ? '#a78bfa' : '#475569', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
                             {(item.unitPrice * item.quantity).toLocaleString()}원
                           </td>
                         </tr>

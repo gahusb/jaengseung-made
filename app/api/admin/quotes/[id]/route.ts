@@ -34,7 +34,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   // ── 허용 필드 화이트리스트 (시스템 필드 변조 방지) ───────────
   const ALLOWED_FIELDS = [
     'title', 'client_name', 'client_email', 'client_phone',
-    'items', 'maintenance', 'notes', 'status',
+    'wbs', 'items', 'maintenance', 'notes', 'status',
     'valid_until', 'discount',
   ] as const;
 
