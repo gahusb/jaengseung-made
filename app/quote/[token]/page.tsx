@@ -40,6 +40,12 @@ export default function QuotePage() {
   const [isPrinting, setIsPrinting] = useState(false);
 
   useEffect(() => {
+    const handleAfterPrint = () => setIsPrinting(false);
+    window.addEventListener('afterprint', handleAfterPrint);
+    return () => window.removeEventListener('afterprint', handleAfterPrint);
+  }, []);
+
+  useEffect(() => {
     fetch(`/api/quote/${token}`)
       .then((r) => r.ok ? r.json() : Promise.reject())
       .then((d) => {
@@ -70,6 +76,8 @@ export default function QuotePage() {
   const optionalItems = quote?.items.filter((i) => i.optional) ?? [];
 
   const requiredTotal = requiredItems.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+  const DISCOUNT_RATE = 0.4; // 40% 할인
+  const requiredOriginal = Math.round(requiredTotal / (1 - DISCOUNT_RATE));
   const optionalTotal = optionalItems
     .filter((i) => checkedOptional[i.id])
     .reduce((s, i) => s + i.unitPrice * i.quantity, 0);
@@ -149,16 +157,17 @@ export default function QuotePage() {
         input[type=checkbox] { accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer; }
         input[type=radio] { accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer; }
         @media print {
-          body { background: white !important; color: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          html, body { height: auto !important; min-height: 0 !important; overflow: visible !important; background: white !important; color: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          * { overflow: visible !important; }
           .no-print { display: none !important; }
           .print-break { page-break-before: always; }
-          .print-section-title { display: block !important; }
-          [style*="background: #0a0f1e"], [style*="background: #0f172a"] {
-            background: white !important;
-            color: #1e293b !important;
-          }
-          table { page-break-inside: auto; }
+          .print-section-title { display: block !important; color: #1e293b !important; }
+          div[style] { background: white !important; color: #1e293b !important; min-height: 0 !important; height: auto !important; }
+          [style*="position: fixed"] { display: none !important; }
+          table { page-break-inside: auto; background: white !important; }
           tr { page-break-inside: avoid; }
+          th, td { color: #1e293b !important; border-color: #e2e8f0 !important; }
+          span, p, h2, h3, div { color: #1e293b !important; }
         }
         .print-section-title { display: none; }
       `}</style>
@@ -184,7 +193,7 @@ export default function QuotePage() {
                   setTimeout(() => {
                     window.print();
                     setIsPrinting(false);
-                  }, 300);
+                  }, 500);
                 }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 6,
@@ -266,7 +275,7 @@ export default function QuotePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
             <StatCard label="총 필수 항목" value={requiredItems.length + '개'} sub="반드시 포함" color="#60a5fa" />
             <StatCard label="총 선택 항목" value={optionalItems.length + '개'} sub="고객 선택 가능" color="#a78bfa" />
-            <StatCard label="필수 견적 합계" value={requiredTotal.toLocaleString() + '원'} sub="VAT 별도" color="#34d399" />
+            <StatCard label="필수 견적 합계" value={requiredTotal.toLocaleString() + '원'} sub={'정가 ' + requiredOriginal.toLocaleString() + '원 → 40% 할인'} color="#34d399" />
             <StatCard
               label="선택 포함 합계"
               value={grandTotal.toLocaleString() + '원'}
@@ -329,6 +338,7 @@ export default function QuotePage() {
                 <h3 style={{ fontSize: 16, fontWeight: 700, color: '#60a5fa', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#60a5fa', display: 'inline-block' }} />
                   필수 항목
+                  <span style={{ background: 'linear-gradient(135deg, #ef4444, #f97316)', color: 'white', fontSize: 11, fontWeight: 700, padding: '2px 10px', borderRadius: 100, marginLeft: 4 }}>40% 할인 적용</span>
                 </h3>
                 <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)', overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: 700 }}>
@@ -367,6 +377,12 @@ export default function QuotePage() {
                       ))}
                     </tbody>
                   </table>
+                </div>
+                {/* 필수 항목 할인 소계 */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12, gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <span style={{ color: '#64748b', fontSize: 13, textDecoration: 'line-through', fontFamily: 'monospace' }}>정가 {requiredOriginal.toLocaleString()}원</span>
+                  <span style={{ color: '#ef4444', fontSize: 13, fontWeight: 600 }}>−{(requiredOriginal - requiredTotal).toLocaleString()}원 할인</span>
+                  <span style={{ color: '#34d399', fontSize: 15, fontWeight: 700, fontFamily: 'monospace' }}>{requiredTotal.toLocaleString()}원</span>
                 </div>
               </section>
             )}
@@ -428,10 +444,14 @@ export default function QuotePage() {
 
             {/* 합계 */}
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <div style={{ background: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '24px 28px', width: 320 }}>
+              <div style={{ background: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '24px 28px', width: 360 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <span style={{ color: '#64748b', fontSize: 14 }}>필수 항목 정가</span>
+                  <span style={{ color: '#64748b', fontSize: 13, fontFamily: 'monospace', textDecoration: 'line-through' }}>{requiredOriginal.toLocaleString()}원</span>
+                </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-                  <span style={{ color: '#64748b', fontSize: 14 }}>필수 항목</span>
-                  <span style={{ color: '#94a3b8', fontSize: 14, fontFamily: 'monospace' }}>{requiredTotal.toLocaleString()}원</span>
+                  <span style={{ color: '#ef4444', fontSize: 13, fontWeight: 600 }}>40% 할인 적용</span>
+                  <span style={{ color: '#34d399', fontSize: 14, fontWeight: 700, fontFamily: 'monospace' }}>{requiredTotal.toLocaleString()}원</span>
                 </div>
                 {optionalTotal > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
@@ -502,7 +522,7 @@ export default function QuotePage() {
 
       {/* 하단 고정 바 — 견적 수락 */}
       {quote.status !== 'accepted' && quote.status !== 'rejected' && !isExpired && (
-        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(10,15,30,0.95)', backdropFilter: 'blur(12px)', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '16px 24px' }}>
+        <div className="no-print" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(10,15,30,0.95)', backdropFilter: 'blur(12px)', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '16px 24px' }}>
           <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
             <div>
               <div style={{ color: '#64748b', fontSize: 13 }}>현재 선택된 견적 합계</div>
