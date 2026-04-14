@@ -4,15 +4,15 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
 
-const AUTH_PATHS = ['/login', '/signup', '/admin'];
+const STANDALONE_PATHS = ['/login', '/signup', '/admin'];
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 
-  const isAuthPage = AUTH_PATHS.some((p) => pathname.startsWith(p));
+  const isStandalone = STANDALONE_PATHS.some((p) => pathname.startsWith(p));
 
-  if (isAuthPage) {
+  if (isStandalone) {
     return <>{children}</>;
   }
 

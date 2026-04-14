@@ -11,7 +11,10 @@
       "Bash(git push:*)",
       "WebFetch(domain:jaengseung-made.com)",
       "Bash(npx vercel:*)",
-      "Bash(1:*)"
+      "Bash(1:*)",
+      "Bash(npx next:*)",
+      "Bash(grep -E \"^d|\\\\.tsx$|\\\\.ts$\")",
+      "Bash(grep -E \"^d|\\\\.ts$\")"
     ]
   }
 }

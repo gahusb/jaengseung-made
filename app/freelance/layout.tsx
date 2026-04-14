@@ -19,6 +19,7 @@ export const metadata: Metadata = {
       '47건 납품 완료. 계약서 먼저, 납기 패널티, 소스코드 100% 인도. 연락 두절 없는 개발자.',
     url: 'https://jaengseung-made.com/freelance',
   },
+  robots: { index: false, follow: false },
 };
 
 export default function FreelanceLayout({ children }: { children: React.ReactNode }) {

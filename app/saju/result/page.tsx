@@ -6,7 +6,6 @@ import { EARTHLY_BRANCHES_KR, FIVE_ELEMENTS_KR, FIVE_ELEMENTS } from '@/lib/saju
 import { calculateElementScore, performFullAnalysis } from '@/lib/ai-interpretation';
 import { createClient } from '@/lib/supabase/server';
 import SajuAISection from './SajuAISection';
-import SajuLottoSection from './SajuLottoSection';
 import SajuFortuneSection from './SajuFortuneSection';
 
 interface PageProps {
@@ -562,29 +561,6 @@ export default async function SajuResultPage({ searchParams }: PageProps) {
                 yongShinKr={analysis.yongShin.yongShinKr}
                 heeShin={analysis.yongShin.heeShin}
                 heeShinKr={analysis.yongShin.heeShinKr}
-                yearNum={yearNum}
-                monthNum={monthNum}
-                dayNum={dayNum}
-                hasLottoSubscription={hasLottoSubscription}
-              />
-            )}
-
-            {/* 사주 연동 로또 번호 추천 (사주 결제 시 표시) */}
-            {hasPaid && (
-              <SajuLottoSection
-                yongShin={analysis.yongShin.yongShin}
-                yongShinKr={analysis.yongShin.yongShinKr}
-                heeShin={analysis.yongShin.heeShin}
-                heeShinKr={analysis.yongShin.heeShinKr}
-                dayBranch={sajuData.day.branch}
-                dayStemKr={sajuData.day.stemKr}
-                currentDaeun={currentDaeun ? {
-                  stemKr: currentDaeun.stemKr,
-                  branchKr: currentDaeun.branchKr,
-                  startYear: currentDaeun.startYear,
-                  endYear: currentDaeun.endYear,
-                  age: currentDaeun.age,
-                } : null}
                 yearNum={yearNum}
                 monthNum={monthNum}
                 dayNum={dayNum}

@@ -545,7 +545,7 @@ export default function MyPage() {
                 icon="📦"
                 title="활성 구독이 없습니다"
                 desc="구독 중인 서비스가 없습니다"
-                linkHref="/services/prompt"
+                linkHref="/services/music"
                 linkLabel="서비스 둘러보기"
               />
             ) : (
@@ -645,7 +645,7 @@ export default function MyPage() {
 
             {/* 서비스 이동 */}
             <div className="text-center py-2">
-              <a href="/services/prompt" className="text-sm text-slate-400 hover:text-slate-600 transition">
+              <a href="/services/music" className="text-sm text-slate-400 hover:text-slate-600 transition">
                 다른 서비스 보기 →
               </a>
             </div>

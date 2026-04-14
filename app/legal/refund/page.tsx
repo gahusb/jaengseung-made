@@ -18,7 +18,11 @@ export default function RefundPage() {
 
         <section>
           <h2 className="text-lg font-bold text-slate-800 mt-8 mb-3">1. 디지털 콘텐츠 (즉시 제공 상품)</h2>
-          <p className="font-medium text-slate-700">대상: 프롬프트 패키지, AI 사주 리포트, 로또 분석 등</p>
+          <p className="font-medium text-slate-700">대상: AI 음악 마스터 구조 팩, 블로그 자동화 솔루션 팩, AI 사주 리포트 등 디지털 콘텐츠 상품 일체</p>
+          <p className="text-xs text-slate-500 mt-2">
+            전자상거래법 제17조 제2항 제5호에 따라, 디지털 콘텐츠는 제공이 개시된 이후 청약철회가 제한됩니다.
+            회사는 구매 전 무료 샘플·미리보기를 제공하고, 구매 시 환불 제한 사항에 대한 소비자 동의를 확인합니다.
+          </p>
           <table className="w-full text-sm border border-slate-200 mt-3">
             <thead>
               <tr className="bg-slate-50">

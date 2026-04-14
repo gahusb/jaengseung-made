@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/', '/mypage/', '/payment/'],
+        disallow: ['/admin/', '/api/', '/mypage/', '/payment/', '/freelance', '/services/website', '/portfolio/'],
       },
     ],
     sitemap: 'https://jaengseung-made.com/sitemap.xml',

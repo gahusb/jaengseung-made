@@ -49,7 +49,6 @@ export function formatLottoMessage(
     `📊 합계: ${numbers.reduce((a, b) => a + b, 0)} | 홀수: ${numbers.filter((n) => n % 2 !== 0).length}개`,
     ``,
     `⚠️ 통계 기반 추천이며 당첨을 보장하지 않습니다.`,
-    `🔗 [번호 추천 받기](https://jaengseung.com/services/lotto/recommend)`,
   ].join('\n');
 }
 

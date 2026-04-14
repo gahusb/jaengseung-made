@@ -23,6 +23,7 @@ export const metadata: Metadata = {
       '소상공인·스타트업 홈페이지 제작. 템플릿 없이 직접 개발, SEO 포함, 20만원~.',
     url: 'https://jaengseung-made.com/services/website',
   },
+  robots: { index: false, follow: false },
 };
 
 export default function WebsiteLayout({ children }: { children: React.ReactNode }) {
