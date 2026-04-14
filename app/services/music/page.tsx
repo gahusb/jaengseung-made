@@ -296,31 +296,34 @@ export default function MusicServicePage() {
       <section id="samples" className="px-6 py-20 lg:px-14 bg-[#0b0530]">
         <div className="max-w-5xl mx-auto">
           <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-2">
-            Sample Showcase
+            Most Popular Sample
           </p>
           <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
             이 쇼츠, 이 팩으로 만들었어요.
           </h2>
-          <p className="text-slate-400 mb-10">30분 만에 나온 결과물을 직접 들어보세요.</p>
+          <p className="text-slate-400 mb-10">가장 인기 있는 결과물 1개. 전체 샘플은 별도 페이지에서.</p>
 
-          <div className="grid sm:grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="aspect-[9/16] rounded-2xl border border-white/10 bg-gradient-to-br from-violet-900/40 to-slate-900 flex items-center justify-center relative overflow-hidden group cursor-pointer"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-cyan-500/10 group-hover:from-violet-500/20 group-hover:to-cyan-500/20 transition-all" />
-                <div className="relative text-center p-6">
-                  <div className="text-5xl mb-3">🎬</div>
-                  <p className="text-xs text-slate-400 font-mono">Sample {i}</p>
-                  <p className="text-sm text-slate-200 mt-1">준비 중</p>
-                </div>
+          <div className="max-w-sm mx-auto mb-8">
+            <div className="aspect-[9/16] rounded-2xl border border-violet-400/30 bg-gradient-to-br from-violet-900/50 to-slate-900 flex items-center justify-center relative overflow-hidden group cursor-pointer shadow-2xl shadow-violet-900/40">
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/15 to-cyan-500/15 group-hover:from-violet-500/30 group-hover:to-cyan-500/30 transition-all" />
+              <div className="relative text-center p-6">
+                <div className="text-6xl mb-4">🎬</div>
+                <p className="text-xs text-violet-300/80 font-mono tracking-widest">FEATURED</p>
+                <p className="text-base text-slate-100 mt-2 font-semibold">TOP 샘플 (준비 중)</p>
+                <p className="text-xs text-slate-400 mt-1">유튜브 쇼츠 임베드 예정</p>
               </div>
-            ))}
+            </div>
           </div>
-          <p className="text-xs text-slate-500 mt-6 text-center">
-            유튜브 쇼츠 임베드로 교체 예정. 샘플 오디오는 구매 전 전체 듣기가 가능하도록 제공됩니다.
-          </p>
+
+          <div className="text-center">
+            <a
+              href="/services/music/samples"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-violet-400/40 bg-violet-500/10 hover:bg-violet-500/20 text-sm font-semibold text-violet-200 transition"
+            >
+              전체 샘플 갤러리 보기
+              <span aria-hidden>→</span>
+            </a>
+          </div>
         </div>
       </section>
 

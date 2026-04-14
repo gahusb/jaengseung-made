@@ -82,7 +82,7 @@ export default function Home() {
               ₩39,000 팩 자세히 보기
             </Link>
             <Link
-              href="/services/music#samples"
+              href="/services/music/samples"
               className="px-8 py-4 rounded-full text-base font-bold inline-flex items-center justify-center"
               style={{
                 background: 'rgba(25,37,64,0.4)',
