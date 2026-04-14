@@ -31,3 +31,47 @@ export function checkAdminCredentials(id: string, password: string): boolean {
   if (!adminId || !adminPassword) return false;
   return id === adminId && password === adminPassword;
 }
+
+/* ─── 포트폴리오 공유 토큰 (위시캣 등 외부 제출용) ──────────────── */
+
+export interface PortfolioTokenPayload {
+  kind: 'portfolio';
+  memo: string;
+  iat: number;
+  exp: number;
+}
+
+export function createPortfolioToken(memo: string, ttlDays = 30): string {
+  const secret = process.env.ADMIN_JWT_SECRET!;
+  const now = Date.now();
+  const payload: PortfolioTokenPayload = {
+    kind: 'portfolio',
+    memo: memo.slice(0, 100),
+    iat: now,
+    exp: now + ttlDays * 24 * 60 * 60 * 1000,
+  };
+  const encoded = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const sig = createHmac('sha256', secret).update(encoded).digest('base64url');
+  return `${encoded}.${sig}`;
+}
+
+export function verifyPortfolioTokenNode(
+  token: string
+): PortfolioTokenPayload | null {
+  try {
+    const secret = process.env.ADMIN_JWT_SECRET;
+    if (!secret) return null;
+    const [encoded, sig] = token.split('.');
+    if (!encoded || !sig) return null;
+    const expected = createHmac('sha256', secret).update(encoded).digest('base64url');
+    if (sig !== expected) return null;
+    const payload = JSON.parse(
+      Buffer.from(encoded, 'base64url').toString()
+    ) as PortfolioTokenPayload;
+    if (payload.kind !== 'portfolio') return null;
+    if (Date.now() >= payload.exp) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}
