@@ -101,7 +101,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" className={`${spaceGrotesk.variable} ${inter.variable} ${manrope.variable}`}>
+    <html lang="ko" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${inter.variable} ${manrope.variable}`}>
       <head>
         <script
           type="application/ld+json"

@@ -115,11 +115,11 @@ export default function Home() {
                   <rect
                     key={i}
                     x={i * 30 + 10}
-                    y={250 - Math.abs(Math.sin(i * 0.6) * 120)}
+                    y={Number((250 - Math.abs(Math.sin(i * 0.6) * 120)).toFixed(3))}
                     width="10"
-                    height={Math.abs(Math.sin(i * 0.6) * 240) + 20}
+                    height={Number((Math.abs(Math.sin(i * 0.6) * 240) + 20).toFixed(3))}
                     fill="url(#wg)"
-                    opacity={0.4 + Math.sin(i * 0.3) * 0.3}
+                    opacity={Number((0.4 + Math.sin(i * 0.3) * 0.3).toFixed(3))}
                   />
                 ))}
               </svg>
@@ -177,9 +177,9 @@ export default function Home() {
                       <rect
                         key={j}
                         x={j * 14 + 8}
-                        y={100 - Math.abs(Math.sin((j + i * 5) * 0.5) * 60)}
+                        y={Number((100 - Math.abs(Math.sin((j + i * 5) * 0.5) * 60)).toFixed(3))}
                         width="6"
-                        height={Math.abs(Math.sin((j + i * 5) * 0.5) * 120) + 10}
+                        height={Number((Math.abs(Math.sin((j + i * 5) * 0.5) * 120) + 10).toFixed(3))}
                         fill="white"
                         opacity={0.4}
                       />
