@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import ContactModal from './components/ContactModal';
 import { trackCTAClick } from '../lib/gtag';
 
@@ -46,13 +47,24 @@ export default function Home() {
       />
 
       {/* 1. Hero */}
-      <section
-        className="relative px-6 py-24 lg:py-32"
-        style={{
-          background: 'radial-gradient(circle at 50% 30%, rgba(156,72,234,0.18) 0%, transparent 70%)',
-        }}
-      >
-        <div className="max-w-7xl mx-auto text-center relative">
+      <section className="relative px-6 py-24 lg:py-32 overflow-hidden">
+        <Image
+          src="/hero_back.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center pointer-events-none select-none"
+          style={{ opacity: 0.35 }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(circle at 50% 30%, rgba(156,72,234,0.28) 0%, transparent 60%), linear-gradient(180deg, rgba(6,14,32,0.35) 0%, rgba(6,14,32,0.85) 75%, var(--kx-surface) 100%)',
+          }}
+        />
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           <span className="kx-label inline-block mb-6">AI MUSIC CREATOR TOOLKIT · 2026</span>
           <h1 className="kx-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.05]" style={{ wordBreak: 'keep-all' }}>
             AI로 음악 + <span className="kx-gradient-text">뮤직비디오까지</span>
