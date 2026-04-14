@@ -1,21 +1,32 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type Mode = 'simple' | 'custom';
-type Clip = {
+
+type SunoClip = {
   id: string;
   title?: string;
-  status?: string;
-  audio_url?: string;
-  image_url?: string;
-  video_url?: string;
-  metadata?: { tags?: string; prompt?: string; duration?: number };
+  audioUrl?: string;
+  streamAudioUrl?: string;
+  imageUrl?: string;
+  tags?: string;
+  duration?: number;
+  prompt?: string;
+};
+
+type TaskState = {
+  taskId: string;
+  status: string;
+  errorMessage?: string;
+  clips: SunoClip[];
+  updatedAt: number;
 };
 
 const MODELS = [
-  { id: 'chirp-v3-5', label: 'v3.5 (고품질)', desc: '가장 풍부한 사운드' },
-  { id: 'chirp-v3-0', label: 'v3.0 (균형)', desc: '속도·품질 밸런스' },
+  { id: 'V4', label: 'V4 (기본)', desc: '안정적 고품질' },
+  { id: 'V4_5', label: 'V4.5', desc: '최신 · 풍부한 디테일' },
+  { id: 'V3_5', label: 'V3.5', desc: '빠른 생성' },
 ];
 
 const TAG_PRESETS = [
@@ -23,11 +34,14 @@ const TAG_PRESETS = [
   'rock', 'jazz', 'acoustic', 'cinematic', 'synthwave', 'ambient',
 ];
 
-const LS_KEY = 'jsm_studio_clip_ids';
+const LS_KEY = 'jsm_studio_task_ids_v2';
+
+const isDone = (s: string) => s === 'SUCCESS' || s === 'FIRST_SUCCESS';
+const isFailed = (s: string) => s.includes('FAILED') || s === 'SENSITIVE_WORD_ERROR';
 
 export default function StudioPage() {
   const [mode, setMode] = useState<Mode>('simple');
-  const [model, setModel] = useState('chirp-v3-5');
+  const [model, setModel] = useState('V4');
   const [prompt, setPrompt] = useState('');
   const [title, setTitle] = useState('');
   const [lyrics, setLyrics] = useState('');
@@ -36,71 +50,68 @@ export default function StudioPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [clips, setClips] = useState<Clip[]>([]);
+  const [tasks, setTasks] = useState<TaskState[]>([]);
   const pollRef = useRef<number | null>(null);
-
-  const activeIds = useMemo(() => clips.map((c) => c.id).join(','), [clips]);
-
-  const loadFromLS = useCallback(() => {
-    if (typeof window === 'undefined') return [];
-    try {
-      const raw = localStorage.getItem(LS_KEY);
-      return raw ? (JSON.parse(raw) as string[]) : [];
-    } catch {
-      return [];
-    }
-  }, []);
 
   const saveToLS = useCallback((ids: string[]) => {
     if (typeof window === 'undefined') return;
-    localStorage.setItem(LS_KEY, JSON.stringify(ids.slice(0, 30)));
+    try { localStorage.setItem(LS_KEY, JSON.stringify(ids.slice(0, 20))); } catch { /* noop */ }
   }, []);
 
-  const fetchStatus = useCallback(async (idsCsv: string) => {
-    if (!idsCsv) return;
+  const fetchOne = useCallback(async (taskId: string) => {
     try {
-      const res = await fetch(`/api/studio/status?ids=${encodeURIComponent(idsCsv)}`);
+      const res = await fetch(`/api/studio/status?taskId=${encodeURIComponent(taskId)}`);
       const json = await res.json();
-      if (json.ok && Array.isArray(json.data)) {
-        setClips((prev) => {
-          const map = new Map<string, Clip>(prev.map((c) => [c.id, c]));
-          for (const c of json.data as Clip[]) map.set(c.id, { ...map.get(c.id), ...c });
-          return Array.from(map.values());
-        });
-      }
+      if (!json.ok) return null;
+      const d = json.data?.data ?? json.data;
+      const status: string = d?.status ?? 'PENDING';
+      const errMsg: string | undefined = d?.errorMessage;
+      const sunoData: SunoClip[] = d?.response?.sunoData ?? [];
+      return { taskId, status, errorMessage: errMsg, clips: sunoData, updatedAt: Date.now() } as TaskState;
     } catch {
-      /* silent */
+      return null;
     }
   }, []);
 
-  useEffect(() => {
-    const ids = loadFromLS();
-    if (ids.length) {
-      setClips(ids.map((id) => ({ id, status: 'loading' })));
-      fetchStatus(ids.join(','));
-    }
-  }, [loadFromLS, fetchStatus]);
+  const refreshAll = useCallback(async (ids: string[]) => {
+    const results = await Promise.all(ids.map((id) => fetchOne(id)));
+    setTasks((prev) => {
+      const map = new Map(prev.map((t) => [t.taskId, t]));
+      for (const r of results) if (r) map.set(r.taskId, r);
+      return Array.from(map.values()).sort((a, b) => b.updatedAt - a.updatedAt);
+    });
+  }, [fetchOne]);
 
   useEffect(() => {
-    const pending = clips.some((c) => c.status !== 'complete' && c.status !== 'error');
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      const ids = raw ? (JSON.parse(raw) as string[]) : [];
+      if (ids.length) {
+        setTasks(ids.map((id) => ({ taskId: id, status: 'PENDING', clips: [], updatedAt: Date.now() })));
+        refreshAll(ids);
+      }
+    } catch { /* noop */ }
+  }, [refreshAll]);
+
+  useEffect(() => {
     if (pollRef.current) window.clearInterval(pollRef.current);
-    if (pending && activeIds) {
-      pollRef.current = window.setInterval(() => fetchStatus(activeIds), 8000);
+    const pending = tasks.filter((t) => !isDone(t.status) && !isFailed(t.status));
+    if (pending.length) {
+      pollRef.current = window.setInterval(() => {
+        refreshAll(pending.map((t) => t.taskId));
+      }, 8000);
     }
-    return () => {
-      if (pollRef.current) window.clearInterval(pollRef.current);
-    };
-  }, [clips, activeIds, fetchStatus]);
+    return () => { if (pollRef.current) window.clearInterval(pollRef.current); };
+  }, [tasks, refreshAll]);
 
   const onSubmit = async () => {
     setError(null);
-    if (mode === 'simple' && !prompt.trim()) {
-      setError('프롬프트를 입력해주세요.');
-      return;
-    }
-    if (mode === 'custom' && !lyrics.trim() && !instrumental) {
-      setError('가사를 입력하거나 Instrumental을 켜주세요.');
-      return;
+    if (mode === 'simple' && !prompt.trim()) { setError('프롬프트를 입력해주세요.'); return; }
+    if (mode === 'custom') {
+      if (!title.trim()) { setError('트랙 제목을 입력해주세요.'); return; }
+      if (!tags.trim()) { setError('스타일 태그를 입력해주세요.'); return; }
+      if (!lyrics.trim() && !instrumental) { setError('가사를 입력하거나 Instrumental을 켜주세요.'); return; }
     }
     setSubmitting(true);
     try {
@@ -108,8 +119,7 @@ export default function StudioPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          mode,
-          model,
+          mode, model,
           prompt: prompt.trim(),
           title: title.trim(),
           lyrics: lyrics.trim(),
@@ -119,21 +129,21 @@ export default function StudioPage() {
       });
       const json = await res.json();
       if (!res.ok || !json.ok) {
-        setError(json.error ?? '생성 실패');
+        setError(typeof json.error === 'string' ? json.error : '생성 실패');
         return;
       }
-      const newClips: Clip[] = (Array.isArray(json.data) ? json.data : []).map((c: Clip) => ({
-        ...c,
-        status: c.status ?? 'submitted',
-      }));
-      if (!newClips.length) {
-        setError('응답에 결과가 없습니다. API URL 응답 포맷을 확인하세요.');
+      const taskId: string | undefined = json.data?.data?.taskId ?? json.data?.taskId;
+      if (!taskId) {
+        setError('응답에서 taskId를 찾지 못했습니다.');
         return;
       }
-      setClips((prev) => {
-        const merged = [...newClips, ...prev];
-        saveToLS(merged.map((c) => c.id));
-        return merged;
+      setTasks((prev) => {
+        const next: TaskState[] = [
+          { taskId, status: 'PENDING', clips: [], updatedAt: Date.now() },
+          ...prev.filter((t) => t.taskId !== taskId),
+        ];
+        saveToLS(next.map((t) => t.taskId));
+        return next;
       });
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -158,7 +168,6 @@ export default function StudioPage() {
       }}
     >
       <div className="max-w-7xl mx-auto">
-        {/* 헤더 */}
         <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
           <div>
             <span className="kx-label">JAENGSEUNG STUDIO</span>
@@ -191,7 +200,6 @@ export default function StudioPage() {
               backdropFilter: 'blur(16px)',
             }}
           >
-            {/* 모드 토글 */}
             <div className="flex gap-1 p-1 rounded-full mb-6" style={{ background: 'rgba(255,255,255,0.04)' }}>
               {(['simple', 'custom'] as Mode[]).map((m) => (
                 <button
@@ -201,8 +209,7 @@ export default function StudioPage() {
                   style={
                     mode === m
                       ? {
-                          background:
-                            'linear-gradient(135deg, rgba(204,151,255,0.25), rgba(83,221,252,0.15))',
+                          background: 'linear-gradient(135deg, rgba(204,151,255,0.25), rgba(83,221,252,0.15))',
                           color: '#fff',
                           boxShadow: '0 0 24px rgba(204,151,255,0.25) inset',
                         }
@@ -276,7 +283,6 @@ export default function StudioPage() {
               </div>
             )}
 
-            {/* 공통 옵션 */}
             <div className="grid grid-cols-2 gap-4 mt-6">
               <Field label="모델">
                 <select
@@ -316,7 +322,6 @@ export default function StudioPage() {
               </Field>
             </div>
 
-            {/* Generate */}
             <div className="mt-8">
               <button
                 onClick={onSubmit}
@@ -358,12 +363,9 @@ export default function StudioPage() {
                 <span className="kx-label">RECENT TRACKS</span>
                 <h2 className="kx-display text-xl font-bold mt-1">최근 생성 결과</h2>
               </div>
-              {clips.length > 0 && (
+              {tasks.length > 0 && (
                 <button
-                  onClick={() => {
-                    setClips([]);
-                    saveToLS([]);
-                  }}
+                  onClick={() => { setTasks([]); saveToLS([]); }}
                   className="text-[11px] underline underline-offset-4"
                   style={{ color: 'var(--kx-on-variant)' }}
                 >
@@ -372,7 +374,7 @@ export default function StudioPage() {
               )}
             </div>
 
-            {clips.length === 0 ? (
+            {tasks.length === 0 ? (
               <div
                 className="rounded-xl p-8 text-center text-sm"
                 style={{ border: '1px dashed rgba(255,255,255,0.1)', color: 'var(--kx-on-variant)' }}
@@ -381,56 +383,83 @@ export default function StudioPage() {
                 <br />왼쪽에서 프롬프트를 입력하고 Generate를 눌러보세요.
               </div>
             ) : (
-              <ul className="space-y-3 max-h-[620px] overflow-y-auto pr-1">
-                {clips.map((c) => (
+              <ul className="space-y-4 max-h-[640px] overflow-y-auto pr-1">
+                {tasks.map((task) => (
                   <li
-                    key={c.id}
-                    className="rounded-xl p-4 transition"
+                    key={task.taskId}
+                    className="rounded-xl p-4"
                     style={{
                       background: 'rgba(20,31,56,0.6)',
                       border: '1px solid rgba(255,255,255,0.05)',
                     }}
                   >
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <div className="min-w-0">
-                        <p className="font-semibold truncate" style={{ color: 'var(--kx-on-surface)' }}>
-                          {c.title || '제목 없음'}
-                        </p>
-                        {c.metadata?.tags && (
-                          <p className="text-[11px] truncate mt-0.5" style={{ color: 'var(--kx-on-variant)' }}>
-                            {c.metadata.tags}
-                          </p>
-                        )}
-                      </div>
-                      <StatusBadge status={c.status} />
+                    <div className="flex items-center justify-between gap-3 mb-3">
+                      <span className="text-[11px] font-mono opacity-60">task: {task.taskId.slice(0, 10)}…</span>
+                      <StatusBadge status={task.status} />
                     </div>
-                    {c.audio_url ? (
-                      <audio controls src={c.audio_url} className="w-full mt-2" style={{ height: 36 }} />
-                    ) : (
+
+                    {task.clips.length === 0 ? (
                       <div
                         className="h-9 rounded-md flex items-center justify-center text-xs"
                         style={{
-                          background:
-                            'linear-gradient(90deg, rgba(204,151,255,0.08) 0%, rgba(83,221,252,0.08) 100%)',
+                          background: 'linear-gradient(90deg, rgba(204,151,255,0.08) 0%, rgba(83,221,252,0.08) 100%)',
                           color: 'var(--kx-on-variant)',
                         }}
                       >
-                        오디오 생성 중… (보통 1~3분)
+                        {isFailed(task.status)
+                          ? (task.errorMessage ?? '생성 실패')
+                          : '오디오 생성 중… (보통 1~3분)'}
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {task.clips.map((c) => {
+                          const src = c.audioUrl || c.streamAudioUrl;
+                          return (
+                            <div
+                              key={c.id}
+                              className="rounded-lg p-3"
+                              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.04)' }}
+                            >
+                              <div className="flex items-center gap-3">
+                                {c.imageUrl && (
+                                  // eslint-disable-next-line @next/next/no-img-element
+                                  <img
+                                    src={c.imageUrl}
+                                    alt=""
+                                    className="w-12 h-12 rounded-md object-cover flex-shrink-0"
+                                  />
+                                )}
+                                <div className="min-w-0 flex-1">
+                                  <p className="font-semibold text-sm truncate" style={{ color: 'var(--kx-on-surface)' }}>
+                                    {c.title || '제목 없음'}
+                                  </p>
+                                  {c.tags && (
+                                    <p className="text-[11px] truncate mt-0.5" style={{ color: 'var(--kx-on-variant)' }}>
+                                      {c.tags}
+                                    </p>
+                                  )}
+                                </div>
+                                {c.duration && (
+                                  <span className="text-[10px] font-mono opacity-60">
+                                    {Math.round(c.duration)}s
+                                  </span>
+                                )}
+                              </div>
+                              {src ? (
+                                <audio controls src={src} className="w-full mt-2" style={{ height: 36 }} />
+                              ) : null}
+                              {c.audioUrl && (
+                                <div className="mt-1.5 text-[11px]" style={{ color: 'var(--kx-on-variant)' }}>
+                                  <a href={c.audioUrl} download className="underline underline-offset-4 hover:text-white">
+                                    MP3 다운로드
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
-                    <div className="flex items-center gap-3 mt-2 text-[11px]" style={{ color: 'var(--kx-on-variant)' }}>
-                      {c.audio_url && (
-                        <a href={c.audio_url} download className="underline underline-offset-4 hover:text-white">
-                          MP3 다운로드
-                        </a>
-                      )}
-                      {c.video_url && (
-                        <a href={c.video_url} target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-white">
-                          영상 보기
-                        </a>
-                      )}
-                      <span className="opacity-50">id: {c.id.slice(0, 8)}</span>
-                    </div>
                   </li>
                 ))}
               </ul>
@@ -438,7 +467,6 @@ export default function StudioPage() {
           </div>
         </div>
 
-        {/* 하단: 가이드 */}
         <div className="mt-10 grid md:grid-cols-3 gap-4 text-xs" style={{ color: 'var(--kx-on-variant)' }}>
           <Tip title="① 간단 모드" body="한 줄 프롬프트로 즉시 생성. 결과물 다양성 높음." />
           <Tip title="② Custom 모드" body="가사·태그·보컬·악기까지 정밀 제어. 반복 생성에 유리." />
@@ -477,21 +505,25 @@ function Field({
   );
 }
 
-function StatusBadge({ status }: { status?: string }) {
+function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { bg: string; fg: string; label: string }> = {
-    complete: { bg: 'rgba(64,206,172,0.18)', fg: '#6cf0c6', label: '완료' },
-    streaming: { bg: 'rgba(83,221,252,0.18)', fg: '#53ddfc', label: '스트리밍' },
-    submitted: { bg: 'rgba(204,151,255,0.18)', fg: '#cc97ff', label: '대기' },
-    queued: { bg: 'rgba(204,151,255,0.18)', fg: '#cc97ff', label: '큐' },
-    error: { bg: 'rgba(215,51,87,0.18)', fg: '#ff8ba7', label: '오류' },
+    SUCCESS: { bg: 'rgba(64,206,172,0.18)', fg: '#6cf0c6', label: '완료' },
+    FIRST_SUCCESS: { bg: 'rgba(83,221,252,0.18)', fg: '#53ddfc', label: '첫 트랙 준비' },
+    TEXT_SUCCESS: { bg: 'rgba(83,221,252,0.18)', fg: '#53ddfc', label: '가사 완료' },
+    PENDING: { bg: 'rgba(204,151,255,0.18)', fg: '#cc97ff', label: '대기' },
   };
-  const s = map[status ?? ''] ?? { bg: 'rgba(255,255,255,0.06)', fg: 'rgba(255,255,255,0.6)', label: status ?? '…' };
+  let entry = map[status];
+  if (!entry) {
+    entry = isFailed(status)
+      ? { bg: 'rgba(215,51,87,0.18)', fg: '#ff8ba7', label: '실패' }
+      : { bg: 'rgba(255,255,255,0.06)', fg: 'rgba(255,255,255,0.6)', label: status };
+  }
   return (
     <span
       className="text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
-      style={{ background: s.bg, color: s.fg }}
+      style={{ background: entry.bg, color: entry.fg }}
     >
-      {s.label}
+      {entry.label}
     </span>
   );
 }

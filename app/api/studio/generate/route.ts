@@ -13,12 +13,12 @@ type GenerateBody = {
 };
 
 export async function POST(request: Request) {
-  const apiUrl = process.env.SUNO_API_URL;
+  const apiUrl = process.env.SUNO_API_URL ?? 'https://api.sunoapi.org';
   const apiKey = process.env.SUNO_API_KEY;
 
-  if (!apiUrl || !apiKey) {
+  if (!apiKey) {
     return NextResponse.json(
-      { error: 'Suno API 미설정 (SUNO_API_URL / SUNO_API_KEY 환경변수 필요)' },
+      { error: 'Suno API 미설정 (SUNO_API_KEY 환경변수 필요)' },
       { status: 503 },
     );
   }
@@ -30,27 +30,30 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const endpoint = body.mode === 'custom' ? '/api/custom_generate' : '/api/generate';
+  const origin = new URL(request.url).origin;
+  const callBackUrl = `${origin}/api/studio/callback`;
 
-  const payload =
-    body.mode === 'custom'
-      ? {
-          prompt: body.lyrics ?? '',
-          tags: body.tags ?? '',
-          title: body.title ?? '',
-          make_instrumental: !!body.make_instrumental,
-          model: body.model ?? 'chirp-v3-5',
-          wait_audio: false,
-        }
-      : {
-          prompt: body.prompt ?? '',
-          make_instrumental: !!body.make_instrumental,
-          model: body.model ?? 'chirp-v3-5',
-          wait_audio: false,
-        };
+  const isCustom = body.mode === 'custom';
+  const payload = isCustom
+    ? {
+        prompt: body.lyrics ?? '',
+        style: body.tags ?? '',
+        title: body.title ?? 'Untitled',
+        customMode: true,
+        instrumental: !!body.make_instrumental,
+        model: body.model ?? 'V4',
+        callBackUrl,
+      }
+    : {
+        prompt: body.prompt ?? '',
+        customMode: false,
+        instrumental: !!body.make_instrumental,
+        model: body.model ?? 'V4',
+        callBackUrl,
+      };
 
   try {
-    const res = await fetch(`${apiUrl.replace(/\/$/, '')}${endpoint}`, {
+    const res = await fetch(`${apiUrl.replace(/\/$/, '')}/api/v1/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -60,10 +63,10 @@ export async function POST(request: Request) {
     });
 
     const data = await res.json().catch(() => null);
-    if (!res.ok) {
+    if (!res.ok || (data && typeof data === 'object' && 'code' in data && data.code !== 200)) {
       return NextResponse.json(
         { error: '생성 실패', detail: data ?? (await res.text().catch(() => '')) },
-        { status: res.status },
+        { status: res.ok ? 502 : res.status },
       );
     }
     return NextResponse.json({ ok: true, data });

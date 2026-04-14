@@ -204,36 +204,31 @@ export default function MusicServicePage() {
         </div>
       </section>
 
-      {/* BEFORE / AFTER */}
-      <section className="px-6 py-20 lg:px-14 bg-slate-950 border-t border-white/5">
-        <div className="max-w-5xl mx-auto">
-          <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-2 text-center">
-            Before vs After
-          </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-12">
-            AI 음악, 왜 다들 어렵다고 할까요?
-          </h2>
-          <div className="grid md:grid-cols-2 gap-5">
-            <div className="border border-rose-500/20 bg-rose-500/5 rounded-2xl p-8">
-              <div className="text-4xl mb-3">😵</div>
-              <h3 className="font-extrabold text-rose-300 mb-3 text-lg">Before · 대충 뽑은 결과</h3>
-              <ul className="space-y-2 text-sm text-slate-300 leading-relaxed">
-                <li>• Suno 10번 돌렸는데 다 별로…</li>
-                <li>• 가사가 이상하게 붙음</li>
-                <li>• 영상 만들려니 뭐부터 할지 모름</li>
-                <li>• 유튜브 올려도 조회수 0</li>
-              </ul>
-            </div>
-            <div className="border border-emerald-500/30 bg-emerald-500/5 rounded-2xl p-8 shadow-[0_0_40px_rgba(16,185,129,0.15)]">
-              <div className="text-4xl mb-3">🎯</div>
-              <h3 className="font-extrabold text-emerald-300 mb-3 text-lg">After · 구조를 쓴 결과</h3>
-              <ul className="space-y-2 text-sm text-slate-200 leading-relaxed">
-                <li>• 프롬프트 1번으로 원하는 무드 적중</li>
-                <li>• 30분 만에 쇼츠까지 완성</li>
-                <li>• 저작권·상업 이용 안전 체크</li>
-                <li>• SEO 템플릿으로 노출 최적화</li>
-              </ul>
-            </div>
+      {/* 팩 구성품 */}
+      <section className="px-6 py-16 lg:px-14 bg-slate-950 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-2">What's Included</p>
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-8">팩 구성품</h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            {[
+              { icon: '📄', title: 'Suno 프롬프트 북 (PDF)', desc: '장르·무드·보컬 톤 조합법 20+종. 복붙해서 바로 사용.' },
+              { icon: '🎼', title: '구조 템플릿 팩', desc: 'Verse·Chorus·Bridge 파트 설계도 + Suno Custom 모드 입력 예시.' },
+              { icon: '🎬', title: 'MV 워크플로우 가이드', desc: 'Midjourney · Runway · Luma로 비트 싱크 영상 만드는 단계별 매뉴얼.' },
+              { icon: '⚖️', title: '저작권 & 상업 이용 가이드', desc: 'Suno/Runway 약관 요약 + 수익화 안전 체크리스트.' },
+              { icon: '📦', title: '샘플 프로젝트 (프로·마스터)', desc: '완성된 .prj 파일 + 영상. 그대로 수정해 재사용 가능.' },
+              { icon: '🔄', title: '12개월 무료 업데이트', desc: 'Suno 신규 모델·기능 반영. 구매자 Notion에서 자동 수령.' },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="flex gap-4 p-5 rounded-xl border border-white/10 bg-white/[0.02]"
+              >
+                <div className="text-2xl flex-shrink-0">{item.icon}</div>
+                <div>
+                  <h3 className="font-bold text-white mb-1">{item.title}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -323,6 +318,39 @@ export default function MusicServicePage() {
               전체 샘플 갤러리 보기
               <span aria-hidden>→</span>
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* 추천 대상 */}
+      <section className="px-6 py-20 lg:px-14 bg-slate-950 border-t border-white/5">
+        <div className="max-w-5xl mx-auto">
+          <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-2 text-center">
+            Who It's For
+          </p>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-12">
+            이런 분께 추천드려요
+          </h2>
+          <div className="grid md:grid-cols-2 gap-5">
+            <div className="border border-emerald-500/30 bg-emerald-500/5 rounded-2xl p-8 shadow-[0_0_40px_rgba(16,185,129,0.12)]">
+              <div className="text-4xl mb-3">🎯</div>
+              <h3 className="font-extrabold text-emerald-300 mb-3 text-lg">이런 분께 딱</h3>
+              <ul className="space-y-2 text-sm text-slate-200 leading-relaxed">
+                <li>• Suno를 써봤지만 원하는 무드가 안 나오는 분</li>
+                <li>• 유튜브 쇼츠·릴스 채널 운영 중인 1인 크리에이터</li>
+                <li>• 브랜드·매장 BGM을 직접 만들고 싶은 소상공인</li>
+                <li>• AI 음악 워크플로우를 처음부터 제대로 배우고 싶은 분</li>
+              </ul>
+            </div>
+            <div className="border border-white/10 bg-white/[0.02] rounded-2xl p-8">
+              <div className="text-4xl mb-3">🙅</div>
+              <h3 className="font-extrabold text-slate-300 mb-3 text-lg">이런 분께는 비추</h3>
+              <ul className="space-y-2 text-sm text-slate-400 leading-relaxed">
+                <li>• 완성된 맞춤곡 파일을 바로 받고 싶은 분 (B2B 문의 권장)</li>
+                <li>• DAW·마스터링 전문가 수준 튜닝을 원하는 분</li>
+                <li>• Suno 유료 플랜 가입 의사가 없는 분 (상업 이용 제한)</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
