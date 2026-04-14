@@ -67,7 +67,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
                 <a href="/legal/privacy" className="text-slate-400 hover:text-[#1a56db] transition underline underline-offset-2">개인정보처리방침</a>
                 <a href="/legal/refund" className="text-slate-400 hover:text-[#1a56db] transition underline underline-offset-2">환불 정책</a>
               </div>
-              <p className="mt-2 text-slate-400">© 2025 쟁승메이드. All rights reserved.</p>
+              <p className="mt-2 text-slate-400">© 2026 쟁승메이드. All rights reserved.</p>
             </div>
           </footer>
         </main>
