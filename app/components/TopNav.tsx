@@ -6,10 +6,9 @@ import { useState, useEffect } from 'react';
 
 const LINKS = [
   { href: '/', label: 'Home' },
-  { href: '/services/music', label: 'AI 음악' },
-  { href: '/services/blog', label: '블로그 팩' },
-  { href: '/saju', label: 'AI 사주' },
-  { href: '/legal/refund', label: '환불정책' },
+  { href: '/services/music#samples', label: 'Showcase' },
+  { href: '/services/music#pricing', label: 'Pricing' },
+  { href: '/services/music', label: 'API' },
 ];
 
 export default function TopNav() {
