@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     let emailSent = true;
     try {
       await resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: '쟁승메이드 <noreply@jaengseung-made.com>',
         to: ['bgg8988@gmail.com'],
         replyTo: email,
         subject: `[쟁승메이드] 새로운 문의: ${safeSubject}`,
