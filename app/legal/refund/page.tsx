@@ -52,7 +52,7 @@ export default function RefundPage() {
 
         <section>
           <h2 className="text-lg font-bold text-slate-800 mt-8 mb-3">2. 구독 서비스</h2>
-          <p className="font-medium text-slate-700">대상: AI 자동화 키트 월 구독, 로또 월간 플랜, 주식 월 유지비 등</p>
+          <p className="font-medium text-slate-700">대상: 향후 도입될 월 구독형 서비스 (현재 운영 중인 구독 상품 없음)</p>
           <table className="w-full text-sm border border-slate-200 mt-3">
             <thead>
               <tr className="bg-slate-50">

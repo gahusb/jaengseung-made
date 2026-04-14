@@ -1,4 +1,11 @@
-import { createHmac } from 'crypto';
+import { createHmac, timingSafeEqual } from 'crypto';
+
+function safeEqual(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
+}
 
 const TOKEN_TTL = 24 * 60 * 60 * 1000; // 24시간
 
@@ -17,7 +24,7 @@ export function verifyAdminTokenNode(token: string): boolean {
     const [encoded, sig] = token.split('.');
     if (!encoded || !sig) return false;
     const expected = createHmac('sha256', secret).update(encoded).digest('base64url');
-    if (sig !== expected) return false;
+    if (!safeEqual(sig, expected)) return false;
     const { exp } = JSON.parse(Buffer.from(encoded, 'base64url').toString());
     return Date.now() < exp;
   } catch {
@@ -64,7 +71,7 @@ export function verifyPortfolioTokenNode(
     const [encoded, sig] = token.split('.');
     if (!encoded || !sig) return null;
     const expected = createHmac('sha256', secret).update(encoded).digest('base64url');
-    if (sig !== expected) return null;
+    if (!safeEqual(sig, expected)) return null;
     const payload = JSON.parse(
       Buffer.from(encoded, 'base64url').toString()
     ) as PortfolioTokenPayload;

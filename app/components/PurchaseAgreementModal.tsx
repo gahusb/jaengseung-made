@@ -16,8 +16,8 @@ interface Props {
 }
 
 const DEFAULT_BANK = {
-  bank: '토스뱅크',
-  account: '1000-0000-0000',
+  bank: '케이뱅크',
+  account: '100-116-337157',
   holder: '박재오',
 };
 
