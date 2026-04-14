@@ -29,6 +29,7 @@ export default function PurchaseAgreementModal({
   bankInfo = DEFAULT_BANK,
 }: Props) {
   const [agreed, setAgreed] = useState(false);
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,6 +37,7 @@ export default function PurchaseAgreementModal({
   useEffect(() => {
     if (!isOpen) {
       setAgreed(false);
+      setName('');
       setEmail('');
       setSent(false);
     }
@@ -44,7 +46,7 @@ export default function PurchaseAgreementModal({
   if (!isOpen) return null;
 
   const handleSubmit = async () => {
-    if (!agreed || !email) return;
+    if (!agreed || !email || !name.trim()) return;
     setLoading(true);
     try {
       await fetch('/api/contact', {
@@ -52,10 +54,10 @@ export default function PurchaseAgreementModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service: `구매 신청: ${productName}`,
-          name: email.split('@')[0],
+          name: name.trim(),
           email,
           phone: '',
-          message: `상품: ${productName} (${price})\n입금 대기 중. 입금 확인 후 이메일로 상품 전달 예정.`,
+          message: `상품: ${productName} (${price})\n입금자명: ${name.trim()}\n입금 대기 중. 입금 확인 후 이메일로 상품 전달 예정.`,
         }),
       });
       setSent(true);
@@ -103,6 +105,19 @@ export default function PurchaseAgreementModal({
           </div>
         ) : (
           <div className="p-6 space-y-5">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-2">
+                이름 (입금자명과 동일하게)
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="홍길동"
+                className="w-full px-4 py-3 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-violet-500"
+              />
+            </div>
+
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-2">
                 이메일 (상품 전달용)
@@ -171,7 +186,7 @@ export default function PurchaseAgreementModal({
               </button>
               <button
                 onClick={handleSubmit}
-                disabled={!agreed || !email || loading}
+                disabled={!agreed || !email || !name.trim() || loading}
                 className="flex-[2] py-3 bg-violet-600 hover:bg-violet-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white rounded-xl text-sm font-bold transition"
               >
                 {loading ? '전송 중...' : '구매 신청'}
