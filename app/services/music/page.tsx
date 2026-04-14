@@ -118,89 +118,89 @@ export default function MusicServicePage() {
 
   return (
     <div className="min-h-full bg-slate-950 text-white">
-      {/* HERO */}
-      <section
-        className="relative overflow-hidden px-6 py-24 lg:px-14 lg:py-32"
-        style={{
-          background:
-            'radial-gradient(circle at 25% 20%, #2e1065 0%, #020617 55%), radial-gradient(circle at 80% 80%, #164e63 0%, transparent 50%)',
-        }}
-      >
-        <div
-          className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>\")",
-          }}
-        />
-
-        <div className="relative max-w-5xl mx-auto">
-          <div className="flex items-center gap-3 mb-8">
+      {/* 상세 페이지 헤더 (컴팩트) */}
+      <section className="px-6 pt-14 pb-8 lg:px-14 bg-slate-950 border-b border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-3 mb-4">
             <span className="inline-flex h-2 w-2 rounded-full bg-violet-400 animate-pulse" />
-            <span className="kx-label">AI MUSIC PACK · v1</span>
+            <span className="kx-label">AI MUSIC PACK · v1 · 상품 상세</span>
           </div>
-
-          <h1
-            className="kx-display text-[2.8rem] md:text-[4rem] lg:text-[5.5rem] font-extrabold leading-[1.02] mb-6"
-            style={{ wordBreak: 'keep-all' }}
-          >
-            <span className="text-white">네 사연을 노래로.</span>
-            <br />
-            <span className="kx-gradient-text">
-              쇼츠까지 한 번에.
-            </span>
+          <h1 className="kx-display text-3xl md:text-5xl font-extrabold leading-tight mb-3" style={{ wordBreak: 'keep-all' }}>
+            AI 음악 마스터 구조 팩
           </h1>
-
-          <p
-            className="text-slate-300 text-lg md:text-xl leading-relaxed mb-3 max-w-2xl"
-            style={{ wordBreak: 'keep-all' }}
-          >
-            AI로 음악을 뽑는 게 아니라, <span className="text-white font-semibold">고품질 결과물을 빠르게</span> 뽑는 법을 팝니다.
+          <p className="text-slate-300 md:text-lg max-w-3xl">
+            Suno 프롬프트 + MV 워크플로우 + 저작권 가이드 + 템플릿 PDF + 샘플 프로젝트.
+            4단계 AI 음악 제작 공정을 한 팩으로.
           </p>
-          <p className="text-slate-400 text-base mb-10 max-w-2xl">
-            엔지니어가 설계한 <span className="text-white">4단계 AI 음악 공정</span> · Suno Pro 검증.
-          </p>
-
-          <div className="flex flex-wrap gap-3 mb-10">
-            <a
-              href="#pricing"
-              className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-8 py-4 rounded-xl font-bold text-sm transition-colors shadow-[0_0_40px_rgba(139,92,246,0.45)]"
-            >
-              팩 둘러보기
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-            <a
-              href="#samples"
-              className="inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white/90 hover:text-white px-8 py-4 rounded-xl font-semibold text-sm transition-all"
-            >
-              ▶ 샘플 쇼츠 보기
-            </a>
-          </div>
-
-          <div className="flex flex-wrap gap-5 text-xs text-slate-400">
-            <span className="flex items-center gap-1.5">✅ 평생 업데이트</span>
-            <span className="flex items-center gap-1.5">✅ 즉시 다운로드</span>
-            <span className="flex items-center gap-1.5">✅ Suno Pro 검증 샘플</span>
-          </div>
         </div>
+      </section>
 
-        {/* Bottom waveform */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 opacity-40 pointer-events-none">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">
-            <path
-              d="M0,60 Q150,10 300,60 T600,60 T900,60 T1200,60 L1200,120 L0,120 Z"
-              fill="url(#wg)"
-            />
-            <defs>
-              <linearGradient id="wg" x1="0%" x2="100%">
-                <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.5" />
-                <stop offset="50%" stopColor="#22d3ee" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.5" />
-              </linearGradient>
-            </defs>
-          </svg>
+      {/* PRICING — 상세 최상단 */}
+      <section id="pricing" className="px-6 py-14 lg:px-14 bg-slate-950">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-end justify-between flex-wrap gap-3 mb-8">
+            <div>
+              <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-1">Pricing · 1회 결제</p>
+              <h2 className="text-2xl md:text-3xl font-extrabold">3개 티어, 목표에 맞게 선택</h2>
+            </div>
+            <Link href="/services/music/samples" className="text-sm text-violet-300 hover:text-violet-200 underline underline-offset-4">
+              샘플 먼저 보기 →
+            </Link>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-5 items-stretch">
+            {(Object.keys(TIERS) as Tier[]).map((key) => {
+              const t = TIERS[key];
+              return (
+                <div
+                  key={key}
+                  className={`relative rounded-3xl p-8 flex flex-col border transition-all ${
+                    t.highlight
+                      ? 'border-violet-400 bg-gradient-to-br from-violet-900/40 to-slate-900 shadow-[0_0_60px_rgba(139,92,246,0.35)] md:scale-[1.03] md:-translate-y-2'
+                      : 'border-white/10 bg-white/[0.02] hover:border-white/30'
+                  }`}
+                >
+                  {t.highlight && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <span className="inline-flex items-center gap-1 bg-gradient-to-r from-violet-500 to-pink-500 text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider">
+                        🔥 가장 많이 팔림
+                      </span>
+                    </div>
+                  )}
+                  <h3 className="font-extrabold text-2xl mb-1">{t.name}</h3>
+                  <p className="text-sm text-slate-400 mb-6">{t.desc}</p>
+                  <div className="mb-6">
+                    <span className="text-4xl font-extrabold font-mono">{t.price}</span>
+                    <span className="text-xs text-slate-500 ml-2">1회 결제</span>
+                  </div>
+                  <ul className="space-y-3 text-sm text-slate-200 mb-8 flex-1">
+                    {t.features.map((f) => (
+                      <li key={f} className="flex gap-2.5">
+                        <svg className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="leading-relaxed">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={() => setSelectedTier(key)}
+                    className={`w-full py-4 rounded-xl font-extrabold text-sm transition-colors ${
+                      t.highlight
+                        ? 'bg-violet-500 hover:bg-violet-400 text-white'
+                        : 'bg-white/10 hover:bg-white/20 text-white'
+                    }`}
+                  >
+                    {t.name} 구매하기 →
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+          <p className="text-xs text-slate-500 text-center mt-8">
+            구매 전 <Link href="/legal/refund" className="underline hover:text-white">환불 정책</Link>을 반드시 확인해주세요.
+            디지털 콘텐츠 특성상 제공 시작 후 청약철회가 제한됩니다.
+          </p>
         </div>
       </section>
 
@@ -324,73 +324,6 @@ export default function MusicServicePage() {
               <span aria-hidden>→</span>
             </a>
           </div>
-        </div>
-      </section>
-
-      {/* PRICING */}
-      <section id="pricing" className="px-6 py-24 lg:px-14 bg-slate-950">
-        <div className="max-w-6xl mx-auto">
-          <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-2 text-center">
-            Pricing
-          </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4">
-            3개 티어, 내 목표에 맞게.
-          </h2>
-          <p className="text-center text-slate-400 mb-14">한 번 결제로 평생 업데이트.</p>
-
-          <div className="grid md:grid-cols-3 gap-5 items-stretch">
-            {(Object.keys(TIERS) as Tier[]).map((key) => {
-              const t = TIERS[key];
-              return (
-                <div
-                  key={key}
-                  className={`relative rounded-3xl p-8 flex flex-col border transition-all ${
-                    t.highlight
-                      ? 'border-violet-400 bg-gradient-to-br from-violet-900/40 to-slate-900 shadow-[0_0_60px_rgba(139,92,246,0.35)] md:scale-[1.03] md:-translate-y-2'
-                      : 'border-white/10 bg-white/[0.02] hover:border-white/30'
-                  }`}
-                >
-                  {t.highlight && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="inline-flex items-center gap-1 bg-gradient-to-r from-violet-500 to-pink-500 text-white text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-wider">
-                        🔥 80%가 선택
-                      </span>
-                    </div>
-                  )}
-                  <h3 className="font-extrabold text-2xl mb-1">{t.name}</h3>
-                  <p className="text-sm text-slate-400 mb-6">{t.desc}</p>
-                  <div className="mb-6">
-                    <span className="text-4xl font-extrabold font-mono">{t.price}</span>
-                    <span className="text-xs text-slate-500 ml-2">1회 결제</span>
-                  </div>
-                  <ul className="space-y-3 text-sm text-slate-200 mb-8 flex-1">
-                    {t.features.map((f) => (
-                      <li key={f} className="flex gap-2.5">
-                        <svg className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="leading-relaxed">{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    onClick={() => setSelectedTier(key)}
-                    className={`w-full py-4 rounded-xl font-extrabold text-sm transition-colors ${
-                      t.highlight
-                        ? 'bg-violet-500 hover:bg-violet-400 text-white'
-                        : 'bg-white/10 hover:bg-white/20 text-white'
-                    }`}
-                  >
-                    {t.name} 구매하기 →
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-          <p className="text-xs text-slate-500 text-center mt-8">
-            구매 전 <Link href="/legal/refund" className="underline hover:text-white">환불 정책</Link>을 반드시 확인해주세요.
-            디지털 콘텐츠 특성상 제공 시작 후 청약철회가 제한됩니다.
-          </p>
         </div>
       </section>
 

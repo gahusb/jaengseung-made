@@ -7,8 +7,8 @@ import { useState, useEffect } from 'react';
 const LINKS = [
   { href: '/', label: '홈' },
   { href: '/services/music/samples', label: '샘플' },
-  { href: '/services/music#pricing', label: '가격' },
   { href: '/services/music', label: '팩 상세' },
+  { href: '/studio', label: '스튜디오' },
 ];
 
 export default function TopNav() {
