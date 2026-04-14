@@ -81,8 +81,8 @@ export default function Home() {
             >
               ₩39,000 팩 자세히 보기
             </Link>
-            <a
-              href="#evidence"
+            <Link
+              href="/services/music#samples"
               className="px-8 py-4 rounded-full text-base font-bold inline-flex items-center justify-center"
               style={{
                 background: 'rgba(25,37,64,0.4)',
@@ -93,11 +93,11 @@ export default function Home() {
               }}
             >
               샘플 결과 보기
-            </a>
+            </Link>
           </div>
 
           {/* Price tier mini summary */}
-          <div className="flex flex-wrap justify-center gap-3 mb-16 text-sm">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center items-stretch sm:items-center gap-2 sm:gap-3 mb-16 text-sm max-w-md mx-auto sm:max-w-none">
             <span
               className="px-4 py-2 rounded-full"
               style={{ background: 'rgba(25,37,64,0.5)', border: '1px solid rgba(255,255,255,0.06)', color: 'var(--kx-on-variant)' }}
@@ -195,9 +195,24 @@ export default function Home() {
       {/* 2. Evidence */}
       <section id="evidence" className="py-24 px-6" style={{ background: 'var(--kx-surface-low)' }}>
         <div className="max-w-7xl mx-auto">
-          <h2 className="kx-display text-3xl md:text-4xl font-bold text-center mb-12" style={{ color: 'var(--kx-on-surface)' }}>
-            결과 먼저 보여주기
-          </h2>
+          <div className="text-center mb-12">
+            <span
+              className="kx-label inline-block px-3 py-1 mb-3 rounded-full"
+              style={{
+                background: 'rgba(255,200,80,0.12)',
+                border: '1px solid rgba(255,200,80,0.35)',
+                color: '#ffcd5c',
+              }}
+            >
+              DEMO · 예시 이미지
+            </span>
+            <h2 className="kx-display text-3xl md:text-4xl font-bold" style={{ color: 'var(--kx-on-surface)' }}>
+              이런 결과를 목표로 만듭니다
+            </h2>
+            <p className="mt-3 text-sm" style={{ color: 'var(--kx-on-variant)' }}>
+              아래 수치는 실제 실적이 아닌 기대 결과 예시입니다. 실샘플은 런칭 후 순차 공개.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { hue: 'from-violet-600 to-fuchsia-500', views: '조회수 1.2M', comments: '댓글 4.5K' },
