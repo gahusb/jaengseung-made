@@ -10,21 +10,21 @@ const manrope = Manrope({ subsets: ["latin"], variable: "--font-kx-label", displ
 
 export const metadata: Metadata = {
   title: {
-    default: "쟁승메이드 | AI 프롬프트 · 업무 자동화 · 사주 분석",
+    default: "AI 음악·뮤비 팩 ₩39,000~ | 쟁승메이드",
     template: "%s | 쟁승메이드",
   },
   description:
-    "AI 음악·뮤비 구조 설계 팩, 블로그 자동화 팩, AI 사주 분석까지. 현직 엔지니어가 직접 설계·운영하는 AI 크리에이티브 스토어. 29,000원부터.",
+    "Suno 프롬프트 + 뮤직비디오 워크플로우 + 유튜브 SEO 템플릿 팩. AI로 음악과 뮤비를 1시간 만에 완성하는 4단계 크리에이터 툴킷. ₩39,000부터.",
   keywords: [
-    "AI 프롬프트",
-    "ChatGPT 프롬프트",
-    "업무 자동화",
+    "AI 음악",
+    "AI 작곡",
+    "Suno 프롬프트",
+    "AI 뮤직비디오",
+    "유튜브 쇼츠 음악",
+    "AI 뮤비",
+    "음악 프롬프트",
+    "블로그 자동화",
     "AI 사주",
-    "AI 자동화 키트",
-    "프롬프트 엔지니어링",
-    "엑셀 자동화",
-    "외주 개발",
-    "홈페이지 제작",
   ],
   authors: [{ name: "박재오", url: "https://jaengseung-made.com" }],
   creator: "박재오",
@@ -33,9 +33,9 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: "https://jaengseung-made.com",
     siteName: "쟁승메이드",
-    title: "쟁승메이드 | AI 프롬프트 · 업무 자동화 · 사주 분석",
+    title: "AI 음악·뮤비 팩 ₩39,000~ | 쟁승메이드",
     description:
-      "AI 음악 구조 설계 팩, 블로그 자동화 팩, AI 사주 분석. 현직 엔지니어가 만든 AI 크리에이티브 스토어.",
+      "Suno 프롬프트 + 뮤비 워크플로우 + 유튜브 SEO 템플릿 팩. AI로 음악·뮤비를 1시간에 완성하는 4단계 크리에이터 툴킷.",
     images: [
       {
         url: "https://jaengseung-made.com/og-image.png",
@@ -47,8 +47,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "쟁승메이드 | AI 프롬프트 · 업무 자동화 · 사주 분석",
-    description: "AI 프롬프트 9,900원~, 업무 자동화, 무료 AI 사주 분석.",
+    title: "AI 음악·뮤비 팩 ₩39,000~ | 쟁승메이드",
+    description: "AI로 음악과 뮤비를 1시간 만에. Suno 프롬프트 + 뮤비 워크플로우 + 유튜브 SEO 템플릿.",
   },
   robots: {
     index: true,

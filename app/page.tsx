@@ -65,7 +65,7 @@ export default function Home() {
           }}
         />
         <div className="max-w-7xl mx-auto text-center relative z-10">
-          <span className="kx-label inline-block mb-6">AI MUSIC CREATOR TOOLKIT · 2026</span>
+          <span className="kx-label inline-block mb-6">프롬프트·템플릿 팩 (PDF + 에셋) · 2026</span>
           <h1 className="kx-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.05]" style={{ wordBreak: 'keep-all' }}>
             AI로 음악 + <span className="kx-gradient-text">뮤직비디오까지</span>
             <br />1시간 만에 완성
@@ -75,11 +75,11 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
             <Link
-              href="/services/music"
+              href="/services/music#pricing"
               onClick={() => trackCTAClick('home_v6_hero_primary')}
               className="kx-btn-primary px-8 py-4 rounded-full text-base inline-flex items-center justify-center gap-2"
             >
-              지금 바로 제작 시작하기
+              ₩39,000 팩 자세히 보기
             </Link>
             <a
               href="#evidence"
@@ -94,6 +94,33 @@ export default function Home() {
             >
               샘플 결과 보기
             </a>
+          </div>
+
+          {/* Price tier mini summary */}
+          <div className="flex flex-wrap justify-center gap-3 mb-16 text-sm">
+            <span
+              className="px-4 py-2 rounded-full"
+              style={{ background: 'rgba(25,37,64,0.5)', border: '1px solid rgba(255,255,255,0.06)', color: 'var(--kx-on-variant)' }}
+            >
+              입문 <strong style={{ color: 'var(--kx-on-surface)' }}>₩39,000</strong>
+            </span>
+            <span
+              className="px-4 py-2 rounded-full"
+              style={{
+                background: 'rgba(156,72,234,0.15)',
+                border: '1px solid rgba(204,151,255,0.4)',
+                color: 'var(--kx-on-surface)',
+                boxShadow: '0 0 20px rgba(156,72,234,0.25)',
+              }}
+            >
+              🔥 프로 <strong>₩99,000</strong> <span style={{ color: 'var(--kx-primary)' }}>가장 많이 팔림</span>
+            </span>
+            <span
+              className="px-4 py-2 rounded-full"
+              style={{ background: 'rgba(25,37,64,0.5)', border: '1px solid rgba(255,255,255,0.06)', color: 'var(--kx-on-variant)' }}
+            >
+              마스터 <strong style={{ color: 'var(--kx-on-surface)' }}>₩149,000</strong>
+            </span>
           </div>
 
           {/* Demo Showcase Card */}
@@ -327,8 +354,11 @@ export default function Home() {
           <div className="text-center mb-12">
             <span className="kx-label">OTHER PRODUCTS</span>
             <h2 className="kx-display text-3xl md:text-4xl font-bold mt-2" style={{ color: 'var(--kx-on-surface)' }}>
-              쟁승메이드의 다른 도구들
+              박재오가 만든 다른 도구
             </h2>
+            <p className="mt-3 text-sm max-w-xl mx-auto" style={{ color: 'var(--kx-on-variant)' }}>
+              현직 엔지니어가 본인 워크플로우에 쓰는 도구를 직접 패키징합니다. 운영·CS도 혼자 책임집니다.
+            </p>
           </div>
           <div className="grid md:grid-cols-2 gap-5 mb-16">
             <Link
@@ -365,27 +395,36 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Final CTA */}
+          {/* Final CTA — 음악 팩 단일 전환 */}
           <div
             className="text-center p-10 kx-glass"
             style={{ border: '1px solid rgba(204,151,255,0.12)' }}
           >
-            <span className="kx-label">NEXT STEP</span>
+            <span className="kx-label">START TODAY</span>
             <h3 className="kx-display text-2xl md:text-3xl font-bold mt-2 mb-3" style={{ color: 'var(--kx-on-surface)' }}>
-              프로젝트 문의가 있으신가요?
+              오늘 밤, 당신 채널에 첫 AI 뮤비가 올라갈 수 있습니다
             </h3>
             <p className="text-sm mb-6 max-w-xl mx-auto" style={{ color: 'var(--kx-on-variant)' }}>
-              맞춤 개발·컨설팅·협업 제안 모두 환영합니다. 24시간 이내 회신.
+              입문 팩 ₩39,000으로 시작. 1시간 워크플로우 + 템플릿 + 저작권 가이드 포함.
             </p>
-            <button
-              onClick={() => {
-                trackCTAClick('home_v6_final_contact');
-                setModalOpen(true);
-              }}
-              className="kx-btn-primary px-7 py-3.5 rounded-full text-sm"
+            <Link
+              href="/services/music#pricing"
+              onClick={() => trackCTAClick('home_v6_final_music')}
+              className="kx-btn-primary px-8 py-3.5 rounded-full text-sm inline-flex"
             >
-              일반 문의 보내기
-            </button>
+              ₩39,000으로 시작하기
+            </Link>
+            <div className="mt-5 text-xs" style={{ color: 'var(--kx-on-variant)' }}>
+              <button
+                onClick={() => {
+                  trackCTAClick('home_v6_final_contact');
+                  setModalOpen(true);
+                }}
+                className="underline underline-offset-4 hover:text-white transition"
+              >
+                맞춤 협업·외주 문의는 여기
+              </button>
+            </div>
           </div>
         </div>
       </section>
