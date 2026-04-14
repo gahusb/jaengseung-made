@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Space_Grotesk, Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import DashboardShell from "./components/DashboardShell";
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-kx-display", display: "swap" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-kx-body", display: "swap" });
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-kx-label", display: "swap" });
 
 export const metadata: Metadata = {
   title: {
@@ -9,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | 쟁승메이드",
   },
   description:
-    "AI 프롬프트 패키지, 업무 자동화 개발, AI 사주 분석까지. 7년차 현직 개발자가 직접 만들고 운영하는 AI 도구 스토어. 9,900원부터.",
+    "AI 음악·뮤비 구조 설계 팩, 블로그 자동화 팩, AI 사주 분석까지. 현직 엔지니어가 직접 설계·운영하는 AI 크리에이티브 스토어. 29,000원부터.",
   keywords: [
     "AI 프롬프트",
     "ChatGPT 프롬프트",
@@ -30,7 +35,7 @@ export const metadata: Metadata = {
     siteName: "쟁승메이드",
     title: "쟁승메이드 | AI 프롬프트 · 업무 자동화 · 사주 분석",
     description:
-      "AI 프롬프트 패키지, 업무 자동화, AI 사주 분석. 7년차 현직 개발자가 만든 AI 도구 스토어.",
+      "AI 음악 구조 설계 팩, 블로그 자동화 팩, AI 사주 분석. 현직 엔지니어가 만든 AI 크리에이티브 스토어.",
     images: [
       {
         url: "https://jaengseung-made.com/og-image.png",
@@ -65,14 +70,14 @@ const jsonLd = {
       email: 'bgg8988@gmail.com',
       telephone: '010-3907-1392',
       knowsAbout: ['Python', 'Java', 'Spring Boot', 'Next.js', 'AI 프롬프트', 'AI 자동화', '업무 자동화', 'ChatGPT', 'Claude'],
-      description: '7년차 현직 대기업 백엔드 개발자. AI 프롬프트 패키지, 업무 자동화, AI 사주 분석 등 AI 도구를 직접 개발·운영합니다.',
+      description: '현직 엔지니어. AI 음악 구조 설계 팩, 블로그 자동화 팩, AI 사주 분석 등 AI 크리에이티브 도구를 직접 개발·운영합니다.',
     },
     {
       '@type': 'LocalBusiness',
       '@id': 'https://jaengseung-made.com/#business',
       name: '쟁승메이드',
       url: 'https://jaengseung-made.com',
-      description: 'AI 음악 작곡·뮤비 구조 설계 팩, 블로그 자동화 팩, AI 사주 분석. 7년차 현직 개발자가 직접 만들고 운영하는 AI 크리에이티브 스토어.',
+      description: 'AI 음악 작곡·뮤비 구조 설계 팩, 블로그 자동화 팩, AI 사주 분석. 현직 엔지니어가 직접 설계·운영하는 AI 크리에이티브 스토어.',
       email: 'bgg8988@gmail.com',
       telephone: '010-3907-1392',
       priceRange: '₩',
@@ -96,7 +101,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={`${spaceGrotesk.variable} ${inter.variable} ${manrope.variable}`}>
       <head>
         <script
           type="application/ld+json"

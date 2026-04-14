@@ -308,7 +308,7 @@ export default function FreelancePage() {
             </div>
             <div>
               <div className="text-white font-bold text-sm">쟁토리 (박재오)</div>
-              <div className="text-blue-300/50 text-xs">대기업 백엔드 7년 · Python / Java / Next.js</div>
+              <div className="text-blue-300/50 text-xs">실무 엔지니어 · Python / Java / Next.js</div>
             </div>
             <div className="flex flex-wrap gap-2">
               {['Python', 'Java', 'Next.js', 'Docker'].map(t => (

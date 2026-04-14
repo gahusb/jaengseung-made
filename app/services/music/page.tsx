@@ -137,18 +137,16 @@ export default function MusicServicePage() {
         <div className="relative max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-8">
             <span className="inline-flex h-2 w-2 rounded-full bg-violet-400 animate-pulse" />
-            <span className="font-mono text-xs text-violet-300/80 tracking-[0.25em] uppercase">
-              AI Music Pack · v1
-            </span>
+            <span className="kx-label">AI MUSIC PACK · v1</span>
           </div>
 
           <h1
-            className="text-[2.8rem] md:text-[4rem] lg:text-[5.5rem] font-extrabold leading-[1.02] tracking-tight mb-6"
+            className="kx-display text-[2.8rem] md:text-[4rem] lg:text-[5.5rem] font-extrabold leading-[1.02] mb-6"
             style={{ wordBreak: 'keep-all' }}
           >
             <span className="text-white">네 사연을 노래로.</span>
             <br />
-            <span className="bg-gradient-to-r from-violet-300 via-pink-200 to-cyan-300 bg-clip-text text-transparent">
+            <span className="kx-gradient-text">
               쇼츠까지 한 번에.
             </span>
           </h1>
@@ -160,7 +158,7 @@ export default function MusicServicePage() {
             AI로 음악을 뽑는 게 아니라, <span className="text-white font-semibold">고품질 결과물을 빠르게</span> 뽑는 법을 팝니다.
           </p>
           <p className="text-slate-400 text-base mb-10 max-w-2xl">
-            7년차 개발자가 설계한 <span className="text-white">4단계 AI 음악 공정</span> · Suno Pro 검증.
+            엔지니어가 설계한 <span className="text-white">4단계 AI 음악 공정</span> · Suno Pro 검증.
           </p>
 
           <div className="flex flex-wrap gap-3 mb-10">

@@ -5,7 +5,7 @@ import { verifyPortfolioTokenNode } from '@/lib/admin-auth';
 
 export const metadata: Metadata = {
   title: '박재오 — 외주 개발 포트폴리오',
-  description: '7년차 대기업 백엔드 개발자 박재오의 외주 포트폴리오.',
+  description: '현직 실무 엔지니어 박재오의 외주 포트폴리오.',
   robots: { index: false, follow: false },
 };
 
@@ -48,7 +48,7 @@ export default async function PortfolioGateway({ params }: Props) {
           </h1>
 
           <p className="text-slate-300 text-lg leading-relaxed max-w-2xl mb-10" style={{ wordBreak: 'keep-all' }}>
-            7년차 대기업 백엔드 개발자 · 계약서 우선 · 납기 패널티 보장 · 소스코드 100% 인도.
+            현직 실무 엔지니어 · 계약서 우선 · 납기 패널티 보장 · 소스코드 100% 인도.
             본 페이지는 {expires}까지 유효한 개별 공유 링크입니다.
           </p>
 

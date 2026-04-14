@@ -35,6 +35,20 @@
   --sidebar-bg: #04102b;
   --card-bg: #ffffff;
   --border: #dbe8ff;
+
+  /* ─── Kinetic Ether Tokens (다크 테마 섹션 전용) ─── */
+  --kx-surface: #060e20;
+  --kx-surface-low: #091328;
+  --kx-surface-mid: #0f1930;
+  --kx-surface-high: #141f38;
+  --kx-surface-bright: #1f2b49;
+  --kx-on-surface: #dee5ff;
+  --kx-on-variant: #a3aac4;
+  --kx-primary: #cc97ff;
+  --kx-primary-dim: #9c48ea;
+  --kx-secondary: #53ddfc;
+  --kx-secondary-dim: #40ceed;
+  --kx-outline: rgba(64, 72, 93, 0.15);
 }
 
 @theme inline {
@@ -82,6 +96,82 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ─── Kinetic Ether 유틸리티 ─── */
+.kx-section {
+  background: var(--kx-surface);
+  color: var(--kx-on-surface);
+  font-family: 'Space Grotesk', 'Inter', 'CookieRun', system-ui, sans-serif;
+}
+.kx-section p, .kx-section li, .kx-section span:not(.kx-label) {
+  color: var(--kx-on-variant);
+}
+.kx-display {
+  font-family: 'Space Grotesk', 'CookieRun', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  color: var(--kx-on-surface);
+}
+.kx-label {
+  font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--kx-secondary);
+}
+.kx-folder {
+  background: var(--kx-surface-mid);
+  border-radius: 0.75rem 0.75rem 0.125rem 0.125rem;
+  padding: 1.5rem;
+  position: relative;
+}
+.kx-folder::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(204,151,255,0.3), transparent);
+}
+.kx-glass {
+  background: rgba(25, 37, 64, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 1rem;
+}
+.kx-glow {
+  box-shadow: 0 0 40px 0 rgba(156, 72, 234, 0.25),
+              0 0 80px 0 rgba(83, 221, 252, 0.08);
+}
+.kx-btn-primary {
+  background: linear-gradient(135deg, #cc97ff 0%, #c284ff 100%);
+  color: #0b0113;
+  font-weight: 700;
+  box-shadow: 0 0 20px 0 rgba(168, 85, 247, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.kx-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 28px 0 rgba(168, 85, 247, 0.55);
+}
+.kx-btn-ghost {
+  color: var(--kx-secondary);
+  background: transparent;
+  transition: background 0.15s ease;
+}
+.kx-btn-ghost:hover {
+  background: var(--kx-surface-bright);
+}
+.kx-gradient-text {
+  background: linear-gradient(135deg, #cc97ff 0%, #53ddfc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.kx-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 /* Service card hover */

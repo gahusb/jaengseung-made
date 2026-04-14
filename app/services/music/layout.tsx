@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'AI 음악 마스터 구조 팩 | Suno · MV · 유튜브 쇼츠',
   description:
-    '7년차 개발자가 설계한 4단계 AI 음악 제작 공정. Suno 프롬프트 조합법 + MV 비디오 생성 워크플로우 + 저작권 가이드 + 템플릿 PDF + 샘플 프로젝트. 입문 ₩39k / 프로 ₩99k / 마스터 ₩149k.',
+    '엔지니어가 설계한 4단계 AI 음악 제작 공정. Suno 프롬프트 조합법 + MV 비디오 생성 워크플로우 + 저작권 가이드 + 템플릿 PDF + 샘플 프로젝트. 입문 ₩39k / 프로 ₩99k / 마스터 ₩149k.',
   keywords: [
     'AI 음악 만들기',
     'Suno 프롬프트',
