@@ -3,17 +3,24 @@
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
+import PublicShell from './PublicShell';
 
 const STANDALONE_PATHS = ['/login', '/signup', '/admin'];
+const SIDEBAR_PATHS = ['/mypage'];
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 
   const isStandalone = STANDALONE_PATHS.some((p) => pathname.startsWith(p));
+  const useSidebar = SIDEBAR_PATHS.some((p) => pathname.startsWith(p));
 
   if (isStandalone) {
     return <>{children}</>;
+  }
+
+  if (!useSidebar) {
+    return <PublicShell>{children}</PublicShell>;
   }
 
   return (
