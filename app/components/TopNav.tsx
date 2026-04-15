@@ -33,8 +33,11 @@ export default function TopNav() {
     }
   }, [open]);
 
-  const isActive = (href: string) =>
-    href === '/' ? pathname === '/' : pathname.startsWith(href);
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    if (href === '/services/music') return pathname === '/services/music';
+    return pathname.startsWith(href);
+  };
 
   return (
     <>
@@ -43,17 +46,17 @@ export default function TopNav() {
           scrolled ? 'backdrop-blur-md' : ''
         }`}
         style={{
-          background: scrolled ? 'rgba(6,14,32,0.85)' : 'rgba(6,14,32,0.55)',
-          borderBottom: '1px solid rgba(204,151,255,0.08)',
-          boxShadow: scrolled ? '0 8px 40px 0 rgba(156,72,234,0.12)' : 'none',
+          background: scrolled ? 'rgba(6,14,32,0.7)' : 'transparent',
+          borderBottom: 'none',
+          boxShadow: scrolled ? '0 8px 32px 0 rgba(6,14,32,0.35)' : 'none',
         }}
       >
         <Link
           href="/"
           className="kx-display text-2xl font-black tracking-tight kx-gradient-text"
-          style={{ textDecoration: 'none' }}
+          style={{ textDecoration: 'none', letterSpacing: '0.02em' }}
         >
-          쟁승메이드
+          JSM
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
@@ -87,7 +90,7 @@ export default function TopNav() {
             className="kx-btn-primary hidden sm:inline-flex items-center px-5 py-2 rounded-full text-sm"
             style={{ textDecoration: 'none' }}
           >
-            시작하기
+            Try now
           </Link>
           <button
             onClick={() => setOpen(true)}
@@ -109,7 +112,7 @@ export default function TopNav() {
           style={{ background: 'rgba(6,14,32,0.98)', backdropFilter: 'blur(16px)' }}
         >
           <div className="flex items-center justify-between px-6 h-20">
-            <span className="kx-display text-2xl font-black kx-gradient-text">쟁승메이드</span>
+            <span className="kx-display text-2xl font-black kx-gradient-text" style={{ letterSpacing: '0.02em' }}>JSM</span>
             <button
               onClick={() => setOpen(false)}
               aria-label="메뉴 닫기"
@@ -148,7 +151,7 @@ export default function TopNav() {
                 className="kx-btn-primary flex-1 py-3 text-center rounded-full text-sm"
                 style={{ textDecoration: 'none' }}
               >
-                시작하기
+                Try now
               </Link>
             </div>
           </div>
