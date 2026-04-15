@@ -129,15 +129,16 @@ export default function MusicServicePage() {
               className="kx-display text-[2.25rem] md:text-[3.25rem] font-extrabold leading-[1.1] mb-5"
               style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
             >
-              AI로 음악 + 뮤비까지,
+              한 줄이면,
               <br />
               <span className="bg-gradient-to-r from-violet-300 to-cyan-300 bg-clip-text text-transparent">
-                구조를 통째로.
+                노래가 됩니다.
               </span>
             </h1>
             <p className="text-slate-300 text-base md:text-lg leading-relaxed mb-8 max-w-lg">
-              Suno 프롬프트부터 MV 워크플로우·저작권 가이드까지.
-              쇼츠 1편을 완성하는 한 팩.
+              Suno 프롬프트, 뮤직비디오 워크플로우, 저작권 가이드.
+              <br className="hidden sm:block" />
+              쇼츠 한 편을 완성하는 모든 것을 한 팩에.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <a

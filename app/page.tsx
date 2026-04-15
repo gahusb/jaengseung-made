@@ -56,13 +56,16 @@ export default function Home() {
           }}
         />
         <div className="max-w-7xl mx-auto text-center relative z-10">
-          <span className="kx-label inline-block mb-6">프롬프트·템플릿 팩 (PDF + 에셋) · 2026</span>
-          <h1 className="kx-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.05]" style={{ wordBreak: 'keep-all' }}>
-            AI로 음악 + <span className="kx-gradient-text">뮤직비디오까지</span>
-            <br />1시간 만에 완성
+          <span className="kx-label inline-block mb-6">AI Music Pack · 2026</span>
+          <h1 className="kx-display text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.05]" style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}>
+            한 줄이면,
+            <br />
+            <span className="kx-gradient-text">노래가 됩니다.</span>
           </h1>
-          <p className="text-lg md:text-xl mb-10 max-w-3xl mx-auto leading-relaxed" style={{ color: 'var(--kx-on-variant)' }}>
-            조회수 터지는 콘텐츠 제작 시스템. 음악 이론을 몰라도 누구나 프로 수준의 결과물을 만듭니다.
+          <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed" style={{ color: 'var(--kx-on-variant)' }}>
+            프롬프트부터 뮤직비디오까지.
+            <br className="sm:hidden" />
+            {' '}AI 음악 제작의 모든 순서를 한 팩에 담았습니다.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
             <Link
