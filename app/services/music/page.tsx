@@ -118,20 +118,72 @@ export default function MusicServicePage() {
 
   return (
     <div className="min-h-full bg-slate-950 text-white">
-      {/* 상세 페이지 헤더 (컴팩트) */}
-      <section className="px-6 pt-14 pb-8 lg:px-14 bg-slate-950 border-b border-white/5">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="inline-flex h-2 w-2 rounded-full bg-violet-400 animate-pulse" />
-            <span className="kx-label">AI MUSIC PACK · v1 · 상품 상세</span>
+      {/* HERO — 결과 중심 2-column */}
+      <section className="px-6 pt-16 pb-14 lg:px-14 bg-slate-950 border-b border-white/5">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          {/* 좌: 카피 + CTA */}
+          <div>
+            <div className="flex items-center gap-2 mb-5">
+              <span className="inline-flex h-2 w-2 rounded-full bg-violet-400 animate-pulse" />
+              <span className="font-mono text-[11px] tracking-widest uppercase text-violet-300/80">
+                AI MUSIC PACK · v1
+              </span>
+            </div>
+            <h1
+              className="kx-display text-[2.25rem] md:text-[3.25rem] font-extrabold leading-[1.1] mb-5"
+              style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
+            >
+              AI로 음악 + 뮤비까지,
+              <br />
+              <span className="bg-gradient-to-r from-violet-300 to-cyan-300 bg-clip-text text-transparent">
+                구조를 통째로.
+              </span>
+            </h1>
+            <p className="text-slate-300 text-base md:text-lg leading-relaxed mb-8 max-w-lg">
+              Suno 프롬프트부터 MV 워크플로우·저작권 가이드까지.
+              쇼츠 1편을 완성하는 한 팩.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <a
+                href="#pricing"
+                className="inline-flex items-center justify-center gap-2 bg-violet-500 hover:bg-violet-400 text-white px-7 py-4 rounded-xl font-extrabold text-sm transition-colors shadow-[0_12px_40px_-12px_rgba(139,92,246,0.6)]"
+              >
+                ₩39,000부터 시작 →
+              </a>
+              <Link
+                href="/services/music/samples"
+                className="inline-flex items-center justify-center gap-2 border border-white/15 hover:border-white/30 hover:bg-white/5 text-white px-7 py-4 rounded-xl font-semibold text-sm transition-colors"
+              >
+                실제 샘플 보기
+              </Link>
+            </div>
           </div>
-          <h1 className="kx-display text-3xl md:text-5xl font-extrabold leading-tight mb-3" style={{ wordBreak: 'keep-all' }}>
-            AI 음악 마스터 구조 팩
-          </h1>
-          <p className="text-slate-300 md:text-lg max-w-3xl">
-            Suno 프롬프트 + MV 워크플로우 + 저작권 가이드 + 템플릿 PDF + 샘플 프로젝트.
-            4단계 AI 음악 제작 공정을 한 팩으로.
-          </p>
+
+          {/* 우: 결과 프리뷰 */}
+          <div className="relative">
+            <div className="absolute -inset-6 bg-gradient-to-br from-violet-500/20 to-cyan-500/10 blur-3xl rounded-full pointer-events-none" />
+            <div
+              className="relative aspect-[9/16] max-w-[320px] mx-auto rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-violet-900/40"
+              style={{ background: 'linear-gradient(135deg,#1e1b4b 0%,#0f172a 60%,#0b0530 100%)' }}
+            >
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+                <div className="text-5xl mb-3">🎬</div>
+                <p className="font-mono text-[10px] tracking-widest text-violet-300/80 uppercase mb-1">
+                  FEATURED SHORT
+                </p>
+                <p className="text-sm text-white font-semibold">TOP 샘플 미리보기</p>
+                <p className="text-[11px] text-slate-400 mt-1">9:16 · 58초</p>
+              </div>
+              <div className="absolute bottom-3 left-3 right-3 flex gap-1.5">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/60 text-white border border-white/10">
+                  Suno V4
+                </span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/60 text-white border border-white/10">
+                  제작 1시간
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -211,16 +263,14 @@ export default function MusicServicePage() {
           <h2 className="text-2xl md:text-3xl font-extrabold mb-8">팩 구성품</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {[
-              { icon: '📄', title: 'Suno 프롬프트 북 (PDF)', desc: '장르·무드·보컬 톤 조합법 20+종. 복붙해서 바로 사용.' },
-              { icon: '🎼', title: '구조 템플릿 팩', desc: 'Verse·Chorus·Bridge 파트 설계도 + Suno Custom 모드 입력 예시.' },
-              { icon: '🎬', title: 'MV 워크플로우 가이드', desc: 'Midjourney · Runway · Luma로 비트 싱크 영상 만드는 단계별 매뉴얼.' },
-              { icon: '⚖️', title: '저작권 & 상업 이용 가이드', desc: 'Suno/Runway 약관 요약 + 수익화 안전 체크리스트.' },
-              { icon: '📦', title: '샘플 프로젝트 (프로·마스터)', desc: '완성된 .prj 파일 + 영상. 그대로 수정해 재사용 가능.' },
-              { icon: '🔄', title: '12개월 무료 업데이트', desc: 'Suno 신규 모델·기능 반영. 구매자 Notion에서 자동 수령.' },
+              { icon: '📄', title: 'Suno 프롬프트 북', desc: '장르·무드·보컬 톤 조합법 20+종. 복붙해서 바로 사용하는 PDF.' },
+              { icon: '🎬', title: 'MV 워크플로우', desc: 'Midjourney·Runway·Luma로 비트 싱크 영상 만드는 단계별 가이드.' },
+              { icon: '⚖️', title: '저작권 & 상업 이용', desc: 'Suno·Runway 약관 요약 + 수익화 전 안전 체크리스트.' },
+              { icon: '📦', title: '샘플 프로젝트 파일', desc: '완성된 가사·프롬프트·영상 세트. 그대로 수정해 재사용 가능.' },
             ].map((item) => (
               <div
                 key={item.title}
-                className="flex gap-4 p-5 rounded-xl border border-white/10 bg-white/[0.02]"
+                className="flex gap-4 p-6 rounded-2xl border border-white/10 bg-white/[0.02]"
               >
                 <div className="text-2xl flex-shrink-0">{item.icon}</div>
                 <div>
@@ -322,65 +372,6 @@ export default function MusicServicePage() {
         </div>
       </section>
 
-      {/* 추천 대상 */}
-      <section className="px-6 py-20 lg:px-14 bg-slate-950 border-t border-white/5">
-        <div className="max-w-5xl mx-auto">
-          <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-2 text-center">
-            Who It's For
-          </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-12">
-            이런 분께 추천드려요
-          </h2>
-          <div className="grid md:grid-cols-2 gap-5">
-            <div className="border border-emerald-500/30 bg-emerald-500/5 rounded-2xl p-8 shadow-[0_0_40px_rgba(16,185,129,0.12)]">
-              <div className="text-4xl mb-3">🎯</div>
-              <h3 className="font-extrabold text-emerald-300 mb-3 text-lg">이런 분께 딱</h3>
-              <ul className="space-y-2 text-sm text-slate-200 leading-relaxed">
-                <li>• Suno를 써봤지만 원하는 무드가 안 나오는 분</li>
-                <li>• 유튜브 쇼츠·릴스 채널 운영 중인 1인 크리에이터</li>
-                <li>• 브랜드·매장 BGM을 직접 만들고 싶은 소상공인</li>
-                <li>• AI 음악 워크플로우를 처음부터 제대로 배우고 싶은 분</li>
-              </ul>
-            </div>
-            <div className="border border-white/10 bg-white/[0.02] rounded-2xl p-8">
-              <div className="text-4xl mb-3">🙅</div>
-              <h3 className="font-extrabold text-slate-300 mb-3 text-lg">이런 분께는 비추</h3>
-              <ul className="space-y-2 text-sm text-slate-400 leading-relaxed">
-                <li>• 완성된 맞춤곡 파일을 바로 받고 싶은 분 (B2B 문의 권장)</li>
-                <li>• DAW·마스터링 전문가 수준 튜닝을 원하는 분</li>
-                <li>• Suno 유료 플랜 가입 의사가 없는 분 (상업 이용 제한)</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* B2B */}
-      <section className="px-6 py-16 lg:px-14 bg-gradient-to-br from-slate-900 to-slate-950 border-y border-white/5">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center gap-6 border border-amber-500/30 bg-amber-500/5 rounded-2xl p-8">
-            <div className="flex-1">
-              <p className="font-mono text-xs text-amber-300/80 tracking-widest uppercase mb-2">
-                For Business
-              </p>
-              <h3 className="text-2xl font-extrabold text-white mb-2">
-                📣 내 가게 전용 BGM, 저작권 걱정 없이.
-              </h3>
-              <p className="text-sm text-slate-300 leading-relaxed">
-                카페 · 쇼핑몰 · 인스타 릴스 · 틱톡 셀러용 전용 BGM 제작.
-                1분 만에 브랜드에 맞는 음악을 뽑아드립니다.
-              </p>
-            </div>
-            <Link
-              href="/contact?service=bgm"
-              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 px-6 py-3 rounded-xl font-extrabold text-sm transition-colors"
-            >
-              B2B 문의 →
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* FAQ */}
       <section className="px-6 py-20 lg:px-14 bg-slate-950">
         <div className="max-w-3xl mx-auto">
@@ -431,6 +422,28 @@ export default function MusicServicePage() {
           </a>
         </div>
       </section>
+
+      {/* Sticky 바텀 CTA */}
+      <div
+        className="fixed bottom-0 inset-x-0 z-40 border-t border-white/10 backdrop-blur-md"
+        style={{ background: 'rgba(6,14,32,0.85)' }}
+      >
+        <div className="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-[11px] font-mono text-violet-300/70 tracking-widest uppercase">From</p>
+            <p className="text-white font-extrabold text-lg leading-tight">
+              ₩39,000 <span className="text-xs text-slate-400 font-medium">· 1회 결제</span>
+            </p>
+          </div>
+          <a
+            href="#pricing"
+            className="inline-flex items-center gap-2 bg-violet-500 hover:bg-violet-400 text-white px-6 py-3 rounded-xl font-extrabold text-sm transition-colors shadow-[0_8px_30px_-8px_rgba(139,92,246,0.6)] whitespace-nowrap"
+          >
+            팩 선택하기 →
+          </a>
+        </div>
+      </div>
+      <div className="h-20" aria-hidden />
 
       {selectedTier && (
         <PurchaseAgreementModal
