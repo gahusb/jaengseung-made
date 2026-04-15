@@ -108,8 +108,8 @@ body {
   color: var(--kx-on-variant);
 }
 .kx-display {
-  font-family: 'Space Grotesk', 'CookieRun', system-ui, sans-serif;
-  letter-spacing: -0.02em;
+  font-family: var(--font-kx-hero), 'Bagel Fat One', 'Space Grotesk', 'CookieRun', system-ui, sans-serif;
+  letter-spacing: -0.01em;
   color: var(--kx-on-surface);
 }
 .kx-label {

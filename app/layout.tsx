@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Space_Grotesk, Inter, Manrope } from "next/font/google";
+import { Space_Grotesk, Inter, Manrope, Bagel_Fat_One } from "next/font/google";
 import "./globals.css";
 import DashboardShell from "./components/DashboardShell";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-kx-display", display: "swap" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-kx-body", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-kx-label", display: "swap" });
+const bagel = Bagel_Fat_One({ weight: "400", subsets: ["latin"], variable: "--font-kx-hero", display: "swap" });
 
 export const metadata: Metadata = {
   title: {
@@ -103,7 +104,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${inter.variable} ${manrope.variable}`}>
+    <html lang="ko" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${inter.variable} ${manrope.variable} ${bagel.variable}`}>
       <head>
         <script
           type="application/ld+json"
