@@ -11,15 +11,6 @@ import { trackCTAClick } from '../lib/gtag';
    참조: Downloads/stitch_ai_mv/ai_music_creator_landing_page
 ═══════════════════════════════════════════════════ */
 
-const TOOLKIT = [
-  { accent: 'var(--kx-primary)', icon: '🎛', title: 'Suno 프롬프트 레시피', desc: '원하는 장르와 감성을 완벽하게 구현하는 검증된 프롬프트 조합 모음.' },
-  { accent: 'var(--kx-secondary)', icon: '✍', title: '작사 치트키 템플릿', desc: '주제만 넣으면 감성적인 가사를 뽑아내는 AI 라이팅 가이드.' },
-  { accent: '#ff86c3', icon: '🎬', title: '뮤직비디오 워크플로우', desc: '음악 비트에 맞춰 자동으로 영상을 생성·편집하는 원스톱 프로세스.' },
-  { accent: '#c284ff', icon: '⚖', title: '저작권 세이프 가이드', desc: 'AI 생성물의 상업적 이용과 저작권 등록을 위한 체크리스트.' },
-  { accent: 'var(--kx-secondary-dim)', icon: '📄', title: 'PDF 기획 템플릿', desc: '채널 브랜딩부터 콘텐츠 기획까지 한번에 끝내는 실행 가이드북.' },
-  { accent: '#ffffff', icon: '📦', title: '성공 사례 샘플 프로젝트', desc: '조회수 100만 이상을 기록한 프로젝트의 실제 파일 구조 분석.' },
-];
-
 const BEFORE = [
   '작곡 공부에만 최소 6개월 소요',
   '영상 편집 프로그램 학습의 높은 장벽',
@@ -192,65 +183,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. Evidence */}
-      <section id="evidence" className="py-24 px-6" style={{ background: 'var(--kx-surface-low)' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <span
-              className="kx-label inline-block px-3 py-1 mb-3 rounded-full"
-              style={{
-                background: 'rgba(255,200,80,0.12)',
-                border: '1px solid rgba(255,200,80,0.35)',
-                color: '#ffcd5c',
-              }}
-            >
-              DEMO · 예시 이미지
-            </span>
-            <h2 className="kx-display text-3xl md:text-4xl font-bold" style={{ color: 'var(--kx-on-surface)' }}>
-              이런 결과를 목표로 만듭니다
-            </h2>
-            <p className="mt-3 text-sm" style={{ color: 'var(--kx-on-variant)' }}>
-              아래 수치는 실제 실적이 아닌 기대 결과 예시입니다. 실샘플은 런칭 후 순차 공개.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { hue: 'from-violet-600 to-fuchsia-500', views: '조회수 1.2M', comments: '댓글 4.5K' },
-              { hue: 'from-sky-600 to-cyan-500', views: '조회수 850K', comments: '댓글 2.1K' },
-              { hue: 'from-pink-600 to-rose-500', views: '조회수 2.4M', comments: '댓글 12K' },
-            ].map((c, i) => (
-              <div
-                key={i}
-                className="overflow-hidden rounded-xl hover:-translate-y-2 transition-transform"
-                style={{ background: 'var(--kx-surface-mid)' }}
-              >
-                <div className={`h-48 bg-gradient-to-br ${c.hue} relative`}>
-                  <div className="absolute inset-0 bg-black/30" />
-                  <svg className="absolute inset-0 w-full h-full opacity-50" preserveAspectRatio="none" viewBox="0 0 400 200">
-                    {[...Array(30)].map((_, j) => (
-                      <rect
-                        key={j}
-                        x={j * 14 + 8}
-                        y={Number((100 - Math.abs(Math.sin((j + i * 5) * 0.5) * 60)).toFixed(3))}
-                        width="6"
-                        height={Number((Math.abs(Math.sin((j + i * 5) * 0.5) * 120) + 10).toFixed(3))}
-                        fill="white"
-                        opacity={0.4}
-                      />
-                    ))}
-                  </svg>
-                </div>
-                <div className="p-4 flex items-center gap-4 text-sm" style={{ color: 'var(--kx-on-variant)' }}>
-                  <span>👁 {c.views}</span>
-                  <span>💬 {c.comments}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Before / After */}
+      {/* 2. Before / After */}
       <section className="py-24 px-6" style={{ background: 'var(--kx-surface)' }}>
         <div className="max-w-7xl mx-auto">
           <h2 className="kx-display text-3xl md:text-4xl font-bold text-center mb-16" style={{ color: 'var(--kx-on-surface)' }}>
@@ -289,81 +222,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Toolkit */}
-      <section className="py-24 px-6" style={{ background: 'var(--kx-surface-low)' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
-            <span className="kx-label">TOOLKIT</span>
-            <h2 className="kx-display text-3xl md:text-4xl font-bold mt-2 mb-3" style={{ color: 'var(--kx-on-surface)' }}>
-              The Toolkit Assets
-            </h2>
-            <p className="text-base" style={{ color: 'var(--kx-on-variant)' }}>
-              성공적인 AI 뮤직 크리에이터를 위한 모든 필수 자산.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {TOOLKIT.map((t) => (
-              <div
-                key={t.title}
-                className="p-6 transition-all hover:-translate-y-1"
-                style={{
-                  background: 'var(--kx-surface-high)',
-                  borderTop: `2px solid ${t.accent}`,
-                  borderRadius: '0.75rem 0.75rem 0.125rem 0.125rem',
-                }}
-              >
-                <div
-                  className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 text-2xl"
-                  style={{ background: `${t.accent}1a` }}
-                >
-                  {t.icon}
-                </div>
-                <h4 className="kx-display text-lg font-bold mb-2" style={{ color: 'var(--kx-on-surface)' }}>{t.title}</h4>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--kx-on-variant)' }}>{t.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Process 3-step */}
-      <section className="py-24 px-6" style={{ background: 'var(--kx-surface)' }}>
-        <div className="max-w-7xl mx-auto">
-          <h2 className="kx-display text-3xl md:text-4xl font-bold text-center mb-16" style={{ color: 'var(--kx-on-surface)' }}>
-            딱 3단계면 충분합니다
-          </h2>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-10 relative">
-            <div className="hidden md:block absolute top-10 left-[10%] right-[10%] h-0.5 -z-0"
-              style={{ background: 'linear-gradient(90deg, rgba(204,151,255,0.3), rgba(83,221,252,0.3), rgba(255,134,195,0.3))' }}
-            />
-            {[
-              { step: '01', title: '프롬프트 입력', desc: '아이디어를 한 줄로 설명하세요', icon: '⌨', color: 'var(--kx-primary)' },
-              { step: '02', title: 'AI 음악 생성', desc: '30초 만에 완성되는 고퀄리티 음원', icon: '🎵', color: 'var(--kx-secondary)' },
-              { step: '03', title: '뮤직비디오 렌더링', desc: '유튜브 쇼츠, 릴스 즉시 업로드', icon: '🎥', color: '#ff86c3' },
-            ].map((s) => (
-              <div key={s.step} className="flex flex-col items-center gap-4 text-center relative z-10">
-                <div
-                  className="w-20 h-20 rounded-full flex items-center justify-center text-3xl"
-                  style={{
-                    background: 'var(--kx-surface-mid)',
-                    border: `3px solid ${s.color}`,
-                    boxShadow: `0 0 24px 0 ${s.color}55`,
-                  }}
-                >
-                  {s.icon}
-                </div>
-                <div>
-                  <span className="kx-label" style={{ color: s.color }}>Step {s.step}</span>
-                  <h4 className="kx-display text-xl font-bold mt-2" style={{ color: 'var(--kx-on-surface)' }}>{s.title}</h4>
-                  <p className="text-sm mt-2" style={{ color: 'var(--kx-on-variant)' }}>{s.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Other Products + CTA */}
+      {/* 3. Other Products + CTA */}
       <section className="py-24 px-6" style={{ background: 'var(--kx-surface-low)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">

@@ -14,7 +14,6 @@ const TIERS: Record<Tier, { name: string; price: string; priceNum: string; desc:
     desc: '첫 AI 음악을 위한 필수 구성',
     features: [
       'Suno 프롬프트 조합법 20종',
-      '기본 가사 최적화 템플릿',
       '구조 템플릿 PDF 40p',
       '저작권 가이드 기본판',
       '12개월 무료 업데이트',
@@ -28,11 +27,9 @@ const TIERS: Record<Tier, { name: string; price: string; priceNum: string; desc:
     highlight: true,
     features: [
       '입문 전체 포함',
-      '고급 편집법 (Stems 분리 · 마스터링 프롬프트)',
-      'MV 비디오 생성 워크플로우 (Runway/Luma/Pika)',
-      '샘플 프로젝트 1개 (.prj · 영상 포함)',
-      '이메일/페이지 1:1 Q&A 1회 (30일 이내)',
-      '유튜브 SEO 템플릿',
+      'MV 워크플로우 (Runway · Luma · Pika)',
+      '샘플 프로젝트 1개 (.prj · 영상)',
+      '1:1 Q&A 1회 + 유튜브 SEO 템플릿',
     ],
   },
   master: {
@@ -42,10 +39,9 @@ const TIERS: Record<Tier, { name: string; price: string; priceNum: string; desc:
     desc: '여러 장르·포맷을 커버하는 마스터피스',
     features: [
       '프로 전체 포함',
-      '샘플 프로젝트 다수 (장르별 3종)',
-      '우선 업데이트 · 베타 기능 선공개',
-      '저작권 가이드 심화판 + 상업 이용 체크리스트',
-      '제작 레시피 영상 가이드',
+      '샘플 프로젝트 장르별 3종',
+      '저작권 심화판 + 상업 이용 체크리스트',
+      '우선 업데이트 · 제작 레시피 영상',
     ],
   },
 };
@@ -317,38 +313,19 @@ export default function MusicServicePage() {
         </div>
       </section>
 
-      {/* SAMPLES */}
-      <section id="samples" className="px-6 py-20 lg:px-14 bg-[#0b0530]">
-        <div className="max-w-5xl mx-auto">
-          <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-2">
-            Most Popular Sample
-          </p>
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-3">
-            이 쇼츠, 이 팩으로 만들었어요.
-          </h2>
-          <p className="text-slate-400 mb-10">가장 인기 있는 결과물 1개. 전체 샘플은 별도 페이지에서.</p>
-
-          <div className="max-w-sm mx-auto mb-8">
-            <div className="aspect-[9/16] rounded-2xl border border-violet-400/30 bg-gradient-to-br from-violet-900/50 to-slate-900 flex items-center justify-center relative overflow-hidden group cursor-pointer shadow-2xl shadow-violet-900/40">
-              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/15 to-cyan-500/15 group-hover:from-violet-500/30 group-hover:to-cyan-500/30 transition-all" />
-              <div className="relative text-center p-6">
-                <div className="text-6xl mb-4">🎬</div>
-                <p className="text-xs text-violet-300/80 font-mono tracking-widest">FEATURED</p>
-                <p className="text-base text-slate-100 mt-2 font-semibold">TOP 샘플 (준비 중)</p>
-                <p className="text-xs text-slate-400 mt-1">유튜브 쇼츠 임베드 예정</p>
-              </div>
-            </div>
+      {/* SAMPLES — 컴팩트 링크 */}
+      <section id="samples" className="px-6 py-12 lg:px-14 bg-[#0b0530] border-t border-white/5">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-1">Samples</p>
+            <h2 className="text-xl md:text-2xl font-extrabold">이 팩으로 만든 실제 쇼츠들</h2>
           </div>
-
-          <div className="text-center">
-            <a
-              href="/services/music/samples"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-violet-400/40 bg-violet-500/10 hover:bg-violet-500/20 text-sm font-semibold text-violet-200 transition"
-            >
-              전체 샘플 갤러리 보기
-              <span aria-hidden>→</span>
-            </a>
-          </div>
+          <Link
+            href="/services/music/samples"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-violet-400/40 bg-violet-500/10 hover:bg-violet-500/20 text-sm font-semibold text-violet-200 transition whitespace-nowrap"
+          >
+            전체 샘플 갤러리 →
+          </Link>
         </div>
       </section>
 
@@ -378,28 +355,6 @@ export default function MusicServicePage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="px-6 py-20 lg:px-14 bg-gradient-to-br from-violet-900 via-slate-950 to-[#0b0530]">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight" style={{ wordBreak: 'keep-all' }}>
-            오늘 밤,
-            <br />
-            <span className="bg-gradient-to-r from-violet-300 via-pink-200 to-cyan-300 bg-clip-text text-transparent">
-              첫 쇼츠를 업로드하세요.
-            </span>
-          </h2>
-          <p className="text-slate-400 text-lg mb-10">
-            ₩39,000부터 · 12개월 무료 업데이트 · 즉시 다운로드
-          </p>
-          <a
-            href="#pricing"
-            className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-12 py-5 rounded-xl font-extrabold text-base transition-colors shadow-[0_0_60px_rgba(139,92,246,0.5)]"
-          >
-            팩 선택하기 →
-          </a>
         </div>
       </section>
 
