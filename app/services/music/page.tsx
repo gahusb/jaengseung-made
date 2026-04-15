@@ -206,7 +206,7 @@ export default function MusicServicePage() {
               return (
                 <div
                   key={key}
-                  className={`relative rounded-3xl p-8 flex flex-col border transition-all ${
+                  className={`relative rounded-2xl p-8 flex flex-col border transition-all ${
                     t.highlight
                       ? 'border-violet-400 bg-gradient-to-br from-violet-900/40 to-slate-900 shadow-[0_0_60px_rgba(139,92,246,0.35)] md:scale-[1.03] md:-translate-y-2'
                       : 'border-white/10 bg-white/[0.02] hover:border-white/30'
@@ -283,54 +283,34 @@ export default function MusicServicePage() {
         </div>
       </section>
 
-      {/* PROCESS — 4 STEPS */}
-      <section className="px-6 py-24 lg:px-14 bg-gradient-to-b from-slate-950 to-[#0b0530]">
-        <div className="max-w-5xl mx-auto">
+      {/* PROCESS — 4 STEPS (컴팩트) */}
+      <section className="px-6 py-16 lg:px-14 bg-gradient-to-b from-slate-950 to-[#0b0530]">
+        <div className="max-w-6xl mx-auto">
           <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-2">
-            Process Architecture
+            Process
           </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4" style={{ wordBreak: 'keep-all' }}>
-            컨셉 → 음악 → 비주얼 → 퍼블리싱,
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-10" style={{ wordBreak: 'keep-all' }}>
+            컨셉 → 음악 → 비주얼 → 퍼블리싱
           </h2>
-          <p className="text-slate-400 text-lg mb-16">한 번에 이어지는 4단계 공정 설계도.</p>
 
-          <div className="space-y-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {PROCESS.map((step) => (
               <div
                 key={step.num}
-                className="group relative border border-white/10 hover:border-violet-400/50 rounded-3xl p-8 md:p-10 bg-white/[0.02] backdrop-blur transition-all"
+                className="rounded-2xl p-6 border border-white/10 bg-white/[0.02] hover:border-violet-400/40 transition-colors"
               >
-                <div className="flex flex-col md:flex-row md:items-start gap-6">
-                  <div className="flex-shrink-0">
-                    <div
-                      className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br ${step.color} font-extrabold text-2xl text-white shadow-lg`}
-                    >
-                      {step.num}
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-mono text-[11px] text-violet-300/60 uppercase tracking-widest mb-1">
-                      {step.subtitle}
-                    </p>
-                    <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
-                      {step.title}
-                    </h3>
-                    <dl className="grid sm:grid-cols-3 gap-4 text-sm">
-                      <div>
-                        <dt className="text-slate-500 text-xs uppercase font-bold mb-1">고객 역할</dt>
-                        <dd className="text-slate-300 leading-relaxed">{step.customer}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-slate-500 text-xs uppercase font-bold mb-1">나의 가치</dt>
-                        <dd className="text-slate-300 leading-relaxed">{step.value}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-slate-500 text-xs uppercase font-bold mb-1">결과물</dt>
-                        <dd className="text-white font-semibold leading-relaxed">{step.result}</dd>
-                      </div>
-                    </dl>
-                  </div>
+                <div
+                  className={`inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br ${step.color} font-extrabold text-sm text-white mb-4`}
+                >
+                  {step.num}
                 </div>
+                <p className="font-mono text-[10px] text-violet-300/60 uppercase tracking-widest mb-1">
+                  {step.subtitle}
+                </p>
+                <h3 className="text-lg font-extrabold text-white mb-2">{step.title}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed" style={{ wordBreak: 'keep-all' }}>
+                  {step.result}
+                </p>
               </div>
             ))}
           </div>
@@ -343,7 +323,7 @@ export default function MusicServicePage() {
           <p className="font-mono text-xs text-violet-300/70 tracking-widest uppercase mb-2">
             Most Popular Sample
           </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-3">
             이 쇼츠, 이 팩으로 만들었어요.
           </h2>
           <p className="text-slate-400 mb-10">가장 인기 있는 결과물 1개. 전체 샘플은 별도 페이지에서.</p>
@@ -375,12 +355,12 @@ export default function MusicServicePage() {
       {/* FAQ */}
       <section className="px-6 py-20 lg:px-14 bg-slate-950">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-center mb-10">
             자주 묻는 질문
           </h2>
           <div className="space-y-3">
             {FAQS.map((f, i) => (
-              <div key={i} className="border border-white/10 rounded-xl overflow-hidden bg-white/[0.02]">
+              <div key={i} className="border border-white/10 rounded-2xl overflow-hidden bg-white/[0.02]">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-white/5 transition-colors"
@@ -412,7 +392,7 @@ export default function MusicServicePage() {
             </span>
           </h2>
           <p className="text-slate-400 text-lg mb-10">
-            ₩39,000부터 · 평생 업데이트 · 즉시 다운로드
+            ₩39,000부터 · 12개월 무료 업데이트 · 즉시 다운로드
           </p>
           <a
             href="#pricing"
