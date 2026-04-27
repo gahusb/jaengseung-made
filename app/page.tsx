@@ -44,13 +44,17 @@ const AFTER = [
 
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalService, setModalService] = useState('일반 문의');
 
   return (
     <div className="relative overflow-x-hidden bg-black text-white">
       <ContactModal
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        service="일반 문의"
+        onClose={() => {
+          setModalOpen(false);
+          setModalService('일반 문의');
+        }}
+        service={modalService}
         checklist={['연락처/이메일', '원하는 작업 범위', '희망 일정']}
       />
 
@@ -295,7 +299,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
             {[
               { href: '/freelance', label: '외주 개발', desc: '맞춤 솔루션 외주', key: 'freelance' },
               { href: '/services/website', label: '웹사이트', desc: '기업·브랜드 사이트', key: 'website' },
@@ -307,11 +311,10 @@ export default function Home() {
                 key={card.key}
                 href={card.href}
                 className="group rounded-2xl border border-white/15 bg-white/[0.02] p-5 hover:border-white/40 hover:bg-white/[0.05] transition flex flex-col"
-                style={{ textDecoration: 'none' }}
               >
                 <p className="font-bold text-white text-sm mb-1.5">{card.label}</p>
                 <p className="text-xs text-white/60 leading-relaxed flex-1">{card.desc}</p>
-                <span className="mt-3 text-white/40 text-xs">→</span>
+                <span aria-hidden="true" className="mt-3 text-white/40 text-xs">→</span>
               </Link>
             ))}
           </div>
@@ -320,6 +323,7 @@ export default function Home() {
             <button
               onClick={() => {
                 trackCTAClick('home_v6_custom_build_cta');
+                setModalService('외주 개발 문의');
                 setModalOpen(true);
               }}
               className="kx-btn-primary inline-flex items-center px-7 py-3 rounded-full text-sm"
