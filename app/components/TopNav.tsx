@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
 const LINKS = [
   { href: '/', label: '홈' },
@@ -14,8 +16,11 @@ const LINKS = [
 
 export default function TopNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const supabase = createClient();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -23,6 +28,28 @@ export default function TopNav() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Supabase auth state subscription (Sidebar.tsx:93-103 패턴)
+  useEffect(() => {
+    let mounted = true;
+    supabase.auth.getUser().then(({ data }) => {
+      if (mounted) setUser(data.user ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (mounted) setUser(session?.user ?? null);
+    });
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setOpen(false);
+    router.push('/');
+    router.refresh();
+  };
 
   useEffect(() => { setOpen(false); }, [pathname]);
 
@@ -89,20 +116,45 @@ export default function TopNav() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/login"
-            className="hidden sm:inline-block text-sm font-medium px-4 py-2 transition-colors"
-            style={{ color: 'var(--kx-on-variant)', textDecoration: 'none' }}
-          >
-            로그인
-          </Link>
-          <Link
-            href="/services/music"
-            className="kx-btn-primary hidden sm:inline-flex items-center px-5 py-2 rounded-full text-sm"
-            style={{ textDecoration: 'none' }}
-          >
-            Try now
-          </Link>
+          {user ? (
+            <>
+              <Link
+                href="/mypage"
+                className="hidden sm:inline-block text-sm font-medium px-4 py-2 transition-colors"
+                style={{ color: 'var(--kx-on-variant)', textDecoration: 'none' }}
+              >
+                마이페이지
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="hidden sm:inline-flex items-center px-5 py-2 rounded-full text-sm font-medium transition-colors"
+                style={{
+                  color: 'var(--kx-on-surface)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  background: 'transparent',
+                }}
+              >
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="hidden sm:inline-block text-sm font-medium px-4 py-2 transition-colors"
+                style={{ color: 'var(--kx-on-variant)', textDecoration: 'none' }}
+              >
+                로그인
+              </Link>
+              <Link
+                href="/services/music"
+                className="kx-btn-primary hidden sm:inline-flex items-center px-5 py-2 rounded-full text-sm"
+                style={{ textDecoration: 'none' }}
+              >
+                Try now
+              </Link>
+            </>
+          )}
           <button
             onClick={() => setOpen(true)}
             aria-label="메뉴 열기"
@@ -151,20 +203,41 @@ export default function TopNav() {
               </Link>
             ))}
             <div className="mt-6 flex gap-3">
-              <Link
-                href="/login"
-                className="flex-1 py-3 text-center rounded-full text-sm font-bold"
-                style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'var(--kx-on-surface)', textDecoration: 'none' }}
-              >
-                로그인
-              </Link>
-              <Link
-                href="/services/music"
-                className="kx-btn-primary flex-1 py-3 text-center rounded-full text-sm"
-                style={{ textDecoration: 'none' }}
-              >
-                Try now
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    href="/mypage"
+                    className="flex-1 py-3 text-center rounded-full text-sm font-bold"
+                    style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'var(--kx-on-surface)', textDecoration: 'none' }}
+                  >
+                    마이페이지
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="flex-1 py-3 text-center rounded-full text-sm font-bold"
+                    style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'var(--kx-on-surface)', background: 'transparent' }}
+                  >
+                    로그아웃
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="flex-1 py-3 text-center rounded-full text-sm font-bold"
+                    style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'var(--kx-on-surface)', textDecoration: 'none' }}
+                  >
+                    로그인
+                  </Link>
+                  <Link
+                    href="/services/music"
+                    className="kx-btn-primary flex-1 py-3 text-center rounded-full text-sm"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Try now
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
