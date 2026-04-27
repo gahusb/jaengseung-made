@@ -268,8 +268,8 @@ export default function MyPage() {
 
   if (loading) {
     return (
-      <div className="min-h-full flex items-center justify-center bg-[#f0f5ff]">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-full flex items-center justify-center bg-slate-50">
+        <div className="w-8 h-8 border-2 border-violet-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -293,7 +293,7 @@ export default function MyPage() {
   ];
 
   return (
-    <div className="min-h-full bg-[#f0f5ff]">
+    <div className="min-h-screen bg-slate-50">
       {/* 텔레그램 가이드 모달 */}
       {showTelegramGuide && (
         <TelegramGuideModal onClose={() => setShowTelegramGuide(false)} />
@@ -328,15 +328,15 @@ export default function MyPage() {
 
       <div className="px-6 py-8 max-w-4xl mx-auto">
         {/* 탭 */}
-        <div className="flex flex-wrap gap-1 bg-white border border-[#dbe8ff] rounded-xl p-1 mb-6">
+        <div className="flex flex-wrap gap-1 bg-white border border-slate-200 rounded-xl p-1 mb-6">
           {tabs.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex-1 min-w-[100px] flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                 tab === t.key
-                  ? 'bg-[#1a56db] text-white shadow'
-                  : 'text-slate-500 hover:text-slate-700'
+                  ? 'bg-violet-600 text-white shadow'
+                  : 'text-slate-500 hover:text-violet-600'
               }`}
             >
               {t.label}
@@ -356,25 +356,25 @@ export default function MyPage() {
         {/* 내 정보 */}
         {tab === 'profile' && (
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
-              <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
-                <div className="w-1 h-5 bg-[#1a56db] rounded-full" />
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+              <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <div className="w-1 h-5 bg-violet-600 rounded-full" />
                 계정 정보
               </h2>
               <div className="space-y-3">
                 <div className="flex items-center justify-between py-3 border-b border-slate-100">
                   <span className="text-sm text-slate-500">이메일</span>
-                  <span className="text-sm font-semibold text-[#04102b]">{user.email}</span>
+                  <span className="text-sm font-semibold text-slate-900">{user.email}</span>
                 </div>
                 <div className="flex items-center justify-between py-3 border-b border-slate-100">
                   <span className="text-sm text-slate-500">로그인 방법</span>
-                  <span className="text-sm font-semibold text-[#04102b] capitalize">
+                  <span className="text-sm font-semibold text-slate-900 capitalize">
                     {user.app_metadata?.provider === 'google' ? 'Google' : '이메일'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-3">
                   <span className="text-sm text-slate-500">가입일</span>
-                  <span className="text-sm font-semibold text-[#04102b]">
+                  <span className="text-sm font-semibold text-slate-900">
                     {new Date(user.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
                   </span>
                 </div>
@@ -383,30 +383,30 @@ export default function MyPage() {
 
             {/* 구독 중인 서비스 - 요약 (탭으로 유도) */}
             {activeSubs.length > 0 && (
-              <div className="bg-blue-50 rounded-2xl border border-blue-200 p-5 flex items-center justify-between gap-3">
+              <div className="bg-violet-50 rounded-2xl border border-violet-200 p-5 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">🎟</span>
                   <div>
-                    <div className="text-sm font-bold text-[#04102b]">
+                    <div className="text-sm font-bold text-slate-900">
                       서비스 구독 중
                     </div>
-                    <div className="text-xs text-blue-600 mt-0.5">
+                    <div className="text-xs text-violet-600 mt-0.5">
                       {Math.max(0, Math.ceil((new Date(activeSubs[0].expires_at).getTime() - Date.now()) / 86400000))}일 후 만료
                       {activeSubs[0].status === 'cancelled' && ' · 해지 예정'}
                     </div>
                   </div>
                 </div>
                 <button onClick={() => setTab('subscription')}
-                  className="text-xs font-bold text-blue-700 bg-blue-100 hover:bg-blue-200 px-3 py-1.5 rounded-lg transition">
+                  className="text-xs font-bold text-violet-700 bg-violet-100 hover:bg-violet-200 px-3 py-1.5 rounded-lg transition">
                   구독 관리 →
                 </button>
               </div>
             )}
 
             {/* 텔레그램 연동 카드 */}
-            <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
-              <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
-                <div className="w-1 h-5 bg-[#1a56db] rounded-full" />
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+              <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <div className="w-1 h-5 bg-violet-600 rounded-full" />
                 텔레그램 알림 연동
                 <button
                   onClick={() => setShowTelegramGuide(true)}
@@ -428,7 +428,7 @@ export default function MyPage() {
                       </svg>
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-[#04102b] flex items-center gap-1.5">
+                      <div className="text-sm font-semibold text-slate-900 flex items-center gap-1.5">
                         연결됨
                         <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
                       </div>
@@ -491,14 +491,14 @@ export default function MyPage() {
                       </svg>
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-[#04102b]">연결 안 됨</div>
+                      <div className="text-sm font-semibold text-slate-900">연결 안 됨</div>
                       <div className="text-xs text-slate-500">텔레그램으로 번호를 바로 받아보세요</div>
                     </div>
                   </div>
                   <button
                     onClick={handleTelegramConnect}
                     disabled={telegramLinkState === 'generating'}
-                    className="px-5 py-2.5 text-sm font-bold text-white bg-[#1a56db] hover:bg-[#1e4fc2] rounded-xl shadow-sm shadow-sky-200 transition disabled:opacity-60"
+                    className="px-5 py-2.5 text-sm font-bold text-white bg-violet-600 hover:bg-violet-500 rounded-xl shadow-sm shadow-sky-200 transition disabled:opacity-60"
                   >
                     {telegramLinkState === 'generating' ? '생성 중...' : '텔레그램 연결하기'}
                   </button>
@@ -506,37 +506,37 @@ export default function MyPage() {
               )}
             </div>
 
-            <div className="bg-white rounded-2xl border border-[#dbe8ff] p-6">
-              <h2 className="font-bold text-[#04102b] mb-4 flex items-center gap-2">
-                <div className="w-1 h-5 bg-[#1a56db] rounded-full" />
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+              <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <div className="w-1 h-5 bg-violet-600 rounded-full" />
                 빠른 메뉴
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <Link href="/saju/input" className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-blue-300 hover:bg-blue-50/50 transition group">
+                <Link href="/saju/input" className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group">
                   <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                     </svg>
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-[#04102b]">사주 분석</div>
+                    <div className="text-sm font-semibold text-slate-900">사주 분석</div>
                     <div className="text-xs text-slate-500">새 사주 보기</div>
                   </div>
                 </Link>
-                <Link href="/freelance" className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-blue-300 hover:bg-blue-50/50 transition group">
-                  <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <Link href="/freelance" className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group">
+                  <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-[#04102b]">외주 의뢰</div>
+                    <div className="text-sm font-semibold text-slate-900">외주 의뢰</div>
                     <div className="text-xs text-slate-500">프로젝트 문의</div>
                   </div>
                 </Link>
                 <Link
                   href="/studio"
-                  className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-blue-300 hover:bg-blue-50/50 transition group"
+                  className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group"
                 >
                   <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -544,7 +544,7 @@ export default function MyPage() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-[#04102b]">AI 스튜디오</div>
+                    <div className="text-sm font-semibold text-slate-900">AI 스튜디오</div>
                     <div className="text-xs text-slate-500">새 트랙 만들기</div>
                   </div>
                 </Link>
@@ -573,13 +573,13 @@ export default function MyPage() {
                 const isActive = sub.status === 'active';
 
                 return (
-                  <div key={sub.id} className={`bg-white rounded-2xl border p-6 ${isExpired ? 'border-slate-200 opacity-60' : isCancelled ? 'border-orange-200' : 'border-[#dbe8ff]'}`}>
+                  <div key={sub.id} className={`bg-white rounded-2xl border p-6 ${isExpired ? 'border-slate-200 opacity-60' : isCancelled ? 'border-orange-200' : 'border-slate-200'}`}>
                     {/* 헤더 */}
                     <div className="flex items-start justify-between mb-5">
                       <div className="flex items-center gap-3">
                         <span className="text-3xl">🎟</span>
                         <div>
-                          <div className="font-bold text-[#04102b] text-base">
+                          <div className="font-bold text-slate-900 text-base">
                             {sub.product_id}
                           </div>
                           <div className="text-xs text-slate-500 mt-0.5">
@@ -600,7 +600,7 @@ export default function MyPage() {
                     <div className="grid grid-cols-2 gap-3 mb-5">
                       <div className="bg-slate-50 rounded-xl p-3">
                         <div className="text-xs text-slate-400 mb-1">만료일</div>
-                        <div className="text-sm font-bold text-[#04102b]">
+                        <div className="text-sm font-bold text-slate-900">
                           {expiresDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </div>
                       </div>
@@ -616,7 +616,7 @@ export default function MyPage() {
                     {!isExpired && (
                       <div className="flex items-center justify-between py-3 border-t border-slate-100 mb-4">
                         <div>
-                          <div className="text-sm font-semibold text-[#04102b]">자동 갱신</div>
+                          <div className="text-sm font-semibold text-slate-900">자동 갱신</div>
                           <div className="text-xs text-slate-400 mt-0.5">
                             {sub.auto_renew ? '만료 시 자동으로 갱신됩니다' : '만료 시 자동 갱신되지 않습니다'}
                           </div>
@@ -642,7 +642,7 @@ export default function MyPage() {
                     {/* 액션 버튼 */}
                     <div className="flex gap-2 flex-wrap">
                       <a href="/freelance"
-                        className="flex-1 text-center py-2 text-sm font-bold text-white bg-[#1a56db] hover:bg-blue-700 rounded-xl transition shadow-sm">
+                        className="flex-1 text-center py-2 text-sm font-bold text-white bg-violet-600 hover:bg-violet-700 rounded-xl transition shadow-sm">
                         외주 의뢰하기
                       </a>
                       {isActive && (
@@ -682,11 +682,11 @@ export default function MyPage() {
             ) : (
               <div className="grid md:grid-cols-2 gap-4">
                 {sajuRecords.map((rec) => (
-                  <div key={rec.id} className="bg-white rounded-2xl border border-[#dbe8ff] p-5">
+                  <div key={rec.id} className="bg-white rounded-2xl border border-slate-200 p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="text-xs text-slate-400 mb-1">{new Date(rec.created_at).toLocaleDateString('ko-KR')}</div>
-                        <div className="font-bold text-[#04102b]">
+                        <div className="font-bold text-slate-900">
                           {rec.saju_data?.birth_year ?? '?'}년{' '}
                           {rec.saju_data?.birth_month ?? '?'}월{' '}
                           {rec.saju_data?.birth_day ?? '?'}일생
@@ -707,7 +707,7 @@ export default function MyPage() {
                     )}
                     <Link
                       href={buildSajuResultUrl(rec)}
-                      className="block w-full text-center py-2 rounded-xl text-xs font-bold bg-[#04102b] hover:bg-[#0a1f5c] text-white transition"
+                      className="block w-full text-center py-2 rounded-xl text-xs font-bold bg-[#060e20] hover:bg-[#0a1f5c] text-white transition"
                     >
                       {rec.is_paid && rec.interpretation ? 'AI 해석 다시 보기 →' : '결과 보기 →'}
                     </Link>
@@ -730,9 +730,9 @@ export default function MyPage() {
                 linkLabel="서비스 보기"
               />
             ) : (
-              <div className="bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden">
+              <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
                 <table className="w-full text-sm">
-                  <thead className="bg-[#f0f5ff] border-b border-[#dbe8ff]">
+                  <thead className="bg-slate-50 border-b border-slate-200">
                     <tr>
                       <th className="px-5 py-3 text-left font-semibold text-slate-600">서비스</th>
                       <th className="px-5 py-3 text-left font-semibold text-slate-600">금액</th>
@@ -743,8 +743,8 @@ export default function MyPage() {
                   <tbody>
                     {payments.map((p, i) => (
                       <tr key={p.id} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
-                        <td className="px-5 py-3 font-medium text-[#04102b]">{p.product_name}</td>
-                        <td className="px-5 py-3 text-[#04102b]">₩{p.amount?.toLocaleString()}</td>
+                        <td className="px-5 py-3 font-medium text-slate-900">{p.product_name}</td>
+                        <td className="px-5 py-3 text-slate-900">₩{p.amount?.toLocaleString()}</td>
                         <td className="px-5 py-3">
                           <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                             p.status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'
@@ -844,15 +844,15 @@ export default function MyPage() {
         {tab === 'projects' && (
           <div className="space-y-4">
             {projects.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-[#dbe8ff] p-8 text-center">
-                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-[#1a56db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
+                <div className="w-16 h-16 bg-violet-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
-                <h3 className="font-bold text-[#04102b] text-lg mb-2">진행 중인 프로젝트가 없습니다</h3>
+                <h3 className="font-bold text-slate-900 text-lg mb-2">진행 중인 프로젝트가 없습니다</h3>
                 <p className="text-slate-500 text-sm mb-6 max-w-sm mx-auto">외주 개발을 의뢰하시면 이곳에서 단계별 진행 현황을 실시간으로 확인할 수 있습니다.</p>
-                <Link href="/freelance" className="inline-flex items-center gap-2 bg-[#1a56db] hover:bg-[#1e4fc2] text-white px-6 py-3 rounded-xl font-semibold text-sm transition">
+                <Link href="/freelance" className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition">
                   개발 의뢰하기 →
                 </Link>
               </div>
@@ -865,18 +865,18 @@ export default function MyPage() {
                   const progressPct = totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
 
                   return (
-                    <div key={project.id} className="bg-white rounded-2xl border border-[#dbe8ff] overflow-hidden">
+                    <div key={project.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
                       {/* 헤더 */}
-                      <div className="bg-[#04102b] px-6 py-4 flex items-center justify-between" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}>
+                      <div className="bg-[#060e20] px-6 py-4 flex items-center justify-between" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}>
                         <div>
                           <h3 className="font-bold text-white text-base">{project.title}</h3>
-                          <p className="text-blue-300/60 text-xs mt-0.5">
+                          <p className="text-white/50 text-xs mt-0.5">
                             {project.total > 0 ? `총 ${project.total.toLocaleString()}원` : '금액 협의 중'} · {new Date(project.created_at).toLocaleDateString('ko-KR')}
                           </p>
                         </div>
                         <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${
                           project.status === 'accepted'    ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30' :
-                          project.status === 'in_progress' ? 'bg-blue-400/20 text-blue-300 border border-blue-400/30' :
+                          project.status === 'in_progress' ? 'bg-sky-400/20 text-sky-300 border border-sky-400/30' :
                           project.status === 'completed'   ? 'bg-violet-400/20 text-violet-300 border border-violet-400/30' :
                           'bg-slate-400/20 text-slate-300 border border-slate-400/30'
                         }`}>
@@ -893,11 +893,11 @@ export default function MyPage() {
                           <div className="mb-6">
                             <div className="flex items-center justify-between mb-2">
                               <span className="text-xs font-semibold text-slate-500">전체 진행률</span>
-                              <span className="text-xs font-bold text-[#1a56db]">{progressPct}% ({completedSteps}/{totalSteps}단계)</span>
+                              <span className="text-xs font-bold text-violet-600">{progressPct}% ({completedSteps}/{totalSteps}단계)</span>
                             </div>
                             <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                               <div
-                                className="h-full bg-[#1a56db] rounded-full transition-all duration-500"
+                                className="h-full bg-violet-600 rounded-full transition-all duration-500"
                                 style={{ width: `${progressPct}%` }}
                               />
                             </div>
@@ -906,12 +906,12 @@ export default function MyPage() {
 
                         {/* 현재 진행 단계 */}
                         {currentStep && (
-                          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-5">
+                          <div className="bg-violet-50 border border-violet-200 rounded-xl p-4 mb-5">
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                              <span className="text-xs font-bold text-blue-600">현재 진행 중</span>
+                              <span className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
+                              <span className="text-xs font-bold text-violet-600">현재 진행 중</span>
                             </div>
-                            <p className="font-bold text-[#04102b] text-sm">{currentStep.title}</p>
+                            <p className="font-bold text-slate-900 text-sm">{currentStep.title}</p>
                             {currentStep.note && (
                               <p className="text-slate-600 text-xs mt-1 leading-relaxed">{currentStep.note}</p>
                             )}
@@ -926,7 +926,7 @@ export default function MyPage() {
                                 {/* 아이콘 */}
                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold border-2 ${
                                   m.status === 'completed'  ? 'bg-emerald-500 border-emerald-500 text-white' :
-                                  m.status === 'in_progress'? 'bg-[#1a56db] border-[#1a56db] text-white' :
+                                  m.status === 'in_progress'? 'bg-violet-600 border-violet-600 text-white' :
                                   'bg-white border-slate-200 text-slate-400'
                                 }`}>
                                   {m.status === 'completed' ? (
@@ -946,7 +946,7 @@ export default function MyPage() {
                                   <div className="flex items-center gap-2 py-1">
                                     <span className={`text-sm font-semibold ${
                                       m.status === 'completed'  ? 'text-emerald-700' :
-                                      m.status === 'in_progress'? 'text-[#1a56db]' :
+                                      m.status === 'in_progress'? 'text-violet-600' :
                                       'text-slate-400'
                                     }`}>{m.title}</span>
                                     {m.status === 'completed' && m.completed_at && (
@@ -971,20 +971,20 @@ export default function MyPage() {
             )}
 
             {/* 견적서 연결 폼 */}
-            <div className="bg-[#f0f5ff] rounded-2xl border border-[#dbe8ff] p-5">
-              <p className="text-sm font-bold text-[#04102b] mb-1">견적서 코드로 프로젝트 연결</p>
+            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5">
+              <p className="text-sm font-bold text-slate-900 mb-1">견적서 코드로 프로젝트 연결</p>
               <p className="text-xs text-slate-500 mb-3">견적서 링크를 받으셨나요? URL 끝의 코드를 입력하면 이 계정에서 진행 현황을 확인할 수 있습니다.</p>
               <form onSubmit={handleLinkProject} className="flex gap-2">
                 <input
                   value={linkToken}
                   onChange={(e) => setLinkToken(e.target.value)}
                   placeholder="예: abc123xyz"
-                  className="flex-1 px-4 py-2 bg-white border border-[#dbe8ff] rounded-xl text-sm focus:outline-none focus:border-blue-400 min-w-0"
+                  className="flex-1 px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-violet-400 min-w-0"
                 />
                 <button
                   type="submit"
                   disabled={linking || !linkToken.trim()}
-                  className="px-4 py-2 bg-[#1a56db] hover:bg-[#1e4fc2] text-white rounded-xl font-semibold text-sm disabled:opacity-50 transition flex-shrink-0"
+                  className="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-xl font-semibold text-sm disabled:opacity-50 transition flex-shrink-0"
                 >
                   {linking ? '연결 중...' : '연결'}
                 </button>
@@ -1012,12 +1012,12 @@ export default function MyPage() {
             ) : (
               <div className="space-y-3">
                 {orders.map((o) => (
-                  <div key={o.id} className="bg-white rounded-2xl border border-[#dbe8ff] p-5">
+                  <div key={o.id} className="bg-white rounded-2xl border border-slate-200 p-5">
                     <div className="flex items-start justify-between mb-2">
-                      <div className="font-bold text-[#04102b]">{o.service}</div>
+                      <div className="font-bold text-slate-900">{o.service}</div>
                       <span className={`text-xs font-bold px-2 py-1 rounded-lg ${
                         o.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
-                        o.status === 'in_progress' ? 'bg-blue-50 text-blue-600 border border-blue-200' :
+                        o.status === 'in_progress' ? 'bg-violet-50 text-violet-600 border border-violet-200' :
                         'bg-slate-100 text-slate-500'
                       }`}>
                         {o.status === 'completed' ? '완료' : o.status === 'in_progress' ? '진행중' : '대기중'}
@@ -1042,13 +1042,13 @@ function EmptyState({
   icon: string; title: string; desc: string; linkHref: string; linkLabel: string;
 }) {
   return (
-    <div className="text-center py-16 bg-white rounded-2xl border border-[#dbe8ff]">
+    <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
       <div className="text-5xl mb-4">{icon}</div>
-      <div className="font-bold text-[#04102b] text-lg mb-2">{title}</div>
+      <div className="font-bold text-slate-900 text-lg mb-2">{title}</div>
       <div className="text-slate-500 text-sm mb-6">{desc}</div>
       <Link
         href={linkHref}
-        className="inline-flex items-center gap-2 bg-[#1a56db] hover:bg-[#1e4fc2] text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-blue-600/20"
+        className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-violet-600/20"
       >
         {linkLabel} →
       </Link>
