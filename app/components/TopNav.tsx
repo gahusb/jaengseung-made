@@ -9,6 +9,7 @@ const LINKS = [
   { href: '/services/music/samples', label: '샘플' },
   { href: '/services/music', label: '팩 상세' },
   { href: '/studio', label: '스튜디오' },
+  { href: '/freelance', label: '외주' },
 ];
 
 export default function TopNav() {
