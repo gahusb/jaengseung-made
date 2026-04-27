@@ -277,6 +277,59 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 4.5. Custom Build — 외주 사업부 미니 섹션 (P0) */}
+      <section className="py-24 px-6 bg-black text-white border-b border-white/10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-4">
+              Custom Build
+            </p>
+            <h2
+              className="kx-display text-3xl md:text-5xl font-bold mb-5"
+              style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
+            >
+              맞춤 개발이 필요하신가요?
+            </h2>
+            <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+              7년차 백엔드 개발자가 직접 설계·개발·납품. 외주, 웹사이트, 자동화부터 사주·블로그 솔루션까지.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+            {[
+              { href: '/freelance', label: '외주 개발', desc: '맞춤 솔루션 외주', key: 'freelance' },
+              { href: '/services/website', label: '웹사이트', desc: '기업·브랜드 사이트', key: 'website' },
+              { href: '/freelance', label: '자동화', desc: 'RPA · API 연동', key: 'automation' },
+              { href: '/saju', label: '사주 카탈로그', desc: 'AI 사주 솔루션', key: 'saju' },
+              { href: '/services/blog', label: '블로그 자동화', desc: '수익 엔진 팩', key: 'blog' },
+            ].map((card) => (
+              <Link
+                key={card.key}
+                href={card.href}
+                className="group rounded-2xl border border-white/15 bg-white/[0.02] p-5 hover:border-white/40 hover:bg-white/[0.05] transition flex flex-col"
+                style={{ textDecoration: 'none' }}
+              >
+                <p className="font-bold text-white text-sm mb-1.5">{card.label}</p>
+                <p className="text-xs text-white/60 leading-relaxed flex-1">{card.desc}</p>
+                <span className="mt-3 text-white/40 text-xs">→</span>
+              </Link>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <button
+              onClick={() => {
+                trackCTAClick('home_v6_custom_build_cta');
+                setModalOpen(true);
+              }}
+              className="kx-btn-primary inline-flex items-center px-7 py-3 rounded-full text-sm"
+            >
+              견적 문의하기
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* 5. Final CTA — Full-width video */}
       <section className="relative w-full min-h-[560px] flex items-center justify-center px-6 py-32 bg-black overflow-hidden">
         <video
