@@ -99,13 +99,9 @@ const jsonLd = {
             '@type': 'Offer',
             url: 'https://jaengseung-made.com/freelance',
             availability: 'https://schema.org/InStock',
-            priceSpecification: {
-              '@type': 'PriceSpecification',
-              priceCurrency: 'KRW',
-            },
             itemOffered: {
               '@type': 'Service',
-              name: '맞춤 개발 외주',
+              name: '외주 개발',
               url: 'https://jaengseung-made.com/freelance',
               description: '7년차 백엔드 개발자의 1:1 맞춤 소프트웨어 개발 외주. 자동화·API·웹/모바일 등 사이트 한정가로 제공.',
               serviceType: 'Custom Software Development',
@@ -117,10 +113,6 @@ const jsonLd = {
             '@type': 'Offer',
             url: 'https://jaengseung-made.com/services/website',
             availability: 'https://schema.org/InStock',
-            priceSpecification: {
-              '@type': 'PriceSpecification',
-              priceCurrency: 'KRW',
-            },
             itemOffered: {
               '@type': 'Service',
               name: '웹사이트 제작',

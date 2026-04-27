@@ -302,14 +302,15 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
             {[
               { href: '/freelance', label: '외주 개발', desc: '맞춤 솔루션 외주', key: 'freelance' },
-              { href: '/services/website', label: '웹사이트', desc: '기업·브랜드 사이트', key: 'website' },
+              { href: '/services/website', label: '웹사이트 제작', desc: '기업·브랜드 사이트', key: 'website' },
               { href: '/freelance', label: '자동화', desc: 'RPA · API 연동', key: 'automation' },
-              { href: '/saju', label: '사주 카탈로그', desc: 'AI 사주 솔루션', key: 'saju' },
+              { href: '/saju', label: 'AI 사주', desc: 'AI 사주 솔루션', key: 'saju' },
               { href: '/services/blog', label: '블로그 자동화', desc: '수익 엔진 팩', key: 'blog' },
             ].map((card) => (
               <Link
                 key={card.key}
                 href={card.href}
+                onClick={() => trackCTAClick(`home_v6_custom_build_card_${card.key}`)}
                 className="group rounded-2xl border border-white/15 bg-white/[0.02] p-5 hover:border-white/40 hover:bg-white/[0.05] transition flex flex-col"
               >
                 <p className="font-bold text-white text-sm mb-1.5">{card.label}</p>
