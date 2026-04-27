@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import TelegramGuideModal from '@/app/components/TelegramGuideModal';
+import { PACK_ASSETS, extractPackTier, type PackTier } from '@/lib/pack-assets';
 
 function buildSajuResultUrl(rec: SajuRecord) {
   const { birth_year, birth_month, birth_day, birth_hour, gender } = rec.saju_data;
@@ -15,7 +16,7 @@ function buildSajuResultUrl(rec: SajuRecord) {
   return url;
 }
 
-type Tab = 'profile' | 'projects' | 'subscription' | 'saju' | 'payments' | 'orders';
+type Tab = 'profile' | 'projects' | 'subscription' | 'saju' | 'payments' | 'orders' | 'packs';
 type TelegramLinkState = 'idle' | 'generating' | 'waiting' | 'disconnecting';
 
 interface SajuRecord {
@@ -162,12 +163,6 @@ export default function MyPage() {
     init();
   }, []);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
-  };
-
   // ── 구독 해지 ──
   const handleCancelSubscription = async (subId: string) => {
     if (!confirm('구독을 해지하시겠습니까?\n만료일까지는 서비스를 계속 이용할 수 있습니다.')) return;
@@ -283,10 +278,15 @@ export default function MyPage() {
 
   const activeSubs = activeSubscriptions.filter((s) => s.status === 'active' || s.status === 'cancelled');
 
+  const packOrders = orders
+    .map((o) => ({ order: o, tier: extractPackTier(o.service) }))
+    .filter((x): x is { order: Order; tier: PackTier } => x.tier !== null);
+
   const tabs: { key: Tab; label: string; count?: number }[] = [
     { key: 'projects', label: '프로젝트 현황', count: projects.length || undefined },
     { key: 'orders', label: '의뢰 내역', count: orders.length || undefined },
     { key: 'payments', label: '결제 내역', count: payments.length || undefined },
+    { key: 'packs', label: '구매한 팩', count: packOrders.length || undefined },
     { key: 'profile', label: '내 정보' },
     { key: 'subscription', label: '구독 관리', count: activeSubs.length || undefined },
     { key: 'saju', label: '사주 기록', count: sajuRecords.length || undefined },
@@ -299,26 +299,27 @@ export default function MyPage() {
         <TelegramGuideModal onClose={() => setShowTelegramGuide(false)} />
       )}
 
-      {/* 헤더 */}
-      <div className="bg-[#04102b] px-6 py-10" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px)' }}>
+      {/* 헤더 — kx-surface 다크 톤, 축소판. 로그아웃은 TopNav에서 담당 */}
+      <div
+        className="px-6 py-8 border-b border-white/5"
+        style={{
+          background: 'var(--kx-surface)',
+          backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px)',
+        }}
+      >
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full bg-[#1a56db] flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold flex-shrink-0"
+              style={{ background: 'var(--kx-primary)' }}
+            >
               {user.email?.[0].toUpperCase()}
             </div>
             <div>
-              <div className="text-white font-bold text-lg leading-tight">{user.email}</div>
-              <div className="text-blue-300/60 text-sm mt-0.5">
-                가입일: {new Date(user.created_at).toLocaleDateString('ko-KR')}
+              <div className="kx-display text-white font-bold text-lg leading-tight">{user.email}</div>
+              <div className="text-white/50 text-xs mt-0.5">
+                가입일 {new Date(user.created_at).toLocaleDateString('ko-KR')}
               </div>
-            </div>
-            <div className="ml-auto">
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 bg-white/5 border border-white/10 text-slate-300 text-sm rounded-xl hover:bg-white/10 transition"
-              >
-                로그아웃
-              </button>
             </div>
           </div>
         </div>
@@ -326,7 +327,7 @@ export default function MyPage() {
 
       <div className="px-6 py-8 max-w-4xl mx-auto">
         {/* 탭 */}
-        <div className="flex gap-1 bg-white border border-[#dbe8ff] rounded-xl p-1 mb-6">
+        <div className="flex flex-wrap gap-1 bg-white border border-[#dbe8ff] rounded-xl p-1 mb-6">
           {tabs.map((t) => (
             <button
               key={t.key}
@@ -509,7 +510,7 @@ export default function MyPage() {
                 <div className="w-1 h-5 bg-[#1a56db] rounded-full" />
                 빠른 메뉴
               </h2>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <Link href="/saju/input" className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-blue-300 hover:bg-blue-50/50 transition group">
                   <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -530,6 +531,20 @@ export default function MyPage() {
                   <div>
                     <div className="text-sm font-semibold text-[#04102b]">외주 의뢰</div>
                     <div className="text-xs text-slate-500">프로젝트 문의</div>
+                  </div>
+                </Link>
+                <Link
+                  href="/studio"
+                  className="flex items-center gap-3 p-4 rounded-xl border border-[#dbe8ff] hover:border-blue-300 hover:bg-blue-50/50 transition group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19a3 3 0 11-6 0 3 3 0 016 0zm12-3a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-[#04102b]">AI 스튜디오</div>
+                    <div className="text-xs text-slate-500">새 트랙 만들기</div>
                   </div>
                 </Link>
               </div>
@@ -744,6 +759,82 @@ export default function MyPage() {
                   </tbody>
                 </table>
               </div>
+            )}
+          </div>
+        )}
+
+        {/* 구매한 팩 */}
+        {tab === 'packs' && (
+          <div className="space-y-4">
+            {packOrders.length === 0 ? (
+              <EmptyState
+                icon="🎵"
+                title="구매한 팩이 없습니다"
+                desc="AI 음악 팩을 구매하시면 자료가 여기에 표시됩니다"
+                linkHref="/services/music"
+                linkLabel="Music 팩 보기"
+              />
+            ) : (
+              packOrders.map(({ order, tier }) => {
+                const asset = PACK_ASSETS[tier];
+                const statusLabel =
+                  order.status === 'completed' ? '자료 발송 완료' :
+                  order.status === 'in_progress' ? '결제 처리 중' :
+                  '입금 대기';
+                const statusColor =
+                  order.status === 'completed' ? 'bg-violet-50 text-violet-600 border-violet-200' :
+                  order.status === 'in_progress' ? 'bg-amber-50 text-amber-600 border-amber-200' :
+                  'bg-slate-100 text-slate-500 border-slate-200';
+
+                return (
+                  <div key={order.id} className="bg-white rounded-2xl border border-slate-200 p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <div className="font-bold text-slate-900 text-base">{asset.name}</div>
+                        <div className="text-xs text-slate-500 mt-1">
+                          {new Date(order.created_at).toLocaleDateString('ko-KR')} 신청
+                        </div>
+                      </div>
+                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${statusColor}`}>
+                        {statusLabel}
+                      </span>
+                    </div>
+
+                    <div className="border-t border-slate-100 pt-4">
+                      <div className="text-sm font-semibold text-slate-700 mb-3">
+                        📦 자료 패키지 ({asset.files.length}개)
+                      </div>
+                      <ul className="space-y-2 mb-5">
+                        {asset.files.map((file, i) => (
+                          <li key={i} className="flex items-center gap-2 text-sm text-slate-600">
+                            <span className="text-slate-400">·</span>
+                            <span>{file}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <button
+                        disabled
+                        className="w-full py-3 rounded-xl text-sm font-bold bg-slate-100 text-slate-400 cursor-not-allowed"
+                      >
+                        자료 준비 중
+                      </button>
+                      <p className="text-xs text-slate-500 mt-2 text-center leading-relaxed">
+                        현재는 카톡 1:1로 자료를 보내드립니다. 자동 다운로드는 곧 활성화됩니다.
+                        <br />
+                        <a
+                          href="https://open.kakao.com/o/s9stoNvb"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-violet-600 hover:underline font-semibold"
+                        >
+                          카톡 오픈채팅 →
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                );
+              })
             )}
           </div>
         )}
