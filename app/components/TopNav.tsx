@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 
@@ -17,7 +17,7 @@ const LINKS = [
 export default function TopNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -32,8 +32,8 @@ export default function TopNav() {
   // Supabase auth state subscription (Sidebar.tsx:93-103 패턴)
   useEffect(() => {
     let mounted = true;
-    supabase.auth.getUser().then(({ data }) => {
-      if (mounted) setUser(data.user ?? null);
+    supabase.auth.getSession().then(({ data }) => {
+      if (mounted) setUser(data.session?.user ?? null);
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (mounted) setUser(session?.user ?? null);
@@ -47,7 +47,7 @@ export default function TopNav() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setOpen(false);
-    router.push('/');
+    router.replace('/');
     router.refresh();
   };
 
@@ -214,7 +214,7 @@ export default function TopNav() {
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex-1 py-3 text-center rounded-full text-sm font-bold"
+                    className="flex-1 py-3 text-center rounded-full text-sm font-bold transition-colors"
                     style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'var(--kx-on-surface)', background: 'transparent' }}
                   >
                     로그아웃
