@@ -84,8 +84,10 @@ export default function PublicShell({ children }: { children: React.ReactNode })
                   </ul>
                 </div>
                 <div>
-                  <p className="font-mono text-[11px] tracking-widest uppercase text-white/40 mb-4">Company</p>
+                  <p className="font-mono text-[11px] tracking-widest uppercase text-white/40 mb-4">Custom Build</p>
                   <ul className="space-y-2.5">
+                    <li><Link href="/freelance" className="hover:text-white transition">외주 개발</Link></li>
+                    <li><Link href="/services/website" className="hover:text-white transition">웹사이트 제작</Link></li>
                     <li><Link href="/saju" className="hover:text-white transition">AI 사주</Link></li>
                     <li><Link href="/services/blog" className="hover:text-white transition">블로그 자동화</Link></li>
                     <li><a href="mailto:bgg8988@gmail.com" className="hover:text-white transition">문의하기</a></li>
