@@ -41,15 +41,25 @@ export default function TopNav() {
 
   return (
     <>
-      <nav
-        className={`fixed top-0 inset-x-0 z-50 h-20 px-6 lg:px-12 flex items-center justify-between transition-all ${
-          scrolled ? 'backdrop-blur-md' : ''
-        }`}
+      <header
+        className={[
+          'fixed left-1/2 -translate-x-1/2 z-50 w-full border-b border-transparent',
+          'md:rounded-full md:border transition-all duration-300 ease-out',
+          scrolled
+            ? 'top-4 max-w-3xl md:shadow-[0_10px_40px_rgba(0,0,0,0.35)] md:border-white/10'
+            : 'top-0 max-w-none',
+        ].join(' ')}
         style={{
-          background: scrolled ? 'rgba(6,14,32,0.7)' : 'transparent',
-          borderBottom: 'none',
-          boxShadow: scrolled ? '0 8px 32px 0 rgba(6,14,32,0.35)' : 'none',
+          background: scrolled ? 'rgba(10,10,12,0.6)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(18px) saturate(160%)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(18px) saturate(160%)' : 'none',
         }}
+      >
+      <nav
+        className={[
+          'flex w-full items-center justify-between transition-all duration-300 ease-out',
+          scrolled ? 'h-14 px-4 md:px-3' : 'h-20 px-6 lg:px-12',
+        ].join(' ')}
       >
         <Link
           href="/"
@@ -104,6 +114,7 @@ export default function TopNav() {
           </button>
         </div>
       </nav>
+      </header>
 
       {/* 모바일 오버레이 */}
       {open && (

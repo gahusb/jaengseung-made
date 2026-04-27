@@ -56,8 +56,8 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
-  --font-sans: 'CookieRun', -apple-system, system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-sans: var(--font-jua), 'Jua', -apple-system, system-ui, sans-serif;
+  --font-mono: var(--font-jua), 'Jua', ui-monospace, monospace;
 }
 
 * {
@@ -71,9 +71,14 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'CookieRun', -apple-system, system-ui, sans-serif;
+  font-family: var(--font-jua), 'Jua', -apple-system, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* font-mono utility → Jua 통일 */
+.font-mono, code, pre, kbd, samp {
+  font-family: var(--font-jua), 'Jua', ui-monospace, monospace;
 }
 
 /* Dashboard layout */
@@ -102,18 +107,18 @@ body {
 .kx-section {
   background: var(--kx-surface);
   color: var(--kx-on-surface);
-  font-family: 'Space Grotesk', 'Inter', 'CookieRun', system-ui, sans-serif;
+  font-family: var(--font-jua), 'Jua', system-ui, sans-serif;
 }
 .kx-section p, .kx-section li, .kx-section span:not(.kx-label) {
   color: var(--kx-on-variant);
 }
 .kx-display {
-  font-family: var(--font-kx-hero), 'Bagel Fat One', 'Space Grotesk', 'CookieRun', system-ui, sans-serif;
+  font-family: var(--font-jua), 'Jua', system-ui, sans-serif;
   letter-spacing: -0.01em;
-  color: var(--kx-on-surface);
+  color: inherit;
 }
 .kx-label {
-  font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+  font-family: var(--font-jua), 'Jua', system-ui, sans-serif;
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -200,6 +205,34 @@ body {
 .reveal-d3 { transition-delay: 240ms; }
 .reveal-d4 { transition-delay: 320ms; }
 .reveal-d5 { transition-delay: 400ms; }
+
+/* Marquee */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.25rem;
+  animation: marquee-left 60s linear infinite;
+  will-change: transform;
+}
+.marquee-track-reverse {
+  animation-name: marquee-right;
+  animation-duration: 75s;
+}
+.marquee-viewport:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
