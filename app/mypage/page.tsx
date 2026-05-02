@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import TelegramGuideModal from '@/app/components/TelegramGuideModal';
-import { PACK_ASSETS, extractPackTier, type PackTier } from '@/lib/pack-assets';
+import { PACK_TIER_NAMES, extractPackTier, type PackTier } from '@/lib/pack-assets';
+import type { PackFile } from '@/lib/supabase/pack-files';
 
 function buildSajuResultUrl(rec: SajuRecord) {
   const { birth_year, birth_month, birth_day, birth_hour, gender } = rec.saju_data;
@@ -92,6 +93,8 @@ export default function MyPage() {
   const [linkToken, setLinkToken] = useState('');
   const [linking, setLinking] = useState(false);
   const [linkMessage, setLinkMessage] = useState('');
+  const [packFiles, setPackFiles] = useState<PackFile[]>([]);
+  const [downloading, setDownloading] = useState<string | null>(null);
 
   // 텔레그램 연동 상태
   const [telegramChatId, setTelegramChatId] = useState<string | null>(null);
@@ -156,6 +159,13 @@ export default function MyPage() {
       if (projRes.ok) {
         const projData = await projRes.json();
         setProjects(projData.projects ?? []);
+      }
+
+      // 구매한 팩 자료 파일 조회
+      const filesRes = await fetch('/api/packs/list-mine');
+      if (filesRes.ok) {
+        const { files } = await filesRes.json();
+        setPackFiles(files ?? []);
       }
 
       setLoading(false);
@@ -239,6 +249,26 @@ export default function MyPage() {
     }
     setTelegramLinkState('idle');
   };
+
+  async function handleDownload(fileId: string) {
+    setDownloading(fileId);
+    try {
+      const res = await fetch('/api/packs/sign-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileId }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        throw new Error(data.error ?? '링크 발급 실패');
+      }
+      window.location.href = data.url;
+    } catch (e) {
+      alert(e instanceof Error ? e.message : '다운로드 준비 중 오류가 발생했습니다');
+    } finally {
+      setDownloading(null);
+    }
+  }
 
   const handleLinkProject = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -777,7 +807,6 @@ export default function MyPage() {
               />
             ) : (
               packOrders.map(({ order, tier }) => {
-                const asset = PACK_ASSETS[tier];
                 const statusLabel =
                   order.status === 'completed' ? '자료 발송 완료' :
                   order.status === 'in_progress' ? '결제 처리 중' :
@@ -791,7 +820,7 @@ export default function MyPage() {
                   <div key={order.id} className="bg-white rounded-2xl border border-slate-200 p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <div className="font-bold text-slate-900 text-base">{asset.name}</div>
+                        <div className="font-bold text-slate-900 text-base">{PACK_TIER_NAMES[tier]}</div>
                         <div className="text-xs text-slate-500 mt-1">
                           {new Date(order.created_at).toLocaleDateString('ko-KR')} 신청
                         </div>
@@ -801,38 +830,65 @@ export default function MyPage() {
                       </span>
                     </div>
 
-                    <div className="border-t border-slate-100 pt-4">
-                      <div className="text-sm font-semibold text-slate-700 mb-3">
-                        📦 자료 패키지 ({asset.files.length}개)
-                      </div>
-                      <ul className="space-y-2 mb-5">
-                        {asset.files.map((file, i) => (
-                          <li key={i} className="flex items-center gap-2 text-sm text-slate-600">
-                            <span className="text-slate-400">·</span>
-                            <span>{file}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    {/* 자료 리스트 — DB가 SSOT */}
+                    {(() => {
+                      const filesForTier = packFiles.filter((pf) => {
+                        if (tier === 'starter') return pf.min_tier === 'starter';
+                        if (tier === 'pro') return pf.min_tier === 'starter' || pf.min_tier === 'pro';
+                        return true;  // master
+                      });
 
-                      <button
-                        disabled
-                        className="w-full py-3 rounded-xl text-sm font-bold bg-slate-100 text-slate-400 cursor-not-allowed"
-                      >
-                        자료 준비 중
-                      </button>
-                      <p className="text-xs text-slate-500 mt-2 text-center leading-relaxed">
-                        현재는 카톡 1:1로 자료를 보내드립니다. 자동 다운로드는 곧 활성화됩니다.
-                        <br />
-                        <a
-                          href="https://open.kakao.com/o/s9stoNvb"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-violet-600 hover:underline font-semibold"
-                        >
-                          카톡 오픈채팅 →
-                        </a>
-                      </p>
-                    </div>
+                      return (
+                        <div className="border-t border-slate-100 pt-4">
+                          <div className="text-sm font-semibold text-slate-700 mb-3">
+                            📦 자료 패키지 ({filesForTier.length}개)
+                          </div>
+                          {filesForTier.length === 0 ? (
+                            <p className="text-xs text-slate-500">자료 준비 중. 카톡 1:1로 문의해주세요.</p>
+                          ) : (
+                            <ul className="space-y-2 mb-3">
+                              {filesForTier.map((f) => (
+                                <li key={f.id} className="flex items-center justify-between gap-2 text-sm">
+                                  <span className="text-slate-700 flex-1">{f.label}</span>
+                                  {order.status === 'completed' ? (
+                                    <button
+                                      onClick={() => handleDownload(f.id)}
+                                      disabled={downloading === f.id}
+                                      className="px-3 py-1.5 rounded-lg text-xs font-bold bg-violet-600 hover:bg-violet-500 disabled:bg-slate-300 text-white transition"
+                                    >
+                                      {downloading === f.id ? '준비중...' : '다운로드'}
+                                    </button>
+                                  ) : (
+                                    <span className="text-xs text-slate-400">대기 중</span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+
+                          {order.status === 'completed' && filesForTier.length > 0 && (
+                            <p className="text-xs text-slate-500 leading-relaxed">
+                              ※ 다운로드 링크는 4시간 동안 유효합니다.
+                            </p>
+                          )}
+
+                          {order.status !== 'completed' && (
+                            <p className="text-xs text-slate-500 mt-2 text-center leading-relaxed">
+                              {order.status === 'in_progress' ? '결제 처리 중. 자료는 결제 확인 후 활성화됩니다.' : '입금 대기 중. 카톡 1:1로 안내드립니다.'}
+                              <br />
+                              <a
+                                href="https://open.kakao.com/o/s9stoNvb"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-violet-600 hover:underline font-semibold"
+                              >
+                                카톡 오픈채팅 →
+                              </a>
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 );
               })
