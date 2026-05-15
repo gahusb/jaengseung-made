@@ -121,14 +121,17 @@ export default function TopNav() {
               >
                 마이페이지
               </Link>
+              <Link
+                href="/music"
+                className="kx-btn-primary hidden sm:inline-flex items-center px-5 py-2 rounded-full text-sm"
+                style={{ textDecoration: 'none' }}
+              >
+                Try now
+              </Link>
               <button
                 onClick={handleLogout}
-                className="hidden sm:inline-flex items-center px-5 py-2 rounded-full text-sm font-medium transition-colors"
-                style={{
-                  color: 'var(--kx-on-surface)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  background: 'transparent',
-                }}
+                className="hidden sm:inline-flex items-center px-3 py-2 text-sm font-medium transition-colors"
+                style={{ color: 'var(--kx-on-variant)', background: 'transparent' }}
               >
                 로그아웃
               </button>
@@ -198,26 +201,35 @@ export default function TopNav() {
                 {l.label}
               </Link>
             ))}
-            <div className="mt-6 flex gap-3">
+            <div className="mt-6 flex flex-col gap-2">
               {user ? (
                 <>
-                  <Link
-                    href="/mypage"
-                    className="flex-1 py-3 text-center rounded-full text-sm font-bold"
-                    style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'var(--kx-on-surface)', textDecoration: 'none' }}
-                  >
-                    마이페이지
-                  </Link>
+                  <div className="flex gap-3">
+                    <Link
+                      href="/mypage"
+                      className="flex-1 py-3 text-center rounded-full text-sm font-bold"
+                      style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'var(--kx-on-surface)', textDecoration: 'none' }}
+                    >
+                      마이페이지
+                    </Link>
+                    <Link
+                      href="/music"
+                      className="kx-btn-primary flex-1 py-3 text-center rounded-full text-sm"
+                      style={{ textDecoration: 'none' }}
+                    >
+                      Try now
+                    </Link>
+                  </div>
                   <button
                     onClick={handleLogout}
-                    className="flex-1 py-3 text-center rounded-full text-sm font-bold transition-colors"
-                    style={{ border: '1px solid rgba(255,255,255,0.15)', color: 'var(--kx-on-surface)', background: 'transparent' }}
+                    className="w-full py-3 text-center text-sm font-medium transition-colors"
+                    style={{ color: 'var(--kx-on-variant)', background: 'transparent' }}
                   >
                     로그아웃
                   </button>
                 </>
               ) : (
-                <>
+                <div className="flex gap-3">
                   <Link
                     href="/login"
                     className="flex-1 py-3 text-center rounded-full text-sm font-bold"
@@ -232,7 +244,7 @@ export default function TopNav() {
                   >
                     Try now
                   </Link>
-                </>
+                </div>
               )}
             </div>
           </div>
