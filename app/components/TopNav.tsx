@@ -7,11 +7,8 @@ import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 
 const LINKS = [
-  { href: '/', label: '홈' },
-  { href: '/services/music/samples', label: '샘플' },
-  { href: '/services/music', label: '팩 상세' },
-  { href: '/studio', label: '스튜디오' },
-  { href: '/freelance', label: '외주' },
+  { href: '/music', label: 'Music' },
+  { href: '/work', label: 'Custom Build' },
 ];
 
 export default function TopNav() {
@@ -63,8 +60,7 @@ export default function TopNav() {
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
-    if (href === '/services/music') return pathname === '/services/music';
-    return pathname.startsWith(href);
+    return pathname === href || pathname.startsWith(href + '/');
   };
 
   return (
@@ -147,7 +143,7 @@ export default function TopNav() {
                 로그인
               </Link>
               <Link
-                href="/services/music"
+                href="/music"
                 className="kx-btn-primary hidden sm:inline-flex items-center px-5 py-2 rounded-full text-sm"
                 style={{ textDecoration: 'none' }}
               >
@@ -230,7 +226,7 @@ export default function TopNav() {
                     로그인
                   </Link>
                   <Link
-                    href="/services/music"
+                    href="/music"
                     className="kx-btn-primary flex-1 py-3 text-center rounded-full text-sm"
                     style={{ textDecoration: 'none' }}
                   >
