@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import PublicShell from './PublicShell';
 
-const STANDALONE_PATHS = ['/login', '/signup', '/admin'];
+const STANDALONE_PATHS = ['/login', '/signup', '/admin', '/gyeol'];
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
