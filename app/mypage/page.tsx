@@ -8,11 +8,12 @@ import type { User } from '@supabase/supabase-js';
 import TelegramGuideModal from '@/app/components/TelegramGuideModal';
 import { PACK_TIER_NAMES, extractPackTier, type PackTier } from '@/lib/pack-assets';
 import type { PackFile } from '@/lib/supabase/pack-files';
+import { KAKAO_OPENCHAT_URL } from '@/lib/contact';
 
 function buildSajuResultUrl(rec: SajuRecord) {
   const { birth_year, birth_month, birth_day, birth_hour, gender } = rec.saju_data;
-  if (!birth_year || !birth_month || !birth_day) return '/saju/input';
-  let url = `/saju/result?year=${birth_year}&month=${birth_month}&day=${birth_day}&gender=${gender}&calendarType=solar`;
+  if (!birth_year || !birth_month || !birth_day) return '/work/saju/input';
+  let url = `/work/saju/result?year=${birth_year}&month=${birth_month}&day=${birth_day}&gender=${gender}&calendarType=solar`;
   if (birth_hour != null) url += `&hour=${birth_hour}`;
   return url;
 }
@@ -358,7 +359,7 @@ export default function MyPage() {
 
       <div className="px-6 py-8 max-w-4xl mx-auto">
         {/* 탭 */}
-        <div className="flex flex-wrap gap-1 bg-white border border-slate-200 rounded-xl p-1 mb-6">
+        <div className="flex flex-nowrap gap-1 bg-white border border-slate-200 rounded-xl p-1 mb-6 overflow-x-auto scrollbar-hide">
           {tabs.map((t) => (
             <button
               key={t.key}
@@ -542,7 +543,7 @@ export default function MyPage() {
                 빠른 메뉴
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <Link href="/saju/input" className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group">
+                <Link href="/work/saju/input" className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group">
                   <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -553,7 +554,7 @@ export default function MyPage() {
                     <div className="text-xs text-slate-500">새 사주 보기</div>
                   </div>
                 </Link>
-                <Link href="/freelance" className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group">
+                <Link href="/work/freelance" className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group">
                   <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -565,7 +566,7 @@ export default function MyPage() {
                   </div>
                 </Link>
                 <Link
-                  href="/studio"
+                  href="/music/studio"
                   className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group"
                 >
                   <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
@@ -591,7 +592,7 @@ export default function MyPage() {
                 icon="📦"
                 title="활성 구독이 없습니다"
                 desc="구독 중인 서비스가 없습니다"
-                linkHref="/services/music"
+                linkHref="/music/packs"
                 linkLabel="서비스 둘러보기"
               />
             ) : (
@@ -671,7 +672,7 @@ export default function MyPage() {
 
                     {/* 액션 버튼 */}
                     <div className="flex gap-2 flex-wrap">
-                      <a href="/freelance"
+                      <a href="/work/freelance"
                         className="flex-1 text-center py-2 text-sm font-bold text-white bg-violet-600 hover:bg-violet-700 rounded-xl transition shadow-sm">
                         외주 의뢰하기
                       </a>
@@ -691,7 +692,7 @@ export default function MyPage() {
 
             {/* 서비스 이동 */}
             <div className="text-center py-2">
-              <a href="/services/music" className="text-sm text-slate-400 hover:text-slate-600 transition">
+              <a href="/music/packs" className="text-sm text-slate-400 hover:text-slate-600 transition">
                 다른 서비스 보기 →
               </a>
             </div>
@@ -706,7 +707,7 @@ export default function MyPage() {
                 icon="✨"
                 title="저장된 사주 기록이 없습니다"
                 desc="사주 분석 후 결과를 저장하면 여기서 다시 확인할 수 있습니다"
-                linkHref="/saju/input"
+                linkHref="/work/saju/input"
                 linkLabel="사주 분석 시작"
               />
             ) : (
@@ -756,7 +757,7 @@ export default function MyPage() {
                 icon="💳"
                 title="결제 내역이 없습니다"
                 desc="서비스 구매 후 결제 내역이 여기에 표시됩니다"
-                linkHref="/saju"
+                linkHref="/work/saju"
                 linkLabel="서비스 보기"
               />
             ) : (
@@ -802,7 +803,7 @@ export default function MyPage() {
                 icon="🎵"
                 title="구매한 팩이 없습니다"
                 desc="AI 음악 팩을 구매하시면 자료가 여기에 표시됩니다"
-                linkHref="/services/music"
+                linkHref="/music/packs"
                 linkLabel="Music 팩 보기"
               />
             ) : (
@@ -877,7 +878,7 @@ export default function MyPage() {
                               {order.status === 'in_progress' ? '결제 처리 중. 자료는 결제 확인 후 활성화됩니다.' : '입금 대기 중. 카톡 1:1로 안내드립니다.'}
                               <br />
                               <a
-                                href="https://open.kakao.com/o/s9stoNvb"
+                                href={KAKAO_OPENCHAT_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-violet-600 hover:underline font-semibold"
@@ -908,7 +909,7 @@ export default function MyPage() {
                 </div>
                 <h3 className="font-bold text-slate-900 text-lg mb-2">진행 중인 프로젝트가 없습니다</h3>
                 <p className="text-slate-500 text-sm mb-6 max-w-sm mx-auto">외주 개발을 의뢰하시면 이곳에서 단계별 진행 현황을 실시간으로 확인할 수 있습니다.</p>
-                <Link href="/freelance" className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition">
+                <Link href="/work/freelance" className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition">
                   개발 의뢰하기 →
                 </Link>
               </div>
@@ -1062,7 +1063,7 @@ export default function MyPage() {
                 icon="📋"
                 title="의뢰 내역이 없습니다"
                 desc="외주 개발, 서비스 문의 내역이 여기에 표시됩니다"
-                linkHref="/freelance"
+                linkHref="/work/freelance"
                 linkLabel="외주 의뢰하기"
               />
             ) : (

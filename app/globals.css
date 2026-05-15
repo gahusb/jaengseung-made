@@ -248,3 +248,11 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* 가로 스크롤 탭바 등에서 스크롤바 시각 숨김 (mypage 7-tab 모바일) */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
