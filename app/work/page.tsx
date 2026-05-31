@@ -25,12 +25,6 @@ const CARDS = [
     desc: 'AI 사주팔자 + 12개 항목 해석 (무료)',
     key: 'saju',
   },
-  {
-    href: '/work/blog',
-    label: '블로그 자동화',
-    desc: '수익 엔진 팩 · 자동화 마케팅 콘텐츠',
-    key: 'blog',
-  },
 ];
 
 export default function WorkHub() {
@@ -67,13 +61,13 @@ export default function WorkHub() {
             맞춤 개발 사업부
           </h1>
           <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
-            7년차 백엔드 개발자가 직접 설계·개발·납품. 외주, 웹사이트, AI 사주, 블로그 자동화까지.
+            7년차 백엔드 개발자가 직접 설계·개발·납품. 외주, 웹사이트, AI 사주까지.
           </p>
         </div>
       </section>
 
       <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {CARDS.map((c) => (
             <Link
               key={c.key}

@@ -47,7 +47,6 @@ const CB_CARDS = [
   { href: '/work/freelance', label: '외주 개발', desc: '맞춤 솔루션 · RPA·API 자동화 포함', key: 'freelance' },
   { href: '/work/website', label: '웹사이트', desc: '기업·브랜드 사이트', key: 'website' },
   { href: '/work/saju', label: 'AI 사주', desc: '12개 항목 무료 해석', key: 'saju' },
-  { href: '/work/blog', label: '블로그 자동화', desc: '수익 엔진 팩', key: 'blog' },
 ];
 
 export default function Home() {
@@ -160,7 +159,7 @@ export default function Home() {
                 맞춤 개발 사업부
               </h2>
               <p className="text-sm md:text-base text-white/70 mb-4">
-                외주 · 웹사이트 · AI 사주 · 블로그 자동화
+                외주 · 웹사이트 · AI 사주
               </p>
               <p className="text-xs text-white/50 mb-5">납품 5건 · 견적 24h 내 답변</p>
               <span className="inline-flex items-center gap-2 text-sm font-bold text-white">
@@ -366,11 +365,11 @@ export default function Home() {
               맞춤 개발이 필요하신가요?
             </h2>
             <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
-              7년차 백엔드 개발자가 직접 설계·개발·납품. 외주, 웹사이트, AI 사주, 블로그 자동화까지.
+              7년차 백엔드 개발자가 직접 설계·개발·납품. 외주, 웹사이트, AI 사주까지.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
             {CB_CARDS.map((card) => (
               <Link
                 key={card.key}

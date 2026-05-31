@@ -90,7 +90,6 @@ export default function PublicShell({ children }: { children: React.ReactNode })
                     <li><Link href="/work/freelance" className="hover:text-white transition">외주 개발</Link></li>
                     <li><Link href="/work/website" className="hover:text-white transition">웹사이트 제작</Link></li>
                     <li><Link href="/work/saju" className="hover:text-white transition">AI 사주</Link></li>
-                    <li><Link href="/work/blog" className="hover:text-white transition">블로그 자동화</Link></li>
                     <li><a href="mailto:bgg8988@gmail.com" className="hover:text-white transition">문의하기</a></li>
                   </ul>
                 </div>

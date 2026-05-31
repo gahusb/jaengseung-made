@@ -39,7 +39,9 @@ const nextConfig: NextConfig = {
       { source: '/freelance', destination: '/work/freelance', permanent: true },
       { source: '/services/website', destination: '/work/website', permanent: true },
       { source: '/services/website/samples/:slug', destination: '/work/website/samples/:slug', permanent: true },
-      { source: '/services/blog', destination: '/work/blog', permanent: true },
+      // 블로그 자동화 폐기(2026-05-29 재정의): 기존 URL은 제품 라인 허브로 안내
+      { source: '/services/blog', destination: '/work', permanent: true },
+      { source: '/work/blog', destination: '/work', permanent: true },
       // 사주 마이그 (단순 URL, 카탈로그 spec은 보류)
       { source: '/saju', destination: '/work/saju', permanent: true },
       { source: '/saju/input', destination: '/work/saju/input', permanent: true },
