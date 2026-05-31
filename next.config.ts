@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
       { source: '/services/music', destination: '/music/packs', permanent: true },
       { source: '/services/music/samples', destination: '/music/samples', permanent: true },
       { source: '/studio', destination: '/music/studio', permanent: true },
-      // Custom Build 사업부 마이그
+      // 커스텀 외주 마이그
       { source: '/freelance', destination: '/work/freelance', permanent: true },
       { source: '/services/website', destination: '/work/website', permanent: true },
       { source: '/services/website/samples/:slug', destination: '/work/website/samples/:slug', permanent: true },

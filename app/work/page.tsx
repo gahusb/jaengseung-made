@@ -52,13 +52,13 @@ export default function WorkHub() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#060e20] to-black pointer-events-none" />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <p className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-4">
-            Custom Build
+            Custom Work
           </p>
           <h1
             className="kx-display text-4xl md:text-6xl font-bold mb-5"
             style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
           >
-            맞춤 개발 사업부
+            커스텀 외주
           </h1>
           <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
             7년차 백엔드 개발자가 직접 설계·개발·납품. 외주, 웹사이트, AI 사주까지.
