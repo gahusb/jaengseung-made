@@ -47,7 +47,6 @@ const CB_CARDS = [
   { href: '/work/freelance', label: '외주 개발', desc: '맞춤 솔루션 · RPA·API 자동화 포함', key: 'freelance' },
   { href: '/work/website', label: '웹사이트', desc: '기업·브랜드 사이트', key: 'website' },
   { href: '/work/saju', label: 'AI 사주', desc: '12개 항목 무료 해석', key: 'saju' },
-  { href: '/work/blog', label: '블로그 자동화', desc: '수익 엔진 팩', key: 'blog' },
 ];
 
 export default function Home() {
@@ -93,11 +92,11 @@ export default function Home() {
             className="kx-display text-4xl md:text-6xl lg:text-7xl font-bold mb-5 leading-[1.1]"
             style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
           >
-            현직 엔지니어가 만드는
-            <br />두 가지.
+            현직 엔지니어가
+            <br />직접 만듭니다.
           </h1>
           <p className="text-base md:text-xl text-white/70 leading-relaxed">
-            AI 제품, 그리고 맞춤 개발.
+            검증된 자동화는 SaaS로. AI 음악 가이드와 커스텀 외주까지.
           </p>
         </div>
       </section>
@@ -141,7 +140,7 @@ export default function Home() {
             </div>
           </Link>
 
-          {/* Custom Build 카드 */}
+          {/* 커스텀 외주 카드 */}
           <Link
             href="/work"
             onClick={() => trackCTAClick('home_v7_card_work')}
@@ -154,13 +153,13 @@ export default function Home() {
           >
             <div className="relative z-10">
               <p className="font-mono text-[11px] tracking-widest uppercase text-white/60 mb-3">
-                Custom Build
+                Custom Work
               </p>
               <h2 className="kx-display text-2xl md:text-3xl font-bold text-white mb-2">
-                맞춤 개발 사업부
+                커스텀 외주
               </h2>
               <p className="text-sm md:text-base text-white/70 mb-4">
-                외주 · 웹사이트 · AI 사주 · 블로그 자동화
+                외주 · 웹사이트 · AI 사주
               </p>
               <p className="text-xs text-white/50 mb-5">납품 5건 · 견적 24h 내 답변</p>
               <span className="inline-flex items-center gap-2 text-sm font-bold text-white">
@@ -352,12 +351,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Custom Build 섹션 — 4 카드 + 5건 사례 + 견적 CTA */}
+      {/* 4. 커스텀 외주 섹션 — 카드 + 5건 사례 + 견적 CTA */}
       <section className="py-24 px-6 bg-black text-white border-b border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14">
             <p className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-4">
-              Custom Build
+              Custom Work
             </p>
             <h2
               className="kx-display text-3xl md:text-5xl font-bold mb-5"
@@ -366,11 +365,11 @@ export default function Home() {
               맞춤 개발이 필요하신가요?
             </h2>
             <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
-              7년차 백엔드 개발자가 직접 설계·개발·납품. 외주, 웹사이트, AI 사주, 블로그 자동화까지.
+              7년차 백엔드 개발자가 직접 설계·개발·납품. 외주, 웹사이트, AI 사주까지.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
             {CB_CARDS.map((card) => (
               <Link
                 key={card.key}

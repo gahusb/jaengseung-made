@@ -13,7 +13,7 @@ const TIERS: Record<Tier, { name: string; price: string; priceNum: string; desc:
     name: '입문',
     price: '₩39,000',
     priceNum: '39,000',
-    desc: '첫 AI 음악을 위한 필수 구성',
+    desc: 'AI 음악 생성을 처음 시작하는 개발 가이드',
     features: [
       'Suno 프롬프트 조합법 20종',
       '구조 템플릿 PDF 40p',
@@ -25,7 +25,7 @@ const TIERS: Record<Tier, { name: string; price: string; priceNum: string; desc:
     name: '프로',
     price: '₩99,000',
     priceNum: '99,000',
-    desc: '쇼츠 업로드까지 완성하는 풀세트',
+    desc: '쇼츠 업로드까지 반복 가능한 워크플로우 가이드',
     highlight: true,
     features: [
       '입문 전체 포함',
@@ -38,7 +38,7 @@ const TIERS: Record<Tier, { name: string; price: string; priceNum: string; desc:
     name: '마스터',
     price: '₩149,000',
     priceNum: '149,000',
-    desc: '여러 장르·포맷을 커버하는 마스터피스',
+    desc: '여러 장르·포맷을 커버하는 마스터 가이드',
     features: [
       '프로 전체 포함',
       '샘플 프로젝트 장르별 3종',
@@ -292,7 +292,7 @@ export default function MusicServicePage() {
         <PurchaseAgreementModal
           isOpen={!!selectedTier}
           onClose={() => setSelectedTier(null)}
-          productName={`AI 음악 마스터 팩 · ${TIERS[selectedTier].name}`}
+          productName={`AI 음악 생성 개발 가이드 · ${TIERS[selectedTier].name}`}
           price={TIERS[selectedTier].price}
         />
       )}

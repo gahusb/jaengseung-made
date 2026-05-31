@@ -7,8 +7,9 @@ import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 
 const LINKS = [
-  { href: '/music', label: 'Music' },
-  { href: '/work', label: 'Custom Build' },
+  { href: '/packages', label: 'SaaS 제품' },
+  { href: '/music', label: 'AI 음악' },
+  { href: '/work', label: '커스텀 외주' },
 ];
 
 export default function TopNav() {

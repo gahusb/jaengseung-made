@@ -75,22 +75,28 @@ export default function PublicShell({ children }: { children: React.ReactNode })
               </div>
 
               {/* 우 — Link groups */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-10">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-10">
                 <div>
-                  <p className="font-mono text-[11px] tracking-widest uppercase text-white/40 mb-4">Music</p>
+                  <p className="font-mono text-[11px] tracking-widest uppercase text-white/40 mb-4">SaaS 제품</p>
                   <ul className="space-y-2.5">
-                    <li><Link href="/music/packs" className="hover:text-white transition">AI 음악 팩</Link></li>
+                    <li><Link href="/packages" className="hover:text-white transition">제품 카탈로그</Link></li>
+                    <li><Link href="/packages" className="hover:text-white transition">출시 알림 신청</Link></li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-mono text-[11px] tracking-widest uppercase text-white/40 mb-4">AI 음악</p>
+                  <ul className="space-y-2.5">
+                    <li><Link href="/music/packs" className="hover:text-white transition">음악 가이드 패키지</Link></li>
                     <li><Link href="/music/samples" className="hover:text-white transition">샘플 갤러리</Link></li>
                     <li><Link href="/music/packs#pricing" className="hover:text-white transition">가격</Link></li>
                   </ul>
                 </div>
                 <div>
-                  <p className="font-mono text-[11px] tracking-widest uppercase text-white/40 mb-4">Custom Build</p>
+                  <p className="font-mono text-[11px] tracking-widest uppercase text-white/40 mb-4">커스텀 외주</p>
                   <ul className="space-y-2.5">
                     <li><Link href="/work/freelance" className="hover:text-white transition">외주 개발</Link></li>
                     <li><Link href="/work/website" className="hover:text-white transition">웹사이트 제작</Link></li>
                     <li><Link href="/work/saju" className="hover:text-white transition">AI 사주</Link></li>
-                    <li><Link href="/work/blog" className="hover:text-white transition">블로그 자동화</Link></li>
                     <li><a href="mailto:bgg8988@gmail.com" className="hover:text-white transition">문의하기</a></li>
                   </ul>
                 </div>
