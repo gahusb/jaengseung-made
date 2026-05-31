@@ -89,9 +89,9 @@ const jsonLd = {
         '@type': 'OfferCatalog',
         name: '쟁승메이드 AI 도구 · 서비스',
         itemListElement: [
-          { '@type': 'Offer', price: '39000', priceCurrency: 'KRW', availability: 'https://schema.org/InStock', url: 'https://jaengseung-made.com/music/packs', itemOffered: { '@type': 'Product', name: 'AI 음악 마스터 구조 팩 (입문)', url: 'https://jaengseung-made.com/music/packs', description: 'Suno 프롬프트 + MV 워크플로우 + 저작권 가이드 + 템플릿 PDF + 샘플 프로젝트. 4단계 AI 음악 제작 공정.' } },
-          { '@type': 'Offer', price: '99000', priceCurrency: 'KRW', availability: 'https://schema.org/InStock', url: 'https://jaengseung-made.com/music/packs', itemOffered: { '@type': 'Product', name: 'AI 음악 마스터 구조 팩 (프로)', url: 'https://jaengseung-made.com/music/packs', description: '입문 전체 + 샘플 프로젝트 1개(.prj · 영상 포함).' } },
-          { '@type': 'Offer', price: '149000', priceCurrency: 'KRW', availability: 'https://schema.org/InStock', url: 'https://jaengseung-made.com/music/packs', itemOffered: { '@type': 'Product', name: 'AI 음악 마스터 구조 팩 (마스터)', url: 'https://jaengseung-made.com/music/packs', description: '프로 전체 + 샘플 다수 + 우선 업데이트·베타 선공개.' } },
+          { '@type': 'Offer', price: '39000', priceCurrency: 'KRW', availability: 'https://schema.org/InStock', url: 'https://jaengseung-made.com/music/packs', itemOffered: { '@type': 'Product', name: 'AI 음악 생성 개발 가이드 패키지 (입문)', url: 'https://jaengseung-made.com/music/packs', description: 'Suno 프롬프트 조합법 + MV 워크플로우 + 저작권 가이드 + 템플릿 PDF + 샘플 프로젝트. AI 음악 생성 개발 가이드 (1회 결제).' } },
+          { '@type': 'Offer', price: '99000', priceCurrency: 'KRW', availability: 'https://schema.org/InStock', url: 'https://jaengseung-made.com/music/packs', itemOffered: { '@type': 'Product', name: 'AI 음악 생성 개발 가이드 패키지 (프로)', url: 'https://jaengseung-made.com/music/packs', description: '입문 전체 + 샘플 프로젝트 1개(.prj · 영상 포함). 1회 결제.' } },
+          { '@type': 'Offer', price: '149000', priceCurrency: 'KRW', availability: 'https://schema.org/InStock', url: 'https://jaengseung-made.com/music/packs', itemOffered: { '@type': 'Product', name: 'AI 음악 생성 개발 가이드 패키지 (마스터)', url: 'https://jaengseung-made.com/music/packs', description: '프로 전체 + 샘플 다수 + 우선 업데이트·베타 선공개. 1회 결제.' } },
           { '@type': 'Offer', price: '0', priceCurrency: 'KRW', url: 'https://jaengseung-made.com/work/saju', itemOffered: { '@type': 'Service', name: 'AI 사주 분석', url: 'https://jaengseung-made.com/work/saju', description: '생년월일 기반 AI 사주팔자 분석. 무료 체험 가능.' } },
           {
             '@type': 'Offer',
