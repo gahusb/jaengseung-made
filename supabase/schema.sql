@@ -112,6 +112,7 @@ create table public.contact_requests (
   user_id uuid references public.profiles(id) on delete set null,
   email text not null,
   name text,
+  phone text,                       -- 연락처 (선택)
   service text not null,            -- 문의 서비스 종류
   message text not null,
   status text default 'pending',    -- 'pending' | 'in_progress' | 'completed'

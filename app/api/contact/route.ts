@@ -109,7 +109,6 @@ export async function POST(request: Request) {
         service: service || null,
         message,
         user_id: userId,
-        created_at: new Date().toISOString(),
       });
     } catch (dbError) {
       console.error('[Contact] DB insert error:', dbError);
