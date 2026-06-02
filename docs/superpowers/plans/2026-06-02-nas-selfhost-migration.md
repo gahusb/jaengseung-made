@@ -27,7 +27,15 @@
 
 ---
 
-## Phase 0 — 사전 준비 & 리소스 실측
+## Phase 0 — 사전 준비 & 리소스 실측 ✅ (2026-06-02 완료)
+
+> **실측 결과 (2026-06-02):**
+> - **RAM** total 17.8GB / available 14GB + swap 12GB → ✅ 넉넉. **디스크** /volume1 1.8TB 여유 → ✅.
+> - **CPU** Celeron 2코어, load avg 5.19/2.64/2.16 → 🔶 **유일한 실질 리스크**(기존 부하 높음). 차단요소 아님(빌드 로컬, 런타임만 추가). Phase 6-4에서 실측 판단, 부족 시 컨테이너 CPU limit·스케줄 조정.
+> - **포트**: 5432 미점유 ✅ / 8000=portainer·3000=gitea 점유 → **해결책: Postgres·Kong·Next 모두 host 비노출, 기존 nginx만 외부**(docker 내부 네트워크 통신). Studio만 필요 시 임시 포트(8100 등).
+> - **DNS**: 가비아 관리. `jaengseung-made.com`→Vercel(216.198.79.1), NAS 공인 IP **211.44.164.244(고정)**.
+> - **443**: 외부 테스트 결과 **이미 HTTPS 200 응답**(포트포워딩+인증서 동작 중). → **노출 방식 = 기존 nginx(443)에 vhost 추가로 확정.** Cloudflare Tunnel 불필요(보강 옵션).
+> - **gitea 기존 운영 중**(`:3000`) → Phase 5는 신규 설치 없이 기존 gitea에 비공개 레포만 생성.
 
 **목표:** 착수 가능 여부를 확정하고 네트워크/도메인 사전작업을 끝낸다.
 
@@ -224,7 +232,7 @@
 
 **작업:**
 - [ ] 5-1. 배포 방식 확정(위 택1 — 권장: 로컬 빌드→이미지 전송).
-- [ ] 5-2. `[사용자 실행]` Gitea에 비공개 레포 생성, 현재 레포를 미러 push:
+- [ ] 5-2. `[사용자 실행]` **기존 NAS gitea(`:3000`)에** 비공개 레포 생성, 현재 레포를 미러 push:
   ```bash
   git remote add gitea https://<GITEA_HOST>/<user>/jaengseung-made.git
   git push gitea --all && git push gitea --tags
@@ -249,11 +257,13 @@
 
 **목표:** 외부 트래픽을 SSL로 받고, 검증 후 DNS를 NAS로 전환한다.
 
+> **노출 방식 확정(Phase 0):** 443이 이미 열려 있고 기존 nginx가 HTTPS 운영 중 → **기존 nginx에 vhost 추가**. 신규 포트포워딩 불필요. Cloudflare Tunnel 미사용.
+
 **작업:**
-- [ ] 6-1. `[사용자 실행]` nginx(기존 8080 또는 별도) 리버스 프록시 설정 추가:
-  - `<APP_DOMAIN>` → next-app:3000
-  - `<SUPA_DOMAIN>`(또는 `/auth /rest /storage` 경로) → kong
-- [ ] 6-2. `[사용자 실행]` Let's Encrypt 인증서 발급(`<APP_DOMAIN>`, `<SUPA_DOMAIN>`) + 자동 갱신. 443 포트포워딩 적용.
+- [ ] 6-1. `[사용자 실행]` **기존 nginx**(443 운영 중)에 vhost 추가:
+  - `<APP_DOMAIN>` → next-app:3000 (docker 내부 네트워크, host 비노출)
+  - `<SUPA_DOMAIN>`(또는 `/auth /rest /storage` 경로) → kong (docker 내부)
+- [ ] 6-2. `[사용자 실행]` 기존 인증서 발급 방식 그대로 `<APP_DOMAIN>`·`<SUPA_DOMAIN>` 인증서 추가(현 nginx가 이미 Let's Encrypt 또는 Synology 인증서 사용 중 — 동일 절차 차용). 443은 이미 열려 있어 신규 포워딩 불필요.
 - [ ] 6-3. `[사용자 실행]` 임시 호스트(hosts 파일 or 스테이징 서브도메인)로 NAS 스택을 **운영 DNS 변경 전에** 외부망에서 검증 — Phase 4의 6개 흐름 재실행(이번엔 실제 도메인/SSL/쿠키).
 - [ ] 6-4. 병행 운영: Vercel/Supabase는 그대로 둔 채 NAS 안정성 24~48h 관찰(로그·메모리·CPU).
 - [ ] 6-5. `[사용자 실행]` **데이터 최종 재동기**(컷오버 직전 클라우드 증분 — 컷오버 윈도 동안 신규 가입/주문 최소화 또는 점검 공지). 2-1~2-5 재실행(델타).
