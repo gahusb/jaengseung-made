@@ -60,7 +60,7 @@
 ### 4.4 배포 파이프라인 (GitHub public → Gitea)
 - 코드 저장소를 개인 **Gitea로 이전(비공개)**.
 - **빌드는 로컬 PC**에서 수행(NAS Celeron 빌드 금지 규칙 — workspace CLAUDE.md). standalone 산출물/도커 이미지를 NAS로 전송.
-- **기존 `webpage-deployer`(Gitea webhook 수신) 패턴 재사용** → 컨테이너 재시작.
+- **배포는 기존 `webpage-deployer`와 분리된 별도 배포 방식 차용**(이 사이트 전용 파이프라인). 구체 방식(예: 로컬 빌드→이미지 레지스트리 push→NAS pull, 또는 Gitea Actions/별도 webhook 수신기)은 계획 단계에서 확정.
 
 ### 4.5 네트워킹·SSL·백업
 - DNS: `jaengseung-made.com` → NAS 공인 IP(DDNS). 443 포워딩. Let's Encrypt 자동 갱신.
@@ -85,7 +85,7 @@
 2. GoTrue 메일 = **Resend SMTP 연결**(이메일 확인 유지) 기본, 운영 복잡 시 확인 비활성 대안.
 3. 컷오버 = **Vercel/Supabase 병행 후 DNS 전환**, DNS 롤백.
 4. Phase 0 = **NAS 리소스 실측을 첫 관문**(RAM은 해소, CPU/디스크/부하 확인).
-5. 빌드 = **로컬 빌드 후 NAS 배포**(Celeron 빌드 금지).
+5. 빌드 = **로컬 빌드 후 NAS 배포**(Celeron 빌드 금지). 배포 파이프라인은 **기존 webpage-deployer와 분리된 별도 방식**(구체안 계획에서 확정).
 
 ## 7. 범위 밖 (Non-goals)
 - 외부 API(Gemini/Portone/Resend) 자체 대체 — 하지 않음(호스팅 위치 무관).
