@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // self-host(NAS) 배포용 standalone 출력. Vercel은 이 설정을 무시하므로 양쪽 호환.
+  output: 'standalone',
+  // workspace/ 하위 프로젝트라 Next가 상위를 추적 루트로 오인 → standalone 중첩 방지 위해 고정
+  outputFileTracingRoot: process.cwd(),
   async headers() {
     return [
       {
