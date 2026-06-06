@@ -103,7 +103,16 @@
 
 ---
 
-## Phase 2 — 데이터 마이그레이션 (클라우드 → NAS)
+## Phase 2 — 데이터 마이그레이션 (클라우드 → NAS) ✅ (2026-06-06 완료)
+
+> **실행 결과 (2026-06-06):**
+> - **발견: 클라우드 DB가 멀티 프로젝트 공유** — public에 쟁승 10개 외 `ebay_search_history·lotto_history·wk_*`(별개 앱) 존재. **박재오 결정: 쟁승메이드 관련만 이전**(ebay/lotto/wk 제외, 클라우드 해지 보류).
+> - **발견: PG 버전 불일치** — 클라우드 PG **17.6**, NAS 기본 15.8 → pg_dump 거부. **NAS db를 `docker-compose.pg17.yml`로 PG17(17.6.1)로 전환**(`.env` `COMPOSE_FILE=docker-compose.yml:docker-compose.pg17.yml`, PG15 볼륨 `down -v`+`rm volumes/db/data` 후 재init).
+> - **선별 덤프**: public 10개(schema+data) + auth.users/identities·storage(data-only). `PGPASSWORD`로 비번 분리(URL 노출 회피).
+> - **무손실 확정**: NAS↔CLOUD 행수 12개 항목 완전 일치 — users4/identities5/profiles4/quotes4/payments4/orders15/products25/project_milestones7/saju_records3, contact_requests0/survey_responses0/pack_files0.
+> - **RLS 이전 확인**: project_milestones=authenticated(anon 없음, 2026-06-01 보안수정 반영), quotes=authenticated.
+> - **storage 0** → buckets/objects 없음 = pack 실파일은 storage 미사용(packs-lab) → **2-3 실파일 이전 스킵**.
+> - **후속 메모**: `subscriptions` 테이블이 클라우드에 미존재(앱 `/api/subscription`이 참조하나 미배포 상태) → 구독 기능 활성화 시 별도 생성 필요. 비번 `Rk..8!`은 채팅 노출됐으므로 클라우드 해지 시 자연 폐기 또는 사전 재설정.
 
 **목표:** 클라우드 Supabase의 데이터·인증·스토리지를 NAS Postgres로 무손실 이전.
 
@@ -165,7 +174,7 @@
     // ...기존 headers/redirects 유지
   };
   ```
-- [ ] 3-2. `app/api/saju/analyze/route.ts`에서 `export const maxDuration = 60;` 제거(self-host Node는 자체 타임아웃). `runtime='nodejs'`는 유지.
+- [ ] 3-2. ~~`maxDuration` 제거~~ **하지 않음** — `export const maxDuration = 60`은 **Vercel 전용 메타라 self-host(`next start`)에선 무시**된다. 컷오버 전까지 Vercel 운영(saju 60초)을 깨지 않으려면 **그대로 유지**. (양쪽 호환)
 - [ ] 3-3. `Dockerfile` 생성(멀티스테이지, standalone):
   ```dockerfile
   FROM node:20-alpine AS deps
