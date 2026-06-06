@@ -55,7 +55,14 @@
 
 ---
 
-## Phase 1 — NAS에 self-host Supabase 스택 기동
+## Phase 1 — NAS에 self-host Supabase 스택 기동 ✅ (2026-06-06 완료)
+
+> **실행 결과 (2026-06-06):**
+> - 경로 `/volume1/docker/jsm`. 최신 스택(studio 2026.06.03, gotrue v2.189, postgres 15.8) 11개 컨테이너 전부 healthy.
+> - 포트: `KONG_HTTP_PORT=8100`, `KONG_HTTPS_PORT=8543`(8000=portainer 회피). curl(apikey 포함) auth/rest/storage = 200.
+> - **pooler(supavisor) 5432 충돌 해결**: NAS에 기존 `127.0.0.1:5432`(로컬 Postgres) 점유 → `docker-compose.yml:522`의 `- ${POSTGRES_PORT}:5432` 매핑 주석 처리(6543만 노출). pooler는 앱 미사용이라 무영향. 백업 `docker-compose.yml.bak`.
+> - **레거시 JWT_SECRET 호환 확정**: gotrue가 레거시 anon/service_role 키로 정상 → 앱 무수정 연결 가능(신규 비대칭 키 불필요).
+> - 첫 기동 시 db init이 Celeron에서 66초+ 걸려 healthcheck 일시 실패 → 의존 서비스 미기동 → `up -d` 재실행으로 해결(알려진 패턴).
 
 **목표:** 빈 self-host Supabase 스택을 NAS에 띄우고 헬스체크를 통과한다(데이터는 다음 Phase).
 
