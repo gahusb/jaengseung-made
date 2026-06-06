@@ -1,136 +1,75 @@
-# 쟁승메이드 — 실제로 쓰이는 솔루션을 만듭니다
+# 쟁승메이드 (JaengseungMade)
 
 > 현직 대기업 백엔드 개발자가 직접 설계·운영하는 개발 서비스 플랫폼
+> **검증된 자동화를 SaaS로 + 필요 시 커스텀 외주.**
 
-🔗 **[jaengseung-made.vercel.app](https://jaengseung-made.vercel.app)**
-
----
-
-## 어떤 서비스인가요?
-
-쟁승메이드는 **업무 효율화**와 **데이터 기반 의사결정**이 필요한 분들을 위해,
-현직 대기업 개발자가 직접 만들고 운영하는 솔루션을 제공합니다.
-
-거창한 컨설팅이 아니라, 실제 현장에서 쓸 수 있는 것들입니다.
+🔗 https://jaengseung-made.com
 
 ---
 
-## 서비스 목록
+## 서비스 구성
 
-### 🎰 AI 사주 분석
-**전통 명리학 × AI의 만남 — 진짜 내 얘기처럼 느껴지는 사주 풀이**
-
-- 생년월일시 입력만으로 사주팔자 즉시 계산
-- 오행 균형 · 신강신약 · 용신 · 대운 · 공망 · 신살 무료 제공
-- GPT-4o 기반 AI 맞춤 해석 12개 항목 (유료 ₩4,900)
-  - 타고난 기질, 재물운, 직업 적성, 애정운, 건강운, 대운·세운 분석 등
-- Python 엔진 기반 천문학적 정밀 절기 계산 (ephem 라이브러리)
-- 결제 후 언제든 다시 조회 가능 (마이페이지 보관)
-
-👉 [AI 사주 분석 바로가기](https://jaengseung-made.vercel.app/saju)
+| 영역 | 경로 | 설명 |
+|------|------|------|
+| **SaaS 제품** | `/packages` | 검증된 자동화를 월 구독 패키지로 (첫 제품 준비 중) |
+| **AI 음악** | `/music/packs` | AI 음악 생성 개발 가이드 패키지 — 1회 결제(₩39k/99k/149k) |
+| **커스텀 외주** | `/work` | 외주 개발 · 웹사이트 제작 · AI 사주 |
+| **AI 사주** | `/work/saju` | 사주팔자 계산 + AI 12항목 해석 (Gemini) |
 
 ---
 
-### 📊 로또 번호 추천
-**빅데이터와 통계로 고른 번호, 그냥 찍는 것보다는 낫지 않을까요?**
+## 기술 스택
 
-- 회차별 당첨 데이터 통계 분석
-- 오행 기반 사주 연계 번호 추천 (개인화)
-- 구독형 서비스 (월 기본 · 프리미엄 · 연간 플랜)
-
-👉 [로또 번호 추천 서비스](https://jaengseung-made.vercel.app/services/lotto)
-
----
-
-### 📈 주식 자동매매 프로그램
-**잠자는 동안에도 시장을 보는 나만의 트레이딩 봇**
-
-- 개인 NAS 서버에서 24시간 실제 운영 중인 검증된 프로그램
-- 텔레그램 연동 — 매수/매도 알림 실시간 수신
-- 전략 커스터마이징 가능 (종목·조건·수량)
-- 스타터 / 프로 / 엔터프라이즈 플랜
-
-👉 [주식 자동매매 서비스](https://jaengseung-made.vercel.app/services/stock)
+- **Framework**: Next.js 16 (App Router, TypeScript), Tailwind CSS v4
+- **Auth/DB**: Supabase (GoTrue Auth · PostgreSQL · RLS · Storage)
+- **결제**: Portone (계좌이체/카카오페이/토스페이)
+- **메일**: Resend
+- **AI**: Google Gemini (사주 해석)
+- **Analytics**: Google Analytics (G-WG77RNHXRK)
 
 ---
 
-### 🤖 업무 자동화 (RPA)
-**반복 업무는 컴퓨터에게 맡기세요**
+## 배포
 
-매일 하는 그 지루한 작업들, 자동화하면 됩니다.
+현재 **Vercel + Supabase(클라우드)**에서 운영 중이며,
+**NAS 자체 호스팅(self-host Supabase + Next standalone + 개인 Gitea)**으로 이전을 진행하고 있다.
 
-- 엑셀 보고서 자동 생성 · 정리
-- 이메일 자동 발송 · 분류
-- 웹 데이터 수집 (크롤링)
-- ERP · 사내 시스템 반복 작업 자동화
-- 카카오톡 / 슬랙 알림 연동
+- 빌드는 로컬에서 수행(`output: 'standalone'`), 도커 이미지를 NAS로 배포
+- self-host Supabase 스택은 docker-compose(PostgreSQL 17 · GoTrue · PostgREST · Storage · Kong)
+- 상세 계획: `docs/superpowers/plans/2026-06-02-nas-selfhost-migration.md`
 
-> 💡 Gmail 자동화 RPA 등 실제 납품 사례 다수 보유
+### 로컬 개발
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # standalone 빌드 (.next/standalone)
+```
 
-👉 [업무 자동화 서비스](https://jaengseung-made.vercel.app/services/automation)
-
----
-
-### 💡 프롬프트 엔지니어링
-**AI를 제대로 쓰는 법, 알려드립니다**
-
-ChatGPT·Claude를 쓰는데 원하는 결과가 안 나온다면, 프롬프트 설계가 문제입니다.
-
-- 업무 특화 프롬프트 설계 (보고서, 분석, 고객 응대 등)
-- 팀·부서 전체가 쓸 수 있는 프롬프트 라이브러리 구축
-- AI 도구 도입 컨설팅
-
-👉 [프롬프트 엔지니어링 서비스](https://jaengseung-made.vercel.app/services/prompt)
+환경변수는 `.env.local`(예시: `.env.local.example`) 참조. `.env*`는 커밋 금지.
 
 ---
 
-### 🛠 외주 개발
-**원하는 것을 말하면, 만들어드립니다**
+## 프로젝트 구조
 
-아이디어는 있는데 개발자가 없다면 연락 주세요.
-
-- 웹 서비스 · 관리자 대시보드 개발
-- 크롤링 · 데이터 파이프라인
-- API 서버 · 백엔드 시스템
-- 자동화 스크립트 · 봇 개발
-- 기존 시스템 유지보수 · 기능 추가
-
-> 포트폴리오 보유 | 요구사항 협의 후 견적 제공
-
-👉 [외주 개발 문의](https://jaengseung-made.vercel.app/freelance)
-
----
-
-## 왜 쟁승메이드인가요?
-
-| | 쟁승메이드 | 일반 프리랜서 |
-|---|---|---|
-| 경력 | 현직 대기업 백엔드 개발자 | 다양 |
-| 실제 운영 | NAS 서버로 자체 서비스 운영 중 | 대부분 납품 후 종료 |
-| 유지보수 | 지속적 개선 및 대응 | 별도 계약 필요 |
-| 소통 | 직접 개발자와 소통 | 중간 관리자 거치는 경우 多 |
-| 가격 | 합리적인 개인 운영 구조 | 대행사 대비 저렴 |
+```
+app/
+  page.tsx                 홈 (SaaS·음악·외주 3축)
+  packages/                SaaS 제품 카탈로그 (확장형 lib/saas-catalog.ts)
+  music/packs/             AI 음악 생성 개발 가이드 패키지
+  work/                    커스텀 외주 (freelance·website·saju)
+  api/                     API routes (Supabase service_role 서버 접근)
+  admin/                   관리자 (견적·문의·설문·통계)
+lib/                       supabase 클라이언트·products·saju 엔진 등
+supabase/                  schema.sql · migrations
+docs/superpowers/          spec·plan 문서
+```
 
 ---
 
-## 운영자 소개
+## 운영자
 
 **박재오** · 현직 대기업 백엔드 개발자
+로또 랩, 주식 자동매매 등 개인 NAS 서버에서 실서비스 운영 중.
 
-현직 대기업에서 대규모 시스템을 설계·운영하면서, 사이드로 실제 쓰이는 솔루션을 직접 만들고 있습니다.
-로또 랩, 주식 자동매매 프로그램 등은 개인 NAS 서버에서 현재도 운영 중입니다.
-
----
-
-## 문의하기
-
-서비스 이용 문의, 외주 개발 협의, 커스터마이징 등 편하게 연락 주세요.
-
-- 📧 이메일: **bgg8988@gmail.com**
-- 📱 연락처: **010-3907-1392**
-- 🌐 웹사이트: **[jaengseung-made.vercel.app](https://jaengseung-made.vercel.app)**
-- 💬 사이트 내 문의 폼: [문의하기](https://jaengseung-made.vercel.app/freelance)
-
----
-
-*쟁승메이드 — 실제로 쓰이는 솔루션*
+- 📧 bgg8988@gmail.com · 📱 010-3907-1392
+- 🌐 https://jaengseung-made.com
