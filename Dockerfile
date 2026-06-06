@@ -14,6 +14,9 @@ ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
 ENV NEXT_TELEMETRY_DISABLED=1
+# 빌드타임에만 필요한 더미(일부 route가 모듈 로드 시 env로 SDK 초기화 — 예: new Resend()).
+# 런타임에는 env_file의 실제값이 사용되므로 무해.
+ENV RESEND_API_KEY=re_build_dummy
 RUN npm run build
 
 FROM node:20-alpine AS runner
