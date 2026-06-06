@@ -244,7 +244,14 @@
 
 ---
 
-## Phase 5 — Gitea 이전 + 별도 배포 파이프라인
+## Phase 5 — Gitea 이전 + 별도 배포 파이프라인 ✅ (2026-06-06 완료)
+
+> **실행 결과 (2026-06-06):**
+> - 코드를 기존 NAS **Gitea**(`gitea.gahusb.synology.me/gahusb/jaengseung-made`)로 이전(옛 main은 `backup-old-main` 보존). README 갱신.
+> - 배포 = **로컬 빌드 → Gitea Container Registry → NAS pull**: 로컬 `docker build`(supa URL + 새 ANON build-arg) → `gitea.gahusb.synology.me/gahusb/jsm-web:latest` push → NAS `pull` + compose `up`.
+> - **빌드 이슈 해결**: `/api/survey` 등 모듈 레벨 `new Resend()`가 docker 빌드(env 없음)에서 throw → Dockerfile 빌드타임 더미 `RESEND_API_KEY`로 통과.
+> - **🚨 데모 키 발견·교체**: NAS supabase가 `supabase-demo` 데모 키(JWT_SECRET/ANON/SERVICE/VAULT) 사용 중이었음 → 실제 키 생성(crypto)·교체, 데모 키 차단(401) 확인. (`POSTGRES_PASSWORD`는 데모 잔존 — 6543 LAN 한정, **컷오버 시 DB 재구축으로 교체**)
+> - jsm-web 컨테이너: env_file 주입 정상, **컨테이너→supa hairpin 200**(공유기 지원), `app.jaengseung-made.com`(테스트 서브도메인, DSM 역프록시→13000) 외부 SSL 200 + 브라우저 OAuth·데이터 검증 통과.
 
 **목표:** 코드를 개인 Gitea(비공개)로 옮기고, 기존 `webpage-deployer`와 **분리된 전용 배포 방식**을 구축한다.
 
