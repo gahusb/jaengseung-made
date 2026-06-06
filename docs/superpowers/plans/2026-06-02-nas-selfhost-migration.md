@@ -209,7 +209,13 @@
 
 ---
 
-## Phase 4 — 코드 env 전환 + 로컬 통합 테스트
+## Phase 4 — 코드 env 전환 + 로컬 통합 테스트 ✅ (2026-06-06 완료)
+
+> **실행 결과 (2026-06-06):**
+> - 로컬 `.env.local`을 NAS Supabase로 전환(URL/ANON/SERVICE) → LAN(`192.168.45.54:8100`) 및 도메인(`https://supa.jaengseung-made.com`) 양쪽에서 apikey 200·RLS(`[]`) 확인.
+> - 전 페이지(home/login/mypage/work/music/packages/saju/freelance) 200, Supabase 연결 에러 0.
+> - **Google OAuth E2E 성공**: 브라우저 로그인 → supa 콜백 → 세션 → mypage 본인 데이터(RLS) 확인. 이메일/비번 계정은 없어 OAuth로만 검증.
+> - 검증 후 `.env.local`은 클라우드로 복구(로컬 개발 정상화). 백업 `.env.local.cloud.bak`.
 
 **목표:** 앱이 NAS self-host Supabase를 바라보게 하고, 로컬에서 핵심 흐름을 검증.
 
@@ -270,6 +276,12 @@
 ---
 
 ## Phase 6 — 도메인·SSL·nginx + 병행→컷오버
+
+> **부분 완료 (2026-06-06) — supa 백엔드 노출 + OAuth:**
+> - 도메인 DNS는 **가비아 등록 + Cloudflare 네임서버 위임** 구조 확인 → supa 레코드는 **Cloudflare DNS**에 추가(A `supa`→211.44.164.244, DNS only).
+> - 외부 노출은 **Synology DSM 역방향 프록시**가 443 관리 → `supa.jaengseung-made.com`(443) → `localhost:8100`(kong) + DSM Let's Encrypt 인증서. (cloudflared도 NAS에 존재 — 향후 Tunnel 대안)
+> - **Google OAuth**: `docker-compose.yml` GOTRUE_EXTERNAL_GOOGLE 주석 해제 + `.env`(GOOGLE_ENABLED/CLIENT_ID/SECRET), redirect=`https://supa.jaengseung-made.com/auth/v1/callback`, Google Console redirect URI 등록. `authorize?provider=google` → 302 accounts.google.com 확인.
+> - **남은 것(앱 컷오버)**: Phase 5(앱 NAS 배포) 후 `jaengseung-made.com`을 Vercel→NAS Next로 전환 + 앱 OAuth redirect를 도메인으로 + ADDITIONAL_REDIRECT_URLS 정리(현재 localhost 테스트분 포함).
 
 **목표:** 외부 트래픽을 SSL로 받고, 검증 후 DNS를 NAS로 전환한다.
 
