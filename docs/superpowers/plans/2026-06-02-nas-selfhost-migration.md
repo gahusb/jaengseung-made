@@ -12,6 +12,31 @@
 
 ---
 
+## 🔖 재개 체크포인트 (2026-06-08) — Phase 6 ③ DNS 전환 직전
+
+**현재 상태:** Phase 0~5 ✅ 완료 + Phase 6 ①(DB 재구축·데이터 최종 동기) ✅ 완료. **③ DNS 전환만 남음(아직 운영=Vercel, 무영향).**
+
+### 완료된 NAS 인프라
+- **self-host Supabase**: `/volume1/docker/jsm`, PG **17.6**, 전 컨테이너 healthy. **데모 키 전량 교체 완료**(JWT_SECRET·ANON·SERVICE·VAULT·POSTGRES_PASSWORD 모두 실제값). KONG 8100/8543, pooler 5432 host 미노출(6543만).
+- **supa 노출**: `https://supa.jaengseung-made.com` (Cloudflare DNS only → DSM 역프록시 443→kong:8100 + DSM Let's Encrypt). Google OAuth 활성(`GOTRUE_EXTERNAL_GOOGLE_*`, redirect=`https://supa.jaengseung-made.com/auth/v1/callback`, Google Console 등록됨).
+- **데이터**: 클라우드→NAS 무손실(users4/profiles4/quotes4/orders15/payments4/products25/saju3/milestones7, RLS 정책 포함). storage 미사용(0).
+- **앱 컨테이너**: 이미지 `gitea.gahusb.synology.me/gahusb/jsm-web:latest`(로컬 Docker Desktop 빌드→Gitea registry push→NAS pull). NAS `/volume1/docker/jsm-web/`(compose: image+env_file `.env`+`ports 13000:3000`+`extra_hosts host-gateway`). 컨테이너→supa **hairpin 200**(공유기 지원). 테스트 `https://app.jaengseung-made.com`(DSM 역프록시→13000) 브라우저 OAuth·데이터 검증 통과.
+- **코드/배포**: Gitea `gitea.gahusb.synology.me/gahusb/jaengseung-made`(main=현재 + `backup-old-main`=옛). GitHub origin 동기. 빌드: `docker build --build-arg NEXT_PUBLIC_SUPABASE_URL=https://supa.jaengseung-made.com --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=<새 ANON> -t gitea.gahusb.synology.me/gahusb/jsm-web:latest .` → `docker push` → NAS `docker compose up -d`.
+
+### ▶ 다음 재개 작업 (Phase 6 ②~⑤ → Phase 7)
+1. **② DSM 역프록시** `jaengseung-made.com`·`www`(443) → `localhost:13000` 생성(인증서는 전환 후).
+2. **③ Cloudflare DNS 전환**(=실제 컷오버): TTL 60s로 낮춘 뒤 `jaengseung-made.com` A `216.198.79.1`→**`211.44.164.244`**, `www`도 NAS로. `ADDITIONAL_REDIRECT_URLS`에 `https://jaengseung-made.com/**` 포함 확인(설정됨).
+3. **④ 인증서**: 전환 직후 DSM Let's Encrypt `jaengseung-made.com`·`www` 발급(80 도달) → 역프록시 매핑 → 전 기능 검증(로그인·mypage·결제·사주·문의).
+4. **⑤ 롤백**: 문제 시 Cloudflare 레코드 `216.198.79.1`(Vercel)로 복구.
+5. **Phase 7**: Postgres 백업 cron + 모니터링(텔레그램 재활용) + 인증서 자동갱신 확인 → 안정 1~2주 후 Vercel·클라우드 Supabase 해지(백업 2중 확인). 노출된 클라우드 비번은 해지로 자연 폐기.
+
+### 주의
+- 클라우드 Supabase는 **멀티앱 공유**(ebay/lotto/wk 별개) → 클라우드 해지는 그 앱들 정리 후. 쟁승은 NAS 독립.
+- 로컬 `.env.local`은 클라우드값(백업 `.env.local.cloud.bak`). 로컬 supa 재테스트 시 supa/새키로 교체 후 복구.
+- Vercel/클라우드는 컷오버 후에도 **해지 전까지 유지**(롤백 안전망).
+
+---
+
 ## 변수 (실행자가 본인 환경값으로 채움)
 
 | 변수 | 의미 | 예시 |
