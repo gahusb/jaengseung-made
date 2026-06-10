@@ -8,6 +8,8 @@ export type HideableService = 'saju' | 'music' | 'gyeol' | 'packages' | 'lotto';
 /**
  * 서비스 노출 여부. admin_token 세션이면 항상 true.
  * service_settings 조회 실패(테이블 미생성 등) 시 안전하게 숨김(false).
+ * @warning 레거시 숨김 전용 — 일반 공개 서비스(products 등) 가드에 재사용 금지.
+ *          fail-closed 정책이라 DB 일시 장애 시 404가 됨. 캐싱 없음(매 렌더 DB 조회).
  */
 export async function isServiceVisible(id: HideableService): Promise<boolean> {
   const cookieStore = await cookies();
