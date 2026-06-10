@@ -58,6 +58,13 @@ export default function TopNav() {
     }
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
     return pathname === href || pathname.startsWith(href + '/');
@@ -143,15 +150,13 @@ export default function TopNav() {
             )}
             <Link
               href="/outsourcing#contact"
-              className="hidden sm:inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150"
+              className="hidden sm:inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-150 hover:bg-[var(--jsm-accent-hover)]"
               style={{
                 background: 'var(--jsm-accent)',
                 color: '#ffffff',
                 textDecoration: 'none',
                 letterSpacing: '-0.01em',
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--jsm-accent-hover)'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--jsm-accent)'; }}
             >
               프로젝트 문의
             </Link>
@@ -160,6 +165,7 @@ export default function TopNav() {
             <button
               onClick={() => setOpen(true)}
               aria-label="메뉴 열기"
+              aria-expanded={open}
               className="md:hidden p-2 rounded-lg transition-colors duration-150"
               style={{ color: 'var(--jsm-ink)' }}
             >
@@ -182,6 +188,9 @@ export default function TopNav() {
             className="absolute top-0 right-0 h-full w-72 flex flex-col shadow-xl"
             style={{ background: 'var(--jsm-surface)' }}
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="메뉴"
           >
             {/* 드로어 헤더 */}
             <div
