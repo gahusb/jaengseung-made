@@ -126,6 +126,7 @@ function LoginForm() {
 
           {/* Google 로그인 */}
           <button
+            type="button"
             onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-lg text-sm font-medium mb-5"
             style={{
@@ -200,7 +201,7 @@ function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--jsm-accent)]"
                 style={{
                   background: 'var(--jsm-surface)',
                   border: '1px solid var(--jsm-line)',
@@ -232,7 +233,7 @@ function LoginForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none"
+                className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--jsm-accent)]"
                 style={{
                   background: 'var(--jsm-surface)',
                   border: '1px solid var(--jsm-line)',
@@ -253,8 +254,8 @@ function LoginForm() {
               disabled={loading}
               className="w-full py-2.5 rounded-lg text-sm font-semibold mt-1"
               style={{
-                background: loading ? 'var(--jsm-line)' : 'var(--jsm-accent)',
-                color: loading ? 'var(--jsm-ink-soft)' : '#ffffff',
+                background: loading ? 'var(--jsm-ink-faint)' : 'var(--jsm-accent)',
+                color: loading ? '#ffffff' : '#ffffff',
                 border: 'none',
                 cursor: loading ? 'not-allowed' : 'pointer',
                 transition: 'background 0.15s, transform 0.15s',
