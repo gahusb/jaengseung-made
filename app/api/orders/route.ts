@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { createServerClient as createSSRClient } from '@supabase/ssr';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getProductById } from '@/lib/supabase/product-files';
-import { sanitizeStr } from '@/lib/security';
+import { sanitizeStr, checkRateLimit } from '@/lib/security';
 import { sendOrderReceivedEmails } from '@/lib/order-emails';
 
 export const runtime = 'nodejs';
@@ -26,6 +26,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: '로그인이 필요합니다' }, { status: 401 });
   }
 
+  // 1-b) Rate Limit: user 기준 분당 5회
+  const rl = checkRateLimit(`orders:${user.id}`, 60_000, 5);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: '요청이 너무 잦습니다. 잠시 후 다시 시도해주세요' },
+      {
+        status: 429,
+        headers: { 'Retry-After': String(Math.ceil(rl.retryAfterMs / 1000)) },
+      },
+    );
+  }
+
   // 2) body 검증
   let body: unknown;
   try {
@@ -46,7 +58,13 @@ export async function POST(request: Request) {
 
   // 3) 상품 조회 및 활성 상태 확인
   const admin = createAdminClient();
-  const product = await getProductById(admin, productId);
+  let product;
+  try {
+    product = await getProductById(admin, productId);
+  } catch (dbErr) {
+    console.error('[Orders] product lookup error:', dbErr);
+    return NextResponse.json({ error: '상품 조회에 실패했습니다' }, { status: 500 });
+  }
 
   if (!product || !product.is_active) {
     return NextResponse.json({ error: '판매 중인 상품이 아닙니다' }, { status: 404 });
