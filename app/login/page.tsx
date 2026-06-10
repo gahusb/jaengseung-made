@@ -73,117 +73,76 @@ function LoginForm() {
     if (error) setMessage('Google 로그인 오류: ' + error.message);
   };
 
-  return (
-    <div className="min-h-screen bg-[#04102b] flex items-center justify-center p-4">
-      {/* 배경 장식 */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}
-      />
+  const isSuccess =
+    message.includes('완료') || message.includes('확인해주세요');
 
-      <div className="relative w-full max-w-md">
-        {/* 로고 */}
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center px-4 py-12"
+      style={{ background: 'var(--jsm-bg)' }}
+    >
+      <div className="w-full max-w-sm">
+        {/* 워드마크 */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-3 group">
-            <div className="w-12 h-12 rounded-xl bg-[#1a56db] flex items-center justify-center text-white font-bold text-xl">
-              쟁
-            </div>
-            <div className="text-left">
-              <div className="text-white font-bold text-xl leading-tight">쟁승메이드</div>
-              <div className="text-blue-400 text-xs font-medium">박재오의 개발 공방</div>
-            </div>
+          <Link
+            href="/"
+            className="inline-block"
+            style={{
+              fontWeight: 800,
+              fontSize: '1.375rem',
+              letterSpacing: '-0.03em',
+              color: 'var(--jsm-ink)',
+              transition: 'color 0.15s',
+            }}
+          >
+            쟁승메이드
           </Link>
+          <p
+            className="mt-2 text-sm break-keep"
+            style={{ color: 'var(--jsm-ink-soft)', letterSpacing: '-0.01em' }}
+          >
+            {isSignUp
+              ? '가입 후 의뢰 현황과 구매 내역을 관리하세요'
+              : '로그인하고 의뢰 현황과 구매 내역을 확인하세요'}
+          </p>
         </div>
 
         {/* 카드 */}
-        <div className="bg-white/5 border border-white/10 backdrop-blur rounded-2xl p-8 shadow-2xl">
-          <div className="text-center mb-7">
-            <h1 className="text-2xl font-extrabold text-white mb-1">
-              {isSignUp ? '회원가입' : '로그인'}
-            </h1>
-            <p className="text-blue-300/60 text-sm">
-              {isSignUp
-                ? '가입 후 사주 기록, 결제 내역을 관리하세요'
-                : '사주 기록·결제·의뢰 내역을 확인하세요'}
-            </p>
-          </div>
+        <div
+          className="rounded-xl p-8"
+          style={{
+            background: 'var(--jsm-surface)',
+            border: '1px solid var(--jsm-line)',
+            boxShadow: '0 1px 4px 0 rgba(15,23,42,0.06), 0 4px 16px 0 rgba(15,23,42,0.04)',
+          }}
+        >
+          {/* 카드 헤더 */}
+          <h1
+            className="text-xl font-bold mb-6 text-center"
+            style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.02em' }}
+          >
+            {isSignUp ? '회원가입' : '로그인'}
+          </h1>
 
-          {/* 오류/성공 메시지 */}
-          {message && (
-            <div className={`mb-4 px-4 py-3 rounded-xl text-sm font-medium ${
-              message.includes('완료') || message.includes('확인해주세요')
-                ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
-                : 'bg-red-500/10 border border-red-500/30 text-red-300'
-            }`}>
-              {message}
-            </div>
-          )}
-
-          {/* 이메일/비밀번호 폼 */}
-          <form onSubmit={handleAuth} className="space-y-4 mb-5">
-            <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-1.5">
-                이메일
-              </label>
-              <input
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:bg-white/8 transition text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-1.5">
-                비밀번호
-              </label>
-              <input
-                type="password"
-                placeholder="6자 이상"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:bg-white/8 transition text-sm"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#1a56db] hover:bg-[#1e4fc2] text-white font-bold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? '처리 중...' : (isSignUp ? '회원가입' : '로그인')}
-            </button>
-          </form>
-
-          {/* 전환 링크 */}
-          <div className="text-center mb-5">
-            <button
-              type="button"
-              onClick={() => { setIsSignUp(!isSignUp); setMessage(''); }}
-              className="text-sm text-blue-400 hover:text-blue-300 transition"
-            >
-              {isSignUp ? '이미 계정이 있으신가요? 로그인 →' : '아직 계정이 없으신가요? 회원가입 →'}
-            </button>
-          </div>
-
-          {/* 구분선 */}
-          <div className="relative mb-5">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/10" />
-            </div>
-            <div className="relative flex justify-center">
-              <span className="px-3 bg-transparent text-slate-500 text-xs">또는 소셜 로그인</span>
-            </div>
-          </div>
-
-          {/* 구글 로그인 */}
+          {/* Google 로그인 */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition text-white font-medium text-sm"
+            className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-lg text-sm font-medium mb-5"
+            style={{
+              background: 'var(--jsm-surface)',
+              border: '1px solid var(--jsm-line)',
+              color: 'var(--jsm-ink)',
+              transition: 'background 0.15s, border-color 0.15s',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = 'var(--jsm-surface-alt)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = 'var(--jsm-surface)';
+            }}
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
+            {/* Google G 로고 */}
+            <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden>
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -191,12 +150,169 @@ function LoginForm() {
             </svg>
             Google로 계속하기
           </button>
+
+          {/* 구분선 */}
+          <div className="relative mb-5">
+            <div
+              className="absolute inset-0 flex items-center"
+              aria-hidden
+            >
+              <div className="w-full" style={{ borderTop: '1px solid var(--jsm-line)' }} />
+            </div>
+            <div className="relative flex justify-center">
+              <span
+                className="px-3 text-xs"
+                style={{ background: 'var(--jsm-surface)', color: 'var(--jsm-ink-faint)' }}
+              >
+                또는
+              </span>
+            </div>
+          </div>
+
+          {/* 오류/성공 메시지 */}
+          {message && (
+            <div
+              className="mb-4 px-3.5 py-3 rounded-lg text-sm"
+              style={{
+                background: isSuccess ? '#f0fdf4' : '#fef2f2',
+                border: `1px solid ${isSuccess ? '#bbf7d0' : '#fecaca'}`,
+                color: isSuccess ? '#15803d' : '#dc2626',
+              }}
+            >
+              {message}
+            </div>
+          )}
+
+          {/* 이메일/비밀번호 폼 */}
+          <form onSubmit={handleAuth} className="space-y-4">
+            <div>
+              <label
+                htmlFor="login-email"
+                className="block text-sm font-medium mb-1.5"
+                style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.01em' }}
+              >
+                이메일
+              </label>
+              <input
+                id="login-email"
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none"
+                style={{
+                  background: 'var(--jsm-surface)',
+                  border: '1px solid var(--jsm-line)',
+                  color: 'var(--jsm-ink)',
+                  transition: 'border-color 0.15s',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--jsm-accent)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--jsm-line)';
+                }}
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="login-password"
+                className="block text-sm font-medium mb-1.5"
+                style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.01em' }}
+              >
+                비밀번호
+              </label>
+              <input
+                id="login-password"
+                type="password"
+                placeholder="6자 이상 입력해주세요"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none"
+                style={{
+                  background: 'var(--jsm-surface)',
+                  border: '1px solid var(--jsm-line)',
+                  color: 'var(--jsm-ink)',
+                  transition: 'border-color 0.15s',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--jsm-accent)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--jsm-line)';
+                }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-2.5 rounded-lg text-sm font-semibold mt-1"
+              style={{
+                background: loading ? 'var(--jsm-line)' : 'var(--jsm-accent)',
+                color: loading ? 'var(--jsm-ink-soft)' : '#ffffff',
+                border: 'none',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                transition: 'background 0.15s, transform 0.15s',
+                letterSpacing: '-0.01em',
+              }}
+              onMouseEnter={(e) => {
+                if (!loading) (e.currentTarget as HTMLButtonElement).style.background = 'var(--jsm-accent-hover)';
+              }}
+              onMouseLeave={(e) => {
+                if (!loading) (e.currentTarget as HTMLButtonElement).style.background = 'var(--jsm-accent)';
+              }}
+            >
+              {loading ? '처리 중...' : isSignUp ? '가입하기' : '로그인'}
+            </button>
+          </form>
+
+          {/* 가입/로그인 전환 */}
+          <div className="mt-5 text-center">
+            <button
+              type="button"
+              onClick={() => { setIsSignUp(!isSignUp); setMessage(''); }}
+              className="text-sm"
+              style={{
+                color: 'var(--jsm-accent)',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                letterSpacing: '-0.01em',
+                transition: 'color 0.15s',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.color = 'var(--jsm-accent-hover)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.color = 'var(--jsm-accent)';
+              }}
+            >
+              {isSignUp
+                ? '이미 계정이 있으신가요? 로그인'
+                : '계정이 없으신가요? 회원가입'}
+            </button>
+          </div>
         </div>
 
         {/* 홈으로 */}
         <div className="text-center mt-6">
-          <Link href="/" className="text-slate-500 hover:text-slate-300 text-sm transition">
-            ← 홈으로 돌아가기
+          <Link
+            href="/"
+            className="text-sm"
+            style={{ color: 'var(--jsm-ink-faint)', transition: 'color 0.15s', letterSpacing: '-0.01em' }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.color = 'var(--jsm-ink-soft)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.color = 'var(--jsm-ink-faint)';
+            }}
+          >
+            홈으로 돌아가기
           </Link>
         </div>
       </div>
@@ -207,8 +323,14 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#04102b] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: 'var(--jsm-bg)' }}
+      >
+        <div
+          className="w-6 h-6 rounded-full border-2 border-t-transparent animate-spin"
+          style={{ borderColor: 'var(--jsm-line)', borderTopColor: 'var(--jsm-accent)' }}
+        />
       </div>
     }>
       <LoginForm />
