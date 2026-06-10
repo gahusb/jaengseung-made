@@ -36,19 +36,32 @@
   --card-bg: #ffffff;
   --border: #dbe8ff;
 
-  /* ─── Kinetic Ether Tokens (다크 테마 섹션 전용) ─── */
-  --kx-surface: #060e20;
-  --kx-surface-low: #091328;
-  --kx-surface-mid: #0f1930;
-  --kx-surface-high: #141f38;
-  --kx-surface-bright: #1f2b49;
-  --kx-on-surface: #dee5ff;
-  --kx-on-variant: #a3aac4;
-  --kx-primary: #cc97ff;
-  --kx-primary-dim: #9c48ea;
-  --kx-secondary: #53ddfc;
-  --kx-secondary-dim: #40ceed;
-  --kx-outline: rgba(64, 72, 93, 0.15);
+  /* === JSM Professional tokens (2026-06 renewal) === */
+  --jsm-bg: #f8fafc;            /* slate-50 본문 배경 */
+  --jsm-surface: #ffffff;       /* 카드 */
+  --jsm-surface-alt: #f1f5f9;   /* slate-100 섹션 교차 배경 */
+  --jsm-ink: #0f172a;           /* slate-900 본문 텍스트 */
+  --jsm-ink-soft: #475569;      /* slate-600 보조 텍스트 */
+  --jsm-ink-faint: #94a3b8;     /* slate-400 캡션 */
+  --jsm-line: #e2e8f0;          /* slate-200 보더 */
+  --jsm-navy: #0b1f3a;          /* 딥네이비 — 푸터/다크 섹션 */
+  --jsm-accent: #1d4ed8;        /* blue-700 포인트 (단일 포인트 컬러) */
+  --jsm-accent-hover: #1e40af;  /* blue-800 */
+  --jsm-accent-soft: #dbeafe;   /* blue-100 뱃지 배경 */
+
+  /* 기존 kx 변수 재매핑 (잔여 참조 호환용) */
+  --kx-surface: var(--jsm-bg);
+  --kx-surface-low: var(--jsm-surface-alt);
+  --kx-surface-mid: var(--jsm-surface);
+  --kx-surface-high: var(--jsm-surface);
+  --kx-surface-bright: var(--jsm-surface-alt);
+  --kx-on-surface: var(--jsm-ink);
+  --kx-on-variant: var(--jsm-ink-soft);
+  --kx-primary: var(--jsm-accent);
+  --kx-primary-dim: var(--jsm-accent-hover);
+  --kx-secondary: var(--jsm-accent);
+  --kx-secondary-dim: var(--jsm-accent-hover);
+  --kx-outline: var(--jsm-line);
 }
 
 @theme inline {
@@ -56,8 +69,8 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
-  --font-sans: var(--font-jua), 'Jua', -apple-system, system-ui, sans-serif;
-  --font-mono: var(--font-jua), 'Jua', ui-monospace, monospace;
+  --font-sans: var(--font-pretendard, 'Pretendard Variable'), Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: var(--font-pretendard, 'Pretendard Variable'), Pretendard, ui-monospace, monospace;
 }
 
 * {
@@ -69,16 +82,16 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-jua), 'Jua', -apple-system, system-ui, sans-serif;
+  background: var(--jsm-bg);
+  color: var(--jsm-ink);
+  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* font-mono utility → Jua 통일 */
+/* font-mono utility → Pretendard 통일 */
 .font-mono, code, pre, kbd, samp {
-  font-family: var(--font-jua), 'Jua', ui-monospace, monospace;
+  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, ui-monospace, monospace;
 }
 
 /* Dashboard layout */
@@ -86,7 +99,7 @@ body {
   display: flex;
   height: 100dvh;
   overflow: hidden;
-  background: var(--background);
+  background: var(--jsm-bg);
 }
 
 .main-content {
@@ -107,18 +120,19 @@ body {
 .kx-section {
   background: var(--kx-surface);
   color: var(--kx-on-surface);
-  font-family: var(--font-jua), 'Jua', system-ui, sans-serif;
+  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, system-ui, sans-serif;
 }
 .kx-section p, .kx-section li, .kx-section span:not(.kx-label) {
   color: var(--kx-on-variant);
 }
 .kx-display {
-  font-family: var(--font-jua), 'Jua', system-ui, sans-serif;
-  letter-spacing: -0.01em;
+  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: inherit;
 }
 .kx-label {
-  font-family: var(--font-jua), 'Jua', system-ui, sans-serif;
+  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, system-ui, sans-serif;
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -147,15 +161,14 @@ body {
               0 0 80px 0 rgba(83, 221, 252, 0.08);
 }
 .kx-btn-primary {
-  background: linear-gradient(135deg, #cc97ff 0%, #c284ff 100%);
-  color: #0b0113;
+  background: var(--jsm-accent);
+  color: #ffffff;
   font-weight: 700;
-  box-shadow: 0 0 20px 0 rgba(168, 85, 247, 0.4);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 .kx-btn-primary:hover {
+  background: var(--jsm-accent-hover);
   transform: translateY(-1px);
-  box-shadow: 0 0 28px 0 rgba(168, 85, 247, 0.55);
 }
 .kx-btn-ghost {
   color: var(--kx-secondary);
@@ -166,10 +179,8 @@ body {
   background: var(--kx-surface-bright);
 }
 .kx-gradient-text {
-  background: linear-gradient(135deg, #cc97ff 0%, #53ddfc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--jsm-ink);
+  -webkit-text-fill-color: var(--jsm-ink);
 }
 .kx-orb {
   position: absolute;

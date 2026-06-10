@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Jua } from "next/font/google";
+import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 import "./globals.css";
 import DashboardShell from "./components/DashboardShell";
 import { GlassFilter } from "./components/LiquidGlass";
-
-const jua = Jua({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-jua",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -133,7 +126,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" data-scroll-behavior="smooth" className={jua.variable}>
+    <html lang="ko" data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"
