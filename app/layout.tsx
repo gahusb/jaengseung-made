@@ -83,12 +83,12 @@ const jsonLd = {
         itemListElement: [
           {
             '@type': 'Offer',
-            url: 'https://jaengseung-made.com/work/freelance',
+            url: 'https://jaengseung-made.com/outsourcing',
             availability: 'https://schema.org/InStock',
             itemOffered: {
               '@type': 'Service',
               name: '외주 개발',
-              url: 'https://jaengseung-made.com/work/freelance',
+              url: 'https://jaengseung-made.com/outsourcing',
               description: '7년차 백엔드 개발자의 1:1 맞춤 소프트웨어 개발 외주. 자동화·API·웹/모바일 등 사이트 한정가로 제공.',
               serviceType: 'Custom Software Development',
               provider: { '@id': 'https://jaengseung-made.com/#business' },
@@ -97,12 +97,12 @@ const jsonLd = {
           },
           {
             '@type': 'Offer',
-            url: 'https://jaengseung-made.com/work/website',
+            url: 'https://jaengseung-made.com/outsourcing',
             availability: 'https://schema.org/InStock',
             itemOffered: {
               '@type': 'Service',
               name: '웹사이트 제작',
-              url: 'https://jaengseung-made.com/work/website',
+              url: 'https://jaengseung-made.com/outsourcing',
               description: 'Next.js 기반 기업·브랜드 웹사이트 맞춤 제작. 반응형 + SEO + 배포 포함.',
               serviceType: 'Web Development',
               provider: { '@id': 'https://jaengseung-made.com/#business' },
