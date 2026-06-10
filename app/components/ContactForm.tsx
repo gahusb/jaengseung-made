@@ -55,11 +55,14 @@ function ContactFormInner() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const fieldClass =
+    'w-full px-3.5 py-2.5 text-sm border rounded-xl outline-none bg-white disabled:bg-slate-50 transition-colors focus:ring-2 focus:ring-[var(--jsm-accent)] focus:border-[var(--jsm-accent)]';
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+          <label className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--jsm-ink-soft)' }}>
             이름 <span className="text-red-500">*</span>
           </label>
           <input
@@ -70,11 +73,12 @@ function ContactFormInner() {
             required
             disabled={status === 'loading'}
             placeholder="홍길동"
-            className="w-full px-3.5 py-2.5 text-sm border border-[#dbe8ff] rounded-xl focus:ring-2 focus:ring-[#1a56db] focus:border-[#1a56db] outline-none bg-white disabled:bg-slate-50"
+            className={fieldClass}
+            style={{ borderColor: 'var(--jsm-line)' }}
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-slate-600 mb-1.5">연락처</label>
+          <label className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--jsm-ink-soft)' }}>연락처</label>
           <input
             type="tel"
             name="phone"
@@ -82,13 +86,14 @@ function ContactFormInner() {
             onChange={handleChange}
             disabled={status === 'loading'}
             placeholder="010-0000-0000"
-            className="w-full px-3.5 py-2.5 text-sm border border-[#dbe8ff] rounded-xl focus:ring-2 focus:ring-[#1a56db] focus:border-[#1a56db] outline-none bg-white disabled:bg-slate-50"
+            className={fieldClass}
+            style={{ borderColor: 'var(--jsm-line)' }}
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+        <label className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--jsm-ink-soft)' }}>
           이메일 <span className="text-red-500">*</span>
         </label>
         <input
@@ -99,18 +104,20 @@ function ContactFormInner() {
           required
           disabled={status === 'loading'}
           placeholder="example@email.com"
-          className="w-full px-3.5 py-2.5 text-sm border border-[#dbe8ff] rounded-xl focus:ring-2 focus:ring-[#1a56db] focus:border-[#1a56db] outline-none bg-white disabled:bg-slate-50"
+          className={fieldClass}
+          style={{ borderColor: 'var(--jsm-line)' }}
         />
       </div>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-600 mb-1.5">문의 서비스</label>
+        <label className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--jsm-ink-soft)' }}>문의 서비스</label>
         <select
           name="service"
           value={formData.service}
           onChange={handleChange}
           disabled={status === 'loading'}
-          className="w-full px-3.5 py-2.5 text-sm border border-[#dbe8ff] rounded-xl focus:ring-2 focus:ring-[#1a56db] focus:border-[#1a56db] outline-none bg-white disabled:bg-slate-50"
+          className={fieldClass}
+          style={{ borderColor: 'var(--jsm-line)' }}
         >
           <option>외주 개발 문의</option>
           <option>AI 자동화 키트 - 월 구독</option>
@@ -125,7 +132,7 @@ function ContactFormInner() {
       </div>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+        <label className="block text-xs font-semibold mb-1.5" style={{ color: 'var(--jsm-ink-soft)' }}>
           문의 내용 <span className="text-red-500">*</span>
         </label>
         <textarea
@@ -136,31 +143,33 @@ function ContactFormInner() {
           rows={5}
           disabled={status === 'loading'}
           placeholder="문의하실 내용을 자유롭게 작성해주세요. 프로젝트 목적, 원하시는 기능, 예산 등을 적어주시면 더 정확한 답변이 가능합니다."
-          className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none bg-white disabled:bg-slate-50"
+          className={`${fieldClass} resize-none`}
+          style={{ borderColor: 'var(--jsm-line)' }}
         />
       </div>
 
       {status === 'success' && (
         <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm px-4 py-3 rounded-xl">
-          ✅ 문의가 전송되었습니다! 24시간 이내 답변드리겠습니다.
+          문의가 전송되었습니다. 영업일 2일 내에 회신드리겠습니다.
         </div>
       )}
       {status === 'error' && (
         <div className="bg-red-50 border border-red-200 text-red-800 text-sm px-4 py-3 rounded-xl">
-          ❌ {errorMessage}
+          {errorMessage}
         </div>
       )}
 
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full bg-[#1a56db] hover:bg-[#1e4fc2] text-white py-3 rounded-xl text-sm font-bold transition shadow-lg shadow-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full text-white py-3 rounded-xl text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--jsm-accent-hover)]"
+        style={{ background: 'var(--jsm-accent)' }}
       >
         {status === 'loading' ? '전송 중...' : '문의 보내기'}
       </button>
 
-      <p className="text-slate-400 text-xs text-center">
-        문의 후 24시간 이내 답변 보장 · 무료 상담 가능
+      <p className="text-xs text-center" style={{ color: 'var(--jsm-ink-faint)' }}>
+        영업일 2일 내 회신 · 무료 상담 가능
       </p>
     </form>
   );

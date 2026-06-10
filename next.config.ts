@@ -39,13 +39,18 @@ const nextConfig: NextConfig = {
       { source: '/services/music', destination: '/music/packs', permanent: true },
       { source: '/services/music/samples', destination: '/music/samples', permanent: true },
       { source: '/studio', destination: '/music/studio', permanent: true },
-      // 커스텀 외주 마이그
-      { source: '/freelance', destination: '/work/freelance', permanent: true },
-      { source: '/services/website', destination: '/work/website', permanent: true },
+      // 커스텀 외주 마이그 (2026-06-11 리뉴얼: work 라우트 → /outsourcing 통합)
+      { source: '/work/freelance', destination: '/outsourcing', permanent: true },
+      { source: '/work', destination: '/outsourcing', permanent: true },
+      { source: '/work/website', destination: '/outsourcing', permanent: true },
+      // 구 URL은 체인 없이 한 번에 /outsourcing 으로
+      { source: '/freelance', destination: '/outsourcing', permanent: true },
+      { source: '/services/website', destination: '/outsourcing', permanent: true },
+      // 샘플 데모는 포트폴리오용으로 잔존 → samples 라우트 유지
       { source: '/services/website/samples/:slug', destination: '/work/website/samples/:slug', permanent: true },
-      // 블로그 자동화 폐기(2026-05-29 재정의): 기존 URL은 제품 라인 허브로 안내
-      { source: '/services/blog', destination: '/work', permanent: true },
-      { source: '/work/blog', destination: '/work', permanent: true },
+      // 블로그 자동화 폐기(2026-05-29 재정의): 기존 URL은 외주 허브로 안내
+      { source: '/services/blog', destination: '/outsourcing', permanent: true },
+      { source: '/work/blog', destination: '/outsourcing', permanent: true },
       // 사주 마이그 (단순 URL, 카탈로그 spec은 보류)
       { source: '/saju', destination: '/work/saju', permanent: true },
       { source: '/saju/input', destination: '/work/saju/input', permanent: true },
