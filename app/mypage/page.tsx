@@ -457,9 +457,9 @@ function MyPageContent() {
             <Card>
               <CardTitle>빠른 메뉴</CardTitle>
               <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <QuickLink href="/outsourcing#contact" title="외주 의뢰" sub="프로젝트 문의" />
-                <QuickLink href="/music/packs" title="음악 팩" sub="제품 둘러보기" />
-                <QuickLink href="/music/studio" title="AI 스튜디오" sub="새 트랙 만들기" />
+                <QuickLink href="/outsourcing#contact" title="외주 문의" sub="프로젝트 문의" />
+                <QuickLink href="/products" title="소프트웨어 보기" sub="완성 소프트웨어 목록" />
+                <QuickLink href="/outsourcing#contact" title="외주 의뢰" sub="맞춤 개발 문의" />
               </div>
             </Card>
           </div>
