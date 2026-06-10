@@ -1,4 +1,6 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { isServiceVisible } from '@/lib/service-visibility';
 
 export const metadata: Metadata = {
   title: 'AI 사주 분석',
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SajuLayout({ children }: { children: React.ReactNode }) {
-  return children;
+export default async function SajuLayout({ children }: { children: React.ReactNode }) {
+  if (!(await isServiceVisible('saju'))) notFound();
+  return <>{children}</>;
 }

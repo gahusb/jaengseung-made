@@ -1,4 +1,6 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { isServiceVisible } from '@/lib/service-visibility';
 
 export const metadata: Metadata = {
   title: 'CONTOUR — 나를 더 선명하게 이해하는 3분',
@@ -22,7 +24,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GyeolLayout({ children }: { children: React.ReactNode }) {
+export default async function GyeolLayout({ children }: { children: React.ReactNode }) {
+  if (!(await isServiceVisible('gyeol'))) notFound();
   return (
     <div
       className="min-h-screen"
