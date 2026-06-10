@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createServerClient as createSSRClient } from '@supabase/ssr';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { extractPackTier, type PackTier } from '@/lib/pack-assets';
-import { tierIncludes, getPackFilesForTiers } from '@/lib/supabase/pack-files';
+import { getUserAccessibleProductIds, getFilesByProductIds } from '@/lib/supabase/product-files';
 
 export const runtime = 'nodejs';
 
@@ -20,21 +19,25 @@ export async function GET() {
     },
   );
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ files: [] });
+  if (!user) return NextResponse.json({ products: [] });
 
   const admin = createAdminClient();
-  const { data: orders } = await admin
-    .from('contact_requests')
-    .select('service, status')
-    .eq('user_id', user.id)
-    .eq('status', 'completed');
+  const productIds = await getUserAccessibleProductIds(admin, user.id);
+  if (productIds.length === 0) return NextResponse.json({ products: [] });
 
-  const tiers = new Set<PackTier>();
-  for (const o of (orders ?? [])) {
-    const t = extractPackTier(o.service);
-    if (t) tierIncludes(t).forEach((x) => tiers.add(x));
+  const [files, { data: products }] = await Promise.all([
+    getFilesByProductIds(admin, productIds),
+    admin.from('products').select('id, name').in('id', productIds),
+  ]);
+
+  const nameMap = new Map((products ?? []).map((p) => [p.id, p.name as string]));
+  const grouped = new Map<string, { id: string; name: string; files: typeof files }>();
+  for (const f of files) {
+    if (!f.product_id) continue;
+    if (!grouped.has(f.product_id)) {
+      grouped.set(f.product_id, { id: f.product_id, name: nameMap.get(f.product_id) ?? f.product_id, files: [] });
+    }
+    grouped.get(f.product_id)!.files.push(f);
   }
-
-  const files = await getPackFilesForTiers(admin, Array.from(tiers));
-  return NextResponse.json({ files });
+  return NextResponse.json({ products: Array.from(grouped.values()) });
 }

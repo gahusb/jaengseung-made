@@ -6,8 +6,6 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import TelegramGuideModal from '@/app/components/TelegramGuideModal';
-import { PACK_TIER_NAMES, extractPackTier, type PackTier } from '@/lib/pack-assets';
-import type { PackFile } from '@/lib/supabase/pack-files';
 import { KAKAO_OPENCHAT_URL } from '@/lib/contact';
 
 // 마이페이지 — 4탭 재구성 (프로필 / 내 의뢰 / 내 제품 / 주문 내역).
@@ -57,6 +55,25 @@ interface Order {
   status: string;
 }
 
+// 구매 제품 자료 그룹 (/api/packs/list-mine 응답)
+interface ProductFileItem {
+  id: string;
+  label: string;
+}
+interface ProductGroup {
+  id: string;
+  name: string;
+  files: ProductFileItem[];
+}
+
+// orders 테이블(결제 단일 소스) — pending 안내용
+interface ProductOrder {
+  id: string;
+  product_id: string | null;
+  status: string;
+  created_at: string;
+}
+
 function MyPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -66,7 +83,8 @@ function MyPageContent() {
   const [tab, setTab] = useState<Tab>(() => resolveTab(searchParams.get('tab')));
   const [payments, setPayments] = useState<Payment[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [packFiles, setPackFiles] = useState<PackFile[]>([]);
+  const [productGroups, setProductGroups] = useState<ProductGroup[]>([]);
+  const [productOrders, setProductOrders] = useState<ProductOrder[]>([]);
   const [downloading, setDownloading] = useState<string | null>(null);
 
   // 텔레그램 연동 상태
@@ -111,12 +129,21 @@ function MyPageContent() {
         .maybeSingle();
       setTelegramChatId(profile?.telegram_chat_id ?? null);
 
-      // 구매한 팩 자료 파일 조회
+      // 구매 제품 자료 그룹 조회 (orders paid 단일 소스)
       const filesRes = await fetch('/api/packs/list-mine');
       if (filesRes.ok) {
-        const { files } = await filesRes.json();
-        setPackFiles(files ?? []);
+        const { products } = await filesRes.json();
+        setProductGroups(products ?? []);
       }
+
+      // 결제 주문(orders 테이블) 조회 — pending 안내 / 주문 내역 공유
+      const { data: prodOrders } = await supabase
+        .from('orders')
+        .select('id, product_id, status, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      setProductOrders(prodOrders || []);
 
       setLoading(false);
     }
@@ -204,15 +231,13 @@ function MyPageContent() {
 
   if (!user) return null;
 
-  // contact_requests 중 팩 주문만 추려 '내 제품' 탭에서 다운로드 노출
-  const packOrders = orders
-    .map((o) => ({ order: o, tier: extractPackTier(o.service) }))
-    .filter((x): x is { order: Order; tier: PackTier } => x.tier !== null);
+  // 입금 확인 대기 중인 주문 (orders 테이블 pending)
+  const pendingOrders = productOrders.filter((o) => o.status === 'pending');
 
   const tabs: { key: Tab; label: string; count?: number }[] = [
     { key: 'profile', label: '프로필' },
     { key: 'requests', label: '내 의뢰', count: orders.length || undefined },
-    { key: 'products', label: '내 제품', count: packOrders.length || undefined },
+    { key: 'products', label: '내 제품', count: productGroups.length || undefined },
     { key: 'orders', label: '주문 내역', count: (orders.length + payments.length) || undefined },
   ];
 
@@ -501,105 +526,89 @@ function MyPageContent() {
           </div>
         )}
 
-        {/* ===== 내 제품 (구매한 팩) ===== */}
+        {/* ===== 내 제품 (구매한 제품 자료) ===== */}
         {tab === 'products' && (
           <div className="space-y-4">
-            {packOrders.length === 0 ? (
+            {/* 입금 확인 대기 안내 */}
+            {pendingOrders.length > 0 && (
+              <div
+                className="rounded-xl px-4 py-3 border flex items-start gap-3"
+                style={{ background: 'var(--jsm-accent-soft)', borderColor: 'var(--jsm-line)' }}
+              >
+                <span
+                  className="text-xs font-semibold px-2 py-0.5 rounded-full flex-shrink-0 mt-0.5"
+                  style={{ background: 'var(--jsm-surface)', color: 'var(--jsm-accent)' }}
+                >
+                  대기중
+                </span>
+                <div className="text-sm leading-relaxed break-keep" style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}>
+                  입금 확인 대기 중인 주문이 {pendingOrders.length}건 있습니다. 입금이 확인되면 자료 다운로드가 활성화됩니다.
+                  {' '}
+                  <a
+                    href={KAKAO_OPENCHAT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold hover:underline"
+                    style={{ color: 'var(--jsm-accent)' }}
+                  >
+                    카톡 오픈채팅 →
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {productGroups.length === 0 ? (
               <EmptyState
                 title="구매한 제품이 없습니다"
-                desc="음악 팩을 구매하시면 자료를 여기서 다운로드할 수 있습니다."
-                linkHref="/music/packs"
-                linkLabel="음악 팩 보기"
+                desc="소프트웨어·자료를 구매하시면 여기서 다운로드할 수 있습니다."
+                linkHref="/products"
+                linkLabel="소프트웨어 보기"
               />
             ) : (
-              packOrders.map(({ order, tier }) => {
-                const completed = order.status === 'completed';
-                const filesForTier = packFiles.filter((pf) => {
-                  if (tier === 'starter') return pf.min_tier === 'starter';
-                  if (tier === 'pro') return pf.min_tier === 'starter' || pf.min_tier === 'pro';
-                  return true; // master
-                });
+              productGroups.map((group) => (
+                <Card key={group.id}>
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <div className="font-bold text-base break-keep" style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}>
+                      {group.name}
+                    </div>
+                  </div>
 
-                return (
-                  <Card key={order.id}>
-                    <div className="flex items-start justify-between gap-3 mb-4">
-                      <div>
-                        <div className="font-bold text-base break-keep" style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}>
-                          {PACK_TIER_NAMES[tier]}
-                        </div>
-                        <div className="text-xs mt-1" style={{ color: 'var(--jsm-ink-faint)' }}>
-                          {new Date(order.created_at).toLocaleDateString('ko-KR')} 신청
-                        </div>
-                      </div>
-                      <StatusBadge status={order.status} />
+                  <div className="border-t pt-4" style={{ borderColor: 'var(--jsm-line)' }}>
+                    <div className="text-sm font-semibold mb-3" style={{ color: 'var(--jsm-ink)' }}>
+                      자료 패키지 ({group.files.length}개)
                     </div>
 
-                    <div className="border-t pt-4" style={{ borderColor: 'var(--jsm-line)' }}>
-                      <div className="text-sm font-semibold mb-3" style={{ color: 'var(--jsm-ink)' }}>
-                        자료 패키지 ({filesForTier.length}개)
-                      </div>
-
-                      {filesForTier.length === 0 ? (
-                        <p className="text-xs" style={{ color: 'var(--jsm-ink-soft)' }}>
-                          자료 준비 중입니다. 카톡 1:1로 문의해주세요.
-                        </p>
-                      ) : (
+                    {group.files.length === 0 ? (
+                      <p className="text-xs" style={{ color: 'var(--jsm-ink-soft)' }}>
+                        자료 준비 중입니다. 카톡 1:1로 문의해주세요.
+                      </p>
+                    ) : (
+                      <>
                         <ul className="space-y-2 mb-3">
-                          {filesForTier.map((f) => (
+                          {group.files.map((f) => (
                             <li key={f.id} className="flex items-center justify-between gap-2 text-sm">
                               <span className="flex-1 break-keep" style={{ color: 'var(--jsm-ink)' }}>
                                 {f.label}
                               </span>
-                              {completed ? (
-                                <button
-                                  onClick={() => handleDownload(f.id)}
-                                  disabled={downloading === f.id}
-                                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors hover:bg-[var(--jsm-accent-hover)] disabled:opacity-50"
-                                  style={{ background: 'var(--jsm-accent)' }}
-                                >
-                                  {downloading === f.id ? '준비중...' : '다운로드'}
-                                </button>
-                              ) : (
-                                <span className="text-xs" style={{ color: 'var(--jsm-ink-faint)' }}>
-                                  대기 중
-                                </span>
-                              )}
+                              <button
+                                onClick={() => handleDownload(f.id)}
+                                disabled={downloading === f.id}
+                                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors hover:bg-[var(--jsm-accent-hover)] disabled:opacity-50"
+                                style={{ background: 'var(--jsm-accent)' }}
+                              >
+                                {downloading === f.id ? '준비중...' : '다운로드'}
+                              </button>
                             </li>
                           ))}
                         </ul>
-                      )}
-
-                      {completed && filesForTier.length > 0 && (
                         <p className="text-xs leading-relaxed" style={{ color: 'var(--jsm-ink-soft)' }}>
                           다운로드 링크는 발급 후 4시간 동안 유효합니다.
                         </p>
-                      )}
-
-                      {!completed && (
-                        <div
-                          className="rounded-lg px-3 py-2.5 text-xs leading-relaxed text-center"
-                          style={{ background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' }}
-                        >
-                          입금 확인 후 다운로드가 활성화됩니다.
-                          {order.status === 'in_progress'
-                            ? ' 결제 처리 중입니다.'
-                            : ' 입금 안내는 카톡 1:1로 드립니다.'}
-                          <br />
-                          <a
-                            href={KAKAO_OPENCHAT_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-semibold hover:underline"
-                            style={{ color: 'var(--jsm-accent)' }}
-                          >
-                            카톡 오픈채팅 →
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  </Card>
-                );
-              })
+                      </>
+                    )}
+                  </div>
+                </Card>
+              ))
             )}
           </div>
         )}
