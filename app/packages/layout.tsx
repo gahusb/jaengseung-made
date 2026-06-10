@@ -1,4 +1,6 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { isServiceVisible } from '@/lib/service-visibility';
 
 export const metadata: Metadata = {
   title: 'SaaS 제품 · 월 구독 패키지',
@@ -13,6 +15,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PackagesLayout({ children }: { children: React.ReactNode }) {
-  return children;
+export default async function PackagesLayout({ children }: { children: React.ReactNode }) {
+  if (!(await isServiceVisible('packages'))) notFound();
+  return <>{children}</>;
 }

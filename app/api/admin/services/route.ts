@@ -51,10 +51,9 @@ export async function PATCH(request: Request) {
 }
 
 const DEFAULT_SERVICES = [
-  { id: 'saju', name: 'AI 사주 분석', description: '사주 입력 및 AI 해석 서비스', is_active: true, order_index: 1 },
-  { id: 'lotto', name: '로또 번호 추천', description: '빅데이터 기반 로또 번호 분석', is_active: true, order_index: 2 },
-  { id: 'stock', name: '주식 자동매매', description: '텔레그램 연동 자동매매 프로그램', is_active: true, order_index: 3 },
-  { id: 'automation', name: '업무 자동화 RPA', description: '반복 업무 자동화 개발', is_active: true, order_index: 4 },
-  { id: 'prompt', name: '프롬프트 엔지니어링', description: 'AI 프롬프트 설계 서비스', is_active: true, order_index: 5 },
-  { id: 'freelance', name: '외주 개발', description: '맞춤형 소프트웨어 개발', is_active: true, order_index: 6 },
+  { id: 'saju',     name: 'AI 사주 분석',       description: '사주 입력 및 AI 해석 (레거시)',   is_active: false, order_index: 101 },
+  { id: 'music',    name: 'AI 음악 팩',         description: '음악 가이드 패키지·샘플·스튜디오', is_active: false, order_index: 102 },
+  { id: 'gyeol',    name: 'CONTOUR 설문',       description: '/gyeol PMF 설문',                 is_active: false, order_index: 103 },
+  { id: 'packages', name: 'SaaS 제품 허브(구)', description: '구 /packages 페이지',             is_active: false, order_index: 104 },
+  { id: 'lotto',    name: '로또 추천',          description: '로또 번호 추천 노출',              is_active: false, order_index: 105 },
 ];

@@ -1,461 +1,433 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
-import ContactModal from './components/ContactModal';
-import { GlassButton } from './components/LiquidGlass';
-import { trackCTAClick } from '@/lib/gtag';
-import { PORTFOLIO } from '@/lib/freelance-portfolio';
 
-const BEFORE = [
-  '작곡 공부에만 최소 6개월 소요',
-  '영상 편집 프로그램 학습의 높은 장벽',
-  '항상 불안한 저작권 위반 위험',
-  '곡 하나 완성에 드는 수백만 원의 외주비',
+// 쟁승메이드 메인 — 외주 개발 + 완성 소프트웨어 2축 랜딩 (서버 컴포넌트)
+// PublicShell이 TopNav(h-16)·푸터·main 배경을 제공하므로 여기서는 콘텐츠 섹션만 렌더한다.
+
+const KOR_TIGHT = { letterSpacing: '-0.02em' } as const;
+const KOR_BODY = { letterSpacing: '-0.01em' } as const;
+
+const PROCESS = [
+  { n: '01', t: '무료 상담', d: '요구사항을 함께 정리하고 실현 가능성을 점검합니다.' },
+  { n: '02', t: '견적·범위 확정', d: '영업일 2일 내 범위와 견적을 정리해 회신드립니다.' },
+  { n: '03', t: '개발·중간 공유', d: '주 1회 이상 진행 상황을 공유하며 방향을 맞춥니다.' },
+  { n: '04', t: '납품·배포 지원', d: '검수 후 30일 무상 하자보수로 안정화까지 책임집니다.' },
 ];
 
-const AFTER = [
-  '단 1시간 만에 프로급 음원 & 영상 완성',
-  '드래그 앤 드롭 수준의 직관적인 워크플로우',
-  '가이드대로 따라하면 완벽한 저작권 해결',
-  '커피 한 잔 가격으로 무한대 콘텐츠 생산',
+const STATS = [
+  { v: '7년차', l: '대기업 백엔드 개발 경력' },
+  { v: '15+', l: '직접 운영 중인 서비스' },
+  { v: '기획→배포', l: '원스톱 단독 진행' },
 ];
 
-const TWEETS_ROW_A = [
-  { name: '김민재', handle: 'minjae_shorts', time: '2h', body: '작곡 하나 못 하던 내가 3일 만에 쇼츠 채널 열었다. 프롬프트북 반칙 수준 ㄹㅇ' },
-  { name: '이소영', handle: 'cafe_sohyang', time: '5h', body: '매장 BGM 직접 만들어요. 저작권 고민 없이 매달 플레이리스트 갈아끼우는 게 신기함.' },
-  { name: '박도현', handle: 'dohyun_side', time: '1d', body: '퇴근 후 1시간 = 쇼츠 한 편. 애드센스 첫 수익이 3주 만에 꽂혔습니다. 팩값 회수 완료.' },
-  { name: '정유진', handle: 'yujin_indie', time: '2d', body: '데모 작업 시간이 1/5로. 레퍼런스 탐색 → MV까지 한 번에. 인디 뮤지션들 다 써야 함.' },
-  { name: '최현우', handle: 'hyunwoo_tube', time: '3d', body: '구독자 정체기였는데 AI 뮤비 시리즈로 알고리즘 탑승. 조회수 월 +320%.' },
-  { name: '한지원', handle: 'jiwon_studio', time: '4d', body: '팩 안에 든 저작권 체크리스트가 실질적. Suno 약관 읽는 시간 아꼈다.' },
-  { name: '오세린', handle: 'serin_mv', time: '5d', body: 'Runway 프리셋 그대로 써도 퀄 나옴. 프롬프트 설계가 반이네요.' },
-  { name: '강태윤', handle: 'taeyun_ads', time: '6d', body: '광고 BGM 10개 찍어서 외주 드렸더니 클라이언트 반응이 달라졌습니다.' },
+const STACK = ['Python', 'Java', 'Spring', 'Next.js', 'AI 연동'];
+
+const PORTFOLIO = [
+  {
+    t: '주식 자동매매 시스템',
+    d: '텔레그램과 연동해 실시간으로 주문을 집행하고 체결·손익 리포트를 자동 전송합니다.',
+    tags: ['실시간 주문', '텔레그램 연동', '리포트 자동화'],
+  },
+  {
+    t: '부동산 청약 자동 수집·매칭',
+    d: '공고를 주기적으로 크롤링해 조건에 맞는 매물만 골라내고, 신규 매칭을 즉시 알립니다.',
+    tags: ['크롤링', '조건 매칭', '푸시 알림'],
+  },
+  {
+    t: 'AI 콘텐츠 자동화 파이프라인',
+    d: '생성부터 검수, 발행까지 사람이 개입할 지점만 남기고 전 과정을 자동으로 연결합니다.',
+    tags: ['AI 연동', '검수 워크플로우', '자동 발행'],
+  },
 ];
 
-const TWEETS_ROW_B = [
-  { name: '문가은', handle: 'gaeun_beats', time: '3h', body: '가사 생성 템플릿이 진짜 핵심. 한글 랩 가사 붙일 때 막히던 거 뚫렸어요.' },
-  { name: '류현석', handle: 'hyun_creator', time: '7h', body: '쇼츠 업로드 루틴이 1시간 안에 끝남. 주말마다 10편씩 쌓고 있습니다.' },
-  { name: '배수진', handle: 'sujin_pop', time: '1d', body: 'K-POP 스타일 프롬프트 조합 충격. 레퍼런스 없이도 그 느낌이 나옴.' },
-  { name: '송재훈', handle: 'jaehun_lab', time: '2d', body: '1:1 Q&A 답변 속도 미쳤어요. 당일 회신 + 실무 디테일까지.' },
-  { name: '조은비', handle: 'eunbi_vlog', time: '3d', body: '브이로그 BGM 자작하니까 조회수 + 체류시간 둘 다 올라감. 데이터가 말함.' },
-  { name: '신도윤', handle: 'doyoon_snd', time: '4d', body: '스템 분리본이 포함된 게 진짜 크다. 믹싱 작업 훨씬 편해짐.' },
-  { name: '윤채원', handle: 'chaewon_art', time: '5d', body: 'Midjourney 프롬프트 풀 가치가 팩값 넘음. 그냥 사세요.' },
-  { name: '임준혁', handle: 'junhyuk_tune', time: '6d', body: '업데이트 진짜로 오네요. 2주 만에 V4.5 프롬프트 가이드 추가됨.' },
-];
-
-const CB_CARDS = [
-  { href: '/work/freelance', label: '외주 개발', desc: '맞춤 솔루션 · RPA·API 자동화 포함', key: 'freelance' },
-  { href: '/work/website', label: '웹사이트', desc: '기업·브랜드 사이트', key: 'website' },
-  { href: '/work/saju', label: 'AI 사주', desc: '12개 항목 무료 해석', key: 'saju' },
-];
+function ArrowRight() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M5 12h14" />
+      <path d="m13 5 7 7-7 7" />
+    </svg>
+  );
+}
 
 export default function Home() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalService, setModalService] = useState('일반 문의');
-
-  const openContact = (service: string) => {
-    setModalService(service);
-    setModalOpen(true);
-  };
-
   return (
-    <div className="relative overflow-x-hidden bg-black text-white">
-      <ContactModal
-        isOpen={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-          setModalService('일반 문의');
-        }}
-        service={modalService}
-        checklist={['연락처/이메일', '원하는 작업 범위', '희망 일정']}
-      />
-
-      {/* 1. Brand Hero — kx-surface 검정, 60vh, 텍스트 중심 */}
-      <section
-        className="relative w-full min-h-[60vh] flex items-center justify-center px-6 border-b border-white/10 overflow-hidden"
-        style={{ background: 'var(--kx-surface)' }}
-      >
-        <video
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          src="/hero-bg.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          aria-hidden
-          style={{ filter: 'blur(8px)', opacity: 0.35 }}
-        />
-        <div className="absolute inset-0 bg-black/40 pointer-events-none" aria-hidden />
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <h1
-            className="kx-display text-4xl md:text-6xl lg:text-7xl font-bold mb-5 leading-[1.1]"
-            style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
-          >
-            현직 엔지니어가
-            <br />직접 만듭니다.
-          </h1>
-          <p className="text-base md:text-xl text-white/70 leading-relaxed">
-            검증된 자동화는 SaaS로. AI 음악 가이드와 커스텀 외주까지.
-          </p>
-        </div>
-      </section>
-
-      {/* 2. Two-up Cards */}
-      <section className="py-20 px-6 bg-black border-b border-white/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Music 카드 */}
-          <Link
-            href="/music"
-            onClick={() => trackCTAClick('home_v7_card_music')}
-            className="group relative rounded-2xl border border-white/15 overflow-hidden min-h-[280px] flex flex-col justify-end p-8 hover:border-white/40 transition"
-            style={{ textDecoration: 'none' }}
-          >
-            <video
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-              src="/hero-bg.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              aria-hidden
-              style={{ opacity: 0.5 }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none" />
-            <div className="relative z-10">
-              <p className="font-mono text-[11px] tracking-widest uppercase text-white/60 mb-3">
-                Music
-              </p>
-              <h2 className="kx-display text-2xl md:text-3xl font-bold text-white mb-2">
-                AI 음악 제품
-              </h2>
-              <p className="text-sm md:text-base text-white/70 mb-4">
-                Suno 프롬프트 + 뮤비 워크플로우 + 유튜브 SEO 한 팩에.
-              </p>
-              <p className="font-mono text-xs text-white mb-5">₩39,000~</p>
-              <span className="inline-flex items-center gap-2 text-sm font-bold text-white">
-                Try now <span aria-hidden>→</span>
-              </span>
-            </div>
-          </Link>
-
-          {/* 커스텀 외주 카드 */}
-          <Link
-            href="/work"
-            onClick={() => trackCTAClick('home_v7_card_work')}
-            className="group relative rounded-2xl border border-white/15 overflow-hidden min-h-[280px] flex flex-col justify-end p-8 hover:border-white/40 transition"
-            style={{
-              textDecoration: 'none',
-              background: 'linear-gradient(135deg, var(--kx-surface) 0%, rgba(204,151,255,0.15) 100%)',
-              backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 40px)',
-            }}
-          >
-            <div className="relative z-10">
-              <p className="font-mono text-[11px] tracking-widest uppercase text-white/60 mb-3">
-                Custom Work
-              </p>
-              <h2 className="kx-display text-2xl md:text-3xl font-bold text-white mb-2">
-                커스텀 외주
-              </h2>
-              <p className="text-sm md:text-base text-white/70 mb-4">
-                외주 · 웹사이트 · AI 사주
-              </p>
-              <p className="text-xs text-white/50 mb-5">납품 5건 · 견적 24h 내 답변</p>
-              <span className="inline-flex items-center gap-2 text-sm font-bold text-white">
-                견적 문의 <span aria-hidden>→</span>
-              </span>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* 3. Music 섹션 — 기존 Features + Before/After + Tweet 마퀴 보존 */}
-
-      {/* 3-1. Features */}
-      <section className="py-24 px-6 bg-white text-black border-b border-black/10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <p className="font-mono text-[11px] tracking-widest uppercase text-black/50 mb-4">
-              Features
-            </p>
-            <h2
-              className="kx-display text-3xl md:text-5xl font-bold text-black"
-              style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
+    <>
+      {/* ─── 1. Hero ─── */}
+      <section className="border-b" style={{ borderColor: 'var(--jsm-line)' }}>
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-24 lg:py-32">
+          <div className="max-w-3xl">
+            <span
+              className="inline-block text-xs font-semibold mb-6 px-2.5 py-1 rounded"
+              style={{
+                color: 'var(--jsm-accent)',
+                background: 'var(--jsm-accent-soft)',
+                ...KOR_BODY,
+              }}
             >
-              한 팩에 담긴 3가지 무기.
-            </h2>
-          </div>
-
-          <div className="space-y-20 lg:space-y-28">
-            {[
-              {
-                label: '01 · Prompt',
-                title: '프롬프트 한 줄이 곡이 됩니다.',
-                desc: '장르·무드·보컬 톤을 조합한 20+종 프롬프트 북. 복붙 한 번으로 Suno가 이해하는 구조로 변환됩니다.',
-                video: '/feature-prompt.mp4',
-              },
-              {
-                label: '02 · Visual',
-                title: '비트에 맞춰 영상이 붙습니다.',
-                desc: 'Midjourney·Runway·Luma 워크플로우. 가사와 비트를 싱크하는 9:16 쇼츠·16:9 풀버전을 바로 뽑아낼 수 있습니다.',
-                video: '/feature-visual.mp4',
-              },
-              {
-                label: '03 · Publish',
-                title: '업로드 직전까지 마무리됩니다.',
-                desc: '유튜브 제목·해시태그·설명란 SEO 템플릿. 복사-붙여넣기만으로 첫 쇼츠가 당일 채널에 올라갑니다.',
-                video: null,
-              },
-            ].map((f, i) => {
-              const reverse = i % 2 === 1;
-              return (
-                <div
-                  key={f.label}
-                  className={`grid lg:grid-cols-2 gap-10 lg:gap-16 items-center ${reverse ? 'lg:[&>*:first-child]:order-2' : ''}`}
-                >
-                  <div>
-                    <p className="font-mono text-[11px] tracking-widest uppercase text-black/50 mb-4">
-                      {f.label}
-                    </p>
-                    <h3
-                      className="kx-display text-2xl md:text-4xl font-bold mb-5 text-black"
-                      style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
-                    >
-                      {f.title}
-                    </h3>
-                    <p className="text-base md:text-lg text-black/70 leading-relaxed max-w-lg">
-                      {f.desc}
-                    </p>
-                  </div>
-                  <div className="relative aspect-video rounded-2xl border border-black/15 bg-black/5 overflow-hidden">
-                    {f.video ? (
-                      <video
-                        className="absolute inset-0 w-full h-full object-cover"
-                        src={f.video}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="auto"
-                        aria-hidden
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="font-mono text-[11px] tracking-widest uppercase text-black/40">
-                          Video Placeholder
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 3-2. Before / After */}
-      <section className="py-24 px-6 bg-black text-white border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-4">
-              Efficiency
-            </p>
-            <h2
-              className="kx-display text-3xl md:text-5xl font-bold"
-              style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
+              외주 개발 · 완성 소프트웨어
+            </span>
+            <h1
+              className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold leading-[1.2] break-keep"
+              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
             >
-              압도적인 제작 효율의 차이.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-2xl border border-white/15 bg-white/[0.02]">
-              <p className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-3">
-                Manual Process
-              </p>
-              <h3 className="text-2xl font-bold mb-6 text-white/60">Before</h3>
-              <ul className="space-y-3">
-                {BEFORE.map((t) => (
-                  <li key={t} className="flex items-start gap-3 text-sm text-white/60">
-                    <span className="text-white/40">·</span>
-                    <span>{t}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="p-8 rounded-2xl border border-white bg-white text-black">
-              <p className="font-mono text-[11px] tracking-widest uppercase text-black/60 mb-3">
-                AI Powered
-              </p>
-              <h3 className="text-2xl font-bold mb-6">After</h3>
-              <ul className="space-y-3">
-                {AFTER.map((t) => (
-                  <li key={t} className="flex items-start gap-3 text-sm text-black/80">
-                    <span className="text-black/50">·</span>
-                    <span>{t}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3-3. Use Cases — Tweet Marquee */}
-      <section className="py-24 bg-white text-black border-b border-black/10 overflow-hidden">
-        <div className="px-6 max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="font-mono text-[11px] tracking-widest uppercase text-black/50 mb-4">
-              Use Cases
-            </p>
-            <h2
-              className="kx-display text-3xl md:text-5xl font-bold"
-              style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
+              필요한 소프트웨어,
+              <br className="hidden sm:block" /> 만들어 드리거나{' '}
+              <span style={{ color: 'var(--jsm-accent)' }}>이미 만들어 두었습니다.</span>
+            </h1>
+            <p
+              className="mt-7 text-lg lg:text-xl leading-relaxed break-keep max-w-2xl"
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
             >
-              실제로 쓰고 있는 사람들.
-            </h2>
-          </div>
-        </div>
-
-        <div className="space-y-5 marquee-mask">
-          {[TWEETS_ROW_A, TWEETS_ROW_B].map((row, rowIdx) => (
-            <div key={rowIdx} className="marquee-viewport overflow-hidden">
-              <div className={`marquee-track ${rowIdx === 1 ? 'marquee-track-reverse' : ''}`}>
-                {[...row, ...row].map((t, i) => (
-                  <article
-                    key={`${rowIdx}-${i}`}
-                    className="shrink-0 w-[320px] sm:w-[360px] p-5 rounded-2xl border border-black/15 bg-black/[0.02]"
-                  >
-                    <header className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-black/5 border border-black/15 flex items-center justify-center font-bold text-black">
-                        {t.name.charAt(0)}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-bold text-black text-sm truncate">{t.name}</p>
-                        <p className="font-mono text-[11px] text-black/50 truncate">@{t.handle}</p>
-                      </div>
-                      <span className="font-mono text-[10px] text-black/40 shrink-0">{t.time}</span>
-                    </header>
-                    <p
-                      className="text-sm leading-relaxed text-black/80"
-                      style={{ wordBreak: 'keep-all' }}
-                    >
-                      {t.body}
-                    </p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 4. 커스텀 외주 섹션 — 카드 + 5건 사례 + 견적 CTA */}
-      <section className="py-24 px-6 bg-black text-white border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="font-mono text-[11px] tracking-widest uppercase text-white/50 mb-4">
-              Custom Work
+              7년차 대기업 백엔드 개발자가 직접 설계·개발·운영합니다. 맞춤 외주 개발과
+              검증된 완성 소프트웨어 중 필요한 쪽을 선택하세요.
             </p>
-            <h2
-              className="kx-display text-3xl md:text-5xl font-bold mb-5"
-              style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
-            >
-              맞춤 개발이 필요하신가요?
-            </h2>
-            <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
-              7년차 백엔드 개발자가 직접 설계·개발·납품. 외주, 웹사이트, AI 사주까지.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-            {CB_CARDS.map((card) => (
+            <div className="mt-10 flex flex-col sm:flex-row gap-3">
               <Link
-                key={card.key}
-                href={card.href}
-                onClick={() => trackCTAClick(`home_v7_cb_card_${card.key}`)}
-                className="group rounded-2xl border border-white/15 bg-white/[0.02] p-5 hover:border-white/40 hover:bg-white/[0.05] transition flex flex-col"
+                href="/outsourcing#contact"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg font-semibold text-white transition-colors duration-150"
+                style={{ background: 'var(--jsm-accent)', ...KOR_BODY }}
               >
-                <p className="font-bold text-white text-sm mb-1.5">{card.label}</p>
-                <p className="text-xs text-white/60 leading-relaxed flex-1">{card.desc}</p>
-                <span aria-hidden="true" className="mt-3 text-white/40 text-xs">→</span>
+                프로젝트 문의하기
+                <ArrowRight />
               </Link>
+              <Link
+                href="/products"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg font-semibold border transition-colors duration-150 hover:bg-[var(--jsm-surface-alt)]"
+                style={{
+                  color: 'var(--jsm-ink)',
+                  borderColor: 'var(--jsm-line)',
+                  background: 'var(--jsm-surface)',
+                  ...KOR_BODY,
+                }}
+              >
+                소프트웨어 보기
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 2. 2축 서비스 ─── */}
+      <section style={{ background: 'var(--jsm-surface-alt)' }}>
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* 외주 개발 */}
+            <Link
+              href="/outsourcing"
+              className="group block rounded-2xl p-9 lg:p-11 border transition-colors duration-200 hover:border-[var(--jsm-accent)]"
+              style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
+            >
+              <span
+                className="text-xs font-semibold uppercase tracking-wider"
+                style={{ color: 'var(--jsm-accent)' }}
+              >
+                Custom
+              </span>
+              <h2
+                className="mt-3 text-2xl font-bold break-keep"
+                style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+              >
+                외주 개발
+              </h2>
+              <p
+                className="mt-3 leading-relaxed break-keep"
+                style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+              >
+                기획부터 배포·운영까지 한 사람이 책임집니다. 웹 서비스, API, 업무 자동화,
+                봇 개발까지 필요한 형태로 만들어 드립니다.
+              </p>
+              <span
+                className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 group-hover:text-[var(--jsm-accent-hover)]"
+                style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
+              >
+                외주 개발 알아보기
+                <ArrowRight />
+              </span>
+            </Link>
+
+            {/* 완성 소프트웨어 */}
+            <Link
+              href="/products"
+              className="group block rounded-2xl p-9 lg:p-11 border transition-colors duration-200 hover:border-[var(--jsm-accent)]"
+              style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
+            >
+              <span
+                className="text-xs font-semibold uppercase tracking-wider"
+                style={{ color: 'var(--jsm-accent)' }}
+              >
+                Ready-made
+              </span>
+              <h2
+                className="mt-3 text-2xl font-bold break-keep"
+                style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+              >
+                완성 소프트웨어
+              </h2>
+              <p
+                className="mt-3 leading-relaxed break-keep"
+                style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+              >
+                입금 확인 후 바로 다운로드해 사용합니다. 제가 직접 운영하며 검증한 도구만
+                정리해 제공합니다.
+              </p>
+              <span
+                className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 group-hover:text-[var(--jsm-accent-hover)]"
+                style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
+              >
+                소프트웨어 둘러보기
+                <ArrowRight />
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 3. 개발 프로세스 ─── */}
+      <section id="process" style={{ background: 'var(--jsm-bg)' }}>
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
+          <div className="max-w-2xl">
+            <p
+              className="text-xs font-semibold uppercase tracking-wider mb-3"
+              style={{ color: 'var(--jsm-accent)' }}
+            >
+              Process
+            </p>
+            <h2
+              className="text-3xl lg:text-4xl font-bold break-keep"
+              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+            >
+              상담부터 납품까지, 흐름이 분명합니다
+            </h2>
+          </div>
+          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-px rounded-2xl overflow-hidden border" style={{ borderColor: 'var(--jsm-line)', background: 'var(--jsm-line)' }}>
+            {PROCESS.map((s) => (
+              <div key={s.n} className="p-7 lg:p-8" style={{ background: 'var(--jsm-surface)' }}>
+                <span
+                  className="text-sm font-bold"
+                  style={{ color: 'var(--jsm-accent)', fontFamily: 'monospace' }}
+                >
+                  {s.n}
+                </span>
+                <h3
+                  className="mt-4 text-lg font-bold break-keep"
+                  style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+                >
+                  {s.t}
+                </h3>
+                <p
+                  className="mt-2 text-sm leading-relaxed break-keep"
+                  style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+                >
+                  {s.d}
+                </p>
+              </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* 납품 5건 사례 미리보기 */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-12">
+      {/* ─── 4. 신뢰 요소 ─── */}
+      <section style={{ background: 'var(--jsm-navy)' }}>
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-24">
+          <div className="grid sm:grid-cols-3 gap-10 sm:gap-8">
+            {STATS.map((s) => (
+              <div key={s.l}>
+                <p
+                  className="text-3xl lg:text-4xl font-bold text-white"
+                  style={KOR_TIGHT}
+                >
+                  {s.v}
+                </p>
+                <p
+                  className="mt-2 text-sm leading-relaxed break-keep text-white/60"
+                  style={KOR_BODY}
+                >
+                  {s.l}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div
+            className="mt-12 pt-8 border-t flex flex-wrap items-center gap-x-3 gap-y-2"
+            style={{ borderColor: 'rgba(255,255,255,0.1)' }}
+          >
+            <span className="text-xs uppercase tracking-wider text-white/40 mr-1">Stack</span>
+            {STACK.map((s) => (
+              <span
+                key={s}
+                className="text-sm text-white/80 px-3 py-1 rounded-full"
+                style={{ background: 'rgba(255,255,255,0.06)', ...KOR_BODY }}
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 5. 포트폴리오 하이라이트 ─── */}
+      <section id="portfolio" style={{ background: 'var(--jsm-surface-alt)' }}>
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
+          <div className="max-w-2xl">
+            <p
+              className="text-xs font-semibold uppercase tracking-wider mb-3"
+              style={{ color: 'var(--jsm-accent)' }}
+            >
+              Portfolio
+            </p>
+            <h2
+              className="text-3xl lg:text-4xl font-bold break-keep"
+              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+            >
+              실제로 운영 중인 시스템들
+            </h2>
+            <p
+              className="mt-4 leading-relaxed break-keep"
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+            >
+              데모가 아니라 매일 돌아가는 서비스입니다. 같은 깊이로 의뢰하신 프로젝트를 만듭니다.
+            </p>
+          </div>
+          <div className="mt-12 grid md:grid-cols-3 gap-6">
             {PORTFOLIO.map((p) => (
               <div
-                key={p.title}
-                className={`p-4 rounded-2xl border ${p.borderAccent} ${p.accentBg} flex flex-col`}
+                key={p.t}
+                className="flex flex-col rounded-2xl p-7 border"
+                style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
               >
-                <p className={`font-mono text-[9px] uppercase tracking-widest ${p.accentColor} mb-2`}>
-                  {p.category}
+                <span
+                  className="self-start inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full mb-5"
+                  style={{ color: 'var(--jsm-accent)', background: 'var(--jsm-accent-soft)' }}
+                >
+                  <span
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ background: 'var(--jsm-accent)' }}
+                  />
+                  직접 개발·운영 중
+                </span>
+                <h3
+                  className="text-lg font-bold break-keep"
+                  style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+                >
+                  {p.t}
+                </h3>
+                <p
+                  className="mt-2.5 text-sm leading-relaxed break-keep flex-1"
+                  style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+                >
+                  {p.d}
                 </p>
-                <h3 className="font-bold text-white text-xs leading-tight mb-1.5">{p.title}</h3>
-                <p className="text-[10px] text-white/50 line-clamp-2 flex-1">{p.result}</p>
+                <div className="mt-5 flex flex-wrap gap-1.5">
+                  {p.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs px-2.5 py-1 rounded"
+                      style={{
+                        color: 'var(--jsm-ink-soft)',
+                        background: 'var(--jsm-surface-alt)',
+                        ...KOR_BODY,
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
-
-          <div className="text-center">
-            <button
-              onClick={() => {
-                trackCTAClick('home_v7_cb_cta');
-                openContact('외주 개발 문의');
-              }}
-              className="kx-btn-primary inline-flex items-center px-7 py-3 rounded-full text-sm"
+          <div className="mt-10">
+            <Link
+              href="/outsourcing#portfolio"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-[var(--jsm-accent-hover)]"
+              style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
             >
-              견적 문의하기
-            </button>
+              포트폴리오 자세히 보기
+              <ArrowRight />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* 5. Final CTA — 어느 쪽이든 시작하세요 */}
-      <section className="relative w-full min-h-[400px] flex items-center justify-center px-6 py-24 bg-black overflow-hidden">
-        <video
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          src="/hero-bg.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          aria-hidden
-          style={{ filter: 'blur(8px)', opacity: 0.35 }}
-        />
-        <div className="absolute inset-0 bg-black/50 pointer-events-none" />
-        <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <h2
-            className="kx-display text-3xl md:text-5xl font-bold mb-8"
-            style={{ wordBreak: 'keep-all', letterSpacing: '-0.02em' }}
+      {/* ─── 6. 소프트웨어 진열(예고) ─── */}
+      {/* Phase 2: 이 섹션은 products 테이블 기반 동적 진열로 교체 예정.
+          현재는 출시 전 정적 안내만 노출한다. */}
+      <section style={{ background: 'var(--jsm-bg)' }}>
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
+          <div
+            className="rounded-2xl border px-8 py-14 lg:px-14 lg:py-16 text-center"
+            style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
           >
-            어느 쪽이든 시작하세요.
-          </h2>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <GlassButton
-              href="/music"
-              onClick={() => trackCTAClick('home_v7_final_music')}
-              tint="rgba(255,255,255,0.18)"
-              className="text-base"
+            <p
+              className="text-xs font-semibold uppercase tracking-wider mb-3"
+              style={{ color: 'var(--jsm-accent)' }}
             >
-              <span className="text-white">Music 팩 보기</span>
-            </GlassButton>
-            <button
-              onClick={() => {
-                trackCTAClick('home_v7_final_work');
-                openContact('외주 개발 문의');
+              Coming soon
+            </p>
+            <h2
+              className="text-2xl lg:text-3xl font-bold break-keep"
+              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+            >
+              검증된 완성 소프트웨어를 준비하고 있습니다
+            </h2>
+            <p
+              className="mt-4 max-w-xl mx-auto leading-relaxed break-keep"
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+            >
+              직접 운영하며 다듬은 도구를 하나씩 다운로드 상품으로 공개할 예정입니다.
+              출시 소식을 가장 먼저 받아보세요.
+            </p>
+            <Link
+              href="/outsourcing#contact"
+              className="mt-8 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg font-semibold border transition-colors duration-150 hover:bg-[var(--jsm-surface-alt)]"
+              style={{
+                color: 'var(--jsm-ink)',
+                borderColor: 'var(--jsm-line)',
+                ...KOR_BODY,
               }}
-              className="kx-btn-primary inline-flex items-center justify-center px-7 py-3 rounded-full text-base"
             >
-              견적 문의
-            </button>
+              출시 소식 받기
+              <ArrowRight />
+            </Link>
           </div>
         </div>
       </section>
-    </div>
+
+      {/* ─── 7. 최종 CTA ─── */}
+      <section style={{ background: 'var(--jsm-navy)' }}>
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-24 lg:py-28">
+          <div className="max-w-3xl">
+            <h2
+              className="text-3xl lg:text-[2.5rem] font-bold leading-tight text-white break-keep"
+              style={KOR_TIGHT}
+            >
+              프로젝트, 이야기부터 시작하세요
+            </h2>
+            <p
+              className="mt-5 text-lg leading-relaxed text-white/70 break-keep max-w-2xl"
+              style={KOR_BODY}
+            >
+              아이디어 단계여도 괜찮습니다. 무료 상담에서 방향을 함께 잡아드립니다.
+            </p>
+            <Link
+              href="/outsourcing#contact"
+              className="mt-9 inline-flex items-center justify-center gap-2 px-7 py-4 rounded-lg font-semibold text-white transition-colors duration-150"
+              style={{ background: 'var(--jsm-accent)', ...KOR_BODY }}
+            >
+              무료 상담 신청
+              <ArrowRight />
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

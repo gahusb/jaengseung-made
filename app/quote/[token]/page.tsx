@@ -20,8 +20,8 @@ interface Quote {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  기획: '#60a5fa', 디자인: '#f472b6', 개발: '#34d399', 인프라: '#fb923c',
-  유지보수: '#a78bfa', 기타: '#94a3b8',
+  기획: '#2563eb', 디자인: '#db2777', 개발: '#059669', 인프라: '#ea580c',
+  유지보수: '#7c3aed', 기타: '#64748b',
 };
 
 export default function QuotePage() {
@@ -100,10 +100,10 @@ export default function QuotePage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0a0f1e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--jsm-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ width: 40, height: 40, border: '3px solid rgba(99,102,241,0.3)', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
-          <p style={{ color: '#475569', fontFamily: 'sans-serif' }}>견적서를 불러오는 중...</p>
+          <div style={{ width: 40, height: 40, border: '3px solid var(--jsm-accent-soft)', borderTopColor: 'var(--jsm-accent)', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }} />
+          <p style={{ color: 'var(--jsm-ink-soft)', fontFamily: 'sans-serif' }}>견적서를 불러오는 중...</p>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -112,29 +112,29 @@ export default function QuotePage() {
 
   if (notFound || !quote) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0a0f1e', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
+      <div style={{ minHeight: '100vh', background: 'var(--jsm-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
         <div style={{ fontSize: 64 }}>🔍</div>
-        <h1 style={{ color: 'white', fontSize: 24, fontWeight: 700, fontFamily: 'sans-serif' }}>견적서를 찾을 수 없습니다</h1>
-        <p style={{ color: '#475569', fontFamily: 'sans-serif' }}>링크가 만료되었거나 잘못된 주소입니다</p>
+        <h1 style={{ color: 'var(--jsm-ink)', fontSize: 24, fontWeight: 700, fontFamily: 'sans-serif' }}>견적서를 찾을 수 없습니다</h1>
+        <p style={{ color: 'var(--jsm-ink-soft)', fontFamily: 'sans-serif' }}>링크가 만료되었거나 잘못된 주소입니다</p>
       </div>
     );
   }
 
   if (submitted) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0a0f1e', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 20, padding: 24 }}>
+      <div style={{ minHeight: '100vh', background: 'var(--jsm-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 20, padding: 24 }}>
         <style>{`@keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }`}</style>
         <div style={{ fontSize: 80, animation: 'pop 0.5s ease forwards' }}>🎉</div>
-        <h1 style={{ color: 'white', fontSize: 28, fontWeight: 800, fontFamily: 'sans-serif', textAlign: 'center' }}>견적을 수락해 주셨습니다!</h1>
-        <p style={{ color: '#94a3b8', fontFamily: 'sans-serif', textAlign: 'center', lineHeight: 1.7 }}>
+        <h1 style={{ color: 'var(--jsm-ink)', fontSize: 28, fontWeight: 800, fontFamily: 'sans-serif', textAlign: 'center' }}>견적을 수락해 주셨습니다!</h1>
+        <p style={{ color: 'var(--jsm-ink-soft)', fontFamily: 'sans-serif', textAlign: 'center', lineHeight: 1.7 }}>
           담당자가 확인 후 빠른 시일 내에 연락드리겠습니다.<br />
           선택하신 내용을 기반으로 계약을 진행합니다.
         </p>
-        <div style={{ background: '#0f172a', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 16, padding: '24px 32px', textAlign: 'center' }}>
-          <div style={{ color: '#94a3b8', fontSize: 14, fontFamily: 'sans-serif', marginBottom: 8 }}>최종 견적 금액</div>
-          <div style={{ color: 'white', fontSize: 36, fontWeight: 800, fontFamily: 'sans-serif' }}>{grandTotal.toLocaleString()}원</div>
+        <div style={{ background: 'var(--jsm-surface)', border: '1px solid var(--jsm-accent-soft)', borderRadius: 16, padding: '24px 32px', textAlign: 'center', boxShadow: '0 4px 20px rgba(29,78,216,0.08)' }}>
+          <div style={{ color: 'var(--jsm-ink-soft)', fontSize: 14, fontFamily: 'sans-serif', marginBottom: 8 }}>최종 견적 금액</div>
+          <div style={{ color: 'var(--jsm-ink)', fontSize: 36, fontWeight: 800, fontFamily: 'sans-serif' }}>{grandTotal.toLocaleString()}원</div>
           {maintenanceTotal > 0 && (
-            <div style={{ color: '#6366f1', fontSize: 14, fontFamily: 'sans-serif', marginTop: 6 }}>+ 유지보수 {maintenanceTotal.toLocaleString()}원/월</div>
+            <div style={{ color: 'var(--jsm-accent)', fontSize: 14, fontFamily: 'sans-serif', marginTop: 6 }}>+ 유지보수 {maintenanceTotal.toLocaleString()}원/월</div>
           )}
         </div>
       </div>
@@ -149,13 +149,12 @@ export default function QuotePage() {
   ].filter((t) => t.show !== false);
 
   return (
-    <div style={{ background: '#0a0f1e', minHeight: '100vh', color: 'white', fontFamily: "'Pretendard', 'Noto Sans KR', sans-serif" }}>
+    <div style={{ background: 'var(--jsm-bg)', minHeight: '100vh', color: 'var(--jsm-ink)', fontFamily: "'Pretendard Variable', Pretendard, 'Noto Sans KR', sans-serif" }}>
       <style>{`
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
         * { box-sizing: border-box; }
-        input[type=checkbox] { accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer; }
-        input[type=radio] { accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer; }
+        input[type=checkbox] { accent-color: var(--jsm-accent); width: 18px; height: 18px; cursor: pointer; }
+        input[type=radio] { accent-color: var(--jsm-accent); width: 18px; height: 18px; cursor: pointer; }
         @media print {
           html, body { height: auto !important; min-height: 0 !important; overflow: visible !important; background: white !important; color: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           * { overflow: visible !important; }
@@ -173,17 +172,17 @@ export default function QuotePage() {
       `}</style>
 
       {/* 헤더 */}
-      <div style={{ background: 'linear-gradient(180deg, #0f172a 0%, #0a0f1e 100%)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '32px 24px 0' }}>
+      <div style={{ background: 'var(--jsm-navy)', borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '32px 24px 0' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           {/* 브랜드 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 700 }}>쟁</div>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--jsm-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 700, color: 'white' }}>쟁</div>
             <div>
               <div style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>쟁승메이드</div>
-              <div style={{ color: '#475569', fontSize: 11 }}>jaengseung-made.com</div>
+              <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 11 }}>jaengseung-made.com</div>
             </div>
             <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)', color: '#818cf8', fontSize: 11, fontWeight: 600, padding: '4px 12px', borderRadius: 100 }}>
+              <span style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.85)', fontSize: 11, fontWeight: 600, padding: '4px 12px', borderRadius: 100 }}>
                 공식 견적서
               </span>
               <button
@@ -197,13 +196,13 @@ export default function QuotePage() {
                 }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)',
-                  color: '#cbd5e1', fontSize: 13, fontWeight: 600,
+                  background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.18)',
+                  color: 'rgba(255,255,255,0.8)', fontSize: 13, fontWeight: 600,
                   padding: '6px 14px', borderRadius: 8, cursor: 'pointer',
                   transition: 'all 0.2s',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.14)'; e.currentTarget.style.color = 'white'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#cbd5e1'; }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; e.currentTarget.style.color = 'white'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.8)'; }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
@@ -220,29 +219,29 @@ export default function QuotePage() {
             </h1>
             <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
               {quote.client_name && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>
                   <span>👤</span> {quote.client_name} 고객님
                 </div>
               )}
               {quote.valid_until && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>
                   <span>📅</span> 유효기간: {quote.valid_until.slice(0, 10)}
                 </div>
               )}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#94a3b8', fontSize: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>
                 <span>📄</span> 발행일: {new Date(quote.created_at).toLocaleDateString('ko-KR')}
               </div>
             </div>
           </div>
 
           {/* 탭 */}
-          <div className="no-print" style={{ display: isPrinting ? 'none' : 'flex', gap: 0, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="no-print" style={{ display: isPrinting ? 'none' : 'flex', gap: 0, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
             {tabs.map((t) => (
               <button key={t.key} onClick={() => setActiveTab(t.key as typeof activeTab)}
                 style={{
                   padding: '12px 20px', fontSize: 14, fontWeight: 500, border: 'none', cursor: 'pointer',
-                  background: 'none', color: activeTab === t.key ? '#818cf8' : '#64748b',
-                  borderBottom: `2px solid ${activeTab === t.key ? '#6366f1' : 'transparent'}`,
+                  background: 'none', color: activeTab === t.key ? 'white' : 'rgba(255,255,255,0.5)',
+                  borderBottom: `2px solid ${activeTab === t.key ? 'var(--jsm-accent)' : 'transparent'}`,
                   transition: 'all 0.2s', marginBottom: -1,
                 }}>
                 {t.label}
@@ -255,10 +254,10 @@ export default function QuotePage() {
       {/* 만료 배너 */}
       {isExpired && (
         <div style={{ maxWidth: 900, margin: '0 auto', padding: '16px 24px 0' }}>
-          <div style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 12, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 12, padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 18 }}>&#9888;</span>
             <div>
-              <div style={{ color: '#f59e0b', fontWeight: 700, fontSize: 14 }}>이 견적서는 만료되었습니다</div>
+              <div style={{ color: '#b45309', fontWeight: 700, fontSize: 14 }}>이 견적서는 만료되었습니다</div>
               <div style={{ color: '#92400e', fontSize: 13 }}>유효기간({quote.valid_until?.slice(0, 10)})이 지났습니다. 새 견적이 필요하시면 문의해 주세요.</div>
             </div>
           </div>
@@ -271,16 +270,16 @@ export default function QuotePage() {
         {/* ── 개요 ── */}
         {(isPrinting || activeTab === 'overview') && (
           <div style={{ animation: 'fadeUp 0.4s ease' }}>
-          {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: '#818cf8', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid rgba(99,102,241,0.3)' }}>개요</h2>}
+          {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: 'var(--jsm-accent)', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid var(--jsm-accent-soft)' }}>개요</h2>}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-            <StatCard label="총 필수 항목" value={requiredItems.length + '개'} sub="반드시 포함" color="#60a5fa" />
-            <StatCard label="총 선택 항목" value={optionalItems.length + '개'} sub="고객 선택 가능" color="#a78bfa" />
-            <StatCard label="필수 견적 합계" value={requiredTotal.toLocaleString() + '원'} sub={'정가 ' + requiredOriginal.toLocaleString() + '원 → 40% 할인'} color="#34d399" />
+            <StatCard label="총 필수 항목" value={requiredItems.length + '개'} sub="반드시 포함" color="#2563eb" />
+            <StatCard label="총 선택 항목" value={optionalItems.length + '개'} sub="고객 선택 가능" color="#7c3aed" />
+            <StatCard label="필수 견적 합계" value={requiredTotal.toLocaleString() + '원'} sub={'정가 ' + requiredOriginal.toLocaleString() + '원 → 40% 할인'} color="#059669" />
             <StatCard
               label="선택 포함 합계"
               value={grandTotal.toLocaleString() + '원'}
               sub={optionalItems.filter(i => checkedOptional[i.id]).length + '개 선택됨'}
-              color="#f59e0b"
+              color="#d97706"
             />
           </div>
           </div>
@@ -289,16 +288,16 @@ export default function QuotePage() {
         {/* ── WBS ── */}
         {(isPrinting || activeTab === 'wbs') && quote.wbs.length > 0 && (
           <div style={{ animation: 'fadeUp 0.4s ease', marginTop: isPrinting ? 40 : 0 }}>
-            {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: '#818cf8', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid rgba(99,102,241,0.3)' }}>WBS (작업 분류 체계)</h2>}
+            {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: 'var(--jsm-accent)', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid var(--jsm-accent-soft)' }}>WBS (작업 분류 체계)</h2>}
             {quote.wbs.map((phase, pi) => (
               <div key={phase.id} style={{ marginBottom: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0 }}>
+                  <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--jsm-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, flexShrink: 0, color: 'white' }}>
                     {pi + 1}
                   </div>
-                  <h3 style={{ fontSize: 18, fontWeight: 700, color: 'white' }}>{phase.phase}</h3>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--jsm-ink)' }}>{phase.phase}</h3>
                 </div>
-                <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+                <div style={{ background: 'var(--jsm-surface)', borderRadius: 12, border: '1px solid var(--jsm-line)', overflow: 'hidden' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
                     <colgroup>
                       <col style={{ width: '28%' }} />
@@ -306,7 +305,7 @@ export default function QuotePage() {
                       <col style={{ width: '60%' }} />
                     </colgroup>
                     <thead>
-                      <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                      <tr style={{ borderBottom: '1px solid var(--jsm-line)', background: 'var(--jsm-surface-alt)' }}>
                         <th style={thStyle}>작업명</th>
                         <th style={thStyle}>기간</th>
                         <th style={thStyle}>설명</th>
@@ -314,10 +313,10 @@ export default function QuotePage() {
                     </thead>
                     <tbody>
                       {phase.tasks.map((task) => (
-                        <tr key={task.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                        <tr key={task.id} style={{ borderBottom: '1px solid var(--jsm-line)' }}>
                           <td style={{ ...tdStyle, wordBreak: 'keep-all' }}>{task.name}</td>
-                          <td style={{ ...tdStyle, color: '#818cf8', fontWeight: 600, whiteSpace: 'nowrap' }}>{task.duration}</td>
-                          <td style={{ ...tdStyle, color: '#64748b' }}>{task.description || '—'}</td>
+                          <td style={{ ...tdStyle, color: 'var(--jsm-accent)', fontWeight: 600, whiteSpace: 'nowrap' }}>{task.duration}</td>
+                          <td style={{ ...tdStyle, color: 'var(--jsm-ink-soft)' }}>{task.description || '—'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -331,16 +330,16 @@ export default function QuotePage() {
         {/* ── 견적 항목 ── */}
         {(isPrinting || activeTab === 'quote') && (
           <div style={{ animation: 'fadeUp 0.4s ease', marginTop: isPrinting ? 40 : 0 }}>
-            {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: '#818cf8', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid rgba(99,102,241,0.3)' }}>견적 항목</h2>}
+            {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: 'var(--jsm-accent)', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid var(--jsm-accent-soft)' }}>견적 항목</h2>}
             {/* 필수 항목 */}
             {requiredItems.length > 0 && (
               <section style={{ marginBottom: 32 }}>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#60a5fa', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#60a5fa', display: 'inline-block' }} />
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#2563eb', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2563eb', display: 'inline-block' }} />
                   필수 항목
                   <span style={{ background: 'linear-gradient(135deg, #ef4444, #f97316)', color: 'white', fontSize: 11, fontWeight: 700, padding: '2px 10px', borderRadius: 100, marginLeft: 4 }}>40% 할인 적용</span>
                 </h3>
-                <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)', overflowX: 'auto' }}>
+                <div style={{ background: 'var(--jsm-surface)', borderRadius: 12, border: '1px solid var(--jsm-line)', overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: 700 }}>
                     <colgroup>
                       <col style={{ width: '10%' }} />
@@ -351,7 +350,7 @@ export default function QuotePage() {
                       <col style={{ width: '12%' }} />
                     </colgroup>
                     <thead>
-                      <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                      <tr style={{ borderBottom: '1px solid var(--jsm-line)', background: 'var(--jsm-surface-alt)' }}>
                         <th style={thStyle}>카테고리</th>
                         <th style={thStyle}>항목명</th>
                         <th style={thStyle}>설명</th>
@@ -362,17 +361,17 @@ export default function QuotePage() {
                     </thead>
                     <tbody>
                       {requiredItems.map((item) => (
-                        <tr key={item.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                        <tr key={item.id} style={{ borderBottom: '1px solid var(--jsm-line)' }}>
                           <td style={tdStyle}>
-                            <span style={{ background: (CATEGORY_COLORS[item.category] || '#94a3b8') + '20', color: CATEGORY_COLORS[item.category] || '#94a3b8', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 100, whiteSpace: 'nowrap', display: 'inline-block' }}>
+                            <span style={{ background: (CATEGORY_COLORS[item.category] || '#64748b') + '18', color: CATEGORY_COLORS[item.category] || '#64748b', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 100, whiteSpace: 'nowrap', display: 'inline-block' }}>
                               {item.category}
                             </span>
                           </td>
-                          <td style={{ ...tdStyle, fontWeight: 600, color: 'white' }}>{item.name}</td>
-                          <td style={{ ...tdStyle, color: '#64748b' }}>{item.description || '—'}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', color: '#94a3b8', whiteSpace: 'nowrap' }}>{item.quantity}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', color: '#94a3b8', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{item.unitPrice.toLocaleString()}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 700, color: 'white', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{(item.unitPrice * item.quantity).toLocaleString()}원</td>
+                          <td style={{ ...tdStyle, fontWeight: 600, color: 'var(--jsm-ink)' }}>{item.name}</td>
+                          <td style={{ ...tdStyle, color: 'var(--jsm-ink-soft)' }}>{item.description || '—'}</td>
+                          <td style={{ ...tdStyle, textAlign: 'right', color: 'var(--jsm-ink-soft)', whiteSpace: 'nowrap' }}>{item.quantity}</td>
+                          <td style={{ ...tdStyle, textAlign: 'right', color: 'var(--jsm-ink-soft)', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{item.unitPrice.toLocaleString()}</td>
+                          <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 700, color: 'var(--jsm-ink)', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{(item.unitPrice * item.quantity).toLocaleString()}원</td>
                         </tr>
                       ))}
                     </tbody>
@@ -380,9 +379,9 @@ export default function QuotePage() {
                 </div>
                 {/* 필수 항목 할인 소계 */}
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12, gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
-                  <span style={{ color: '#64748b', fontSize: 13, textDecoration: 'line-through', fontFamily: 'monospace' }}>정가 {requiredOriginal.toLocaleString()}원</span>
+                  <span style={{ color: 'var(--jsm-ink-faint)', fontSize: 13, textDecoration: 'line-through', fontFamily: 'monospace' }}>정가 {requiredOriginal.toLocaleString()}원</span>
                   <span style={{ color: '#ef4444', fontSize: 13, fontWeight: 600 }}>−{(requiredOriginal - requiredTotal).toLocaleString()}원 할인</span>
-                  <span style={{ color: '#34d399', fontSize: 15, fontWeight: 700, fontFamily: 'monospace' }}>{requiredTotal.toLocaleString()}원</span>
+                  <span style={{ color: '#059669', fontSize: 15, fontWeight: 700, fontFamily: 'monospace' }}>{requiredTotal.toLocaleString()}원</span>
                 </div>
               </section>
             )}
@@ -390,12 +389,12 @@ export default function QuotePage() {
             {/* 선택 항목 */}
             {optionalItems.length > 0 && (
               <section style={{ marginBottom: 32 }}>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#a78bfa', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#a78bfa', display: 'inline-block' }} />
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#7c3aed', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#7c3aed', display: 'inline-block' }} />
                   선택 항목
                 </h3>
-                <p style={{ color: '#475569', fontSize: 13, marginBottom: 12 }}>아래 항목 중 원하시는 것을 선택하세요 — 총 금액에 실시간으로 반영됩니다</p>
-                <div style={{ background: '#0f172a', borderRadius: 12, border: '1px solid rgba(167,139,250,0.2)', overflowX: 'auto' }}>
+                <p style={{ color: 'var(--jsm-ink-soft)', fontSize: 13, marginBottom: 12 }}>아래 항목 중 원하시는 것을 선택하세요 — 총 금액에 실시간으로 반영됩니다</p>
+                <div style={{ background: 'var(--jsm-surface)', borderRadius: 12, border: '1px solid rgba(29,78,216,0.2)', overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: 700 }}>
                     <colgroup>
                       <col style={{ width: '6%' }} />
@@ -406,7 +405,7 @@ export default function QuotePage() {
                       <col style={{ width: '12%' }} />
                     </colgroup>
                     <thead>
-                      <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                      <tr style={{ borderBottom: '1px solid var(--jsm-line)', background: 'var(--jsm-surface-alt)' }}>
                         <th style={thStyle}>선택</th>
                         <th style={thStyle}>카테고리</th>
                         <th style={thStyle}>항목명</th>
@@ -419,19 +418,19 @@ export default function QuotePage() {
                       {optionalItems.map((item) => (
                         <tr key={item.id}
                           onClick={() => setCheckedOptional((prev) => ({ ...prev, [item.id]: !prev[item.id] }))}
-                          style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', cursor: 'pointer', background: checkedOptional[item.id] ? 'rgba(167,139,250,0.05)' : 'transparent', transition: 'background 0.2s' }}>
+                          style={{ borderBottom: '1px solid var(--jsm-line)', cursor: 'pointer', background: checkedOptional[item.id] ? 'rgba(29,78,216,0.06)' : 'transparent', transition: 'background 0.2s' }}>
                           <td style={{ ...tdStyle, textAlign: 'center' }}>
                             <input type="checkbox" checked={!!checkedOptional[item.id]} onChange={() => {}} />
                           </td>
                           <td style={tdStyle}>
-                            <span style={{ background: (CATEGORY_COLORS[item.category] || '#94a3b8') + '20', color: CATEGORY_COLORS[item.category] || '#94a3b8', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 100, whiteSpace: 'nowrap', display: 'inline-block' }}>
+                            <span style={{ background: (CATEGORY_COLORS[item.category] || '#64748b') + '18', color: CATEGORY_COLORS[item.category] || '#64748b', fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 100, whiteSpace: 'nowrap', display: 'inline-block' }}>
                               {item.category}
                             </span>
                           </td>
-                          <td style={{ ...tdStyle, fontWeight: 600, color: checkedOptional[item.id] ? 'white' : '#64748b' }}>{item.name}</td>
-                          <td style={{ ...tdStyle, color: '#475569' }}>{item.description || '—'}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', color: '#64748b', whiteSpace: 'nowrap' }}>{item.quantity}</td>
-                          <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 700, color: checkedOptional[item.id] ? '#a78bfa' : '#475569', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
+                          <td style={{ ...tdStyle, fontWeight: 600, color: checkedOptional[item.id] ? 'var(--jsm-ink)' : 'var(--jsm-ink-soft)' }}>{item.name}</td>
+                          <td style={{ ...tdStyle, color: 'var(--jsm-ink-soft)' }}>{item.description || '—'}</td>
+                          <td style={{ ...tdStyle, textAlign: 'right', color: 'var(--jsm-ink-faint)', whiteSpace: 'nowrap' }}>{item.quantity}</td>
+                          <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 700, color: checkedOptional[item.id] ? '#7c3aed' : 'var(--jsm-ink-faint)', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>
                             {(item.unitPrice * item.quantity).toLocaleString()}원
                           </td>
                         </tr>
@@ -444,24 +443,24 @@ export default function QuotePage() {
 
             {/* 합계 */}
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <div style={{ background: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '24px 28px', width: 360 }}>
+              <div style={{ background: 'var(--jsm-surface)', border: '1px solid var(--jsm-line)', borderRadius: 16, padding: '24px 28px', width: 360, boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <span style={{ color: '#64748b', fontSize: 14 }}>필수 항목 정가</span>
-                  <span style={{ color: '#64748b', fontSize: 13, fontFamily: 'monospace', textDecoration: 'line-through' }}>{requiredOriginal.toLocaleString()}원</span>
+                  <span style={{ color: 'var(--jsm-ink-soft)', fontSize: 14 }}>필수 항목 정가</span>
+                  <span style={{ color: 'var(--jsm-ink-faint)', fontSize: 13, fontFamily: 'monospace', textDecoration: 'line-through' }}>{requiredOriginal.toLocaleString()}원</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
                   <span style={{ color: '#ef4444', fontSize: 13, fontWeight: 600 }}>40% 할인 적용</span>
-                  <span style={{ color: '#34d399', fontSize: 14, fontWeight: 700, fontFamily: 'monospace' }}>{requiredTotal.toLocaleString()}원</span>
+                  <span style={{ color: '#059669', fontSize: 14, fontWeight: 700, fontFamily: 'monospace' }}>{requiredTotal.toLocaleString()}원</span>
                 </div>
                 {optionalTotal > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-                    <span style={{ color: '#64748b', fontSize: 14 }}>선택 항목</span>
-                    <span style={{ color: '#a78bfa', fontSize: 14, fontFamily: 'monospace' }}>+{optionalTotal.toLocaleString()}원</span>
+                    <span style={{ color: 'var(--jsm-ink-soft)', fontSize: 14 }}>선택 항목</span>
+                    <span style={{ color: '#7c3aed', fontSize: 14, fontFamily: 'monospace' }}>+{optionalTotal.toLocaleString()}원</span>
                   </div>
                 )}
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                  <span style={{ color: 'white', fontWeight: 700, fontSize: 16 }}>합계 (VAT 별도)</span>
-                  <span style={{ color: 'white', fontWeight: 800, fontSize: 24, fontFamily: 'monospace' }}>{grandTotal.toLocaleString()}원</span>
+                <div style={{ borderTop: '1px solid var(--jsm-line)', paddingTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <span style={{ color: 'var(--jsm-ink)', fontWeight: 700, fontSize: 16 }}>합계 (VAT 별도)</span>
+                  <span style={{ color: 'var(--jsm-ink)', fontWeight: 800, fontSize: 24, fontFamily: 'monospace' }}>{grandTotal.toLocaleString()}원</span>
                 </div>
               </div>
             </div>
@@ -471,35 +470,36 @@ export default function QuotePage() {
         {/* ── 향후 관리 ── */}
         {(isPrinting || activeTab === 'maintenance') && quote.maintenance.length > 0 && (
           <div style={{ animation: 'fadeUp 0.4s ease', marginTop: isPrinting ? 40 : 0 }}>
-            {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: '#818cf8', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid rgba(99,102,241,0.3)' }}>향후 관리</h2>}
-            <p style={{ color: '#64748b', fontSize: 14, marginBottom: 20 }}>납품 후 유지보수 플랜을 선택해주세요 (선택 사항)</p>
+            {isPrinting && <h2 className="print-section-title" style={{ fontSize: 20, fontWeight: 800, color: 'var(--jsm-accent)', marginBottom: 16, paddingBottom: 8, borderBottom: '2px solid var(--jsm-accent-soft)' }}>향후 관리</h2>}
+            <p style={{ color: 'var(--jsm-ink-soft)', fontSize: 14, marginBottom: 20 }}>납품 후 유지보수 플랜을 선택해주세요 (선택 사항)</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 16 }}>
               {quote.maintenance.map((plan) => {
                 const isSelected = selectedMaintenance === plan.id;
                 return (
                   <div key={plan.id} onClick={() => setSelectedMaintenance(isSelected ? null : plan.id)}
                     style={{
-                      background: isSelected ? 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1))' : '#0f172a',
-                      border: `1px solid ${isSelected ? '#6366f1' : 'rgba(255,255,255,0.06)'}`,
+                      background: isSelected ? 'rgba(29,78,216,0.06)' : 'var(--jsm-surface)',
+                      border: `1px solid ${isSelected ? 'var(--jsm-accent)' : 'var(--jsm-line)'}`,
                       borderRadius: 16, padding: 24, cursor: 'pointer', transition: 'all 0.25s', position: 'relative',
+                      boxShadow: isSelected ? '0 4px 16px rgba(29,78,216,0.1)' : '0 2px 8px rgba(0,0,0,0.04)',
                     }}>
                     {plan.recommended && (
-                      <div style={{ position: 'absolute', top: 16, right: 16, background: '#6366f1', color: 'white', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 100 }}>추천</div>
+                      <div style={{ position: 'absolute', top: 16, right: 16, background: 'var(--jsm-accent)', color: 'white', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 100 }}>추천</div>
                     )}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
                       <input type="radio" checked={isSelected} onChange={() => {}} />
                       <div>
-                        <div style={{ color: 'white', fontWeight: 700, fontSize: 16 }}>{plan.name}</div>
-                        <div style={{ color: '#475569', fontSize: 13 }}>{plan.period}</div>
+                        <div style={{ color: 'var(--jsm-ink)', fontWeight: 700, fontSize: 16 }}>{plan.name}</div>
+                        <div style={{ color: 'var(--jsm-ink-soft)', fontSize: 13 }}>{plan.period}</div>
                       </div>
                     </div>
-                    <div style={{ fontSize: 24, fontWeight: 800, color: isSelected ? '#818cf8' : 'white', marginBottom: 16, fontFamily: 'monospace' }}>
+                    <div style={{ fontSize: 24, fontWeight: 800, color: isSelected ? 'var(--jsm-accent)' : 'var(--jsm-ink)', marginBottom: 16, fontFamily: 'monospace' }}>
                       {plan.monthlyFee === 0 ? '무료' : plan.monthlyFee.toLocaleString() + '원/월'}
                     </div>
-                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <div style={{ borderTop: '1px solid var(--jsm-line)', paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
                       {plan.includes.map((inc, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#94a3b8' }}>
-                          <span style={{ color: '#6366f1', flexShrink: 0, marginTop: 1 }}>✓</span>
+                        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: 'var(--jsm-ink-soft)' }}>
+                          <span style={{ color: 'var(--jsm-accent)', flexShrink: 0, marginTop: 1 }}>✓</span>
                           {inc}
                         </div>
                       ))}
@@ -513,32 +513,32 @@ export default function QuotePage() {
 
         {/* 특이사항 */}
         {quote.notes && (
-          <div style={{ marginTop: 40, background: '#0f172a', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)', padding: 24 }}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, color: '#475569', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.1em' }}>특이사항 및 참고사항</h3>
-            <p style={{ color: '#64748b', fontSize: 14, lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>{quote.notes}</p>
+          <div style={{ marginTop: 40, background: 'var(--jsm-surface)', borderRadius: 12, border: '1px solid var(--jsm-line)', padding: 24 }}>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--jsm-ink-soft)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.1em' }}>특이사항 및 참고사항</h3>
+            <p style={{ color: 'var(--jsm-ink-soft)', fontSize: 14, lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>{quote.notes}</p>
           </div>
         )}
       </div>
 
       {/* 하단 고정 바 — 견적 수락 */}
       {quote.status !== 'accepted' && quote.status !== 'rejected' && !isExpired && (
-        <div className="no-print" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(10,15,30,0.95)', backdropFilter: 'blur(12px)', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '16px 24px' }}>
+        <div className="no-print" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--jsm-navy)', borderTop: '1px solid rgba(255,255,255,0.1)', padding: '16px 24px' }}>
           <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
             <div>
-              <div style={{ color: '#64748b', fontSize: 13 }}>현재 선택된 견적 합계</div>
+              <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13 }}>현재 선택된 견적 합계</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
                 <span style={{ color: 'white', fontSize: 24, fontWeight: 800, fontFamily: 'monospace' }}>{grandTotal.toLocaleString()}원</span>
                 {maintenanceTotal > 0 && selectedPlan && (
-                  <span style={{ color: '#6366f1', fontSize: 13 }}>+ {maintenanceTotal.toLocaleString()}원/월 ({selectedPlan.name})</span>
+                  <span style={{ color: 'rgba(255,255,255,0.65)', fontSize: 13 }}>+ {maintenanceTotal.toLocaleString()}원/월 ({selectedPlan.name})</span>
                 )}
               </div>
             </div>
             <button onClick={handleAccept} disabled={submitting}
               style={{
                 padding: '14px 36px', borderRadius: 12, border: 'none', cursor: 'pointer',
-                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                background: 'var(--jsm-accent)',
                 color: 'white', fontSize: 16, fontWeight: 700, transition: 'all 0.2s',
-                boxShadow: '0 8px 32px rgba(99,102,241,0.4)',
+                boxShadow: '0 8px 32px rgba(29,78,216,0.4)',
                 opacity: submitting ? 0.7 : 1,
               }}>
               {submitting ? '처리 중...' : '이 견적으로 진행하겠습니다 →'}
@@ -549,8 +549,8 @@ export default function QuotePage() {
 
       {/* 수락된 경우 */}
       {quote.status === 'accepted' && (
-        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(16,185,129,0.1)', backdropFilter: 'blur(12px)', borderTop: '1px solid rgba(16,185,129,0.3)', padding: '16px 24px', textAlign: 'center' }}>
-          <p style={{ color: '#34d399', fontWeight: 600, fontSize: 16 }}>✓ 이미 수락된 견적서입니다</p>
+        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(5,150,105,0.08)', borderTop: '1px solid rgba(5,150,105,0.3)', padding: '16px 24px', textAlign: 'center' }}>
+          <p style={{ color: '#059669', fontWeight: 600, fontSize: 16 }}>✓ 이미 수락된 견적서입니다</p>
         </div>
       )}
 
@@ -562,13 +562,13 @@ export default function QuotePage() {
 
 function StatCard({ label, value, sub, color }: { label: string; value: string; sub: string; color: string }) {
   return (
-    <div style={{ background: '#0f172a', border: `1px solid ${color}20`, borderRadius: 16, padding: 24 }}>
-      <div style={{ color: '#475569', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>{label}</div>
+    <div style={{ background: 'var(--jsm-surface)', border: `1px solid ${color}28`, borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+      <div style={{ color: 'var(--jsm-ink-soft)', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>{label}</div>
       <div style={{ color, fontSize: 28, fontWeight: 800, fontFamily: 'monospace', marginBottom: 4 }}>{value}</div>
-      <div style={{ color: '#374151', fontSize: 12 }}>{sub}</div>
+      <div style={{ color: 'var(--jsm-ink-faint)', fontSize: 12 }}>{sub}</div>
     </div>
   );
 }
 
-const thStyle: React.CSSProperties = { padding: '12px 16px', textAlign: 'left', fontSize: 11, fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' };
-const tdStyle: React.CSSProperties = { padding: '14px 16px', fontSize: 14, color: '#94a3b8' };
+const thStyle: React.CSSProperties = { padding: '12px 16px', textAlign: 'left', fontSize: 11, fontWeight: 600, color: 'var(--jsm-ink-soft)', textTransform: 'uppercase', letterSpacing: '0.08em' };
+const tdStyle: React.CSSProperties = { padding: '14px 16px', fontSize: 14, color: 'var(--jsm-ink-soft)' };
