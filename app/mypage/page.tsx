@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
@@ -10,29 +10,35 @@ import { PACK_TIER_NAMES, extractPackTier, type PackTier } from '@/lib/pack-asse
 import type { PackFile } from '@/lib/supabase/pack-files';
 import { KAKAO_OPENCHAT_URL } from '@/lib/contact';
 
-function buildSajuResultUrl(rec: SajuRecord) {
-  const { birth_year, birth_month, birth_day, birth_hour, gender } = rec.saju_data;
-  if (!birth_year || !birth_month || !birth_day) return '/work/saju/input';
-  let url = `/work/saju/result?year=${birth_year}&month=${birth_month}&day=${birth_day}&gender=${gender}&calendarType=solar`;
-  if (birth_hour != null) url += `&hour=${birth_hour}`;
-  return url;
-}
+// 마이페이지 — 4탭 재구성 (프로필 / 내 의뢰 / 내 제품 / 주문 내역).
+// PublicShell(TopNav)이 상단 내비·로그아웃을 제공하므로 여기서는 콘텐츠만 렌더한다.
+// 디자인은 메인(/)·외주(/outsourcing) 페이지의 --jsm-* 토큰·타이포 패턴과 일관되게 구성한다.
 
-type Tab = 'profile' | 'projects' | 'subscription' | 'saju' | 'payments' | 'orders' | 'packs';
+const KOR_TIGHT = { letterSpacing: '-0.02em' } as const;
+const KOR_BODY = { letterSpacing: '-0.01em' } as const;
+
+type Tab = 'profile' | 'requests' | 'products' | 'orders';
 type TelegramLinkState = 'idle' | 'generating' | 'waiting' | 'disconnecting';
 
-interface SajuRecord {
-  id: number;
-  created_at: string;
-  saju_data: {
-    birth_year: number;
-    birth_month: number;
-    birth_day: number;
-    birth_hour?: number;
-    gender: string;
-  };
-  interpretation: string | null;
-  is_paid: boolean;
+// 구 탭 키 → 새 탭 키 매핑. 사주/구독/프로젝트 등 폐지 탭은 프로필로 폴백.
+function resolveTab(raw: string | null): Tab {
+  switch (raw) {
+    case 'requests':
+      return 'requests';
+    case 'products':
+    case 'packs':
+      return 'products';
+    case 'orders':
+    case 'payments':
+      return 'orders';
+    case 'profile':
+    case 'saju':
+    case 'subscription':
+    case 'projects':
+      return 'profile';
+    default:
+      return 'requests';
+  }
 }
 
 interface Payment {
@@ -51,49 +57,15 @@ interface Order {
   status: string;
 }
 
-interface ProjectMilestone {
-  id: string;
-  step_number: number;
-  title: string;
-  description: string;
-  status: 'pending' | 'in_progress' | 'completed';
-  note: string;
-  completed_at: string | null;
-}
-
-interface Project {
-  id: string;
-  title: string;
-  status: string;
-  total: number;
-  created_at: string;
-  milestones: ProjectMilestone[];
-}
-
-interface ActiveSubscription {
-  id: string;
-  product_id: string;
-  status: string;
-  auto_renew: boolean;
-  started_at: string;
-  expires_at: string;
-  cancelled_at: string | null;
-}
-
-export default function MyPage() {
+function MyPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<Tab>('projects');
-  const [sajuRecords, setSajuRecords] = useState<SajuRecord[]>([]);
+  const [tab, setTab] = useState<Tab>(() => resolveTab(searchParams.get('tab')));
   const [payments, setPayments] = useState<Payment[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [activeSubscriptions, setActiveSubscriptions] = useState<ActiveSubscription[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [linkToken, setLinkToken] = useState('');
-  const [linking, setLinking] = useState(false);
-  const [linkMessage, setLinkMessage] = useState('');
   const [packFiles, setPackFiles] = useState<PackFile[]>([]);
   const [downloading, setDownloading] = useState<string | null>(null);
 
@@ -112,15 +84,6 @@ export default function MyPage() {
         return;
       }
       setUser(user);
-
-      // 사주 기록 조회 (테이블 있을 때 동작)
-      const { data: saju } = await supabase
-        .from('saju_records')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(20);
-      setSajuRecords(saju || []);
 
       // 결제 내역 조회
       const { data: pay } = await supabase
@@ -148,20 +111,6 @@ export default function MyPage() {
         .maybeSingle();
       setTelegramChatId(profile?.telegram_chat_id ?? null);
 
-      // 구독 목록 조회 (subscriptions 테이블)
-      const subRes = await fetch('/api/subscription');
-      if (subRes.ok) {
-        const subData = await subRes.json();
-        setActiveSubscriptions(subData.subscriptions ?? []);
-      }
-
-      // 프로젝트 진행 현황 조회
-      const projRes = await fetch('/api/projects');
-      if (projRes.ok) {
-        const projData = await projRes.json();
-        setProjects(projData.projects ?? []);
-      }
-
       // 구매한 팩 자료 파일 조회
       const filesRes = await fetch('/api/packs/list-mine');
       if (filesRes.ok) {
@@ -173,38 +122,6 @@ export default function MyPage() {
     }
     init();
   }, []);
-
-  // ── 구독 해지 ──
-  const handleCancelSubscription = async (subId: string) => {
-    if (!confirm('구독을 해지하시겠습니까?\n만료일까지는 서비스를 계속 이용할 수 있습니다.')) return;
-    const res = await fetch(`/api/subscription/${subId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'cancel' }),
-    });
-    if (res.ok) {
-      setActiveSubscriptions((prev) =>
-        prev.map((s) => s.id === subId ? { ...s, status: 'cancelled', auto_renew: false, cancelled_at: new Date().toISOString() } : s)
-      );
-    } else {
-      alert('해지 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-    }
-  };
-
-  // ── 자동갱신 토글 ──
-  const handleToggleAutoRenew = async (subId: string) => {
-    const res = await fetch(`/api/subscription/${subId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'toggle_autorenew' }),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setActiveSubscriptions((prev) =>
-        prev.map((s) => s.id === subId ? { ...s, auto_renew: data.auto_renew } : s)
-      );
-    }
-  };
 
   // ── 텔레그램 연결 ──
   const handleTelegramConnect = async () => {
@@ -271,821 +188,511 @@ export default function MyPage() {
     }
   }
 
-  const handleLinkProject = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!linkToken.trim()) return;
-    setLinking(true);
-    setLinkMessage('');
-    try {
-      const res = await fetch('/api/projects/link', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: linkToken.trim() }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setLinkMessage('프로젝트가 연결되었습니다!');
-        setLinkToken('');
-        const projRes = await fetch('/api/projects');
-        if (projRes.ok) setProjects((await projRes.json()).projects ?? []);
-      } else {
-        setLinkMessage(data.error ?? '연결 중 오류가 발생했습니다.');
-      }
-    } catch {
-      setLinkMessage('연결 중 오류가 발생했습니다.');
-    }
-    setLinking(false);
-  };
-
   if (loading) {
     return (
-      <div className="min-h-full flex items-center justify-center bg-slate-50">
-        <div className="w-8 h-8 border-2 border-violet-600 border-t-transparent rounded-full animate-spin" />
+      <div
+        className="min-h-[60vh] flex items-center justify-center"
+        style={{ background: 'var(--jsm-bg)' }}
+      >
+        <div
+          className="w-7 h-7 rounded-full animate-spin"
+          style={{ border: '2px solid var(--jsm-accent)', borderTopColor: 'transparent' }}
+        />
       </div>
     );
   }
 
   if (!user) return null;
 
-  const activeSubs = activeSubscriptions.filter((s) => s.status === 'active' || s.status === 'cancelled');
-
+  // contact_requests 중 팩 주문만 추려 '내 제품' 탭에서 다운로드 노출
   const packOrders = orders
     .map((o) => ({ order: o, tier: extractPackTier(o.service) }))
     .filter((x): x is { order: Order; tier: PackTier } => x.tier !== null);
 
   const tabs: { key: Tab; label: string; count?: number }[] = [
-    { key: 'projects', label: '프로젝트 현황', count: projects.length || undefined },
-    { key: 'orders', label: '의뢰 내역', count: orders.length || undefined },
-    { key: 'payments', label: '결제 내역', count: payments.length || undefined },
-    { key: 'packs', label: '구매한 팩', count: packOrders.length || undefined },
-    { key: 'profile', label: '내 정보' },
-    { key: 'subscription', label: '구독 관리', count: activeSubs.length || undefined },
-    { key: 'saju', label: '사주 기록', count: sajuRecords.length || undefined },
+    { key: 'profile', label: '프로필' },
+    { key: 'requests', label: '내 의뢰', count: orders.length || undefined },
+    { key: 'products', label: '내 제품', count: packOrders.length || undefined },
+    { key: 'orders', label: '주문 내역', count: (orders.length + payments.length) || undefined },
   ];
 
+  function selectTab(key: Tab) {
+    setTab(key);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', key);
+    router.replace(`/mypage?${params.toString()}`, { scroll: false });
+  }
+
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div style={{ background: 'var(--jsm-bg)' }} className="min-h-[calc(100vh-4rem)]">
       {/* 텔레그램 가이드 모달 */}
       {showTelegramGuide && (
         <TelegramGuideModal onClose={() => setShowTelegramGuide(false)} />
       )}
 
-      {/* 헤더 — kx-surface 다크 톤, 축소판. 로그아웃은 TopNav에서 담당 */}
-      <div
-        className="px-6 py-8 border-b border-white/5"
-        style={{
-          background: 'var(--kx-surface)',
-          backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 40px)',
-        }}
-      >
-        <div className="max-w-4xl mx-auto">
+      {/* ─── 페이지 헤더 ─── */}
+      <div className="border-b" style={{ borderColor: 'var(--jsm-line)', background: 'var(--jsm-surface)' }}>
+        <div className="max-w-5xl mx-auto px-6 lg:px-8 pt-12 pb-6">
+          <span
+            className="inline-block text-xs font-semibold mb-4 px-2.5 py-1 rounded"
+            style={{ color: 'var(--jsm-accent)', background: 'var(--jsm-accent-soft)', ...KOR_BODY }}
+          >
+            마이페이지
+          </span>
           <div className="flex items-center gap-4">
             <div
               aria-hidden="true"
-              className="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg font-bold flex-shrink-0"
-              style={{ background: 'var(--kx-primary)' }}
+              className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-lg font-bold flex-shrink-0"
+              style={{ background: 'var(--jsm-accent)' }}
             >
               {user.email?.[0].toUpperCase()}
             </div>
-            <div>
-              <div className="kx-display text-white font-bold text-lg leading-tight">{user.email}</div>
-              <div className="text-white/50 text-xs mt-0.5">
+            <div className="min-w-0">
+              <div
+                className="font-bold text-lg leading-tight truncate"
+                style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+              >
+                {user.email}
+              </div>
+              <div className="text-xs mt-0.5" style={{ color: 'var(--jsm-ink-faint)' }}>
                 가입일 {new Date(user.created_at).toLocaleDateString('ko-KR')}
               </div>
             </div>
           </div>
         </div>
+
+        {/* ─── 탭 바 (상단 가로 탭 · 모바일 스크롤) ─── */}
+        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          <div className="flex gap-1 overflow-x-auto scrollbar-hide -mb-px">
+            {tabs.map((t) => {
+              const active = tab === t.key;
+              return (
+                <button
+                  key={t.key}
+                  onClick={() => selectTab(t.key)}
+                  className="flex items-center gap-1.5 px-4 py-3 text-sm font-semibold whitespace-nowrap transition-colors duration-150 border-b-2"
+                  style={{
+                    color: active ? 'var(--jsm-ink)' : 'var(--jsm-ink-soft)',
+                    borderColor: active ? 'var(--jsm-accent)' : 'transparent',
+                    ...KOR_BODY,
+                  }}
+                >
+                  {t.label}
+                  {t.count !== undefined && t.count > 0 && (
+                    <span
+                      className="text-xs px-1.5 py-0.5 rounded-full font-semibold"
+                      style={
+                        active
+                          ? { background: 'var(--jsm-accent-soft)', color: 'var(--jsm-accent)' }
+                          : { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' }
+                      }
+                    >
+                      {t.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
-      <div className="px-6 py-8 max-w-4xl mx-auto">
-        {/* 탭 */}
-        <div className="flex flex-nowrap gap-1 bg-white border border-slate-200 rounded-xl p-1 mb-6 overflow-x-auto scrollbar-hide">
-          {tabs.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`flex-1 min-w-[100px] flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
-                tab === t.key
-                  ? 'bg-violet-600 text-white shadow'
-                  : 'text-slate-500 hover:text-violet-600'
-              }`}
-            >
-              {t.label}
-              {t.count !== undefined && t.count > 0 && (
-                <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${
-                  tab === t.key ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
-                }`}>
-                  {t.count}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* 탭 콘텐츠 */}
-
-        {/* 내 정보 */}
+      {/* ─── 탭 콘텐츠 ─── */}
+      <div className="px-6 lg:px-8 py-8 max-w-5xl mx-auto">
+        {/* ===== 프로필 ===== */}
         {tab === 'profile' && (
-          <div className="space-y-4">
-            <div className="bg-white rounded-2xl border border-slate-200 p-6">
-              <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <div className="w-1 h-5 bg-violet-600 rounded-full" />
-                계정 정보
-              </h2>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between py-3 border-b border-slate-100">
-                  <span className="text-sm text-slate-500">이메일</span>
-                  <span className="text-sm font-semibold text-slate-900">{user.email}</span>
-                </div>
-                <div className="flex items-center justify-between py-3 border-b border-slate-100">
-                  <span className="text-sm text-slate-500">로그인 방법</span>
-                  <span className="text-sm font-semibold text-slate-900 capitalize">
-                    {user.app_metadata?.provider === 'google' ? 'Google' : '이메일'}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between py-3">
-                  <span className="text-sm text-slate-500">가입일</span>
-                  <span className="text-sm font-semibold text-slate-900">
-                    {new Date(user.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
-                  </span>
-                </div>
+          <div className="space-y-5">
+            <Card>
+              <CardTitle>계정 정보</CardTitle>
+              <div className="mt-4">
+                <Row label="이메일" value={user.email ?? '-'} />
+                <Row
+                  label="로그인 방법"
+                  value={user.app_metadata?.provider === 'google' ? 'Google' : '이메일'}
+                />
+                <Row
+                  label="가입일"
+                  value={new Date(user.created_at).toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                  last
+                />
               </div>
-            </div>
-
-            {/* 구독 중인 서비스 - 요약 (탭으로 유도) */}
-            {activeSubs.length > 0 && (
-              <div className="bg-violet-50 rounded-2xl border border-violet-200 p-5 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">🎟</span>
-                  <div>
-                    <div className="text-sm font-bold text-slate-900">
-                      서비스 구독 중
-                    </div>
-                    <div className="text-xs text-violet-600 mt-0.5">
-                      {Math.max(0, Math.ceil((new Date(activeSubs[0].expires_at).getTime() - Date.now()) / 86400000))}일 후 만료
-                      {activeSubs[0].status === 'cancelled' && ' · 해지 예정'}
-                    </div>
-                  </div>
-                </div>
-                <button onClick={() => setTab('subscription')}
-                  className="text-xs font-bold text-violet-700 bg-violet-100 hover:bg-violet-200 px-3 py-1.5 rounded-lg transition">
-                  구독 관리 →
-                </button>
-              </div>
-            )}
+            </Card>
 
             {/* 텔레그램 연동 카드 */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6">
-              <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <div className="w-1 h-5 bg-violet-600 rounded-full" />
-                텔레그램 알림 연동
+            <Card>
+              <div className="flex items-center gap-2">
+                <CardTitle inline>텔레그램 알림 연동</CardTitle>
                 <button
                   onClick={() => setShowTelegramGuide(true)}
-                  className="ml-1 w-5 h-5 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-400 hover:text-sky-500 text-xs font-bold flex items-center justify-center transition"
+                  className="w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center transition-colors"
+                  style={{ background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-faint)' }}
                   title="연결 방법 보기"
                 >
                   ?
                 </button>
-                <span className="ml-auto text-xs text-slate-400 font-normal">플래티넘 · 다이아 전용</span>
-              </h2>
-
-              {telegramChatId ? (
-                /* ── 연결됨 ── */
-                <div className="flex items-center justify-between flex-wrap gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200 flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5 text-sky-500" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.667l-2.95-.924c-.64-.203-.654-.64.136-.954l11.566-4.458c.538-.194 1.006.131.972.89z"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-slate-900 flex items-center gap-1.5">
-                        연결됨
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
-                      </div>
-                      <div className="text-xs text-slate-500">Chat ID: {telegramChatId}</div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleTelegramDisconnect}
-                    disabled={telegramLinkState === 'disconnecting'}
-                    className="px-4 py-2 text-xs font-semibold text-red-500 border border-red-200 rounded-xl hover:bg-red-50 transition disabled:opacity-50"
-                  >
-                    {telegramLinkState === 'disconnecting' ? '해제 중...' : '연결 해제'}
-                  </button>
-                </div>
-              ) : telegramLinkState === 'waiting' ? (
-                /* ── 연결 대기 중 ── */
-                <div className="space-y-4">
-                  <div className="bg-sky-50 border border-sky-200 rounded-xl p-4">
-                    <p className="text-sm font-semibold text-sky-700 mb-1">📱 아래 순서로 진행하세요</p>
-                    <ol className="text-xs text-sky-600 space-y-1 list-decimal list-inside">
-                      <li>아래 버튼을 클릭해 텔레그램 봇을 엽니다</li>
-                      <li>텔레그램에서 <strong>시작</strong> 버튼을 누릅니다</li>
-                      <li>봇이 &quot;연결 완료&quot; 메시지를 보내면 새로고침을 눌러주세요</li>
-                    </ol>
-                    <p className="text-xs text-sky-500 mt-2">⏱ 유효시간: {telegramLinkExpiry}까지</p>
-                  </div>
-                  <div className="flex gap-2 flex-wrap">
-                    <a
-                      href={telegramDeepLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-500 hover:bg-sky-400 text-white text-sm font-bold rounded-xl transition shadow-sm shadow-sky-200"
-                    >
-                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.667l-2.95-.924c-.64-.203-.654-.64.136-.954l11.566-4.458c.538-.194 1.006.131.972.89z"/>
-                      </svg>
-                      텔레그램 봇 열기
-                    </a>
-                    <button
-                      onClick={handleTelegramRefresh}
-                      className="px-4 py-2.5 text-sm font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition"
-                    >
-                      연결 확인 새로고침
-                    </button>
-                    <button
-                      onClick={() => setTelegramLinkState('idle')}
-                      className="px-4 py-2.5 text-sm text-slate-400 rounded-xl hover:text-slate-600 transition"
-                    >
-                      취소
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                /* ── 미연결 ── */
-                <div className="flex items-center justify-between flex-wrap gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.667l-2.95-.924c-.64-.203-.654-.64.136-.954l11.566-4.458c.538-.194 1.006.131.972.89z"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-sm font-semibold text-slate-900">연결 안 됨</div>
-                      <div className="text-xs text-slate-500">텔레그램으로 번호를 바로 받아보세요</div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleTelegramConnect}
-                    disabled={telegramLinkState === 'generating'}
-                    className="px-5 py-2.5 text-sm font-bold text-white bg-violet-600 hover:bg-violet-500 rounded-xl shadow-sm shadow-sky-200 transition disabled:opacity-60"
-                  >
-                    {telegramLinkState === 'generating' ? '생성 중...' : '텔레그램 연결하기'}
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <div className="bg-white rounded-2xl border border-slate-200 p-6">
-              <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-                <div className="w-1 h-5 bg-violet-600 rounded-full" />
-                빠른 메뉴
-              </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <Link href="/work/saju/input" className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group">
-                  <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-slate-900">사주 분석</div>
-                    <div className="text-xs text-slate-500">새 사주 보기</div>
-                  </div>
-                </Link>
-                <Link href="/work/freelance" className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group">
-                  <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-slate-900">외주 의뢰</div>
-                    <div className="text-xs text-slate-500">프로젝트 문의</div>
-                  </div>
-                </Link>
-                <Link
-                  href="/music/studio"
-                  className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/50 transition group"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-violet-50 border border-violet-200 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19a3 3 0 11-6 0 3 3 0 016 0zm12-3a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-slate-900">AI 스튜디오</div>
-                    <div className="text-xs text-slate-500">새 트랙 만들기</div>
-                  </div>
-                </Link>
+                <span className="ml-auto text-xs font-normal" style={{ color: 'var(--jsm-ink-faint)' }}>
+                  플래티넘 · 다이아 전용
+                </span>
               </div>
-            </div>
-          </div>
-        )}
 
-        {/* 구독 관리 */}
-        {tab === 'subscription' && (
-          <div className="space-y-4">
-            {activeSubscriptions.length === 0 ? (
-              <EmptyState
-                icon="📦"
-                title="활성 구독이 없습니다"
-                desc="구독 중인 서비스가 없습니다"
-                linkHref="/music/packs"
-                linkLabel="서비스 둘러보기"
-              />
-            ) : (
-              activeSubscriptions.map((sub) => {
-                const expiresDate = new Date(sub.expires_at);
-                const daysLeft = Math.max(0, Math.ceil((expiresDate.getTime() - Date.now()) / 86400000));
-                const isExpired = sub.status === 'expired';
-                const isCancelled = sub.status === 'cancelled';
-                const isActive = sub.status === 'active';
-
-                return (
-                  <div key={sub.id} className={`bg-white rounded-2xl border p-6 ${isExpired ? 'border-slate-200 opacity-60' : isCancelled ? 'border-orange-200' : 'border-slate-200'}`}>
-                    {/* 헤더 */}
-                    <div className="flex items-start justify-between mb-5">
-                      <div className="flex items-center gap-3">
-                        <span className="text-3xl">🎟</span>
-                        <div>
-                          <div className="font-bold text-slate-900 text-base">
-                            {sub.product_id}
-                          </div>
-                          <div className="text-xs text-slate-500 mt-0.5">
-                            {new Date(sub.started_at).toLocaleDateString('ko-KR')} 시작
-                          </div>
-                        </div>
+              <div className="mt-4">
+                {telegramChatId ? (
+                  /* ── 연결됨 ── */
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border"
+                        style={{ background: 'var(--jsm-accent-soft)', borderColor: 'var(--jsm-line)' }}
+                      >
+                        <TelegramIcon className="w-5 h-5" style={{ color: 'var(--jsm-accent)' }} />
                       </div>
-                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-                        isActive ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
-                        isCancelled ? 'bg-orange-50 text-orange-600 border border-orange-200' :
-                        'bg-slate-100 text-slate-500'
-                      }`}>
-                        {isActive ? '이용 중' : isCancelled ? '해지 예정' : '만료됨'}
-                      </span>
-                    </div>
-
-                    {/* 만료 정보 */}
-                    <div className="grid grid-cols-2 gap-3 mb-5">
-                      <div className="bg-slate-50 rounded-xl p-3">
-                        <div className="text-xs text-slate-400 mb-1">만료일</div>
-                        <div className="text-sm font-bold text-slate-900">
-                          {expiresDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
-                        </div>
-                      </div>
-                      <div className={`rounded-xl p-3 ${daysLeft <= 5 && !isExpired ? 'bg-red-50' : 'bg-slate-50'}`}>
-                        <div className="text-xs text-slate-400 mb-1">남은 기간</div>
-                        <div className={`text-sm font-bold ${isExpired ? 'text-slate-400' : daysLeft <= 5 ? 'text-red-500' : 'text-emerald-600'}`}>
-                          {isExpired ? '만료됨' : `D-${daysLeft}`}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 자동갱신 토글 */}
-                    {!isExpired && (
-                      <div className="flex items-center justify-between py-3 border-t border-slate-100 mb-4">
-                        <div>
-                          <div className="text-sm font-semibold text-slate-900">자동 갱신</div>
-                          <div className="text-xs text-slate-400 mt-0.5">
-                            {sub.auto_renew ? '만료 시 자동으로 갱신됩니다' : '만료 시 자동 갱신되지 않습니다'}
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => handleToggleAutoRenew(sub.id)}
-                          disabled={isCancelled}
-                          className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none disabled:opacity-40 ${sub.auto_renew ? 'bg-emerald-500' : 'bg-slate-200'}`}
-                        >
-                          <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 ${sub.auto_renew ? 'translate-x-5' : 'translate-x-0'}`} />
-                        </button>
-                      </div>
-                    )}
-
-                    {/* 해지 취소 버튼 */}
-                    {isCancelled && (
-                      <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 mb-4 text-xs text-orange-700">
-                        해지 신청됨 · {expiresDate.toLocaleDateString('ko-KR')}까지 서비스를 이용할 수 있습니다.
-                        {sub.cancelled_at && ` (해지일: ${new Date(sub.cancelled_at).toLocaleDateString('ko-KR')})`}
-                      </div>
-                    )}
-
-                    {/* 액션 버튼 */}
-                    <div className="flex gap-2 flex-wrap">
-                      <a href="/work/freelance"
-                        className="flex-1 text-center py-2 text-sm font-bold text-white bg-violet-600 hover:bg-violet-700 rounded-xl transition shadow-sm">
-                        외주 의뢰하기
-                      </a>
-                      {isActive && (
-                        <button
-                          onClick={() => handleCancelSubscription(sub.id)}
-                          className="px-4 py-2 text-sm font-semibold text-red-500 border border-red-200 rounded-xl hover:bg-red-50 transition"
-                        >
-                          구독 해지
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            )}
-
-            {/* 서비스 이동 */}
-            <div className="text-center py-2">
-              <a href="/music/packs" className="text-sm text-slate-400 hover:text-slate-600 transition">
-                다른 서비스 보기 →
-              </a>
-            </div>
-          </div>
-        )}
-
-        {/* 사주 기록 */}
-        {tab === 'saju' && (
-          <div>
-            {sajuRecords.length === 0 ? (
-              <EmptyState
-                icon="✨"
-                title="저장된 사주 기록이 없습니다"
-                desc="사주 분석 후 결과를 저장하면 여기서 다시 확인할 수 있습니다"
-                linkHref="/work/saju/input"
-                linkLabel="사주 분석 시작"
-              />
-            ) : (
-              <div className="grid md:grid-cols-2 gap-4">
-                {sajuRecords.map((rec) => (
-                  <div key={rec.id} className="bg-white rounded-2xl border border-slate-200 p-5">
-                    <div className="flex items-start justify-between mb-3">
                       <div>
-                        <div className="text-xs text-slate-400 mb-1">{new Date(rec.created_at).toLocaleDateString('ko-KR')}</div>
-                        <div className="font-bold text-slate-900">
-                          {rec.saju_data?.birth_year ?? '?'}년{' '}
-                          {rec.saju_data?.birth_month ?? '?'}월{' '}
-                          {rec.saju_data?.birth_day ?? '?'}일생
+                        <div
+                          className="text-sm font-semibold flex items-center gap-1.5"
+                          style={{ color: 'var(--jsm-ink)' }}
+                        >
+                          연결됨
+                          <span className="w-2 h-2 rounded-full inline-block" style={{ background: '#16a34a' }} />
                         </div>
-                        <div className="text-sm text-slate-500 mt-0.5">
-                          {rec.saju_data?.gender === 'male' ? '남성' : '여성'}
-                          {rec.saju_data?.birth_hour != null ? ` · ${rec.saju_data.birth_hour}시생` : ''}
+                        <div className="text-xs" style={{ color: 'var(--jsm-ink-soft)' }}>
+                          Chat ID: {telegramChatId}
                         </div>
                       </div>
-                      <span className={`text-xs font-bold px-2 py-1 rounded-lg ${rec.is_paid ? 'bg-amber-50 text-amber-600 border border-amber-200' : 'bg-slate-100 text-slate-500'}`}>
-                        {rec.is_paid ? '유료' : '무료'}
-                      </span>
                     </div>
-                    {rec.interpretation && (
-                      <p className="text-xs text-slate-500 line-clamp-2 bg-slate-50 rounded-lg px-3 py-2 mb-3">
-                        {rec.interpretation.replace(/[#*]/g, '').substring(0, 80)}...
+                    <button
+                      onClick={handleTelegramDisconnect}
+                      disabled={telegramLinkState === 'disconnecting'}
+                      className="px-4 py-2 text-xs font-semibold rounded-lg border transition-colors disabled:opacity-50"
+                      style={{ color: '#dc2626', borderColor: '#fecaca' }}
+                    >
+                      {telegramLinkState === 'disconnecting' ? '해제 중...' : '연결 해제'}
+                    </button>
+                  </div>
+                ) : telegramLinkState === 'waiting' ? (
+                  /* ── 연결 대기 중 ── */
+                  <div className="space-y-4">
+                    <div
+                      className="rounded-xl p-4 border"
+                      style={{ background: 'var(--jsm-surface-alt)', borderColor: 'var(--jsm-line)' }}
+                    >
+                      <p className="text-sm font-semibold mb-2" style={{ color: 'var(--jsm-ink)' }}>
+                        아래 순서로 진행하세요
                       </p>
-                    )}
-                    <Link
-                      href={buildSajuResultUrl(rec)}
-                      className="block w-full text-center py-2 rounded-xl text-xs font-bold bg-[#060e20] hover:bg-[#0a1f5c] text-white transition"
-                    >
-                      {rec.is_paid && rec.interpretation ? 'AI 해석 다시 보기 →' : '결과 보기 →'}
-                    </Link>
+                      <ol
+                        className="text-xs space-y-1 list-decimal list-inside"
+                        style={{ color: 'var(--jsm-ink-soft)' }}
+                      >
+                        <li>아래 버튼을 클릭해 텔레그램 봇을 엽니다</li>
+                        <li>텔레그램에서 <strong>시작</strong> 버튼을 누릅니다</li>
+                        <li>봇이 &quot;연결 완료&quot; 메시지를 보내면 새로고침을 눌러주세요</li>
+                      </ol>
+                      <p className="text-xs mt-2" style={{ color: 'var(--jsm-ink-faint)' }}>
+                        유효시간: {telegramLinkExpiry}까지
+                      </p>
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                      <a
+                        href={telegramDeepLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-lg text-white transition-colors hover:bg-[var(--jsm-accent-hover)]"
+                        style={{ background: 'var(--jsm-accent)' }}
+                      >
+                        <TelegramIcon className="w-4 h-4" />
+                        텔레그램 봇 열기
+                      </a>
+                      <button
+                        onClick={handleTelegramRefresh}
+                        className="px-4 py-2.5 text-sm font-semibold rounded-lg border transition-colors hover:bg-[var(--jsm-surface-alt)]"
+                        style={{ color: 'var(--jsm-ink-soft)', borderColor: 'var(--jsm-line)' }}
+                      >
+                        연결 확인 새로고침
+                      </button>
+                      <button
+                        onClick={() => setTelegramLinkState('idle')}
+                        className="px-4 py-2.5 text-sm rounded-lg transition-colors"
+                        style={{ color: 'var(--jsm-ink-faint)' }}
+                      >
+                        취소
+                      </button>
+                    </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* 결제 내역 */}
-        {tab === 'payments' && (
-          <div>
-            {payments.length === 0 ? (
-              <EmptyState
-                icon="💳"
-                title="결제 내역이 없습니다"
-                desc="서비스 구매 후 결제 내역이 여기에 표시됩니다"
-                linkHref="/work/saju"
-                linkLabel="서비스 보기"
-              />
-            ) : (
-              <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead className="bg-slate-50 border-b border-slate-200">
-                    <tr>
-                      <th className="px-5 py-3 text-left font-semibold text-slate-600">서비스</th>
-                      <th className="px-5 py-3 text-left font-semibold text-slate-600">금액</th>
-                      <th className="px-5 py-3 text-left font-semibold text-slate-600">상태</th>
-                      <th className="px-5 py-3 text-left font-semibold text-slate-600">일시</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {payments.map((p, i) => (
-                      <tr key={p.id} className={i % 2 === 0 ? '' : 'bg-slate-50/50'}>
-                        <td className="px-5 py-3 font-medium text-slate-900">{p.product_name}</td>
-                        <td className="px-5 py-3 text-slate-900">₩{p.amount?.toLocaleString()}</td>
-                        <td className="px-5 py-3">
-                          <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                            p.status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'
-                          }`}>
-                            {p.status === 'paid' ? '결제완료' : p.status}
-                          </span>
-                        </td>
-                        <td className="px-5 py-3 text-slate-500 text-xs">
-                          {new Date(p.created_at).toLocaleDateString('ko-KR')}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* 구매한 팩 */}
-        {tab === 'packs' && (
-          <div className="space-y-4">
-            {packOrders.length === 0 ? (
-              <EmptyState
-                icon="🎵"
-                title="구매한 팩이 없습니다"
-                desc="AI 음악 팩을 구매하시면 자료가 여기에 표시됩니다"
-                linkHref="/music/packs"
-                linkLabel="Music 팩 보기"
-              />
-            ) : (
-              packOrders.map(({ order, tier }) => {
-                const statusLabel =
-                  order.status === 'completed' ? '자료 발송 완료' :
-                  order.status === 'in_progress' ? '결제 처리 중' :
-                  '입금 대기';
-                const statusColor =
-                  order.status === 'completed' ? 'bg-violet-50 text-violet-600 border-violet-200' :
-                  order.status === 'in_progress' ? 'bg-amber-50 text-amber-600 border-amber-200' :
-                  'bg-slate-100 text-slate-500 border-slate-200';
-
-                return (
-                  <div key={order.id} className="bg-white rounded-2xl border border-slate-200 p-6">
-                    <div className="flex items-start justify-between mb-4">
+                ) : (
+                  /* ── 미연결 ── */
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border"
+                        style={{ background: 'var(--jsm-surface-alt)', borderColor: 'var(--jsm-line)' }}
+                      >
+                        <TelegramIcon className="w-5 h-5" style={{ color: 'var(--jsm-ink-faint)' }} />
+                      </div>
                       <div>
-                        <div className="font-bold text-slate-900 text-base">{PACK_TIER_NAMES[tier]}</div>
-                        <div className="text-xs text-slate-500 mt-1">
-                          {new Date(order.created_at).toLocaleDateString('ko-KR')} 신청
+                        <div className="text-sm font-semibold" style={{ color: 'var(--jsm-ink)' }}>
+                          연결 안 됨
+                        </div>
+                        <div className="text-xs" style={{ color: 'var(--jsm-ink-soft)' }}>
+                          텔레그램으로 알림을 바로 받아보세요
                         </div>
                       </div>
-                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${statusColor}`}>
-                        {statusLabel}
-                      </span>
                     </div>
-
-                    {/* 자료 리스트 — DB가 SSOT */}
-                    {(() => {
-                      const filesForTier = packFiles.filter((pf) => {
-                        if (tier === 'starter') return pf.min_tier === 'starter';
-                        if (tier === 'pro') return pf.min_tier === 'starter' || pf.min_tier === 'pro';
-                        return true;  // master
-                      });
-
-                      return (
-                        <div className="border-t border-slate-100 pt-4">
-                          <div className="text-sm font-semibold text-slate-700 mb-3">
-                            📦 자료 패키지 ({filesForTier.length}개)
-                          </div>
-                          {filesForTier.length === 0 ? (
-                            <p className="text-xs text-slate-500">자료 준비 중. 카톡 1:1로 문의해주세요.</p>
-                          ) : (
-                            <ul className="space-y-2 mb-3">
-                              {filesForTier.map((f) => (
-                                <li key={f.id} className="flex items-center justify-between gap-2 text-sm">
-                                  <span className="text-slate-700 flex-1">{f.label}</span>
-                                  {order.status === 'completed' ? (
-                                    <button
-                                      onClick={() => handleDownload(f.id)}
-                                      disabled={downloading === f.id}
-                                      className="px-3 py-1.5 rounded-lg text-xs font-bold bg-violet-600 hover:bg-violet-500 disabled:bg-slate-300 text-white transition"
-                                    >
-                                      {downloading === f.id ? '준비중...' : '다운로드'}
-                                    </button>
-                                  ) : (
-                                    <span className="text-xs text-slate-400">대기 중</span>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-
-                          {order.status === 'completed' && filesForTier.length > 0 && (
-                            <p className="text-xs text-slate-500 leading-relaxed">
-                              ※ 다운로드 링크는 4시간 동안 유효합니다.
-                            </p>
-                          )}
-
-                          {order.status !== 'completed' && (
-                            <p className="text-xs text-slate-500 mt-2 text-center leading-relaxed">
-                              {order.status === 'in_progress' ? '결제 처리 중. 자료는 결제 확인 후 활성화됩니다.' : '입금 대기 중. 카톡 1:1로 안내드립니다.'}
-                              <br />
-                              <a
-                                href={KAKAO_OPENCHAT_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-violet-600 hover:underline font-semibold"
-                              >
-                                카톡 오픈채팅 →
-                              </a>
-                            </p>
-                          )}
-                        </div>
-                      );
-                    })()}
+                    <button
+                      onClick={handleTelegramConnect}
+                      disabled={telegramLinkState === 'generating'}
+                      className="px-5 py-2.5 text-sm font-semibold rounded-lg text-white transition-colors hover:bg-[var(--jsm-accent-hover)] disabled:opacity-60"
+                      style={{ background: 'var(--jsm-accent)' }}
+                    >
+                      {telegramLinkState === 'generating' ? '생성 중...' : '텔레그램 연결하기'}
+                    </button>
                   </div>
-                );
-              })
-            )}
+                )}
+              </div>
+            </Card>
+
+            {/* 빠른 메뉴 */}
+            <Card>
+              <CardTitle>빠른 메뉴</CardTitle>
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <QuickLink href="/outsourcing#contact" title="외주 의뢰" sub="프로젝트 문의" />
+                <QuickLink href="/music/packs" title="음악 팩" sub="제품 둘러보기" />
+                <QuickLink href="/music/studio" title="AI 스튜디오" sub="새 트랙 만들기" />
+              </div>
+            </Card>
           </div>
         )}
 
-        {/* 프로젝트 진행 현황 */}
-        {tab === 'projects' && (
-          <div className="space-y-4">
-            {projects.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
-                <div className="w-16 h-16 bg-violet-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
-                </div>
-                <h3 className="font-bold text-slate-900 text-lg mb-2">진행 중인 프로젝트가 없습니다</h3>
-                <p className="text-slate-500 text-sm mb-6 max-w-sm mx-auto">외주 개발을 의뢰하시면 이곳에서 단계별 진행 현황을 실시간으로 확인할 수 있습니다.</p>
-                <Link href="/work/freelance" className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition">
-                  개발 의뢰하기 →
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {projects.map((project) => {
-                  const totalSteps = project.milestones.length;
-                  const completedSteps = project.milestones.filter((m) => m.status === 'completed').length;
-                  const currentStep = project.milestones.find((m) => m.status === 'in_progress');
-                  const progressPct = totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
-
-                  return (
-                    <div key={project.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                      {/* 헤더 */}
-                      <div className="bg-[#060e20] px-6 py-4 flex items-center justify-between" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}>
-                        <div>
-                          <h3 className="font-bold text-white text-base">{project.title}</h3>
-                          <p className="text-white/50 text-xs mt-0.5">
-                            {project.total > 0 ? `총 ${project.total.toLocaleString()}원` : '금액 협의 중'} · {new Date(project.created_at).toLocaleDateString('ko-KR')}
-                          </p>
-                        </div>
-                        <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${
-                          project.status === 'accepted'    ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30' :
-                          project.status === 'in_progress' ? 'bg-sky-400/20 text-sky-300 border border-sky-400/30' :
-                          project.status === 'completed'   ? 'bg-violet-400/20 text-violet-300 border border-violet-400/30' :
-                          'bg-slate-400/20 text-slate-300 border border-slate-400/30'
-                        }`}>
-                          {project.status === 'sent'        ? '견적 검토 중' :
-                           project.status === 'accepted'    ? '계약 완료' :
-                           project.status === 'in_progress' ? '개발 진행 중' :
-                           project.status === 'completed'   ? '납품 완료' : project.status}
-                        </span>
-                      </div>
-
-                      <div className="p-6">
-                        {/* 진행률 바 */}
-                        {totalSteps > 0 && (
-                          <div className="mb-6">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-xs font-semibold text-slate-500">전체 진행률</span>
-                              <span className="text-xs font-bold text-violet-600">{progressPct}% ({completedSteps}/{totalSteps}단계)</span>
-                            </div>
-                            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                              <div
-                                className="h-full bg-violet-600 rounded-full transition-all duration-500"
-                                style={{ width: `${progressPct}%` }}
-                              />
-                            </div>
-                          </div>
-                        )}
-
-                        {/* 현재 진행 단계 */}
-                        {currentStep && (
-                          <div className="bg-violet-50 border border-violet-200 rounded-xl p-4 mb-5">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
-                              <span className="text-xs font-bold text-violet-600">현재 진행 중</span>
-                            </div>
-                            <p className="font-bold text-slate-900 text-sm">{currentStep.title}</p>
-                            {currentStep.note && (
-                              <p className="text-slate-600 text-xs mt-1 leading-relaxed">{currentStep.note}</p>
-                            )}
-                          </div>
-                        )}
-
-                        {/* 단계별 타임라인 */}
-                        {project.milestones.length > 0 && (
-                          <div className="space-y-2">
-                            {project.milestones.map((m, idx) => (
-                              <div key={m.id} className="flex items-start gap-3">
-                                {/* 아이콘 */}
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold border-2 ${
-                                  m.status === 'completed'  ? 'bg-emerald-500 border-emerald-500 text-white' :
-                                  m.status === 'in_progress'? 'bg-violet-600 border-violet-600 text-white' :
-                                  'bg-white border-slate-200 text-slate-400'
-                                }`}>
-                                  {m.status === 'completed' ? (
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                  ) : m.status === 'in_progress' ? (
-                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3" />
-                                      <circle cx="12" cy="12" r="9" />
-                                    </svg>
-                                  ) : m.step_number}
-                                </div>
-
-                                {/* 수직 연결선 */}
-                                <div className="flex flex-col flex-1 min-w-0" style={{ marginTop: idx === project.milestones.length - 1 ? 0 : undefined }}>
-                                  <div className="flex items-center gap-2 py-1">
-                                    <span className={`text-sm font-semibold ${
-                                      m.status === 'completed'  ? 'text-emerald-700' :
-                                      m.status === 'in_progress'? 'text-violet-600' :
-                                      'text-slate-400'
-                                    }`}>{m.title}</span>
-                                    {m.status === 'completed' && m.completed_at && (
-                                      <span className="text-xs text-slate-400 ml-auto flex-shrink-0">
-                                        {new Date(m.completed_at).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
-                                      </span>
-                                    )}
-                                  </div>
-                                  {m.note && m.status !== 'pending' && (
-                                    <p className="text-xs text-slate-500 leading-relaxed pb-1">{m.note}</p>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* 견적서 연결 폼 */}
-            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5">
-              <p className="text-sm font-bold text-slate-900 mb-1">견적서 코드로 프로젝트 연결</p>
-              <p className="text-xs text-slate-500 mb-3">견적서 링크를 받으셨나요? URL 끝의 코드를 입력하면 이 계정에서 진행 현황을 확인할 수 있습니다.</p>
-              <form onSubmit={handleLinkProject} className="flex gap-2">
-                <input
-                  value={linkToken}
-                  onChange={(e) => setLinkToken(e.target.value)}
-                  placeholder="예: abc123xyz"
-                  className="flex-1 px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-violet-400 min-w-0"
-                />
-                <button
-                  type="submit"
-                  disabled={linking || !linkToken.trim()}
-                  className="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-xl font-semibold text-sm disabled:opacity-50 transition flex-shrink-0"
-                >
-                  {linking ? '연결 중...' : '연결'}
-                </button>
-              </form>
-              {linkMessage && (
-                <p className={`text-xs mt-2 font-medium ${linkMessage.includes('연결되었') ? 'text-emerald-600' : 'text-red-500'}`}>
-                  {linkMessage}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* 의뢰 내역 */}
-        {tab === 'orders' && (
+        {/* ===== 내 의뢰 ===== */}
+        {tab === 'requests' && (
           <div>
             {orders.length === 0 ? (
               <EmptyState
-                icon="📋"
                 title="의뢰 내역이 없습니다"
-                desc="외주 개발, 서비스 문의 내역이 여기에 표시됩니다"
-                linkHref="/work/freelance"
-                linkLabel="외주 의뢰하기"
+                desc="외주 개발·서비스 문의 내역이 여기에 표시됩니다."
+                linkHref="/outsourcing#contact"
+                linkLabel="외주 문의하기"
               />
             ) : (
               <div className="space-y-3">
                 {orders.map((o) => (
-                  <div key={o.id} className="bg-white rounded-2xl border border-slate-200 p-5">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="font-bold text-slate-900">{o.service}</div>
-                      <span className={`text-xs font-bold px-2 py-1 rounded-lg ${
-                        o.status === 'completed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
-                        o.status === 'in_progress' ? 'bg-violet-50 text-violet-600 border border-violet-200' :
-                        'bg-slate-100 text-slate-500'
-                      }`}>
-                        {o.status === 'completed' ? '완료' : o.status === 'in_progress' ? '진행중' : '대기중'}
-                      </span>
+                  <Card key={o.id} compact>
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <div className="font-bold break-keep" style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}>
+                        {o.service}
+                      </div>
+                      <StatusBadge status={o.status} />
                     </div>
-                    <p className="text-sm text-slate-600 line-clamp-2">{o.message}</p>
-                    <div className="text-xs text-slate-400 mt-2">{new Date(o.created_at).toLocaleDateString('ko-KR')}</div>
-                  </div>
+                    <p
+                      className="text-sm line-clamp-2 break-keep"
+                      style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+                    >
+                      {o.message}
+                    </p>
+                    <div className="text-xs mt-2" style={{ color: 'var(--jsm-ink-faint)' }}>
+                      {new Date(o.created_at).toLocaleDateString('ko-KR')}
+                    </div>
+                  </Card>
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* ===== 내 제품 (구매한 팩) ===== */}
+        {tab === 'products' && (
+          <div className="space-y-4">
+            {packOrders.length === 0 ? (
+              <EmptyState
+                title="구매한 제품이 없습니다"
+                desc="음악 팩을 구매하시면 자료를 여기서 다운로드할 수 있습니다."
+                linkHref="/music/packs"
+                linkLabel="음악 팩 보기"
+              />
+            ) : (
+              packOrders.map(({ order, tier }) => {
+                const completed = order.status === 'completed';
+                const filesForTier = packFiles.filter((pf) => {
+                  if (tier === 'starter') return pf.min_tier === 'starter';
+                  if (tier === 'pro') return pf.min_tier === 'starter' || pf.min_tier === 'pro';
+                  return true; // master
+                });
+
+                return (
+                  <Card key={order.id}>
+                    <div className="flex items-start justify-between gap-3 mb-4">
+                      <div>
+                        <div className="font-bold text-base break-keep" style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}>
+                          {PACK_TIER_NAMES[tier]}
+                        </div>
+                        <div className="text-xs mt-1" style={{ color: 'var(--jsm-ink-faint)' }}>
+                          {new Date(order.created_at).toLocaleDateString('ko-KR')} 신청
+                        </div>
+                      </div>
+                      <StatusBadge status={order.status} />
+                    </div>
+
+                    <div className="border-t pt-4" style={{ borderColor: 'var(--jsm-line)' }}>
+                      <div className="text-sm font-semibold mb-3" style={{ color: 'var(--jsm-ink)' }}>
+                        자료 패키지 ({filesForTier.length}개)
+                      </div>
+
+                      {filesForTier.length === 0 ? (
+                        <p className="text-xs" style={{ color: 'var(--jsm-ink-soft)' }}>
+                          자료 준비 중입니다. 카톡 1:1로 문의해주세요.
+                        </p>
+                      ) : (
+                        <ul className="space-y-2 mb-3">
+                          {filesForTier.map((f) => (
+                            <li key={f.id} className="flex items-center justify-between gap-2 text-sm">
+                              <span className="flex-1 break-keep" style={{ color: 'var(--jsm-ink)' }}>
+                                {f.label}
+                              </span>
+                              {completed ? (
+                                <button
+                                  onClick={() => handleDownload(f.id)}
+                                  disabled={downloading === f.id}
+                                  className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors hover:bg-[var(--jsm-accent-hover)] disabled:opacity-50"
+                                  style={{ background: 'var(--jsm-accent)' }}
+                                >
+                                  {downloading === f.id ? '준비중...' : '다운로드'}
+                                </button>
+                              ) : (
+                                <span className="text-xs" style={{ color: 'var(--jsm-ink-faint)' }}>
+                                  대기 중
+                                </span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {completed && filesForTier.length > 0 && (
+                        <p className="text-xs leading-relaxed" style={{ color: 'var(--jsm-ink-soft)' }}>
+                          다운로드 링크는 발급 후 4시간 동안 유효합니다.
+                        </p>
+                      )}
+
+                      {!completed && (
+                        <div
+                          className="rounded-lg px-3 py-2.5 text-xs leading-relaxed text-center"
+                          style={{ background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' }}
+                        >
+                          입금 확인 후 다운로드가 활성화됩니다.
+                          {order.status === 'in_progress'
+                            ? ' 결제 처리 중입니다.'
+                            : ' 입금 안내는 카톡 1:1로 드립니다.'}
+                          <br />
+                          <a
+                            href={KAKAO_OPENCHAT_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold hover:underline"
+                            style={{ color: 'var(--jsm-accent)' }}
+                          >
+                            카톡 오픈채팅 →
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+                );
+              })
+            )}
+          </div>
+        )}
+
+        {/* ===== 주문 내역 (의뢰 + 결제 완료) ===== */}
+        {tab === 'orders' && (
+          <div className="space-y-8">
+            {/* 주문 목록 (contact_requests) */}
+            <section>
+              <SectionHeading>주문 목록</SectionHeading>
+              {orders.length === 0 ? (
+                <EmptyState
+                  title="주문 내역이 없습니다"
+                  desc="서비스 신청·외주 문의 내역이 여기에 표시됩니다."
+                  linkHref="/outsourcing#contact"
+                  linkLabel="외주 문의하기"
+                />
+              ) : (
+                <div className="space-y-3">
+                  {orders.map((o) => (
+                    <Card key={o.id} compact>
+                      <div className="flex items-start justify-between gap-3 mb-1.5">
+                        <div className="font-bold break-keep" style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}>
+                          {o.service}
+                        </div>
+                        <StatusBadge status={o.status} />
+                      </div>
+                      <p
+                        className="text-sm line-clamp-1 break-keep"
+                        style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+                      >
+                        {o.message}
+                      </p>
+                      <div className="text-xs mt-2" style={{ color: 'var(--jsm-ink-faint)' }}>
+                        {new Date(o.created_at).toLocaleDateString('ko-KR')}
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            {/* 결제 완료 내역 (payments) */}
+            <section>
+              <SectionHeading>결제 완료 내역</SectionHeading>
+              {payments.length === 0 ? (
+                <div
+                  className="rounded-2xl border px-6 py-8 text-center text-sm"
+                  style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)', color: 'var(--jsm-ink-soft)' }}
+                >
+                  결제 완료된 내역이 아직 없습니다.
+                </div>
+              ) : (
+                <div
+                  className="rounded-2xl border overflow-hidden"
+                  style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
+                >
+                  <table className="w-full text-sm">
+                    <thead style={{ background: 'var(--jsm-surface-alt)' }}>
+                      <tr style={{ borderBottom: '1px solid var(--jsm-line)' }}>
+                        <th className="px-5 py-3 text-left font-semibold" style={{ color: 'var(--jsm-ink-soft)' }}>서비스</th>
+                        <th className="px-5 py-3 text-left font-semibold" style={{ color: 'var(--jsm-ink-soft)' }}>금액</th>
+                        <th className="px-5 py-3 text-left font-semibold" style={{ color: 'var(--jsm-ink-soft)' }}>상태</th>
+                        <th className="px-5 py-3 text-left font-semibold" style={{ color: 'var(--jsm-ink-soft)' }}>일시</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {payments.map((p) => (
+                        <tr key={p.id} style={{ borderTop: '1px solid var(--jsm-line)' }}>
+                          <td className="px-5 py-3 font-medium" style={{ color: 'var(--jsm-ink)' }}>{p.product_name}</td>
+                          <td className="px-5 py-3" style={{ color: 'var(--jsm-ink)' }}>₩{p.amount?.toLocaleString()}</td>
+                          <td className="px-5 py-3">
+                            <span
+                              className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                              style={
+                                p.status === 'paid'
+                                  ? { background: '#dcfce7', color: '#166534' }
+                                  : { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' }
+                              }
+                            >
+                              {p.status === 'paid' ? '결제완료' : p.status}
+                            </span>
+                          </td>
+                          <td className="px-5 py-3 text-xs" style={{ color: 'var(--jsm-ink-faint)' }}>
+                            {new Date(p.created_at).toLocaleDateString('ko-KR')}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </section>
           </div>
         )}
       </div>
@@ -1093,22 +700,147 @@ export default function MyPage() {
   );
 }
 
-function EmptyState({
-  icon, title, desc, linkHref, linkLabel,
+export default function MyPage() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          className="min-h-[60vh] flex items-center justify-center"
+          style={{ background: 'var(--jsm-bg)' }}
+        >
+          <div
+            className="w-7 h-7 rounded-full animate-spin"
+            style={{ border: '2px solid var(--jsm-accent)', borderTopColor: 'transparent' }}
+          />
+        </div>
+      }
+    >
+      <MyPageContent />
+    </Suspense>
+  );
+}
+
+/* ─────────── 공통 프레젠테이션 컴포넌트 ─────────── */
+
+function Card({
+  children,
+  compact = false,
 }: {
-  icon: string; title: string; desc: string; linkHref: string; linkLabel: string;
+  children: React.ReactNode;
+  compact?: boolean;
 }) {
   return (
-    <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
-      <div className="text-5xl mb-4">{icon}</div>
-      <div className="font-bold text-slate-900 text-lg mb-2">{title}</div>
-      <div className="text-slate-500 text-sm mb-6">{desc}</div>
+    <div
+      className={`rounded-2xl border ${compact ? 'p-5' : 'p-6'}`}
+      style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function CardTitle({ children }: { children: React.ReactNode; inline?: boolean }) {
+  return (
+    <h2 className="font-bold" style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}>
+      {children}
+    </h2>
+  );
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h3
+      className="text-xs font-semibold uppercase tracking-wider mb-3"
+      style={{ color: 'var(--jsm-accent)' }}
+    >
+      {children}
+    </h3>
+  );
+}
+
+function Row({ label, value, last = false }: { label: string; value: string; last?: boolean }) {
+  return (
+    <div
+      className="flex items-center justify-between py-3"
+      style={last ? undefined : { borderBottom: '1px solid var(--jsm-line)' }}
+    >
+      <span className="text-sm" style={{ color: 'var(--jsm-ink-soft)' }}>{label}</span>
+      <span className="text-sm font-semibold" style={{ color: 'var(--jsm-ink)' }}>{value}</span>
+    </div>
+  );
+}
+
+function QuickLink({ href, title, sub }: { href: string; title: string; sub: string }) {
+  return (
+    <Link
+      href={href}
+      className="flex flex-col gap-1 p-4 rounded-xl border transition-colors hover:bg-[var(--jsm-surface-alt)]"
+      style={{ borderColor: 'var(--jsm-line)' }}
+    >
+      <span className="text-sm font-semibold" style={{ color: 'var(--jsm-ink)' }}>{title}</span>
+      <span className="text-xs" style={{ color: 'var(--jsm-ink-faint)' }}>{sub}</span>
+    </Link>
+  );
+}
+
+// 상태 뱃지 — pending=surface-alt / in_progress=accent-soft / completed=성공 그린(예외 허용)
+function StatusBadge({ status }: { status: string }) {
+  const map: Record<string, { label: string; style: React.CSSProperties }> = {
+    completed: { label: '완료', style: { background: '#dcfce7', color: '#166534' } },
+    in_progress: { label: '진행중', style: { background: 'var(--jsm-accent-soft)', color: 'var(--jsm-accent)' } },
+    pending: { label: '대기중', style: { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' } },
+  };
+  const conf = map[status] ?? {
+    label: status,
+    style: { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' },
+  };
+  return (
+    <span
+      className="text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap flex-shrink-0"
+      style={conf.style}
+    >
+      {conf.label}
+    </span>
+  );
+}
+
+function EmptyState({
+  title,
+  desc,
+  linkHref,
+  linkLabel,
+}: {
+  title: string;
+  desc: string;
+  linkHref: string;
+  linkLabel: string;
+}) {
+  return (
+    <div
+      className="text-center px-6 py-16 rounded-2xl border"
+      style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
+    >
+      <div className="font-bold text-lg mb-2 break-keep" style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}>
+        {title}
+      </div>
+      <div className="text-sm mb-6 break-keep max-w-sm mx-auto" style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}>
+        {desc}
+      </div>
       <Link
         href={linkHref}
-        className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-violet-600/20"
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm text-white transition-colors hover:bg-[var(--jsm-accent-hover)]"
+        style={{ background: 'var(--jsm-accent)' }}
       >
         {linkLabel} →
       </Link>
     </div>
+  );
+}
+
+function TelegramIcon({ className, style }: { className?: string; style?: React.CSSProperties }) {
+  return (
+    <svg className={className} style={style} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.667l-2.95-.924c-.64-.203-.654-.64.136-.954l11.566-4.458c.538-.194 1.006.131.972.89z" />
+    </svg>
   );
 }
