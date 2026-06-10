@@ -3,7 +3,6 @@ import Script from "next/script";
 import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 import "./globals.css";
 import DashboardShell from "./components/DashboardShell";
-import { GlassFilter } from "./components/LiquidGlass";
 
 export const metadata: Metadata = {
   title: {
@@ -144,7 +143,6 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="antialiased">
-        <GlassFilter />
         <DashboardShell>{children}</DashboardShell>
       </body>
     </html>

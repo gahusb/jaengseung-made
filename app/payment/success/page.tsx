@@ -18,7 +18,7 @@ function SuccessContent() {
       <div className="inline-block bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full mb-4">
         결제 완료
       </div>
-      <h2 className="text-2xl font-extrabold text-[#04102b] mb-2">결제가 완료되었습니다!</h2>
+      <h2 className="text-2xl font-extrabold mb-2" style={{ color: 'var(--jsm-ink)' }}>결제가 완료되었습니다!</h2>
       {paymentId && (
         <p className="text-slate-400 text-xs mb-1">주문번호: {paymentId}</p>
       )}
@@ -47,9 +47,9 @@ export default function PaymentSuccessPage() {
   return (
     <div className="min-h-full bg-[#f0f5ff] flex items-center justify-center px-6 py-16">
       <div className="w-full max-w-md bg-white rounded-2xl border border-[#dbe8ff] shadow-lg overflow-hidden">
-        <div className="bg-[#04102b] px-6 py-4" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px)' }}>
+        <div className="px-6 py-4 border-b" style={{ background: 'var(--jsm-navy)' }}>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#1a56db] flex items-center justify-center text-white font-bold text-xs">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-xs" style={{ background: 'var(--jsm-accent)' }}>
               쟁
             </div>
             <span className="text-white font-bold text-sm">쟁승메이드 결제</span>
