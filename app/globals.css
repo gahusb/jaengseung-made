@@ -69,8 +69,8 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
-  --font-sans: var(--font-pretendard, 'Pretendard Variable'), Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-mono: var(--font-pretendard, 'Pretendard Variable'), Pretendard, ui-monospace, monospace;
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: 'Pretendard Variable', Pretendard, ui-monospace, monospace;
 }
 
 * {
@@ -84,14 +84,14 @@ html {
 body {
   background: var(--jsm-bg);
   color: var(--jsm-ink);
-  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* font-mono utility → Pretendard 통일 */
 .font-mono, code, pre, kbd, samp {
-  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, ui-monospace, monospace;
+  font-family: 'Pretendard Variable', Pretendard, ui-monospace, monospace;
 }
 
 /* Dashboard layout */
@@ -120,19 +120,19 @@ body {
 .kx-section {
   background: var(--kx-surface);
   color: var(--kx-on-surface);
-  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, system-ui, sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
 }
 .kx-section p, .kx-section li, .kx-section span:not(.kx-label) {
   color: var(--kx-on-variant);
 }
 .kx-display {
-  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, system-ui, sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: inherit;
 }
 .kx-label {
-  font-family: var(--font-pretendard, 'Pretendard Variable'), Pretendard, system-ui, sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
