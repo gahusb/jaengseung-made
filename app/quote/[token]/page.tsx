@@ -394,7 +394,7 @@ export default function QuotePage() {
                   선택 항목
                 </h3>
                 <p style={{ color: 'var(--jsm-ink-soft)', fontSize: 13, marginBottom: 12 }}>아래 항목 중 원하시는 것을 선택하세요 — 총 금액에 실시간으로 반영됩니다</p>
-                <div style={{ background: 'var(--jsm-surface)', borderRadius: 12, border: '1px solid rgba(124,58,237,0.2)', overflowX: 'auto' }}>
+                <div style={{ background: 'var(--jsm-surface)', borderRadius: 12, border: '1px solid rgba(29,78,216,0.2)', overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: 700 }}>
                     <colgroup>
                       <col style={{ width: '6%' }} />
@@ -418,7 +418,7 @@ export default function QuotePage() {
                       {optionalItems.map((item) => (
                         <tr key={item.id}
                           onClick={() => setCheckedOptional((prev) => ({ ...prev, [item.id]: !prev[item.id] }))}
-                          style={{ borderBottom: '1px solid var(--jsm-line)', cursor: 'pointer', background: checkedOptional[item.id] ? 'rgba(124,58,237,0.04)' : 'transparent', transition: 'background 0.2s' }}>
+                          style={{ borderBottom: '1px solid var(--jsm-line)', cursor: 'pointer', background: checkedOptional[item.id] ? 'rgba(29,78,216,0.06)' : 'transparent', transition: 'background 0.2s' }}>
                           <td style={{ ...tdStyle, textAlign: 'center' }}>
                             <input type="checkbox" checked={!!checkedOptional[item.id]} onChange={() => {}} />
                           </td>
@@ -522,7 +522,7 @@ export default function QuotePage() {
 
       {/* 하단 고정 바 — 견적 수락 */}
       {quote.status !== 'accepted' && quote.status !== 'rejected' && !isExpired && (
-        <div className="no-print" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(11,31,58,0.97)', borderTop: '1px solid rgba(255,255,255,0.1)', padding: '16px 24px' }}>
+        <div className="no-print" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--jsm-navy)', borderTop: '1px solid rgba(255,255,255,0.1)', padding: '16px 24px' }}>
           <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
             <div>
               <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13 }}>현재 선택된 견적 합계</div>
