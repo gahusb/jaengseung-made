@@ -127,14 +127,21 @@ export default function QuoteEditorPage() {
   }
 
   // ── 고객에게 발송 ───────────────────────
+  const SENT_STATUSES = ['sent', 'accepted', 'rejected'];
+  const isSentStatus = SENT_STATUSES.includes(form.status);
+
   async function sendToClient() {
-    if (!form.client_email) return;
+    if (!form.client_email || isSentStatus) return;
     if (!confirm("고객에게 견적 메일을 발송하고 상태를 '발송됨'으로 변경합니다.")) return;
     setSending(true);
     try {
       const res = await fetch(`/api/admin/quotes/${id}/send`, { method: 'POST' });
       const d = await res.json();
       if (res.ok && d.success) {
+        if (d.alreadySent) {
+          alert('이미 발송된 견적입니다');
+          return;
+        }
         setField('status', 'sent');
         if (d.emailSent === false) {
           alert('상태는 변경됐으나 메일 발송에 실패했습니다 — 수동 발송이 필요합니다');
@@ -285,17 +292,21 @@ export default function QuoteEditorPage() {
           {/* 고객에게 발송 */}
           <button
             onClick={sendToClient}
-            disabled={sending || !form.client_email}
-            title={!form.client_email ? '고객 이메일을 먼저 입력하세요' : '고객에게 견적 메일 발송'}
+            disabled={sending || !form.client_email || isSentStatus}
+            title={
+              isSentStatus ? '이미 발송된 견적입니다' :
+              !form.client_email ? '고객 이메일을 먼저 입력하세요' :
+              '고객에게 견적 메일 발송'
+            }
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-50 disabled:cursor-not-allowed">
             {sending ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : (
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             )}
-            고객에게 발송
+            {isSentStatus ? '발송됨' : '고객에게 발송'}
           </button>
-          {!form.client_email && (
+          {!form.client_email && !isSentStatus && (
             <span className="text-xs text-amber-400/80">이메일 입력 필요</span>
           )}
 

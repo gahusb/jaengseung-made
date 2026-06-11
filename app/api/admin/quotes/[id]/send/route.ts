@@ -31,16 +31,21 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     return NextResponse.json({ error: '견적서를 찾을 수 없습니다' }, { status: 404 });
   }
 
-  // 2. 고객 이메일 필수
+  // 2. 이미 발송/수락/거절된 견적은 재발송 차단
+  if (['sent', 'accepted', 'rejected'].includes(quote.status)) {
+    return NextResponse.json({ success: true, emailSent: false, alreadySent: true });
+  }
+
+  // 3. 고객 이메일 필수
   if (!quote.client_email) {
     return NextResponse.json({ error: '고객 이메일을 먼저 입력하세요' }, { status: 400 });
   }
 
-  // 3. public_token 보장
+  // 4. public_token 보장
   const quoteToken: string = quote.public_token || crypto.randomUUID();
   const nowIso = new Date().toISOString();
 
-  // 4. 견적 상태 업데이트
+  // 5. 견적 상태 업데이트
   const updatePayload: Record<string, unknown> = { status: 'sent', updated_at: nowIso };
   if (!quote.public_token) updatePayload.public_token = quoteToken;
 
@@ -54,7 +59,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     return NextResponse.json({ error: '견적 상태 업데이트 실패' }, { status: 500 });
   }
 
-  // 5. 연결된 의뢰 상태 동기화 (실패해도 진행)
+  // 6. 연결된 의뢰 상태 동기화 (실패해도 진행)
   if (quote.contact_request_id) {
     const { error: syncError } = await supabase
       .from('contact_requests')
@@ -65,7 +70,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     }
   }
 
-  // 6. 견적 메일 발송 (실패해도 상태 변경은 유지)
+  // 7. 견적 메일 발송 (실패해도 상태 변경은 유지)
   let emailSent = true;
   try {
     await sendQuoteSentEmail({

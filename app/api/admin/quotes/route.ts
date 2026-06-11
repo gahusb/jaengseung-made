@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 
   // 의뢰(contact_requests) 연결용 필드 — string만 허용
   const insertData: Record<string, unknown> = {
-    title: body.title || '새 견적서',
+    title: typeof body.title === 'string' && body.title.trim() ? body.title : '새 견적서',
     client_name: typeof body.client_name === 'string' ? body.client_name : '',
     client_email: typeof body.client_email === 'string' ? body.client_email : '',
     valid_until: body.valid_until || null,
