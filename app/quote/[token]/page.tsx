@@ -37,6 +37,8 @@ export default function QuotePage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'wbs' | 'quote' | 'maintenance'>('overview');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [rejected, setRejected] = useState(false);
+  const [alreadyProcessed, setAlreadyProcessed] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
 
   useEffect(() => {
@@ -89,13 +91,29 @@ export default function QuotePage() {
     if (!quote) return;
     setSubmitting(true);
     const selectedItems = quote.items.filter((i) => !i.optional || checkedOptional[i.id]).map((i) => i.id);
-    await fetch(`/api/quote/${token}`, {
+    const res = await fetch(`/api/quote/${token}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ selectedItems, selectedMaintenance, total: grandTotal }),
     });
     setSubmitting(false);
+    if (res.status === 409) { setAlreadyProcessed(true); return; }
     setSubmitted(true);
+  }
+
+  async function handleReject() {
+    if (!quote) return;
+    const confirmed = window.confirm('견적을 거절하시겠습니까? 조건 조정이 필요하시면 회신으로 말씀해 주세요.');
+    if (!confirmed) return;
+    setSubmitting(true);
+    const res = await fetch(`/api/quote/${token}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'reject' }),
+    });
+    setSubmitting(false);
+    if (res.status === 409) { setAlreadyProcessed(true); return; }
+    setRejected(true);
   }
 
   if (loading) {
@@ -137,6 +155,30 @@ export default function QuotePage() {
             <div style={{ color: 'var(--jsm-accent)', fontSize: 14, fontFamily: 'sans-serif', marginTop: 6 }}>+ 유지보수 {maintenanceTotal.toLocaleString()}원/월</div>
           )}
         </div>
+      </div>
+    );
+  }
+
+  if (rejected) {
+    return (
+      <div style={{ minHeight: '100vh', background: 'var(--jsm-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 20, padding: 24 }}>
+        <style>{`@keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }`}</style>
+        <div style={{ fontSize: 80, animation: 'pop 0.5s ease forwards' }}>🙏</div>
+        <h1 style={{ color: 'var(--jsm-ink)', fontSize: 28, fontWeight: 800, fontFamily: 'sans-serif', textAlign: 'center' }}>의견 감사합니다</h1>
+        <p style={{ color: 'var(--jsm-ink-soft)', fontFamily: 'sans-serif', textAlign: 'center', lineHeight: 1.7 }}>
+          조건 조정이 필요하시면 언제든 회신 주세요.<br />
+          더 나은 견적으로 다시 찾아뵙겠습니다.
+        </p>
+      </div>
+    );
+  }
+
+  if (alreadyProcessed) {
+    return (
+      <div style={{ minHeight: '100vh', background: 'var(--jsm-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16, padding: 24 }}>
+        <div style={{ fontSize: 64 }}>📋</div>
+        <h1 style={{ color: 'var(--jsm-ink)', fontSize: 24, fontWeight: 700, fontFamily: 'sans-serif', textAlign: 'center' }}>이미 처리된 견적입니다</h1>
+        <p style={{ color: 'var(--jsm-ink-soft)', fontFamily: 'sans-serif', textAlign: 'center' }}>이 견적은 이미 수락 또는 거절 처리되었습니다.</p>
       </div>
     );
   }
@@ -533,16 +575,29 @@ export default function QuotePage() {
                 )}
               </div>
             </div>
-            <button onClick={handleAccept} disabled={submitting}
-              style={{
-                padding: '14px 36px', borderRadius: 12, border: 'none', cursor: 'pointer',
-                background: 'var(--jsm-accent)',
-                color: 'white', fontSize: 16, fontWeight: 700, transition: 'all 0.2s',
-                boxShadow: '0 8px 32px rgba(29,78,216,0.4)',
-                opacity: submitting ? 0.7 : 1,
-              }}>
-              {submitting ? '처리 중...' : '이 견적으로 진행하겠습니다 →'}
-            </button>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+              <button onClick={handleReject} disabled={submitting}
+                style={{
+                  padding: '14px 24px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.25)', cursor: 'pointer',
+                  background: 'transparent',
+                  color: 'rgba(255,255,255,0.75)', fontSize: 15, fontWeight: 600, transition: 'all 0.2s',
+                  opacity: submitting ? 0.5 : 1,
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = 'white'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)'; }}>
+                정중히 거절
+              </button>
+              <button onClick={handleAccept} disabled={submitting}
+                style={{
+                  padding: '14px 36px', borderRadius: 12, border: 'none', cursor: 'pointer',
+                  background: 'var(--jsm-accent)',
+                  color: 'white', fontSize: 16, fontWeight: 700, transition: 'all 0.2s',
+                  boxShadow: '0 8px 32px rgba(29,78,216,0.4)',
+                  opacity: submitting ? 0.7 : 1,
+                }}>
+                {submitting ? '처리 중...' : '이 견적으로 진행하겠습니다 →'}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -551,6 +606,13 @@ export default function QuotePage() {
       {quote.status === 'accepted' && (
         <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(5,150,105,0.08)', borderTop: '1px solid rgba(5,150,105,0.3)', padding: '16px 24px', textAlign: 'center' }}>
           <p style={{ color: '#059669', fontWeight: 600, fontSize: 16 }}>✓ 이미 수락된 견적서입니다</p>
+        </div>
+      )}
+
+      {/* 거절된 경우 */}
+      {quote.status === 'rejected' && (
+        <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(100,116,139,0.08)', borderTop: '1px solid rgba(100,116,139,0.3)', padding: '16px 24px', textAlign: 'center' }}>
+          <p style={{ color: '#64748b', fontWeight: 600, fontSize: 16 }}>✕ 거절된 견적서입니다 — 조정이 필요하시면 회신 주세요</p>
         </div>
       )}
 
