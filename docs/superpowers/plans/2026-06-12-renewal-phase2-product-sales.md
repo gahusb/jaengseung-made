@@ -738,6 +738,13 @@ git commit -m "feat(home): 소프트웨어 진열 섹션 products 동적 연동"
 
 ---
 
+## 🔖 재개 체크포인트 (2026-06-12 세션 한도 중단)
+
+- **완료**: Task 1~8 (P2-1~P2-8) — 커밋 `cf89e8c`→`dc5e9d4`. vitest·마이그레이션 SQL 2건·product-files 헬퍼·/api/orders·다운로드 orders 교체·/products 카탈로그·/admin/orders 전부 리뷰 승인 완료
+- **진행 중**: Task 9 (P2-9 /admin/products) — 구현 서브에이전트가 파일 작성 후 한도로 중단. **working tree에 미커밋 상태**: `app/admin/products/`(신규), `app/api/admin/products/`(신규), `app/admin/components/AdminSidebar.tsx`·`app/admin/packs/page.tsx`·`app/api/admin/packs/route.ts`(수정)
+- **재개 절차**: ① 미커밋 파일 정독(미완성 함수/문법 확인) → ② `npm test`+`npm run build` → ③ curl 401/200 검증 → ④ 커밋 → ⑤ 스펙+품질 리뷰 → Task 10(메인 동적화)·Task 11(E2E)로 계속
+- **주의**: 운영 DB 마이그레이션(Task 2·3 SQL) 미적용 — 머지·배포 전 양쪽 DB 적용 필수
+
 ## Phase 3 예고 (별도 플랜)
 
 외주 고객 포털: 단계형 의뢰 폼, contact_requests 상태 머신 확장 + public_token, quotes FK 연결, /track/[token], 자동 이메일, admin 의뢰·견적 통합 뷰.
