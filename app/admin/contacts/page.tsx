@@ -211,7 +211,10 @@ export default function AdminContactsPage() {
               filtered.map((contact) => (
                 <button
                   key={contact.id}
-                  onClick={() => setSelected(contact)}
+                  onClick={() => {
+                    setSelected(contact);
+                    setCopied(false);
+                  }}
                   className={`w-full text-left bg-slate-900 rounded-xl p-4 border transition-all hover:border-slate-600 ${
                     selected?.id === contact.id ? 'border-red-500/50' : 'border-slate-700/50'
                   }`}
@@ -349,7 +352,7 @@ export default function AdminContactsPage() {
                         className="flex items-center justify-between bg-slate-800 rounded-lg px-3 py-2 text-xs hover:bg-slate-700 transition"
                       >
                         <span className="text-slate-200 truncate flex-1 mr-2">{q.title}</span>
-                        <span className="flex-shrink-0 px-2 py-0.5 rounded-full bg-violet-900/40 text-violet-400">
+                        <span className="flex-shrink-0 px-2 py-0.5 rounded-full bg-blue-900/40 text-blue-400">
                           {q.status}
                         </span>
                       </a>
