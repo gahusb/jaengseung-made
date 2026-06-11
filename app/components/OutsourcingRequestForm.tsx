@@ -122,11 +122,13 @@ export default function OutsourcingRequestForm() {
     }
   };
 
-  const goNext = useCallback(() => {
+  // 주의: useCallback 금지 — stepValid가 매 렌더 갱신되는 state를 캡처하므로
+  // 메모이즈하면 스테일 클로저로 항상 초기(빈) 상태 기준 검증이 됨 (실제 운영 버그였음)
+  const goNext = () => {
     if (!stepValid(step)) return;
     setError('');
     setStep((s) => Math.min(s + 1, STEPS.length));
-  }, [step]);
+  };
 
   const goPrev = useCallback(() => {
     setError('');
