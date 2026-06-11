@@ -1,7 +1,12 @@
 import Link from 'next/link';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { getListedProducts, type ProductRow } from '@/lib/supabase/product-files';
 
 // 쟁승메이드 메인 — 외주 개발 + 완성 소프트웨어 2축 랜딩 (서버 컴포넌트)
 // PublicShell이 TopNav(h-16)·푸터·main 배경을 제공하므로 여기서는 콘텐츠 섹션만 렌더한다.
+
+// 소프트웨어 진열 섹션이 DB 조회를 포함하므로 항상 최신 목록을 보여준다.
+export const dynamic = 'force-dynamic';
 
 const KOR_TIGHT = { letterSpacing: '-0.02em' } as const;
 const KOR_BODY = { letterSpacing: '-0.01em' } as const;
@@ -58,7 +63,20 @@ function ArrowRight() {
   );
 }
 
-export default function Home() {
+async function loadFeaturedProducts(): Promise<ProductRow[]> {
+  try {
+    const all = await getListedProducts(createAdminClient());
+    return all.slice(0, 3);
+  } catch (err) {
+    console.error('[Home] getListedProducts failed, falling back to empty:', err);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const featuredProducts = await loadFeaturedProducts();
+  const hasProducts = featuredProducts.length > 0;
+
   return (
     <>
       {/* ─── 1. Hero ─── */}
@@ -357,47 +375,128 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── 6. 소프트웨어 진열(예고) ─── */}
-      {/* Phase 2: 이 섹션은 products 테이블 기반 동적 진열로 교체 예정.
-          현재는 출시 전 정적 안내만 노출한다. */}
+      {/* ─── 6. 소프트웨어 진열 ─── */}
+      {/* Phase 2: products 테이블 기반 동적 진열. 0개이면 출시 준비 중 폴백. */}
       <section style={{ background: 'var(--jsm-bg)' }}>
         <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
-          <div
-            className="rounded-2xl border px-8 py-14 lg:px-14 lg:py-16 text-center"
-            style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
-          >
-            <p
-              className="text-xs font-semibold uppercase tracking-wider mb-3"
-              style={{ color: 'var(--jsm-accent)' }}
+          {hasProducts ? (
+            <>
+              <div className="flex items-end justify-between mb-10">
+                <div>
+                  <p
+                    className="text-xs font-semibold uppercase tracking-wider mb-3"
+                    style={{ color: 'var(--jsm-accent)' }}
+                  >
+                    Software
+                  </p>
+                  <h2
+                    className="text-3xl lg:text-4xl font-bold break-keep"
+                    style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+                  >
+                    완성 소프트웨어
+                  </h2>
+                </div>
+                <Link
+                  href="/products"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-[var(--jsm-accent-hover)] shrink-0"
+                  style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
+                >
+                  전체 보기
+                  <ArrowRight />
+                </Link>
+              </div>
+              <div className="grid md:grid-cols-3 gap-6">
+                {featuredProducts.map((p) => (
+                  <Link
+                    key={p.id}
+                    href={`/products/${p.id}`}
+                    className="group flex flex-col rounded-2xl p-7 border transition-colors duration-200 hover:border-[var(--jsm-accent)]"
+                    style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
+                  >
+                    <h3
+                      className="text-lg font-bold break-keep"
+                      style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+                    >
+                      {p.name}
+                    </h3>
+                    {p.description && (
+                      <p
+                        className="mt-2.5 text-sm leading-relaxed break-keep flex-1"
+                        style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+                      >
+                        {p.description}
+                      </p>
+                    )}
+                    <div
+                      className="mt-6 pt-5 flex items-center justify-between border-t"
+                      style={{ borderColor: 'var(--jsm-line)' }}
+                    >
+                      <span
+                        className="text-lg font-bold"
+                        style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+                      >
+                        &#8361;{p.price.toLocaleString('ko-KR')}
+                      </span>
+                      <span
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 group-hover:text-[var(--jsm-accent-hover)]"
+                        style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
+                      >
+                        자세히
+                        <ArrowRight />
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-8 sm:hidden">
+                <Link
+                  href="/products"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold"
+                  style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
+                >
+                  전체 보기
+                  <ArrowRight />
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div
+              className="rounded-2xl border px-8 py-14 lg:px-14 lg:py-16 text-center"
+              style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
             >
-              Coming soon
-            </p>
-            <h2
-              className="text-2xl lg:text-3xl font-bold break-keep"
-              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
-            >
-              검증된 완성 소프트웨어를 준비하고 있습니다
-            </h2>
-            <p
-              className="mt-4 max-w-xl mx-auto leading-relaxed break-keep"
-              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
-            >
-              직접 운영하며 다듬은 도구를 하나씩 다운로드 상품으로 공개할 예정입니다.
-              출시 소식을 가장 먼저 받아보세요.
-            </p>
-            <Link
-              href="/outsourcing#contact"
-              className="mt-8 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg font-semibold border transition-colors duration-150 hover:bg-[var(--jsm-surface-alt)]"
-              style={{
-                color: 'var(--jsm-ink)',
-                borderColor: 'var(--jsm-line)',
-                ...KOR_BODY,
-              }}
-            >
-              출시 소식 받기
-              <ArrowRight />
-            </Link>
-          </div>
+              <p
+                className="text-xs font-semibold uppercase tracking-wider mb-3"
+                style={{ color: 'var(--jsm-accent)' }}
+              >
+                Coming soon
+              </p>
+              <h2
+                className="text-2xl lg:text-3xl font-bold break-keep"
+                style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+              >
+                검증된 완성 소프트웨어를 준비하고 있습니다
+              </h2>
+              <p
+                className="mt-4 max-w-xl mx-auto leading-relaxed break-keep"
+                style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+              >
+                직접 운영하며 다듬은 도구를 하나씩 다운로드 상품으로 공개할 예정입니다.
+                출시 소식을 가장 먼저 받아보세요.
+              </p>
+              <Link
+                href="/outsourcing#contact"
+                className="mt-8 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg font-semibold border transition-colors duration-150 hover:bg-[var(--jsm-surface-alt)]"
+                style={{
+                  color: 'var(--jsm-ink)',
+                  borderColor: 'var(--jsm-line)',
+                  ...KOR_BODY,
+                }}
+              >
+                출시 소식 받기
+                <ArrowRight />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
