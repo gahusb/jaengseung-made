@@ -34,7 +34,7 @@ export async function PATCH(request: Request) {
   if (!(await checkAuth())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  const { id, label, sort_order, min_tier } = await request.json();
+  const { id, label, sort_order, min_tier, product_id } = await request.json();
   if (!id) return NextResponse.json({ error: 'id 필요' }, { status: 400 });
 
   const updates: Record<string, unknown> = {};
@@ -43,6 +43,7 @@ export async function PATCH(request: Request) {
   if (typeof min_tier === 'string' && VALID_TIERS.has(min_tier as PackTier)) {
     updates.min_tier = min_tier;
   }
+  if (typeof product_id === 'string' || product_id === null) updates.product_id = product_id;
   if (Object.keys(updates).length === 0) {
     return NextResponse.json({ error: '변경할 필드 없음' }, { status: 400 });
   }

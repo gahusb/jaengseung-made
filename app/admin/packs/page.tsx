@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 type PackTier = 'starter' | 'pro' | 'master';
 
@@ -154,6 +155,10 @@ export default function AdminPacksPage() {
         <h1 className="text-white text-2xl font-bold">팩 자료 관리</h1>
         <p className="text-slate-400 text-sm mt-0.5">
           NAS 자료 업로드 + 다운로드 활성화. 최대 5GB / 4시간 만료 공유 링크.
+        </p>
+        <p className="text-amber-400/90 text-xs mt-2">
+          음악 팩 레거시 관리 화면입니다. 신규 제품 파일은{' '}
+          <Link href="/admin/products" className="underline hover:text-amber-300">제품 관리</Link>에서 배정하세요.
         </p>
       </div>
 
