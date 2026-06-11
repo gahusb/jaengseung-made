@@ -37,7 +37,7 @@ export async function sendQuoteSentEmail(opts: {
   await resend().emails.send({
     from: FROM,
     to: [clientEmail],
-    subject: `[쟁승메이드] 견적서가 도착했습니다 — ${escapeHtml(quoteTitle)}`,
+    subject: `[쟁승메이드] 견적서가 도착했습니다 — ${quoteTitle}`,
     html: `
       <h2>견적서를 보내드립니다</h2>
       <p>${escapeHtml(clientName)}님, 요청하신 건의 견적서가 준비되었습니다.</p>
@@ -57,7 +57,7 @@ export async function sendQuoteDecisionEmail(opts: {
   await resend().emails.send({
     from: FROM,
     to: [ADMIN_EMAIL],
-    subject: `[쟁승메이드] 견적 ${label} — ${escapeHtml(quoteTitle)}`,
+    subject: `[쟁승메이드] 견적 ${label} — ${quoteTitle}`,
     html: `
       <h2>고객이 견적을 ${label}했습니다</h2>
       <p>견적: ${escapeHtml(quoteTitle)} / 고객: ${escapeHtml(clientName)}</p>
