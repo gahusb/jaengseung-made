@@ -56,6 +56,10 @@ export default function AdminOrdersPage() {
       const ok = confirm('입금을 확인하셨습니까? 고객에게 다운로드 활성화 메일이 발송됩니다.');
       if (!ok) return;
     }
+    if (status === 'cancelled') {
+      const ok = confirm('이 주문을 취소하시겠습니까?');
+      if (!ok) return;
+    }
     setUpdating(id);
     try {
       const res = await fetch('/api/admin/orders', {
