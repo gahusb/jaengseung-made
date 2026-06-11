@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import ContactForm from '@/app/components/ContactForm';
+import OutsourcingRequestForm from '@/app/components/OutsourcingRequestForm';
 
 // 외주 개발 의뢰 페이지 (서버 컴포넌트)
 // PublicShell이 TopNav(h-16)·푸터·main 배경을 제공하므로 여기서는 콘텐츠 섹션만 렌더한다.
@@ -528,7 +528,7 @@ export default function OutsourcingPage() {
                 className="rounded-2xl p-6 lg:p-8"
                 style={{ background: 'var(--jsm-surface)' }}
               >
-                <ContactForm />
+                <OutsourcingRequestForm />
               </div>
             </div>
           </div>
