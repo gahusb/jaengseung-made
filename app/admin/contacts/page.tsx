@@ -2,6 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { REQUEST_STATUS, RequestStatus } from '@/lib/request-status';
+
+interface QuoteSummary {
+  id: string;
+  title: string;
+  status: string;
+}
 
 interface Contact {
   id: string;
@@ -9,15 +16,34 @@ interface Contact {
   name: string | null;
   service: string;
   message: string;
-  status: 'pending' | 'in_progress' | 'completed';
+  status: string;
   created_at: string;
+  public_token?: string;
+  project_type?: string;
+  budget?: string;
+  timeline?: string;
+  quotes?: QuoteSummary[];
 }
 
-const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  pending: { label: '미처리', color: 'bg-yellow-900/40 text-yellow-400' },
-  in_progress: { label: '처리중', color: 'bg-blue-900/40 text-blue-400' },
-  completed: { label: '완료', color: 'bg-green-900/40 text-green-400' },
+/** 상태별 색상 매핑 — admin 다크 톤 bg-*-900/40 text-*-400 */
+const STATUS_COLORS: Record<string, string> = {
+  pending:     'bg-yellow-900/40 text-yellow-400',
+  reviewing:   'bg-sky-900/40 text-sky-400',
+  quoted:      'bg-blue-900/40 text-blue-400',
+  accepted:    'bg-green-900/40 text-green-400',
+  in_progress: 'bg-blue-900/40 text-blue-400',
+  completed:   'bg-green-900/40 text-green-400',
+  on_hold:     'bg-slate-700/60 text-slate-400',
+  cancelled:   'bg-red-900/40 text-red-400',
 };
+
+function getStatusColor(status: string): string {
+  return STATUS_COLORS[status] ?? 'bg-slate-700/60 text-slate-400';
+}
+
+function getStatusLabel(status: string): string {
+  return (REQUEST_STATUS as Record<string, { label: string }>)[status]?.label ?? status;
+}
 
 const SERVICE_LABELS: Record<string, string> = {
   lotto: '로또 추천',
@@ -29,6 +55,31 @@ const SERVICE_LABELS: Record<string, string> = {
   general: '일반 문의',
 };
 
+/** 필터 탭 정의 */
+const FILTER_TABS: { val: string; label: string }[] = [
+  { val: 'all',         label: '전체' },
+  { val: 'pending',     label: '접수' },
+  { val: 'reviewing',   label: '검토중' },
+  { val: 'quoted',      label: '견적 발송' },
+  { val: 'accepted',    label: '수주 확정' },
+  { val: 'in_progress', label: '진행중' },
+  { val: 'completed',   label: '완료' },
+  { val: '__other',     label: '기타' },
+];
+
+const OTHER_STATUSES = new Set(['on_hold', 'cancelled']);
+
+function matchFilter(status: string, filterVal: string): boolean {
+  if (filterVal === 'all') return true;
+  if (filterVal === '__other') return OTHER_STATUSES.has(status);
+  return status === filterVal;
+}
+
+function filterCount(contacts: Contact[], filterVal: string): number {
+  if (filterVal === 'all') return contacts.length;
+  return contacts.filter((c) => matchFilter(c.status, filterVal)).length;
+}
+
 export default function AdminContactsPage() {
   const router = useRouter();
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -37,6 +88,7 @@ export default function AdminContactsPage() {
   const [updating, setUpdating] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [creatingQuote, setCreatingQuote] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   async function createQuote(contact: Contact) {
     setCreatingQuote(true);
@@ -84,10 +136,10 @@ export default function AdminContactsPage() {
       });
       if (res.ok) {
         setContacts((prev) =>
-          prev.map((c) => (c.id === id ? { ...c, status: status as Contact['status'] } : c))
+          prev.map((c) => (c.id === id ? { ...c, status } : c))
         );
         if (selected?.id === id) {
-          setSelected((prev) => prev ? { ...prev, status: status as Contact['status'] } : null);
+          setSelected((prev) => prev ? { ...prev, status } : null);
         }
       }
     } catch (e) {
@@ -97,7 +149,14 @@ export default function AdminContactsPage() {
     }
   }
 
-  const filtered = contacts.filter((c) => filterStatus === 'all' || c.status === filterStatus);
+  function copyTrackingLink(token: string) {
+    navigator.clipboard.writeText(location.origin + '/track/' + token).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  const filtered = contacts.filter((c) => matchFilter(c.status, filterStatus));
   const pendingCount = contacts.filter((c) => c.status === 'pending').length;
 
   return (
@@ -115,8 +174,8 @@ export default function AdminContactsPage() {
       </div>
 
       {/* 필터 탭 */}
-      <div className="flex gap-2 mb-4">
-        {[['all', '전체'], ['pending', '미처리'], ['in_progress', '처리중'], ['completed', '완료']].map(([val, label]) => (
+      <div className="flex gap-2 mb-4 flex-wrap">
+        {FILTER_TABS.map(({ val, label }) => (
           <button
             key={val}
             onClick={() => setFilterStatus(val)}
@@ -129,7 +188,7 @@ export default function AdminContactsPage() {
             {label}
             {val !== 'all' && (
               <span className="ml-1.5 text-xs opacity-70">
-                {contacts.filter((c) => c.status === val).length}
+                {filterCount(contacts, val)}
               </span>
             )}
           </button>
@@ -170,8 +229,8 @@ export default function AdminContactsPage() {
                       <p className="text-slate-400 text-xs truncate">{contact.message}</p>
                     </div>
                     <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_LABELS[contact.status]?.color}`}>
-                        {STATUS_LABELS[contact.status]?.label}
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getStatusColor(contact.status)}`}>
+                        {getStatusLabel(contact.status)}
                       </span>
                       <span className="text-slate-600 text-xs">
                         {new Date(contact.created_at).toLocaleDateString('ko-KR')}
@@ -220,26 +279,84 @@ export default function AdminContactsPage() {
                 </div>
               </dl>
 
-              {/* 상태 변경 */}
-              <div>
-                <p className="text-slate-500 text-xs mb-2">상태 변경</p>
-                <div className="flex gap-2">
-                  {(['pending', 'in_progress', 'completed'] as const).map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => updateStatus(selected.id, s)}
-                      disabled={selected.status === s || updating === selected.id}
-                      className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition ${
-                        selected.status === s
-                          ? STATUS_LABELS[s].color + ' opacity-100'
-                          : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
-                      } disabled:opacity-50`}
-                    >
-                      {STATUS_LABELS[s].label}
-                    </button>
-                  ))}
+              {/* 프로젝트 정보 */}
+              {(selected.project_type || selected.budget || selected.timeline) && (
+                <div className="mb-4 p-3 bg-slate-800 rounded-lg text-sm space-y-1.5">
+                  <p className="text-slate-400 font-medium mb-2">프로젝트 정보</p>
+                  {selected.project_type && (
+                    <div className="flex gap-2">
+                      <span className="text-slate-500 w-16 flex-shrink-0">유형</span>
+                      <span className="text-slate-200">{selected.project_type}</span>
+                    </div>
+                  )}
+                  {selected.budget && (
+                    <div className="flex gap-2">
+                      <span className="text-slate-500 w-16 flex-shrink-0">예산</span>
+                      <span className="text-slate-200">{selected.budget}</span>
+                    </div>
+                  )}
+                  {selected.timeline && (
+                    <div className="flex gap-2">
+                      <span className="text-slate-500 w-16 flex-shrink-0">일정</span>
+                      <span className="text-slate-200">{selected.timeline}</span>
+                    </div>
+                  )}
                 </div>
+              )}
+
+              {/* 상태 변경 — 8종 select */}
+              <div className="mb-3">
+                <p className="text-slate-500 text-xs mb-2">상태 변경</p>
+                <select
+                  value={selected.status}
+                  onChange={(e) => updateStatus(selected.id, e.target.value)}
+                  disabled={updating === selected.id}
+                  className="w-full bg-slate-800 text-white text-sm rounded-lg px-3 py-2 border border-slate-700 focus:outline-none focus:border-slate-500 disabled:opacity-50"
+                >
+                  {(Object.entries(REQUEST_STATUS) as [RequestStatus, { label: string }][]).map(([key, { label }]) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                  {/* 레거시 값 폴백 — REQUEST_STATUS에 없는 경우 표시 */}
+                  {!(selected.status in REQUEST_STATUS) && (
+                    <option value={selected.status}>{selected.status}</option>
+                  )}
+                </select>
               </div>
+
+              {/* 추적 링크 복사 */}
+              {selected.public_token && (
+                <button
+                  onClick={() => copyTrackingLink(selected.public_token!)}
+                  className="mb-2 w-full flex items-center justify-center gap-2 py-2 bg-slate-700/60 text-slate-300 rounded-lg text-xs hover:bg-slate-700 transition"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  {copied ? '복사됨!' : '추적 링크 복사'}
+                </button>
+              )}
+
+              {/* 연결된 견적 */}
+              {selected.quotes && selected.quotes.length > 0 && (
+                <div className="mb-2">
+                  <p className="text-slate-500 text-xs mb-2">연결된 견적</p>
+                  <div className="space-y-1">
+                    {selected.quotes.map((q) => (
+                      <a
+                        key={q.id}
+                        href={`/admin/quotes/${q.id}`}
+                        className="flex items-center justify-between bg-slate-800 rounded-lg px-3 py-2 text-xs hover:bg-slate-700 transition"
+                      >
+                        <span className="text-slate-200 truncate flex-1 mr-2">{q.title}</span>
+                        <span className="flex-shrink-0 px-2 py-0.5 rounded-full bg-violet-900/40 text-violet-400">
+                          {q.status}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* 이메일 바로 보내기 링크 */}
               <a
@@ -253,7 +370,7 @@ export default function AdminContactsPage() {
                 이메일 답장하기
               </a>
 
-              {/* 견적서 작성 */}
+              {/* 견적서 작성 (연결 견적이 있으면 라벨 변경) */}
               <button
                 onClick={() => createQuote(selected)}
                 disabled={creatingQuote}
@@ -263,7 +380,11 @@ export default function AdminContactsPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                {creatingQuote ? '생성 중...' : '견적서 작성'}
+                {creatingQuote
+                  ? '생성 중...'
+                  : selected.quotes && selected.quotes.length > 0
+                    ? '추가 견적서 작성'
+                    : '견적서 작성'}
               </button>
             </div>
           )}
