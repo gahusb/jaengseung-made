@@ -7,6 +7,13 @@ import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import TelegramGuideModal from '@/app/components/TelegramGuideModal';
 import { KAKAO_OPENCHAT_URL } from '@/lib/contact';
+import {
+  REQUEST_STATUS,
+  TIMELINE_STEPS,
+  timelineIndex,
+  isRequestStatus,
+  type RequestStatus,
+} from '@/lib/request-status';
 
 // 마이페이지 — 4탭 재구성 (프로필 / 내 의뢰 / 내 제품 / 주문 내역).
 // PublicShell(TopNav)이 상단 내비·로그아웃을 제공하므로 여기서는 콘텐츠만 렌더한다.
@@ -53,6 +60,12 @@ interface Order {
   service: string;
   message: string;
   status: string;
+  // 2026-06-12-client-portal 마이그레이션 신규 컬럼 — 미적용 환경에선 undefined
+  public_token?: string | null;
+  project_type?: string | null;
+  budget?: string | null;
+  timeline?: string | null;
+  updated_at?: string | null;
 }
 
 // 구매 제품 자료 그룹 (/api/packs/list-mine 응답)
@@ -86,6 +99,8 @@ function MyPageContent() {
   const [productGroups, setProductGroups] = useState<ProductGroup[]>([]);
   const [productOrders, setProductOrders] = useState<ProductOrder[]>([]);
   const [downloading, setDownloading] = useState<string | null>(null);
+  // 내 의뢰 탭 — 펼친 카드 id 집합 (기본 접힘)
+  const [expandedRequests, setExpandedRequests] = useState<Set<string>>(new Set());
 
   // 텔레그램 연동 상태
   const [telegramChatId, setTelegramChatId] = useState<string | null>(null);
@@ -194,6 +209,15 @@ function MyPageContent() {
     }
     setTelegramLinkState('idle');
   };
+
+  function toggleRequest(id: string) {
+    setExpandedRequests((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
 
   async function handleDownload(fileId: string) {
     setDownloading(fileId);
@@ -503,23 +527,12 @@ function MyPageContent() {
             ) : (
               <div className="space-y-3">
                 {orders.map((o) => (
-                  <Card key={o.id} compact>
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <div className="font-bold break-keep" style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}>
-                        {o.service}
-                      </div>
-                      <StatusBadge status={o.status} />
-                    </div>
-                    <p
-                      className="text-sm line-clamp-2 break-keep"
-                      style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
-                    >
-                      {o.message}
-                    </p>
-                    <div className="text-xs mt-2" style={{ color: 'var(--jsm-ink-faint)' }}>
-                      {new Date(o.created_at).toLocaleDateString('ko-KR')}
-                    </div>
-                  </Card>
+                  <RequestCard
+                    key={o.id}
+                    order={o}
+                    expanded={expandedRequests.has(o.id)}
+                    onToggle={() => toggleRequest(o.id)}
+                  />
                 ))}
               </div>
             )}
@@ -792,24 +805,258 @@ function QuickLink({ href, title, sub }: { href: string; title: string; sub: str
   );
 }
 
-// 상태 뱃지 — pending=surface-alt / in_progress=accent-soft / completed=성공 그린(예외 허용)
+// 상태 뱃지 — REQUEST_STATUS 8종.
+// completed=성공 그린(예외 허용) / accepted·quoted·in_progress=accent / pending·reviewing=surface-alt
+// on_hold·cancelled=faint. 알 수 없는 값(다른 도메인 status 등)은 원문 라벨+기본 스타일 폴백.
+const STATUS_BADGE_STYLE: Record<RequestStatus, React.CSSProperties> = {
+  completed: { background: '#dcfce7', color: '#166534' },
+  accepted: { background: 'var(--jsm-accent-soft)', color: 'var(--jsm-accent)' },
+  in_progress: { background: 'var(--jsm-accent-soft)', color: 'var(--jsm-accent)' },
+  quoted: { background: 'var(--jsm-accent-soft)', color: 'var(--jsm-accent)' },
+  pending: { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' },
+  reviewing: { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' },
+  on_hold: { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-faint)' },
+  cancelled: { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-faint)' },
+};
+
 function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, { label: string; style: React.CSSProperties }> = {
-    completed: { label: '완료', style: { background: '#dcfce7', color: '#166534' } },
-    in_progress: { label: '진행중', style: { background: 'var(--jsm-accent-soft)', color: 'var(--jsm-accent)' } },
-    pending: { label: '대기중', style: { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' } },
-  };
-  const conf = map[status] ?? {
-    label: status,
-    style: { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' },
-  };
+  const known = isRequestStatus(status);
+  const label = known ? REQUEST_STATUS[status].label : status;
+  const style = known
+    ? STATUS_BADGE_STYLE[status]
+    : { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)' };
   return (
     <span
       className="text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap flex-shrink-0"
-      style={conf.style}
+      style={style}
     >
-      {conf.label}
+      {label}
     </span>
+  );
+}
+
+// 펼침 토글 셰브론
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      style={{
+        transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+        transition: 'transform 0.2s ease',
+      }}
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
+function TimelineCheck() {
+  return (
+    <svg
+      width="11"
+      height="11"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+// 컴팩트 가로 미니 타임라인 — track 페이지 타임라인의 축소판.
+// 모바일에서는 라벨을 숨기고 도트만 노출(라벨 축약 허용).
+function MiniTimeline({ current }: { current: number }) {
+  return (
+    <ol className="flex items-start">
+      {TIMELINE_STEPS.map((step, i) => {
+        const isDone = i < current;
+        const isCurrent = i === current;
+        const isLast = i === TIMELINE_STEPS.length - 1;
+        const label = REQUEST_STATUS[step].label;
+        return (
+          <li key={step} className="flex-1 flex flex-col items-center min-w-0">
+            <div className="flex items-center w-full">
+              {/* 좌측 연결선 */}
+              <span
+                className="h-0.5 flex-1"
+                style={{
+                  background: i === 0 ? 'transparent' : i <= current ? 'var(--jsm-accent)' : 'var(--jsm-line)',
+                }}
+                aria-hidden
+              />
+              {/* 마커 */}
+              <span
+                className="relative z-10 flex items-center justify-center rounded-full shrink-0"
+                style={{
+                  width: 20,
+                  height: 20,
+                  background: isDone ? 'var(--jsm-accent)' : 'var(--jsm-surface)',
+                  border: isDone || isCurrent ? '2px solid var(--jsm-accent)' : '2px solid var(--jsm-line)',
+                  color: isDone ? '#ffffff' : 'transparent',
+                  boxShadow: isCurrent ? '0 0 0 3px var(--jsm-accent-soft)' : 'none',
+                }}
+                aria-hidden
+              >
+                {isDone ? (
+                  <TimelineCheck />
+                ) : (
+                  <span
+                    className="rounded-full"
+                    style={{
+                      width: 6,
+                      height: 6,
+                      background: isCurrent ? 'var(--jsm-accent)' : 'var(--jsm-line)',
+                    }}
+                  />
+                )}
+              </span>
+              {/* 우측 연결선 */}
+              <span
+                className="h-0.5 flex-1"
+                style={{
+                  background: isLast ? 'transparent' : i < current ? 'var(--jsm-accent)' : 'var(--jsm-line)',
+                }}
+                aria-hidden
+              />
+            </div>
+            {/* 라벨 — 모바일 숨김 */}
+            <span
+              className="hidden sm:block mt-1.5 text-[11px] text-center break-keep"
+              style={{
+                color: isDone || isCurrent ? 'var(--jsm-ink)' : 'var(--jsm-ink-faint)',
+                fontWeight: isCurrent ? 700 : 500,
+                ...KOR_BODY,
+              }}
+            >
+              {label}
+            </span>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+// 내 의뢰 카드 — 접힘 기본, 펼치면 타임라인 + 의뢰 정보 + 추적 링크
+function RequestCard({
+  order,
+  expanded,
+  onToggle,
+}: {
+  order: Order;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const status: RequestStatus = isRequestStatus(order.status) ? order.status : 'pending';
+  const current = timelineIndex(status);
+
+  const info: { label: string; value: string }[] = [];
+  if (order.project_type) info.push({ label: '프로젝트 유형', value: order.project_type });
+  if (order.budget) info.push({ label: '예산', value: order.budget });
+  if (order.timeline) info.push({ label: '희망 일정', value: order.timeline });
+
+  return (
+    <Card compact>
+      {/* 헤더 — 클릭 토글 */}
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={expanded}
+        className="w-full text-left"
+      >
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <div className="font-bold break-keep" style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}>
+            {order.service}
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <StatusBadge status={order.status} />
+            <span style={{ color: 'var(--jsm-ink-faint)' }}>
+              <Chevron open={expanded} />
+            </span>
+          </div>
+        </div>
+        <p
+          className={`text-sm break-keep ${expanded ? '' : 'line-clamp-2'}`}
+          style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+        >
+          {order.message}
+        </p>
+        <div className="text-xs mt-2" style={{ color: 'var(--jsm-ink-faint)' }}>
+          {new Date(order.created_at).toLocaleDateString('ko-KR')}
+        </div>
+      </button>
+
+      {/* 펼침 영역 */}
+      {expanded && (
+        <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--jsm-line)' }}>
+          {status === 'cancelled' ? (
+            <p className="text-sm break-keep" style={{ color: 'var(--jsm-ink-faint)', ...KOR_BODY }}>
+              취소된 의뢰입니다.
+            </p>
+          ) : (
+            <>
+              {status === 'on_hold' && (
+                <div
+                  className="mb-4 rounded-lg px-3 py-2.5"
+                  style={{ background: 'var(--jsm-surface-alt)' }}
+                >
+                  <p className="text-xs break-keep" style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}>
+                    현재 보류 중입니다 — 조건 조정이 필요하면 회신 주세요.
+                  </p>
+                </div>
+              )}
+              <div className="px-1 py-1">
+                <MiniTimeline current={current} />
+              </div>
+            </>
+          )}
+
+          {/* 의뢰 정보 */}
+          {info.length > 0 && (
+            <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-3">
+              {info.map((item) => (
+                <div key={item.label}>
+                  <dt className="text-xs mb-0.5" style={{ color: 'var(--jsm-ink-faint)', ...KOR_BODY }}>
+                    {item.label}
+                  </dt>
+                  <dd
+                    className="text-sm font-medium break-keep"
+                    style={{ color: 'var(--jsm-ink)', ...KOR_BODY }}
+                  >
+                    {item.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          )}
+
+          {/* 상세 추적 페이지 링크 */}
+          {order.public_token && (
+            <Link
+              href={`/track/${order.public_token}`}
+              className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors hover:underline"
+              style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
+            >
+              상세 추적 페이지
+              <span aria-hidden>→</span>
+            </Link>
+          )}
+        </div>
+      )}
+    </Card>
   );
 }
 
