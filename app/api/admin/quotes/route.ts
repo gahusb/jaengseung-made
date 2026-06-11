@@ -34,19 +34,25 @@ export async function POST(request: Request) {
   const body = await request.json();
   const supabase = createAdminClient();
 
+  // 의뢰(contact_requests) 연결용 필드 — string만 허용
+  const insertData: Record<string, unknown> = {
+    title: body.title || '새 견적서',
+    client_name: typeof body.client_name === 'string' ? body.client_name : '',
+    client_email: typeof body.client_email === 'string' ? body.client_email : '',
+    valid_until: body.valid_until || null,
+    wbs: body.wbs || [],
+    items: body.items || [],
+    maintenance: body.maintenance || [],
+    notes: body.notes || '',
+    status: 'draft',
+  };
+  if (typeof body.contact_request_id === 'string' && body.contact_request_id) {
+    insertData.contact_request_id = body.contact_request_id;
+  }
+
   const { data, error } = await supabase
     .from('quotes')
-    .insert({
-      title: body.title || '새 견적서',
-      client_name: body.client_name || '',
-      client_email: body.client_email || '',
-      valid_until: body.valid_until || null,
-      wbs: body.wbs || [],
-      items: body.items || [],
-      maintenance: body.maintenance || [],
-      notes: body.notes || '',
-      status: 'draft',
-    })
+    .insert(insertData)
     .select()
     .single();
 

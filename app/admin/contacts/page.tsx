@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface Contact {
   id: string;
@@ -29,11 +30,41 @@ const SERVICE_LABELS: Record<string, string> = {
 };
 
 export default function AdminContactsPage() {
+  const router = useRouter();
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Contact | null>(null);
   const [updating, setUpdating] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [creatingQuote, setCreatingQuote] = useState(false);
+
+  async function createQuote(contact: Contact) {
+    setCreatingQuote(true);
+    try {
+      const title = `${SERVICE_LABELS[contact.service] ?? contact.service ?? '외주 문의'} — ${contact.name ?? ''}`.trim();
+      const res = await fetch('/api/admin/quotes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          contact_request_id: contact.id,
+          client_name: contact.name ?? '',
+          client_email: contact.email,
+        }),
+      });
+      const d = await res.json();
+      if (res.ok && d.quote?.id) {
+        router.push('/admin/quotes/' + d.quote.id);
+      } else {
+        alert(d.error || '견적서 생성에 실패했습니다');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('견적서 생성 중 오류가 발생했습니다');
+    } finally {
+      setCreatingQuote(false);
+    }
+  }
 
   useEffect(() => {
     fetch('/api/admin/contacts')
@@ -221,6 +252,19 @@ export default function AdminContactsPage() {
                 </svg>
                 이메일 답장하기
               </a>
+
+              {/* 견적서 작성 */}
+              <button
+                onClick={() => createQuote(selected)}
+                disabled={creatingQuote}
+                className="mt-2 w-full flex items-center justify-center gap-2 py-2 bg-violet-600/20 text-violet-300 rounded-lg text-xs hover:bg-violet-600/30 transition disabled:opacity-50"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                {creatingQuote ? '생성 중...' : '견적서 작성'}
+              </button>
             </div>
           )}
         </div>

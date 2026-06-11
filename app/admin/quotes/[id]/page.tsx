@@ -64,6 +64,7 @@ export default function QuoteEditorPage() {
   const [copied, setCopied] = useState(false);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [mileSaving, setMileSaving] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     fetch(`/api/admin/quotes/${id}`)
@@ -123,6 +124,32 @@ export default function QuoteEditorPage() {
       setMilestones((prev) => prev.map((m) => m.id === mid ? d.milestone : m));
     }
     setMileSaving(null);
+  }
+
+  // ── 고객에게 발송 ───────────────────────
+  async function sendToClient() {
+    if (!form.client_email) return;
+    if (!confirm("고객에게 견적 메일을 발송하고 상태를 '발송됨'으로 변경합니다.")) return;
+    setSending(true);
+    try {
+      const res = await fetch(`/api/admin/quotes/${id}/send`, { method: 'POST' });
+      const d = await res.json();
+      if (res.ok && d.success) {
+        setField('status', 'sent');
+        if (d.emailSent === false) {
+          alert('상태는 변경됐으나 메일 발송에 실패했습니다 — 수동 발송이 필요합니다');
+        } else {
+          alert('발송 완료');
+        }
+      } else {
+        alert(d.error || '발송에 실패했습니다');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('발송 중 오류가 발생했습니다');
+    } finally {
+      setSending(false);
+    }
   }
 
   // ── helpers ────────────────────────────
@@ -255,6 +282,23 @@ export default function QuoteEditorPage() {
               PDF 저장
             </a>
           )}
+          {/* 고객에게 발송 */}
+          <button
+            onClick={sendToClient}
+            disabled={sending || !form.client_email}
+            title={!form.client_email ? '고객 이메일을 먼저 입력하세요' : '고객에게 견적 메일 발송'}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-50 disabled:cursor-not-allowed">
+            {sending ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : (
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            )}
+            고객에게 발송
+          </button>
+          {!form.client_email && (
+            <span className="text-xs text-amber-400/80">이메일 입력 필요</span>
+          )}
+
           {/* 저장 */}
           <button onClick={() => save()} disabled={saving}
             className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all ${saved ? 'bg-green-600 text-white' : 'bg-blue-600 hover:bg-blue-500 text-white'} disabled:opacity-60`}>
