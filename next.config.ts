@@ -36,7 +36,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // Music 사업부 마이그
-      { source: '/services/music', destination: '/music/packs', permanent: true },
+      { source: '/services/music', destination: '/products', permanent: true },
+      // music/packs 고아 구매 경로 차단 — Phase 2 orders 시스템으로 통합(2026-06-12)
+      { source: '/music/packs', destination: '/products', permanent: true },
       { source: '/services/music/samples', destination: '/music/samples', permanent: true },
       { source: '/studio', destination: '/music/studio', permanent: true },
       // 커스텀 외주 마이그 (2026-06-11 리뉴얼: work 라우트 → /outsourcing 통합)

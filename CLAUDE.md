@@ -2,7 +2,7 @@
 
 ## 프로젝트 개요
 7년차 대기업 백엔드 개발자 **박재오**가 운영하는 개발 부업 사이트.
-고객 맞춤형 서비스를 개발·판매하거나, 이미 완성된 솔루션을 구독 형태로 제공한다.
+고객 맞춤형 서비스를 외주 개발하거나, 이미 완성된 솔루션을 계좌이체 구매 형태로 제공한다.
 
 ## 운영자 정보
 - 이름: 박재오
@@ -11,50 +11,158 @@
 - 연락처: 010-3907-1392
 - NAS 개인 서버: 로또 랩, 주식 자동매매 프로그램 등 실제 서비스 운영 중
 
-## 핵심 서비스
-| 서비스 | 경로 | 설명 |
-|--------|------|------|
-| 로또 번호 추천 | `/services/lotto` | 빅데이터/통계 기반 로또 번호 분석 제공 |
-| 주식 자동 매매 | `/services/stock` | 텔레그램 연동 주식 자동 매매 프로그램 |
-| 프롬프트 엔지니어링 | `/services/prompt` | 업무 특화 AI 프롬프트 설계 서비스 |
-| 업무 자동화 | `/services/automation` | RPA·엑셀·이메일 등 일상 업무 자동화 개발 |
-| 외주 개발 | `/freelance` | 맞춤형 소프트웨어 외주 (포트폴리오 + 문의) |
+## 핵심 IA (공개 라우트)
+| 경로 | 설명 |
+|------|------|
+| `/` | 메인 — 외주 개발 + 완성 소프트웨어 2축 소개 |
+| `/outsourcing` | 외주 개발 — 4단계 의뢰 폼 · 프로세스 · 포트폴리오 · FAQ |
+| `/products` | 완성 소프트웨어 목록 — 계좌이체 구매 |
+| `/products/[id]` | 제품 상세 — 구매 신청·결제 안내 |
+| `/track/[token]` | 비회원 의뢰 진행 추적 |
+| `/quote/[token]` | 공개 견적 — 고객 수락/거절 |
+| `/login` | 로그인 (`?next=` 리다이렉트 지원) |
+| `/mypage` | 4탭: 프로필 / 내 의뢰(타임라인) / 내 제품(다운로드) / 주문 내역 |
+| `/legal/*` | 이용약관 · 개인정보처리방침 · 환불정책 |
+
+## 숨김 서비스 (admin_token 세션 전용)
+`service_settings` 테이블 토글 + `lib/service-visibility.ts` 가드로 접근 제한.
+admin/services 패널에서 ON/OFF 전환 가능.
+
+| 경로 | 서비스 |
+|------|--------|
+| `/work/saju*` | 사주 분석 |
+| `/music/*` | 음악 팩 (단, `/music/packs`는 `/products`로 308 리다이렉트) |
+| `/gyeol` | CONTOUR PMF 설문 |
+| `/packages` | 레거시 패키지 |
 
 ## 기술 스택
-- **Framework**: Next.js 16 (App Router, TypeScript)
+- **Framework**: Next.js 15 (App Router, TypeScript)
 - **Styling**: Tailwind CSS v4
-- **Email**: Resend (API key: 환경변수 `RESEND_API_KEY`)
+- **DB**: Supabase (클라우드 + NAS self-host 이중 운영)
+- **Email**: Resend (`RESEND_API_KEY`) — 문의 접수·주문 확인·견적 발송 메일
 - **Analytics**: Google Analytics G-WG77RNHXRK
-- **Deployment**: Vercel
+- **Test**: vitest (`npm test`) — lib 단위 테스트
+- **Deployment**: Vercel (NAS self-host 전환 진행 중, 컷오버 전 Vercel 운영)
 
-## 디자인 시스템
-- **Primary**: Blue (`#1d4ed8` blue-700, `#2563eb` blue-600)
-- **Secondary**: Violet/Purple (`#7c3aed` violet-600, `#8b5cf6` violet-500)
-- **Layout**: 대시보드형 — 왼쪽 고정 사이드바 + 오른쪽 스크롤 콘텐츠
-- **Sidebar bg**: `#0f172a` (slate-900)
-- **Main bg**: `#f1f5f9` (slate-100)
-- **Cards**: white + 그림자
+## 디자인 시스템 (`--jsm-*` 토큰)
+
+### CSS 변수
+| 토큰 | 값 | 역할 |
+|------|----|------|
+| `--jsm-bg` | `#f8fafc` | 페이지 배경 |
+| `--jsm-surface` | `#ffffff` | 카드·패널 배경 |
+| `--jsm-ink` | `#0f172a` | 본문 텍스트 |
+| `--jsm-line` | `#e2e8f0` | 구분선·테두리 |
+| `--jsm-navy` | `#0b1f3a` | 헤더·강조 배경 |
+| `--jsm-accent` | `#1d4ed8` | 단일 포인트 컬러 (버튼·링크) |
+
+### 레이아웃
+- 상단 네비(`TopNav`) + 푸터 포함 `PublicShell` 기업형 레이아웃
+- Pretendard 폰트
+
+### 금지 가이드레일
+- gradient / blur / 보라(violet/purple) 계열 색상 사용 금지
+- 이모지 사용 금지 (UI 내)
+- `--jsm-*` 토큰 외 임의 색상 변수 추가 금지
 
 ## 파일 구조
 ```
 app/
-  layout.tsx              — 루트 레이아웃 (메타데이터, 폰트, GA, DashboardShell 래핑)
-  page.tsx                — 홈 대시보드 (서비스 카드 그리드)
-  globals.css             — 전역 스타일 + CSS 변수
-  components/
-    DashboardShell.tsx    — 클라이언트: 사이드바 + 메인 영역 레이아웃 래퍼
-    Sidebar.tsx           — 클라이언트: 왼쪽 사이드바 내비게이션
-    ContactForm.tsx       — 클라이언트: 문의 폼 (Resend 연동)
-  services/
-    lotto/page.tsx        — 로또 번호 추천 서비스 상세
-    stock/page.tsx        — 주식 자동 매매 서비스 상세
-    prompt/page.tsx       — 프롬프트 엔지니어링 서비스 상세
-    automation/page.tsx   — 업무 자동화 서비스 상세
-  freelance/
-    page.tsx              — 외주 개발 포트폴리오 + 문의 폼
+  layout.tsx                  — 루트 레이아웃 (메타데이터·폰트·GA·PublicShell)
+  page.tsx                    — 메인 (2축 랜딩)
+  globals.css                 — 전역 스타일 + --jsm-* CSS 변수
+  components/                 — 공용 UI (TopNav, PublicShell, ContactForm 등)
+  outsourcing/page.tsx        — 외주 의뢰 페이지
+  products/
+    page.tsx                  — 완성 소프트웨어 목록
+    [id]/page.tsx             — 제품 상세 + 구매 신청
+  track/[token]/page.tsx      — 비회원 의뢰 추적
+  quote/[token]/page.tsx      — 공개 견적 수락/거절
+  login/page.tsx              — 로그인 (?next= 지원)
+  mypage/page.tsx             — 마이페이지 4탭
+  legal/                      — privacy / terms / refund
+  admin/                      — 관리자 전용 (dashboard·members·services·orders·products·contacts·quotes·packs·...)
   api/
-    contact/route.ts      — POST: 문의 이메일 발송 (Resend)
+    contact/route.ts          — POST: 의뢰 접수 (public_token 발급 + 고객 메일)
+    orders/route.ts           — POST: 주문 생성(pending)
+    quote/[token]/route.ts    — GET/POST: 견적 조회·수락/거절
+    admin/quotes/[id]/send/route.ts  — 견적 발송 (메일 + 'quoted' 상태 동기화)
+    saju/analyze/route.ts     — 사주 AI 분석 (Gemini)
+    payment/                  — PortOne 연동 (보존 전용, 미활성)
+  work/saju/                  — 숨김: 사주 서비스
+  music/                      — 숨김: 음악 팩 (packs는 /products로 308)
+  gyeol/                      — 숨김: CONTOUR PMF 설문
+
+lib/
+  service-visibility.ts       — 숨김 서비스 접근 가드
+  product-access.ts           — orders→제품 접근 확장 (music tier 하위 호환)
+  request-status.ts           — 의뢰 상태 머신 단일 소스
+  order-emails.ts             — 주문 관련 Resend 메일
+  request-emails.ts           — 의뢰 관련 Resend 메일
+  supabase/
+    product-files.ts          — 제품·파일 조회
+    pack-files.ts             — 레거시 팩 파일
+  saju-calculator.ts          — 사주팔자 계산 (검증 완료)
+  solar-terms.ts              — 절기 계산
+  ai-interpretation.ts        — 사주 AI 해석·용신 추정
 ```
+
+---
+
+## 외주 플로우 (의뢰 상태 머신)
+
+```
+고객 의뢰 (/api/contact)
+  → public_token 발급 + 고객 접수 메일
+  → admin/contacts 수신
+       ↓
+  pending → reviewing → quoted ──→ accepted ──→ in_progress → completed
+                           ↓            ↓
+                        on_hold      on_hold
+                           ↓
+                        cancelled (어느 단계에서도 가능)
+```
+
+| 전환 | 트리거 |
+|------|--------|
+| `pending → reviewing` | 관리자 확인 |
+| `reviewing → quoted` | 관리자 견적 작성 + `/api/admin/quotes/[id]/send` 발송 (메일 + 상태 동기화) |
+| `quoted → accepted` | 고객 `/quote/[token]` 수락 (관리자 메일 알림) |
+| `quoted → on_hold` | 고객 `/quote/[token]` 거절 |
+| `accepted → in_progress` | 관리자 착수 처리 |
+| `in_progress → completed` | 관리자 완료 처리 |
+
+---
+
+## 결제 플로우 (계좌이체 단일 소스)
+
+```
+고객 구매 신청 (/products/[id])
+  → POST /api/orders  → orders 레코드 생성 (status: pending)
+  → 입금 안내 메일 발송 (케이뱅크 100-116-337157 박재오)
+
+관리자 입금 확인 (/admin/orders)
+  → orders.status: pending → paid
+  → 다운로드 링크 메일 발송
+
+고객 다운로드 (/mypage → 내 제품 탭)
+  → GET /api/packs/sign-link  → DSM 서명 링크 (4시간 TTL)
+```
+
+- PG(PortOne) 코드는 `products.pay_method` 플래그 기반으로 보존만, 현재 미활성
+- `lib/product-access.ts`: orders 기반 접근 + music tier 하위 호환
+
+---
+
+## 개발 규칙
+- 서비스 페이지 공통 구조: Hero → Features → Pricing → FAQ → CTA
+- 구매/신청 CTA는 `/outsourcing#contact` 또는 `/products/[id]` 구매 버튼으로 연결
+- 가드레일 준수: gradient·blur·보라·이모지 금지, `--jsm-*` 토큰만 사용
+- 숨김 서비스 접근: `lib/service-visibility.ts` 가드 → admin_token 세션 없으면 404 반환
+- 새 라우트 추가 시 공개/숨김 여부를 `service_settings`에 명시
+- DB 마이그레이션은 클라우드 Supabase + NAS self-host **양쪽** 적용 필수
+
+---
 
 ## 쟁승메이드 Co. — AI 에이전트 팀 (`.claude/commands/`)
 
@@ -104,16 +212,9 @@ app/
 
 ---
 
-## 개발 규칙
-- 서비스 페이지 공통 구조: Hero → Features → Pricing → FAQ → CTA
-- 구매/신청 CTA는 `/freelance` 페이지 ContactForm으로 연결 (service 파라미터로 pre-fill)
-- 사이드바는 `usePathname`으로 활성 경로 감지
-- 모바일: 햄버거 메뉴로 사이드바 토글 (overlay 포함)
-- 이미지 없이 아이콘·그래디언트·SVG로 시각적 완성도 유지
+## 사주 시스템 (`/app/work/saju`, `/lib/saju-*.ts`)
 
----
-
-## 사주 시스템 (`/app/saju`, `/lib/saju-*.ts`)
+> **서비스는 현재 숨김 — `/admin/services` 토글로 복귀 가능**
 
 ### AI 연동 (`app/api/saju/analyze/route.ts`)
 - **AI**: Google Gemini (`@google/generative-ai`)
@@ -124,7 +225,7 @@ app/
 - **Vercel 타임아웃**: `export const maxDuration = 60` (Pro 플랜 기준)
 - **Mock 감지**: `isMockInterpretation()` 함수로 DB에 캐시된 예시 데이터 판별
   - `SajuAISection.tsx`에서 mock이면 `validSaved = null`로 처리 → API 재호출
-  - 재생성 버튼(🔄)으로 수동 재생성 가능
+  - 재생성 버튼으로 수동 재생성 가능
 
 ### 사주팔자 계산 원칙 (검증 완료)
 
@@ -159,3 +260,12 @@ const stemIndex = (startStem + (branchIndex - 2 + 12) % 12) % 10;
 년주: 壬申  월주: 壬子  일주: 癸酉  시주: 庚申
 ```
 이 결과가 나오면 계산 로직 정상. 다른 값이면 위 원칙 재확인.
+
+---
+
+## 운영 주의사항
+- **`.env` 파일 절대 커밋 금지**
+- **DB 마이그레이션**: 클라우드 Supabase + NAS self-host **양쪽** 적용 필수
+- **`2026-06-12-products-extend.sql`의 pack_files 백필 UPDATE는 재실행 금지** (중복 데이터 발생)
+- **NAS self-host 전환 진행 중**: 컷오버 전까지 Vercel 운영 유지
+- **music/packs 고아 경로**: `/music/packs` → `/products` 308 리다이렉트 (next.config.ts 처리)
