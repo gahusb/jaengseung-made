@@ -10,6 +10,7 @@ import {
 } from '@/lib/security';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
+import { sendRequestReceivedEmail } from '@/lib/request-emails';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -31,11 +32,15 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     // ── 입력 정제 + 길이 제한 ─────────────────────────────────
-    const name    = sanitizeStr(body.name,    INPUT_LIMITS.NAME);
-    const phone   = sanitizeStr(body.phone,   INPUT_LIMITS.PHONE);
-    const email   = sanitizeStr(body.email,   INPUT_LIMITS.EMAIL);
-    const service = sanitizeStr(body.service, INPUT_LIMITS.SERVICE);
-    const message = sanitizeStr(body.message, INPUT_LIMITS.MESSAGE);
+    const name        = sanitizeStr(body.name,        INPUT_LIMITS.NAME);
+    const phone       = sanitizeStr(body.phone,       INPUT_LIMITS.PHONE);
+    const email       = sanitizeStr(body.email,       INPUT_LIMITS.EMAIL);
+    const service     = sanitizeStr(body.service,     INPUT_LIMITS.SERVICE);
+    const message     = sanitizeStr(body.message,     INPUT_LIMITS.MESSAGE);
+    // 구조화 필드 (선택값 — 미전송 시 빈 문자열)
+    const projectType = sanitizeStr(body.projectType, 100);
+    const budget      = sanitizeStr(body.budget,      100);
+    const timeline    = sanitizeStr(body.timeline,    100);
 
     // ── 필수값 검증 ───────────────────────────────────────────
     if (!name || !email || !message) {
@@ -99,19 +104,72 @@ export async function POST(request: Request) {
       emailSent = false;
     }
 
+    // ── 추적 토큰 생성 ────────────────────────────────────────
+    let publicToken: string;
+    try {
+      publicToken = globalThis.crypto.randomUUID();
+    } catch {
+      const { randomUUID } = await import('crypto');
+      publicToken = randomUUID();
+    }
+
     // ── DB 저장 (이메일 성공/실패 무관) ──────────────────────
+    // 신규 컬럼 포함 insert 시도 → 컬럼 부재(42703) 시 기존 필드만으로 재시도
+    let tokenStored = false;
     try {
       const admin = createAdminClient();
-      await admin.from('contact_requests').insert({
+      const { error: insertError } = await admin.from('contact_requests').insert({
         name,
         email,
         phone: phone || null,
         service: service || null,
         message,
         user_id: userId,
+        public_token: publicToken,
+        project_type: projectType || null,
+        budget: budget || null,
+        timeline: timeline || null,
       });
+
+      if (insertError) {
+        // PostgreSQL undefined_column (42703) — 마이그레이션 미적용 환경 폴백
+        const pgCode = (insertError as { code?: string }).code;
+        if (pgCode === '42703') {
+          console.warn('[Contact] 신규 컬럼 없음(42703) — 기존 필드만으로 재시도');
+          const { error: fallbackError } = await admin.from('contact_requests').insert({
+            name,
+            email,
+            phone: phone || null,
+            service: service || null,
+            message,
+            user_id: userId,
+          });
+          if (fallbackError) {
+            console.error('[Contact] DB fallback insert error:', fallbackError);
+          }
+          // tokenStored는 false 유지 (공개 토큰이 DB에 없음)
+        } else {
+          console.error('[Contact] DB insert error:', insertError);
+        }
+      } else {
+        tokenStored = true;
+      }
     } catch (dbError) {
       console.error('[Contact] DB insert error:', dbError);
+    }
+
+    // ── 고객 접수 확인 메일 (신규 컬럼 insert 성공 시에만) ──
+    if (tokenStored) {
+      try {
+        await sendRequestReceivedEmail({
+          name,
+          email,
+          service: service || '외주 문의',
+          publicToken,
+        });
+      } catch (confirmEmailError) {
+        console.error('[Contact] 고객 확인 메일 발송 오류:', confirmEmailError);
+      }
     }
 
     if (!emailSent) {
@@ -122,7 +180,11 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { success: true, message: '문의가 성공적으로 전송되었습니다!' },
+      {
+        success: true,
+        message: '문의가 성공적으로 전송되었습니다!',
+        trackUrl: tokenStored ? `/track/${publicToken}` : null,
+      },
       { status: 200 }
     );
   } catch (error) {
