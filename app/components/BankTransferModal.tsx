@@ -82,6 +82,11 @@ export default function BankTransferModal({ product, isOpen, onClose }: Props) {
     };
   }, [isOpen, onClose]);
 
+  // 초기 포커스: 모달 열릴 때 닫기 버튼으로 포커스 이동
+  useEffect(() => {
+    if (isOpen) closeBtnRef.current?.focus();
+  }, [isOpen]);
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -97,6 +102,11 @@ export default function BankTransferModal({ product, isOpen, onClose }: Props) {
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) {
+          if (res.status === 401) {
+            setSubmitting(false);
+            setAuthState('guest');
+            return;
+          }
           setError(data?.error || '주문 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
           setSubmitting(false);
           return;

@@ -4,7 +4,11 @@ import { createClient } from '@/lib/supabase/server';
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') ?? '/mypage';
+  const rawNext = searchParams.get('next') ?? '/mypage';
+  const next =
+    rawNext.startsWith('/') && !rawNext.startsWith('//') && !rawNext.startsWith('/\\')
+      ? rawNext
+      : '/mypage';
 
   // 리다이렉트 기준 URL 결정
   // - dev: 항상 현재 request의 origin (localhost) → NEXT_PUBLIC_SITE_URL 무시
