@@ -36,7 +36,7 @@ admin/services 패널에서 ON/OFF 전환 가능.
 | `/packages` | 레거시 패키지 |
 
 ## 기술 스택
-- **Framework**: Next.js 15 (App Router, TypeScript)
+- **Framework**: Next.js 16 (App Router, TypeScript)
 - **Styling**: Tailwind CSS v4
 - **DB**: Supabase (클라우드 + NAS self-host 이중 운영)
 - **Email**: Resend (`RESEND_API_KEY`) — 문의 접수·주문 확인·견적 발송 메일
@@ -146,7 +146,7 @@ lib/
   → 다운로드 링크 메일 발송
 
 고객 다운로드 (/mypage → 내 제품 탭)
-  → GET /api/packs/sign-link  → DSM 서명 링크 (4시간 TTL)
+  → POST /api/packs/sign-link  → DSM 서명 링크 (4시간 TTL)
 ```
 
 - PG(PortOne) 코드는 `products.pay_method` 플래그 기반으로 보존만, 현재 미활성
