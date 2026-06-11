@@ -6,6 +6,13 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Suspense } from 'react';
 
+// next 파라미터가 안전한 내부 경로(`/`로 시작, `//`·`/\` 프로토콜-상대 아님)일 때만 허용.
+function safeNext(raw: string | null): string {
+  if (!raw) return '/mypage';
+  if (!raw.startsWith('/') || raw.startsWith('//') || raw.startsWith('/\\')) return '/mypage';
+  return raw;
+}
+
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,6 +22,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClient();
+  const next = safeNext(searchParams.get('next'));
 
   useEffect(() => {
     if (searchParams.get('error')) {
@@ -22,7 +30,7 @@ function LoginForm() {
     }
     // 이미 로그인된 경우 리다이렉트
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) router.push('/mypage');
+      if (data.user) router.push(next);
     });
   }, []);
 
@@ -52,7 +60,7 @@ function LoginForm() {
       if (error) {
         setMessage('로그인 실패: 이메일 또는 비밀번호를 확인해주세요.');
       } else {
-        router.push('/mypage');
+        router.push(next);
         router.refresh();
       }
     }
@@ -66,9 +74,11 @@ function LoginForm() {
       process.env.NODE_ENV === 'development'
         ? window.location.origin
         : (process.env.NEXT_PUBLIC_SITE_URL ?? window.location.origin);
+    // next는 /auth/callback에서 read해 로그인 후 목적지로 리다이렉트 (기본 /mypage)
+    const callbackUrl = `${base}/auth/callback?next=${encodeURIComponent(next)}`;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${base}/auth/callback` },
+      options: { redirectTo: callbackUrl },
     });
     if (error) setMessage('Google 로그인 오류: ' + error.message);
   };
