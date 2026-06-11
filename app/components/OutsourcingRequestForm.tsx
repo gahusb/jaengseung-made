@@ -15,6 +15,12 @@ import { trackEvent } from '@/lib/gtag';
 const KOR_TIGHT = { letterSpacing: '-0.02em' } as const;
 const KOR_BODY = { letterSpacing: '-0.01em' } as const;
 
+const INPUT_STYLE = {
+  background: 'var(--jsm-surface)',
+  border: '1px solid var(--jsm-line)',
+  color: 'var(--jsm-ink)',
+} as const;
+
 const PROJECT_TYPES = [
   '웹 서비스',
   '웹사이트',
@@ -117,9 +123,10 @@ export default function OutsourcingRequestForm() {
   };
 
   const goNext = useCallback(() => {
+    if (!stepValid(step)) return;
     setError('');
     setStep((s) => Math.min(s + 1, STEPS.length));
-  }, []);
+  }, [step]);
 
   const goPrev = useCallback(() => {
     setError('');
@@ -398,9 +405,7 @@ export default function OutsourcingRequestForm() {
               placeholder="만들고 싶은 것, 참고 서비스, 현재 상황을 자유롭게 적어주세요. 기획이 정리되지 않았어도 괜찮습니다."
               className="w-full px-3.5 py-3 rounded-lg text-sm leading-relaxed resize-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--jsm-accent)]"
               style={{
-                background: 'var(--jsm-surface)',
-                border: '1px solid var(--jsm-line)',
-                color: 'var(--jsm-ink)',
+                ...INPUT_STYLE,
                 ...KOR_BODY,
               }}
             />
@@ -450,11 +455,7 @@ export default function OutsourcingRequestForm() {
                   disabled={submitting}
                   placeholder="홍길동"
                   className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--jsm-accent)]"
-                  style={{
-                    background: 'var(--jsm-surface)',
-                    border: '1px solid var(--jsm-line)',
-                    color: 'var(--jsm-ink)',
-                  }}
+                  style={INPUT_STYLE}
                 />
               </div>
 
@@ -476,11 +477,7 @@ export default function OutsourcingRequestForm() {
                   disabled={submitting}
                   placeholder="example@email.com"
                   className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--jsm-accent)]"
-                  style={{
-                    background: 'var(--jsm-surface)',
-                    border: '1px solid var(--jsm-line)',
-                    color: 'var(--jsm-ink)',
-                  }}
+                  style={INPUT_STYLE}
                 />
               </div>
 
@@ -501,11 +498,7 @@ export default function OutsourcingRequestForm() {
                   disabled={submitting}
                   placeholder="010-0000-0000 (선택)"
                   className="w-full px-3.5 py-2.5 rounded-lg text-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--jsm-accent)]"
-                  style={{
-                    background: 'var(--jsm-surface)',
-                    border: '1px solid var(--jsm-line)',
-                    color: 'var(--jsm-ink)',
-                  }}
+                  style={INPUT_STYLE}
                 />
               </div>
             </div>
@@ -537,9 +530,8 @@ export default function OutsourcingRequestForm() {
               disabled={submitting}
               className="px-5 py-3 rounded-lg text-sm font-semibold border transition-colors hover:bg-[var(--jsm-surface-alt)] disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
-                color: 'var(--jsm-ink)',
+                ...INPUT_STYLE,
                 borderColor: 'var(--jsm-line)',
-                background: 'var(--jsm-surface)',
                 ...KOR_BODY,
               }}
             >
