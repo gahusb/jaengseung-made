@@ -2,14 +2,20 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import OutsourcingRequestForm from '@/app/components/OutsourcingRequestForm';
 
-// 외주 개발 의뢰 페이지 (서버 컴포넌트)
-// PublicShell이 TopNav(h-16)·푸터·main 배경을 제공하므로 여기서는 콘텐츠 섹션만 렌더한다.
-// 메인(/)의 토큰·타이포 패턴(KOR_TIGHT/KOR_BODY)·섹션 리듬과 일관되게 구성한다.
+import HeroField from '@/app/components/deepfield/HeroField';
+import ShowcaseGrid from '@/app/components/deepfield/ShowcaseGrid';
+import ScrollReveal from '@/app/components/deepfield/ScrollReveal';
+import { SHOWCASE_SLOTS } from '@/lib/showcase';
+
+// 외주 개발 의뢰 페이지 (서버 컴포넌트) — Deep Field 다크 캔버스.
+// PublicShell이 TopNav(h-16, /outsourcing 다크 인지)·푸터·main 배경(라이트)을 제공한다.
+// 이 페이지는 자기 풀-블리드 다크 배경을 소유해 main의 라이트 배경을 덮고,
+// 메인(/)과 동일한 비주얼 언어(다크 루트 div + -mt-16 hero + 섹션 border-t 리듬 + 모노 라벨 헤더)를 따른다.
 
 export const metadata: Metadata = {
   title: '외주 개발',
   description:
-    '7년차 대기업 백엔드 개발자가 직접 진행하는 맞춤 소프트웨어 외주 개발. 웹 서비스, 업무 자동화, API·백엔드, 봇, AI 연동까지 기획부터 납품·하자보수까지 단독으로 책임집니다.',
+    '24시간 돌아가는 실서비스를 직접 설계·운영하는 손으로, 맞춤 소프트웨어를 만들어 드립니다. 웹 서비스·업무 자동화·API·백엔드·봇·AI 연동까지 기획부터 납품·하자보수까지 단독으로 책임집니다.',
 };
 
 const KOR_TIGHT = { letterSpacing: '-0.02em' } as const;
@@ -51,7 +57,7 @@ const PROCESS = [
   { n: '06', t: '무상 하자보수 30일', d: '납품 후 30일간 결함·수정을 무상으로 대응해 안정화까지 책임집니다.' },
 ];
 
-// 기존 work/freelance(lib/freelance-portfolio) 실사례를 새 토큰 기준으로 재구성.
+// 기존 work/freelance(lib/freelance-portfolio) 실사례를 다크 토큰 기준으로 재구성.
 const CASES = [
   {
     t: '주식 자동매매 시스템',
@@ -97,14 +103,6 @@ const CASES = [
   },
 ];
 
-// /work/website/samples/* 중 대표 샘플 — 이 라우트는 숨김이 아니라 포트폴리오용으로 잔존.
-const SAMPLES = [
-  { slug: 'corporate', t: '기업 홈페이지', sub: '테크솔루션㈜', tag: 'B2B · 신뢰' },
-  { slug: 'shopping', t: '개인 쇼핑몰', sub: 'MELLOW STUDIO', tag: '쇼핑몰 · 브랜드' },
-  { slug: 'dashboard', t: '관리자 대시보드', sub: 'DataFlow SaaS', tag: 'SaaS · 자동화' },
-  { slug: 'portfolio', t: '개인 포트폴리오', sub: 'Kim Jisu', tag: '크리에이터 · 수주' },
-];
-
 const FAQ = [
   {
     q: '견적은 어떻게 산정되나요?',
@@ -145,395 +143,430 @@ function ArrowRight() {
 
 export default function OutsourcingPage() {
   return (
-    <>
-      {/* ─── 1. Hero ─── */}
-      <section className="border-b" style={{ borderColor: 'var(--jsm-line)' }}>
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-24 lg:py-32">
+    // 풀-블리드 다크 캔버스 — main의 라이트 배경을 덮는다.
+    <div style={{ background: 'var(--jsm-dark-bg)', color: 'var(--jsm-dark-ink)' }}>
+      {/* ─────────────────── 1. HERO (축약 ~60vh) ─────────────────── */}
+      {/* -mt-16 pt-16: 고정 헤더 아래로 끌어올려 상단 라이트 띠 제거 */}
+      <section className="relative -mt-16 flex min-h-[60vh] items-center overflow-hidden pt-16">
+        <HeroField className="absolute inset-0" />
+        {/* 콘텐츠 가독성용 스크림 (radial 광원 위 텍스트 대비) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(7,13,26,0.55) 0%, transparent 30%, transparent 62%, rgba(7,13,26,0.78) 100%)',
+          }}
+        />
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
           <div className="max-w-3xl">
             <span
-              className="inline-block text-xs font-semibold mb-6 px-2.5 py-1 rounded"
-              style={{ color: 'var(--jsm-accent)', background: 'var(--jsm-accent-soft)', ...KOR_BODY }}
+              className="mb-7 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em]"
+              style={{ color: 'var(--jsm-accent-bright)' }}
             >
-              외주 개발
+              <span
+                className="inline-block h-1 w-1 rounded-full"
+                style={{ background: 'var(--jsm-accent-bright)' }}
+              />
+              outsourcing
             </span>
             <h1
-              className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold leading-[1.2] break-keep"
-              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+              className="font-bold break-keep"
+              style={{
+                color: 'var(--jsm-dark-ink)',
+                fontSize: 'clamp(2.4rem, 7vw, 5rem)',
+                lineHeight: 1.06,
+                letterSpacing: '-0.04em',
+              }}
             >
-              맞춤 소프트웨어{' '}
-              <span style={{ color: 'var(--jsm-accent)' }}>외주 개발</span>
+              맞춤 소프트웨어
+              <br />
+              외주 개발
+              <span style={{ color: 'var(--jsm-accent-bright)' }}>.</span>
             </h1>
             <p
-              className="mt-7 text-lg lg:text-xl leading-relaxed break-keep max-w-2xl"
-              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+              className="mt-7 max-w-2xl break-keep text-lg leading-relaxed lg:text-xl"
+              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
             >
-              기획 정리가 안 됐어도 괜찮습니다. 상담에서 함께 정리합니다. 7년차 대기업 백엔드
-              개발자가 기획부터 배포·하자보수까지 단독으로 책임집니다.
+              기획 정리가 안 됐어도 괜찮습니다. 상담에서 함께 정리합니다.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-3">
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="#contact"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg font-semibold text-white transition-colors duration-150 hover:bg-[var(--jsm-accent-hover)]"
+                className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-semibold text-white transition-transform duration-200 hover:translate-y-[-1px]"
                 style={{ background: 'var(--jsm-accent)', ...KOR_BODY }}
               >
                 의뢰 내용 보내기
                 <ArrowRight />
               </Link>
               <Link
-                href="#portfolio"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg font-semibold border transition-colors duration-150 hover:bg-[var(--jsm-surface-alt)]"
+                href="#showcase"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border px-6 py-3.5 font-semibold transition-colors duration-200 hover:bg-[var(--jsm-dark-surface)]"
                 style={{
-                  color: 'var(--jsm-ink)',
-                  borderColor: 'var(--jsm-line)',
-                  background: 'var(--jsm-surface)',
+                  color: 'var(--jsm-dark-ink)',
+                  borderColor: 'var(--jsm-dark-line)',
                   ...KOR_BODY,
                 }}
               >
-                포트폴리오 보기
+                작업 화면 보기
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── 2. 제공 분야 ─── */}
-      <section style={{ background: 'var(--jsm-surface-alt)' }}>
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
-          <div className="max-w-2xl">
+      {/* ─────────────────── 2. SHOWCASE (풀 그리드) ─────────────────── */}
+      <section id="showcase" className="scroll-mt-20 border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
+        {/* 하위 호환: 기존 /outsourcing#portfolio 링크(메인 footer 등)용 앵커 유지 */}
+        <div id="portfolio" className="scroll-mt-20" />
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
+          <ScrollReveal>
             <p
-              className="text-xs font-semibold uppercase tracking-wider mb-3"
-              style={{ color: 'var(--jsm-accent)' }}
+              className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
+              style={{ color: 'var(--jsm-accent-bright)' }}
             >
-              Scope
+              showcase
             </p>
             <h2
-              className="text-3xl lg:text-4xl font-bold break-keep"
-              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.75rem] lg:leading-[1.12]"
+              style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
             >
-              이런 것들을 만들어 드립니다
+              우리가 만드는 화면들
             </h2>
-          </div>
-          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {FIELDS.map((f) => (
-              <div
-                key={f.t}
-                className="rounded-2xl p-7 border"
-                style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
-              >
-                <h3
-                  className="text-lg font-bold break-keep"
-                  style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
-                >
-                  {f.t}
-                </h3>
-                <p
-                  className="mt-2.5 text-sm leading-relaxed break-keep"
-                  style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
-                >
-                  {f.d}
-                </p>
-              </div>
-            ))}
+          </ScrollReveal>
+
+          <div className="mt-14">
+            <ShowcaseGrid slots={SHOWCASE_SLOTS} variant="full" />
           </div>
         </div>
       </section>
 
-      {/* ─── 3. 진행 프로세스 ─── */}
-      <section id="process" className="scroll-mt-20" style={{ background: 'var(--jsm-bg)' }}>
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
-          <div className="max-w-2xl">
+      {/* ─────────────────── 3. 운영 실사례 ─────────────────── */}
+      <section className="border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
+          <ScrollReveal>
             <p
-              className="text-xs font-semibold uppercase tracking-wider mb-3"
-              style={{ color: 'var(--jsm-accent)' }}
+              className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
+              style={{ color: 'var(--jsm-accent-bright)' }}
             >
-              Process
+              in production
             </p>
             <h2
-              className="text-3xl lg:text-4xl font-bold break-keep"
-              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
-            >
-              상담부터 하자보수까지, 흐름이 분명합니다
-            </h2>
-          </div>
-          <div
-            className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-px rounded-2xl overflow-hidden border"
-            style={{ borderColor: 'var(--jsm-line)', background: 'var(--jsm-line)' }}
-          >
-            {PROCESS.map((s) => (
-              <div key={s.n} className="p-7 lg:p-8" style={{ background: 'var(--jsm-surface)' }}>
-                <span
-                  className="text-sm font-bold"
-                  style={{ color: 'var(--jsm-accent)', fontFamily: 'monospace' }}
-                >
-                  {s.n}
-                </span>
-                <h3
-                  className="mt-4 text-lg font-bold break-keep"
-                  style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
-                >
-                  {s.t}
-                </h3>
-                <p
-                  className="mt-2 text-sm leading-relaxed break-keep"
-                  style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
-                >
-                  {s.d}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── 4. 포트폴리오 ─── */}
-      <section id="portfolio" className="scroll-mt-20" style={{ background: 'var(--jsm-surface-alt)' }}>
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
-          <div className="max-w-2xl">
-            <p
-              className="text-xs font-semibold uppercase tracking-wider mb-3"
-              style={{ color: 'var(--jsm-accent)' }}
-            >
-              Portfolio
-            </p>
-            <h2
-              className="text-3xl lg:text-4xl font-bold break-keep"
-              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.75rem] lg:leading-[1.12]"
+              style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
             >
               직접 개발하고, 실제로 굴러가는 결과물
             </h2>
             <p
-              className="mt-4 leading-relaxed break-keep"
-              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+              className="mt-4 max-w-xl break-keep leading-relaxed"
+              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
             >
               운영 중인 서비스와 납품 완료 프로젝트입니다. 의뢰하신 프로젝트도 같은 깊이로 만듭니다.
             </p>
-          </div>
+          </ScrollReveal>
 
-          {/* 실사례 카드 */}
-          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CASES.map((c) => (
-              <div
-                key={c.t}
-                className="flex flex-col rounded-2xl p-7 border"
-                style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
-              >
-                <span
-                  className="self-start inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full mb-5"
-                  style={
-                    c.live
-                      ? { color: 'var(--jsm-accent)', background: 'var(--jsm-accent-soft)' }
-                      : { color: 'var(--jsm-ink-soft)', background: 'var(--jsm-surface-alt)' }
-                  }
-                >
-                  {c.live && (
-                    <span
-                      className="w-1.5 h-1.5 rounded-full"
-                      style={{ background: 'var(--jsm-accent)' }}
-                    />
-                  )}
-                  {c.cat}
-                </span>
-                <h3
-                  className="text-lg font-bold break-keep"
-                  style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
-                >
-                  {c.t}
-                </h3>
-                <p
-                  className="mt-2.5 text-sm leading-relaxed break-keep flex-1"
-                  style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
-                >
-                  {c.d}
-                </p>
-                <div className="mt-5 flex flex-wrap gap-1.5">
-                  {c.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-xs px-2.5 py-1 rounded"
-                      style={{
-                        color: 'var(--jsm-ink-soft)',
-                        background: 'var(--jsm-surface-alt)',
-                        ...KOR_BODY,
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* 웹사이트 샘플 링크 */}
-          <div className="mt-14">
-            <h3
-              className="text-lg font-bold break-keep"
-              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
-            >
-              웹사이트 제작 샘플
-            </h3>
-            <p
-              className="mt-2 text-sm leading-relaxed break-keep"
-              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
-            >
-              직접 둘러볼 수 있는 데모 사이트입니다. 카드를 눌러 화면을 확인하세요.
-            </p>
-            <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {SAMPLES.map((s) => (
-                <Link
-                  key={s.slug}
-                  href={`/work/website/samples/${s.slug}`}
-                  className="group flex flex-col rounded-2xl p-6 border transition-colors duration-200 hover:border-[var(--jsm-accent)]"
-                  style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {CASES.map((c, i) => (
+              <ScrollReveal key={c.t} delay={i * 80}>
+                <div
+                  className="flex h-full flex-col rounded-2xl border p-7"
+                  style={{
+                    background: 'var(--jsm-dark-surface)',
+                    borderColor: 'var(--jsm-dark-line)',
+                  }}
                 >
                   <span
-                    className="text-[11px] font-semibold uppercase tracking-wider"
-                    style={{ color: 'var(--jsm-accent)' }}
+                    className="mb-5 inline-flex items-center gap-1.5 self-start rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                    style={
+                      c.live
+                        ? { color: 'var(--jsm-accent-bright)', background: 'rgba(96,165,250,0.12)' }
+                        : { color: 'var(--jsm-dark-soft)', background: 'rgba(148,163,184,0.08)' }
+                    }
                   >
-                    {s.tag}
+                    {c.live && (
+                      <span
+                        className="h-1.5 w-1.5 rounded-full"
+                        style={{ background: 'var(--jsm-accent-bright)' }}
+                      />
+                    )}
+                    {c.cat}
                   </span>
-                  <h4
-                    className="mt-3 text-base font-bold break-keep"
-                    style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+                  <h3
+                    className="break-keep text-lg font-bold"
+                    style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
                   >
-                    {s.t}
-                  </h4>
+                    {c.t}
+                  </h3>
                   <p
-                    className="mt-1 text-sm break-keep"
-                    style={{ color: 'var(--jsm-ink-faint)', ...KOR_BODY }}
+                    className="mt-2.5 flex-1 break-keep text-sm leading-relaxed"
+                    style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
                   >
-                    {s.sub}
+                    {c.d}
                   </p>
-                  <span
-                    className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 group-hover:text-[var(--jsm-accent-hover)]"
-                    style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
-                  >
-                    데모 보기
-                    <ArrowRight />
-                  </span>
-                </Link>
-              ))}
-            </div>
+                  <div className="mt-5 flex flex-wrap gap-1.5">
+                    {c.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded px-2.5 py-1 text-xs"
+                        style={{
+                          color: 'var(--jsm-dark-soft)',
+                          background: 'rgba(148,163,184,0.08)',
+                          ...KOR_BODY,
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ─── 5. FAQ ─── */}
-      <section style={{ background: 'var(--jsm-bg)' }}>
-        <div className="max-w-3xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
-          <div className="mb-12">
+      {/* ─────────────────── 4a. 제공 분야 ─────────────────── */}
+      <section className="border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
+          <ScrollReveal>
             <p
-              className="text-xs font-semibold uppercase tracking-wider mb-3"
-              style={{ color: 'var(--jsm-accent)' }}
+              className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
+              style={{ color: 'var(--jsm-accent-bright)' }}
             >
-              FAQ
+              scope
             </p>
             <h2
-              className="text-3xl lg:text-4xl font-bold break-keep"
-              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.75rem] lg:leading-[1.12]"
+              style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
+            >
+              이런 것들을 만들어 드립니다
+            </h2>
+          </ScrollReveal>
+
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {FIELDS.map((f, i) => (
+              <ScrollReveal key={f.t} delay={i * 80}>
+                <div
+                  className="h-full rounded-2xl border p-7"
+                  style={{
+                    background: 'var(--jsm-dark-surface)',
+                    borderColor: 'var(--jsm-dark-line)',
+                  }}
+                >
+                  <h3
+                    className="break-keep text-lg font-bold"
+                    style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
+                  >
+                    {f.t}
+                  </h3>
+                  <p
+                    className="mt-2.5 break-keep text-sm leading-relaxed"
+                    style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+                  >
+                    {f.d}
+                  </p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────── 4b. 진행 프로세스 ─────────────────── */}
+      <section id="process" className="scroll-mt-20 border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
+          <ScrollReveal>
+            <p
+              className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
+              style={{ color: 'var(--jsm-accent-bright)' }}
+            >
+              process
+            </p>
+            <h2
+              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.75rem] lg:leading-[1.12]"
+              style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
+            >
+              상담부터 하자보수까지, 흐름이 분명합니다
+            </h2>
+          </ScrollReveal>
+
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {PROCESS.map((s, i) => (
+              <ScrollReveal key={s.n} delay={i * 80}>
+                <div
+                  className="relative h-full rounded-2xl border p-7 lg:p-8"
+                  style={{
+                    background: 'var(--jsm-dark-surface)',
+                    borderColor: 'var(--jsm-dark-line)',
+                  }}
+                >
+                  <span
+                    className="relative z-10 inline-flex h-12 w-12 items-center justify-center rounded-full font-mono text-sm font-bold"
+                    style={{
+                      color: 'var(--jsm-accent-bright)',
+                      background: 'var(--jsm-dark-bg)',
+                      boxShadow: 'inset 0 0 0 1px var(--jsm-dark-line)',
+                    }}
+                  >
+                    {s.n}
+                  </span>
+                  <h3
+                    className="mt-5 break-keep text-lg font-bold"
+                    style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
+                  >
+                    {s.t}
+                  </h3>
+                  <p
+                    className="mt-2 break-keep text-sm leading-relaxed"
+                    style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+                  >
+                    {s.d}
+                  </p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────── 5. FAQ ─────────────────── */}
+      <section className="border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
+        <div className="mx-auto max-w-3xl px-6 py-24 lg:px-8 lg:py-32">
+          <ScrollReveal>
+            <p
+              className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
+              style={{ color: 'var(--jsm-accent-bright)' }}
+            >
+              faq
+            </p>
+            <h2
+              className="break-keep text-3xl font-bold lg:text-[2.75rem] lg:leading-[1.12]"
+              style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
             >
               자주 묻는 질문
             </h2>
-          </div>
-          <div className="space-y-3">
-            {FAQ.map((item) => (
-              <details
-                key={item.q}
-                className="group rounded-2xl border overflow-hidden"
-                style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
-              >
-                <summary
-                  className="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-5 font-semibold break-keep"
-                  style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+          </ScrollReveal>
+
+          <div className="mt-14 space-y-3">
+            {FAQ.map((item, i) => (
+              <ScrollReveal key={item.q} delay={i * 80}>
+                <details
+                  className="group overflow-hidden rounded-2xl border"
+                  style={{
+                    background: 'var(--jsm-dark-surface)',
+                    borderColor: 'var(--jsm-dark-line)',
+                  }}
                 >
-                  {item.q}
-                  <svg
-                    className="shrink-0 transition-transform duration-200 group-open:rotate-45"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    aria-hidden
-                    style={{ color: 'var(--jsm-ink-faint)' }}
+                  <summary
+                    className="flex cursor-pointer list-none items-center justify-between gap-4 break-keep px-6 py-5 font-semibold"
+                    style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
                   >
-                    <path d="M12 5v14M5 12h14" />
-                  </svg>
-                </summary>
-                <p
-                  className="px-6 pb-5 text-sm leading-relaxed break-keep"
-                  style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
-                >
-                  {item.a}
-                </p>
-              </details>
+                    {item.q}
+                    <svg
+                      className="shrink-0 transition-transform duration-200 group-open:rotate-45"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      aria-hidden
+                      style={{ color: 'var(--jsm-dark-soft)' }}
+                    >
+                      <path d="M12 5v14M5 12h14" />
+                    </svg>
+                  </summary>
+                  <p
+                    className="break-keep px-6 pb-5 text-sm leading-relaxed"
+                    style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+                  >
+                    {item.a}
+                  </p>
+                </details>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── 6. 의뢰 폼 ─── */}
-      <section id="contact" className="scroll-mt-20" style={{ background: 'var(--jsm-navy)' }}>
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
-          <div className="grid lg:grid-cols-5 gap-10 lg:gap-12">
+      {/* ─────────────────── 6. 의뢰 폼 ─────────────────── */}
+      <section id="contact" className="scroll-mt-20 border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
+        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
+          <div className="grid gap-10 lg:grid-cols-5 lg:gap-12">
             {/* 안내 */}
             <div className="lg:col-span-2">
-              <p
-                className="text-xs font-semibold uppercase tracking-wider mb-3"
-                style={{ color: '#7aa7ff' }}
-              >
-                Contact
-              </p>
-              <h2
-                className="text-3xl lg:text-[2.5rem] font-bold leading-tight text-white break-keep"
-                style={KOR_TIGHT}
-              >
-                프로젝트 문의
-              </h2>
-              <p
-                className="mt-5 text-lg leading-relaxed text-white/70 break-keep"
-                style={KOR_BODY}
-              >
-                영업일 2일 내에 회신드립니다. 아이디어 단계여도 괜찮습니다 — 상담에서 방향을
-                함께 잡아드립니다.
-              </p>
-              <div
-                className="mt-8 pt-8 border-t space-y-3"
-                style={{ borderColor: 'rgba(255,255,255,0.12)' }}
-              >
-                <a
-                  href="mailto:bgg8988@gmail.com"
-                  className="flex items-center gap-3 text-sm text-white/80 hover:text-white transition-colors"
-                  style={KOR_BODY}
+              <ScrollReveal>
+                <p
+                  className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
+                  style={{ color: 'var(--jsm-accent-bright)' }}
                 >
-                  <span className="text-white/40 text-xs uppercase tracking-wider w-12">Mail</span>
-                  bgg8988@gmail.com
-                </a>
-                <a
-                  href="tel:010-3907-1392"
-                  className="flex items-center gap-3 text-sm text-white/80 hover:text-white transition-colors"
-                  style={KOR_BODY}
+                  contact
+                </p>
+                <h2
+                  className="break-keep text-3xl font-bold leading-tight lg:text-[2.5rem]"
+                  style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
                 >
-                  <span className="text-white/40 text-xs uppercase tracking-wider w-12">Tel</span>
-                  010-3907-1392
-                </a>
-              </div>
+                  프로젝트 문의
+                </h2>
+                <p
+                  className="mt-5 break-keep text-lg leading-relaxed"
+                  style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+                >
+                  영업일 2일 내에 회신드립니다. 아이디어 단계여도 괜찮습니다 — 상담에서 방향을
+                  함께 잡아드립니다.
+                </p>
+                <div
+                  className="mt-8 space-y-3 border-t pt-8"
+                  style={{ borderColor: 'var(--jsm-dark-line)' }}
+                >
+                  <a
+                    href="mailto:bgg8988@gmail.com"
+                    className="flex items-center gap-3 text-sm transition-colors hover:text-[var(--jsm-dark-ink)]"
+                    style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+                  >
+                    <span
+                      className="w-12 font-mono text-xs uppercase tracking-wider"
+                      style={{ color: 'var(--jsm-accent-bright)' }}
+                    >
+                      Mail
+                    </span>
+                    bgg8988@gmail.com
+                  </a>
+                  <a
+                    href="tel:010-3907-1392"
+                    className="flex items-center gap-3 text-sm transition-colors hover:text-[var(--jsm-dark-ink)]"
+                    style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+                  >
+                    <span
+                      className="w-12 font-mono text-xs uppercase tracking-wider"
+                      style={{ color: 'var(--jsm-accent-bright)' }}
+                    >
+                      Tel
+                    </span>
+                    010-3907-1392
+                  </a>
+                </div>
+              </ScrollReveal>
             </div>
 
             {/* 폼 */}
             <div className="lg:col-span-3">
-              <div
-                className="rounded-2xl p-6 lg:p-8"
-                style={{ background: 'var(--jsm-surface)' }}
-              >
-                <OutsourcingRequestForm />
-              </div>
+              <ScrollReveal delay={100}>
+                <div
+                  className="rounded-2xl border p-6 lg:p-8"
+                  style={{
+                    background: 'var(--jsm-dark-surface)',
+                    borderColor: 'var(--jsm-dark-line)',
+                  }}
+                >
+                  <OutsourcingRequestForm />
+                </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

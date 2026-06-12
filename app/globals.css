@@ -198,6 +198,13 @@ body {
   pointer-events: none;
 }
 
+/* 외주 의뢰 폼 — 다크 스킨 placeholder (Deep Field 재스킨) */
+.jsm-dark-form input::placeholder,
+.jsm-dark-form textarea::placeholder {
+  color: var(--jsm-dark-soft);
+  opacity: 1;
+}
+
 /* Service card hover */
 .service-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
