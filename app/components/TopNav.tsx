@@ -65,6 +65,18 @@ export default function TopNav() {
     return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
+  // 다크 라우트 판정
+  const DARK_ROUTES = ['/', '/outsourcing'];
+  const isDark = DARK_ROUTES.includes(pathname) || pathname.startsWith('/outsourcing/');
+
+  // 팔레트 헬퍼 — isDark 분기
+  const ink      = isDark ? 'var(--jsm-dark-ink)'    : 'var(--jsm-ink)';
+  const inkSoft  = isDark ? 'var(--jsm-dark-soft)'   : 'var(--jsm-ink-soft)';
+  const surface  = isDark ? 'var(--jsm-dark-bg)'     : 'var(--jsm-surface)';
+  const line     = isDark ? 'var(--jsm-dark-line)'   : 'var(--jsm-line)';
+  const accent   = isDark ? 'var(--jsm-accent-bright)' : 'var(--jsm-accent)';
+  const accentBg = isDark ? 'rgba(96,165,250,0.12)'  : 'var(--jsm-accent-soft)';
+
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
     return pathname === href || pathname.startsWith(href + '/');
@@ -75,9 +87,13 @@ export default function TopNav() {
       <header
         className="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300"
         style={{
-          background: scrolled ? 'var(--jsm-surface)' : 'transparent',
-          borderBottom: scrolled ? '1px solid var(--jsm-line)' : '1px solid transparent',
-          boxShadow: scrolled ? '0 1px 8px rgba(15,23,42,0.06)' : 'none',
+          background: scrolled
+            ? (isDark ? 'rgba(7,13,26,0.85)' : 'var(--jsm-surface)')
+            : 'transparent',
+          borderBottom: scrolled
+            ? `1px solid ${line}`
+            : '1px solid transparent',
+          boxShadow: scrolled && !isDark ? '0 1px 8px rgba(15,23,42,0.06)' : 'none',
         }}
       >
         <nav className="max-w-7xl mx-auto flex w-full items-center justify-between h-16 px-6 lg:px-8">
@@ -89,13 +105,13 @@ export default function TopNav() {
           >
             <span
               className="text-xl font-black tracking-tight"
-              style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.02em' }}
+              style={{ color: ink, letterSpacing: '-0.02em' }}
             >
               JSM
             </span>
             <span
               className="hidden sm:inline text-sm font-medium"
-              style={{ color: 'var(--jsm-ink-soft)', letterSpacing: '-0.01em' }}
+              style={{ color: inkSoft, letterSpacing: '-0.01em' }}
             >
               쟁승메이드
             </span>
@@ -109,8 +125,8 @@ export default function TopNav() {
                 href={l.href}
                 className="text-sm font-medium px-4 py-2 rounded-md transition-colors duration-150"
                 style={{
-                  color: isActive(l.href) ? 'var(--jsm-accent)' : 'var(--jsm-ink-soft)',
-                  background: isActive(l.href) ? 'var(--jsm-accent-soft)' : 'transparent',
+                  color: isActive(l.href) ? accent : inkSoft,
+                  background: isActive(l.href) ? accentBg : 'transparent',
                   textDecoration: 'none',
                   letterSpacing: '-0.01em',
                 }}
@@ -127,14 +143,14 @@ export default function TopNav() {
                 <Link
                   href="/mypage"
                   className="hidden sm:inline-block text-sm font-medium px-3 py-2 rounded-md transition-colors duration-150"
-                  style={{ color: 'var(--jsm-ink-soft)', textDecoration: 'none', letterSpacing: '-0.01em' }}
+                  style={{ color: inkSoft, textDecoration: 'none', letterSpacing: '-0.01em' }}
                 >
                   마이페이지
                 </Link>
                 <button
                   onClick={handleLogout}
                   className="hidden sm:inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150"
-                  style={{ color: 'var(--jsm-ink-soft)', background: 'transparent', letterSpacing: '-0.01em' }}
+                  style={{ color: inkSoft, background: 'transparent', letterSpacing: '-0.01em' }}
                 >
                   로그아웃
                 </button>
@@ -143,7 +159,7 @@ export default function TopNav() {
               <Link
                 href="/login"
                 className="hidden sm:inline-block text-sm font-medium px-3 py-2 rounded-md transition-colors duration-150"
-                style={{ color: 'var(--jsm-ink-soft)', textDecoration: 'none', letterSpacing: '-0.01em' }}
+                style={{ color: inkSoft, textDecoration: 'none', letterSpacing: '-0.01em' }}
               >
                 로그인
               </Link>
@@ -167,7 +183,7 @@ export default function TopNav() {
               aria-label="메뉴 열기"
               aria-expanded={open}
               className="md:hidden p-2 rounded-lg transition-colors duration-150"
-              style={{ color: 'var(--jsm-ink)' }}
+              style={{ color: ink }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -186,7 +202,7 @@ export default function TopNav() {
         >
           <div
             className="absolute top-0 right-0 h-full w-72 flex flex-col shadow-xl"
-            style={{ background: 'var(--jsm-surface)' }}
+            style={{ background: surface }}
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -195,18 +211,18 @@ export default function TopNav() {
             {/* 드로어 헤더 */}
             <div
               className="flex items-center justify-between px-6 h-16 border-b"
-              style={{ borderColor: 'var(--jsm-line)' }}
+              style={{ borderColor: line }}
             >
               <div className="flex items-baseline gap-2">
                 <span
                   className="text-lg font-black tracking-tight"
-                  style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.02em' }}
+                  style={{ color: ink, letterSpacing: '-0.02em' }}
                 >
                   JSM
                 </span>
                 <span
                   className="text-xs font-medium"
-                  style={{ color: 'var(--jsm-ink-soft)' }}
+                  style={{ color: inkSoft }}
                 >
                   쟁승메이드
                 </span>
@@ -215,7 +231,7 @@ export default function TopNav() {
                 onClick={() => setOpen(false)}
                 aria-label="메뉴 닫기"
                 className="p-2 rounded-lg transition-colors duration-150"
-                style={{ color: 'var(--jsm-ink-soft)' }}
+                style={{ color: inkSoft }}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -231,8 +247,8 @@ export default function TopNav() {
                   href={l.href}
                   className="text-base font-semibold px-3 py-3 rounded-lg transition-colors duration-150"
                   style={{
-                    color: isActive(l.href) ? 'var(--jsm-accent)' : 'var(--jsm-ink)',
-                    background: isActive(l.href) ? 'var(--jsm-accent-soft)' : 'transparent',
+                    color: isActive(l.href) ? accent : ink,
+                    background: isActive(l.href) ? accentBg : 'transparent',
                     textDecoration: 'none',
                     letterSpacing: '-0.01em',
                   }}
@@ -243,7 +259,7 @@ export default function TopNav() {
 
               <div
                 className="my-4 border-t"
-                style={{ borderColor: 'var(--jsm-line)' }}
+                style={{ borderColor: line }}
               />
 
               {user ? (
@@ -251,14 +267,14 @@ export default function TopNav() {
                   <Link
                     href="/mypage"
                     className="text-sm font-medium px-3 py-3 rounded-lg transition-colors duration-150"
-                    style={{ color: 'var(--jsm-ink-soft)', textDecoration: 'none', letterSpacing: '-0.01em' }}
+                    style={{ color: inkSoft, textDecoration: 'none', letterSpacing: '-0.01em' }}
                   >
                     마이페이지
                   </Link>
                   <button
                     onClick={handleLogout}
                     className="text-left text-sm font-medium px-3 py-3 rounded-lg transition-colors duration-150"
-                    style={{ color: 'var(--jsm-ink-soft)', background: 'transparent', letterSpacing: '-0.01em' }}
+                    style={{ color: inkSoft, background: 'transparent', letterSpacing: '-0.01em' }}
                   >
                     로그아웃
                   </button>
@@ -267,7 +283,7 @@ export default function TopNav() {
                 <Link
                   href="/login"
                   className="text-sm font-medium px-3 py-3 rounded-lg transition-colors duration-150"
-                  style={{ color: 'var(--jsm-ink-soft)', textDecoration: 'none', letterSpacing: '-0.01em' }}
+                  style={{ color: inkSoft, textDecoration: 'none', letterSpacing: '-0.01em' }}
                 >
                   로그인
                 </Link>
