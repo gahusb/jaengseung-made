@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | 쟁승메이드",
   },
   description:
-    "7년차 대기업 백엔드 개발자가 직접 설계하고 만듭니다. 맞춤 소프트웨어 외주 개발과 검증된 완성 소프트웨어를 제공하는 쟁승메이드.",
+    "24시간 돌아가는 실서비스를 직접 설계·운영하는 개발 스튜디오. 맞춤 외주 개발과 검증된 완성 소프트웨어.",
   keywords: [
     "외주 개발",
     "소프트웨어 개발",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "쟁승메이드",
     title: "외주 개발 · 완성 소프트웨어 | 쟁승메이드",
     description:
-      "7년차 대기업 백엔드 개발자가 직접 설계·개발·운영합니다. 맞춤 외주 개발과 검증된 완성 소프트웨어를 제공하는 쟁승메이드.",
+      "24시간 돌아가는 실서비스를 직접 설계·운영하는 개발 스튜디오. 맞춤 외주 개발과 검증된 완성 소프트웨어.",
     images: [
       {
         url: "https://jaengseung-made.com/og-image.png",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "외주 개발 · 완성 소프트웨어 | 쟁승메이드",
     description:
-      "7년차 대기업 백엔드 개발자가 직접 만듭니다. 맞춤 외주 개발과 검증된 완성 소프트웨어를 제공합니다.",
+      "24시간 돌아가는 실서비스를 직접 설계·운영하는 개발 스튜디오. 맞춤 외주 개발과 검증된 완성 소프트웨어.",
   },
   robots: {
     index: true,
@@ -59,19 +59,18 @@ const jsonLd = {
       '@id': 'https://jaengseung-made.com/#person',
       name: '박재오',
       url: 'https://jaengseung-made.com',
-      jobTitle: '백엔드 개발자 · 외주 개발 전문가',
-      worksFor: { '@type': 'Organization', name: '대기업 재직 중' },
+      jobTitle: '소프트웨어 엔지니어',
       email: 'bgg8988@gmail.com',
       telephone: '010-3907-1392',
       knowsAbout: ['Python', 'Java', 'Spring Boot', 'Next.js', '외주 개발', '웹사이트 제작', '업무 자동화', 'API 설계'],
-      description: '7년차 대기업 백엔드 개발자. 맞춤 소프트웨어 외주 개발과 검증된 완성 소프트웨어를 직접 설계·개발·운영합니다.',
+      description: '24시간 돌아가는 실서비스를 직접 설계·운영합니다. 맞춤 소프트웨어 외주 개발과 검증된 완성 소프트웨어를 제공합니다.',
     },
     {
       '@type': 'LocalBusiness',
       '@id': 'https://jaengseung-made.com/#business',
       name: '쟁승메이드',
       url: 'https://jaengseung-made.com',
-      description: '7년차 대기업 백엔드 개발자가 직접 설계·개발·운영하는 외주 개발 · 완성 소프트웨어 스토어.',
+      description: '24시간 돌아가는 실서비스를 직접 설계·운영하는 외주 개발 · 완성 소프트웨어 스토어.',
       email: 'bgg8988@gmail.com',
       telephone: '010-3907-1392',
       priceRange: '₩',
@@ -88,7 +87,7 @@ const jsonLd = {
               '@type': 'Service',
               name: '외주 개발',
               url: 'https://jaengseung-made.com/outsourcing',
-              description: '7년차 백엔드 개발자의 1:1 맞춤 소프트웨어 개발 외주. 자동화·API·웹/모바일 등 사이트 한정가로 제공.',
+              description: '1:1 맞춤 소프트웨어 개발 외주. 자동화·API·웹/모바일 등 사이트 한정가로 제공.',
               serviceType: 'Custom Software Development',
               provider: { '@id': 'https://jaengseung-made.com/#business' },
               areaServed: '대한민국',
