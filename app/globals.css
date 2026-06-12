@@ -49,6 +49,14 @@
   --jsm-accent-hover: #1e40af;  /* blue-800 */
   --jsm-accent-soft: #dbeafe;   /* blue-100 뱃지 배경 */
 
+  /* === Deep Field dark tokens (2026-06 랜딩 경험) — 라이트 토큰과 공존 === */
+  --jsm-dark-bg: #070d1a;
+  --jsm-dark-surface: rgba(255, 255, 255, 0.03);
+  --jsm-dark-line: rgba(148, 163, 184, 0.14);
+  --jsm-dark-ink: #f8fafc;
+  --jsm-dark-soft: #94a3b8;
+  --jsm-accent-bright: #60a5fa;
+
   /* 기존 kx 변수 재매핑 (잔여 참조 호환용) */
   --kx-surface: var(--jsm-bg);
   --kx-surface-low: var(--jsm-surface-alt);
