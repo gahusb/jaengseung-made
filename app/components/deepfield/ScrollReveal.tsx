@@ -41,10 +41,15 @@ export default function ScrollReveal({ children, delay = 0, variant = 'fade-up',
     variant === 'draw' ? 'opacity-0 [transform:scaleX(0)] origin-left' :
     'opacity-0 translate-y-6';
 
+  const visible =
+    variant === 'draw' ? 'opacity-100 [transform:scaleX(1)]' :
+    variant === 'fade' ? 'opacity-100' :
+    'opacity-100 translate-y-0';
+
   return (
     <div
       ref={ref}
-      className={`${className ?? ''} transition-all duration-700 ease-out ${shown ? 'opacity-100 translate-y-0 [transform:none]' : hidden}`}
+      className={`${className ?? ''} transition-all duration-700 ease-out ${shown ? visible : hidden}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
