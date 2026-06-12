@@ -249,7 +249,7 @@ export default function ShowcaseCard({ slot, size = 'standard', index }: Props) 
       onMouseLeave={() => setHovered(false)}
       className={[
         'group/card relative isolate h-full w-full overflow-hidden rounded-2xl',
-        'ring-1 transition-[transform,box-shadow,border-color] duration-500',
+        'transition-[transform,box-shadow] duration-500',
         '[transition-timing-function:cubic-bezier(0.16,1,0.3,1)]',
         'motion-safe:hover:scale-[1.03]',
         isLink ? 'cursor-pointer' : 'cursor-default',
