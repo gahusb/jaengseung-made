@@ -84,13 +84,17 @@ export default async function Home() {
       {/* -mt-16 pt-16: 고정 헤더 아래로 끌어올려 상단 라이트 띠 제거 + 풀 뷰포트 확보 */}
       <section className="relative -mt-16 flex min-h-[100svh] items-center overflow-hidden">
         <HeroField className="absolute inset-0" />
-        {/* 콘텐츠 가독성용 하단 스크림 (radial 광원 위 텍스트 대비) */}
+        {/* 콘텐츠 가독성용 스크림 — 좌측 앵커 다크(텍스트 컬럼 받침) + 상하 비네트.
+            텍스트는 좌측 정렬(max-w-4xl)이므로 좌→우 어둠 그라데이션으로 글자 뒤를 항상 어둡게 깔고,
+            우측은 파티클 필드가 비치게 둔다. 모바일(좁은 폭)에선 좌측 스크림이 거의 전체를 덮어 가독성 확보. */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
           style={{
-            background:
-              'linear-gradient(to bottom, rgba(7,13,26,0.55) 0%, transparent 28%, transparent 60%, rgba(7,13,26,0.75) 100%)',
+            background: [
+              'linear-gradient(to right, rgba(7,13,26,0.94) 0%, rgba(7,13,26,0.80) 34%, rgba(7,13,26,0.34) 64%, rgba(7,13,26,0) 100%)',
+              'linear-gradient(to bottom, rgba(7,13,26,0.50) 0%, rgba(7,13,26,0) 26%, rgba(7,13,26,0) 64%, rgba(7,13,26,0.82) 100%)',
+            ].join(','),
           }}
         />
         <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-28 pb-24 lg:px-8 lg:pt-32">

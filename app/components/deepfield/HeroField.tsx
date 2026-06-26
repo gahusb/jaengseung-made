@@ -23,10 +23,10 @@ function StaticField() {
       style={{
         backgroundColor: 'var(--jsm-dark-bg, #070d1a)',
         backgroundImage: [
-          // 광원1: 우상단 — accent blue-700
-          'radial-gradient(60% 55% at 75% 25%, rgba(29,78,216,0.45) 0%, transparent 45%)',
-          // 광원2: 좌하단 — bright blue (sky-400)
-          'radial-gradient(55% 50% at 15% 85%, rgba(56,189,248,0.16) 0%, transparent 40%)',
+          // 광원1: 우상단 — accent blue-700 (텍스트 컬럼에서 떨어진 우측에 배치, 밝기 완화)
+          'radial-gradient(58% 52% at 78% 22%, rgba(29,78,216,0.30) 0%, transparent 46%)',
+          // 광원2: 우하단 — bright blue (sky-400), 좌측 텍스트와 겹치지 않게 우측 이동 + 밝기 완화
+          'radial-gradient(52% 48% at 82% 88%, rgba(56,189,248,0.10) 0%, transparent 42%)',
         ].join(','),
       }}
     />
@@ -83,9 +83,9 @@ const VERTEX_SHADER = /* glsl */ `
     // 색: seed로 두 파랑 사이 보간
     vColor = mix(C_DEEP, C_BRIGHT, aSeed);
 
-    // 불투명도: 스크롤로 소멸, 깊이로 약간 페이드
+    // 불투명도: 스크롤로 소멸, 깊이로 약간 페이드 (전체 톤 다운 — 텍스트 가독성 우선)
     float depthFade = smoothstep(-3.0, 0.5, mvPosition.z);
-    vAlpha = (1.0 - uScroll) * (0.45 + depthFade * 0.25);
+    vAlpha = (1.0 - uScroll) * (0.28 + depthFade * 0.18);
   }
 `;
 
@@ -121,7 +121,8 @@ export default function HeroField({ className }: Props) {
     if (!canvas) return;
 
     const isFull = effectiveMode === 'full';
-    const COUNT = isFull ? 3000 : 800;
+    // 밀도 완화 — 가산 혼합 파티클이 겹쳐 텍스트 뒤를 밝게 씻어내는(화이트 블룸) 현상 억제
+    const COUNT = isFull ? 1600 : 500;
 
     let disposed = false;
     let rafId = 0;
