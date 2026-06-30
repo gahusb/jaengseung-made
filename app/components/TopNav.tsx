@@ -65,17 +65,13 @@ export default function TopNav() {
     return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
-  // 다크 라우트 판정
-  const DARK_ROUTES = ['/', '/outsourcing'];
-  const isDark = DARK_ROUTES.includes(pathname) || pathname.startsWith('/outsourcing/');
-
-  // 팔레트 헬퍼 — isDark 분기
-  const ink      = isDark ? 'var(--jsm-dark-ink)'    : 'var(--jsm-ink)';
-  const inkSoft  = isDark ? 'var(--jsm-dark-soft)'   : 'var(--jsm-ink-soft)';
-  const surface  = isDark ? 'var(--jsm-dark-bg)'     : 'var(--jsm-surface)';
-  const line     = isDark ? 'var(--jsm-dark-line)'   : 'var(--jsm-line)';
-  const accent   = isDark ? 'var(--jsm-accent-bright)' : 'var(--jsm-accent)';
-  const accentBg = isDark ? 'rgba(96,165,250,0.12)'  : 'var(--jsm-accent-soft)';
+  // 단일 라이트 팔레트 (전 라우트 동일 — 라우트 분기 제거)
+  const ink      = 'var(--jsm-ink)';
+  const inkSoft  = 'var(--jsm-ink-soft)';
+  const surface  = 'var(--jsm-surface)';
+  const line     = 'var(--jsm-line)';
+  const accent   = 'var(--jsm-accent)';
+  const accentBg = 'var(--jsm-accent-soft)';
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -87,13 +83,11 @@ export default function TopNav() {
       <header
         className="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300"
         style={{
-          background: scrolled
-            ? (isDark ? 'rgba(7,13,26,0.85)' : 'var(--jsm-surface)')
-            : 'transparent',
+          background: scrolled ? 'var(--jsm-surface)' : 'transparent',
           borderBottom: scrolled
             ? `1px solid ${line}`
             : '1px solid transparent',
-          boxShadow: scrolled && !isDark ? '0 1px 8px rgba(15,23,42,0.06)' : 'none',
+          boxShadow: scrolled ? '0 1px 8px rgba(15,23,42,0.06)' : 'none',
         }}
       >
         <nav className="max-w-7xl mx-auto flex w-full items-center justify-between h-16 px-6 lg:px-8">
