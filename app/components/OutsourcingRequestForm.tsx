@@ -16,9 +16,9 @@ const KOR_TIGHT = { letterSpacing: '-0.02em' } as const;
 const KOR_BODY = { letterSpacing: '-0.01em' } as const;
 
 const INPUT_STYLE = {
-  background: 'var(--jsm-dark-surface)',
-  border: '1px solid var(--jsm-dark-line)',
-  color: 'var(--jsm-dark-ink)',
+  background: 'var(--jsm-surface-alt)',
+  border: '1px solid var(--jsm-line)',
+  color: 'var(--jsm-ink)',
 } as const;
 
 const PROJECT_TYPES = [
@@ -195,13 +195,13 @@ export default function OutsourcingRequestForm() {
           ref={setHeadingRef}
           tabIndex={-1}
           className="text-xl font-bold break-keep outline-none"
-          style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
+          style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
         >
           의뢰가 접수되었습니다
         </h3>
         <p
           className="mt-3 text-sm leading-relaxed break-keep"
-          style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+          style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
         >
           영업일 2일 내 회신드립니다.
         </p>
@@ -218,7 +218,7 @@ export default function OutsourcingRequestForm() {
             </Link>
             <p
               className="mt-3 text-xs leading-relaxed break-keep"
-              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
             >
               추적 링크를 이메일로도 보내드렸습니다.
             </p>
@@ -232,7 +232,7 @@ export default function OutsourcingRequestForm() {
   const canAdvance = stepValid(step);
 
   return (
-    <div className="jsm-dark-form">
+    <div>
       {/* 진행 표시기 */}
       <ol className="flex items-center gap-2 mb-7" aria-label="진행 단계">
         {STEPS.map((s, i) => {
@@ -244,7 +244,7 @@ export default function OutsourcingRequestForm() {
                 className="flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold shrink-0 transition-colors"
                 style={
                   state === 'upcoming'
-                    ? { background: 'var(--jsm-dark-surface)', color: 'var(--jsm-dark-soft)', boxShadow: 'inset 0 0 0 1px var(--jsm-dark-line)' }
+                    ? { background: 'var(--jsm-surface-alt)', color: 'var(--jsm-ink-soft)', boxShadow: 'inset 0 0 0 1px var(--jsm-line)' }
                     : { background: 'var(--jsm-accent)', color: '#ffffff' }
                 }
                 aria-current={state === 'current' ? 'step' : undefined}
@@ -255,7 +255,7 @@ export default function OutsourcingRequestForm() {
                 className="text-xs font-semibold truncate hidden sm:inline"
                 style={{
                   color:
-                    state === 'upcoming' ? 'var(--jsm-dark-soft)' : 'var(--jsm-dark-ink)',
+                    state === 'upcoming' ? 'var(--jsm-ink-soft)' : 'var(--jsm-ink)',
                   ...KOR_BODY,
                 }}
               >
@@ -264,7 +264,7 @@ export default function OutsourcingRequestForm() {
               {i < STEPS.length - 1 && (
                 <span
                   className="w-4 sm:w-6 h-px shrink-0"
-                  style={{ background: 'var(--jsm-dark-line)' }}
+                  style={{ background: 'var(--jsm-line)' }}
                   aria-hidden
                 />
               )}
@@ -281,13 +281,13 @@ export default function OutsourcingRequestForm() {
               ref={setHeadingRef}
               tabIndex={-1}
               className="text-lg font-bold break-keep outline-none mb-1"
-              style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
+              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
             >
               어떤 프로젝트인가요?
             </legend>
             <p
               className="text-sm leading-relaxed break-keep mb-5"
-              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
             >
               가장 가까운 유형을 하나 선택해주세요.
             </p>
@@ -303,12 +303,12 @@ export default function OutsourcingRequestForm() {
                     className="px-4 py-3.5 rounded-lg text-sm font-semibold text-center break-keep transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--jsm-accent)]"
                     style={{
                       border: selected
-                        ? '1px solid var(--jsm-accent-bright)'
-                        : '1px solid var(--jsm-dark-line)',
+                        ? '1px solid var(--jsm-accent)'
+                        : '1px solid var(--jsm-line)',
                       background: selected
-                        ? 'rgba(96,165,250,0.12)'
-                        : 'var(--jsm-dark-surface)',
-                      color: selected ? 'var(--jsm-accent-bright)' : 'var(--jsm-dark-ink)',
+                        ? 'var(--jsm-accent-soft)'
+                        : 'var(--jsm-surface-alt)',
+                      color: selected ? 'var(--jsm-accent)' : 'var(--jsm-ink)',
                       ...KOR_BODY,
                     }}
                   >
@@ -327,13 +327,13 @@ export default function OutsourcingRequestForm() {
               ref={setHeadingRef}
               tabIndex={-1}
               className="text-lg font-bold break-keep outline-none mb-1"
-              style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
+              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
             >
               예산과 일정을 알려주세요
             </h3>
             <p
               className="text-sm leading-relaxed break-keep mb-5"
-              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
             >
               대략적인 범위면 충분합니다. 정해지지 않았다면 미정을 선택하세요.
             </p>
@@ -341,7 +341,7 @@ export default function OutsourcingRequestForm() {
             <fieldset className="mb-6">
               <legend
                 className="text-sm font-semibold mb-2.5"
-                style={{ color: 'var(--jsm-dark-ink)', ...KOR_BODY }}
+                style={{ color: 'var(--jsm-ink)', ...KOR_BODY }}
               >
                 예산
               </legend>
@@ -360,7 +360,7 @@ export default function OutsourcingRequestForm() {
             <fieldset>
               <legend
                 className="text-sm font-semibold mb-2.5"
-                style={{ color: 'var(--jsm-dark-ink)', ...KOR_BODY }}
+                style={{ color: 'var(--jsm-ink)', ...KOR_BODY }}
               >
                 희망 일정
               </legend>
@@ -385,13 +385,13 @@ export default function OutsourcingRequestForm() {
               ref={setHeadingRef}
               tabIndex={-1}
               className="text-lg font-bold break-keep outline-none mb-1"
-              style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
+              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
             >
               자세히 들려주세요
             </h3>
             <p
               className="text-sm leading-relaxed break-keep mb-5"
-              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
             >
               구체적일수록 정확한 견적이 가능합니다. 최소 10자 이상 작성해주세요.
             </p>
@@ -413,7 +413,7 @@ export default function OutsourcingRequestForm() {
             />
             <p
               className="mt-1.5 text-xs"
-              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
             >
               {trimmedMessage.length}/10자 이상
             </p>
@@ -427,13 +427,13 @@ export default function OutsourcingRequestForm() {
               ref={setHeadingRef}
               tabIndex={-1}
               className="text-lg font-bold break-keep outline-none mb-1"
-              style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
+              style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
             >
               어디로 회신드릴까요?
             </h3>
             <p
               className="text-sm leading-relaxed break-keep mb-5"
-              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
             >
               영업일 2일 내에 회신드립니다.
             </p>
@@ -443,7 +443,7 @@ export default function OutsourcingRequestForm() {
                 <label
                   htmlFor="req-name"
                   className="block text-sm font-medium mb-1.5"
-                  style={{ color: 'var(--jsm-dark-ink)', ...KOR_BODY }}
+                  style={{ color: 'var(--jsm-ink)', ...KOR_BODY }}
                 >
                   이름 <span style={{ color: 'var(--jsm-accent)' }}>*</span>
                 </label>
@@ -465,7 +465,7 @@ export default function OutsourcingRequestForm() {
                 <label
                   htmlFor="req-email"
                   className="block text-sm font-medium mb-1.5"
-                  style={{ color: 'var(--jsm-dark-ink)', ...KOR_BODY }}
+                  style={{ color: 'var(--jsm-ink)', ...KOR_BODY }}
                 >
                   이메일 <span style={{ color: 'var(--jsm-accent)' }}>*</span>
                 </label>
@@ -487,7 +487,7 @@ export default function OutsourcingRequestForm() {
                 <label
                   htmlFor="req-phone"
                   className="block text-sm font-medium mb-1.5"
-                  style={{ color: 'var(--jsm-dark-ink)', ...KOR_BODY }}
+                  style={{ color: 'var(--jsm-ink)', ...KOR_BODY }}
                 >
                   연락처
                 </label>
@@ -530,10 +530,10 @@ export default function OutsourcingRequestForm() {
               type="button"
               onClick={goPrev}
               disabled={submitting}
-              className="px-5 py-3 rounded-lg text-sm font-semibold border transition-colors hover:bg-[var(--jsm-dark-surface)] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-3 rounded-lg text-sm font-semibold border transition-colors hover:bg-[var(--jsm-surface-alt)] disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 ...INPUT_STYLE,
-                borderColor: 'var(--jsm-dark-line)',
+                borderColor: 'var(--jsm-line)',
                 ...KOR_BODY,
               }}
             >
@@ -548,7 +548,7 @@ export default function OutsourcingRequestForm() {
               className="flex-1 py-3 rounded-lg text-sm font-semibold text-white transition-colors"
               style={{
                 background: !canAdvance || submitting
-                  ? 'var(--jsm-dark-line)'
+                  ? 'var(--jsm-line)'
                   : 'var(--jsm-accent)',
                 cursor: !canAdvance || submitting ? 'not-allowed' : 'pointer',
                 ...KOR_BODY,
@@ -563,7 +563,7 @@ export default function OutsourcingRequestForm() {
               disabled={!canAdvance}
               className="flex-1 inline-flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold text-white transition-colors"
               style={{
-                background: canAdvance ? 'var(--jsm-accent)' : 'var(--jsm-dark-line)',
+                background: canAdvance ? 'var(--jsm-accent)' : 'var(--jsm-line)',
                 cursor: canAdvance ? 'pointer' : 'not-allowed',
                 ...KOR_BODY,
               }}
@@ -595,9 +595,9 @@ function Chip({
       aria-pressed={selected}
       className="px-4 py-2.5 rounded-lg text-sm font-semibold break-keep transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--jsm-accent)]"
       style={{
-        border: selected ? '1px solid var(--jsm-accent-bright)' : '1px solid var(--jsm-dark-line)',
-        background: selected ? 'rgba(96,165,250,0.12)' : 'var(--jsm-dark-surface)',
-        color: selected ? 'var(--jsm-accent-bright)' : 'var(--jsm-dark-ink)',
+        border: selected ? '1px solid var(--jsm-accent)' : '1px solid var(--jsm-line)',
+        background: selected ? 'var(--jsm-accent-soft)' : 'var(--jsm-surface-alt)',
+        color: selected ? 'var(--jsm-accent)' : 'var(--jsm-ink)',
         ...KOR_BODY,
       }}
     >
