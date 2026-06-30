@@ -14,10 +14,13 @@ interface Props {
 export default function ScrollReveal({ children, delay = 0, variant = 'fade-up', className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [shown, setShown] = useState(false);
+  // reduced-motion: transition까지 생략하고 정적으로 표시
+  const [instant, setInstant] = useState(false);
 
   useEffect(() => {
-    // reduced-motion: 즉시 표시 (연출 생략)
+    // reduced-motion: 즉시 표시 (연출·전환 생략)
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setInstant(true);
       setShown(true);
       return;
     }
@@ -45,6 +48,15 @@ export default function ScrollReveal({ children, delay = 0, variant = 'fade-up',
     variant === 'draw' ? 'opacity-100 [transform:scaleX(1)]' :
     variant === 'fade' ? 'opacity-100' :
     'opacity-100 translate-y-0';
+
+  // reduced-motion이면 transition/transform 없이 정적 표시
+  if (instant) {
+    return (
+      <div ref={ref} className={className}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div
