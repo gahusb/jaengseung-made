@@ -402,11 +402,8 @@ export default async function Home() {
             {/* 단계 연결선 (데스크톱) */}
             <span
               aria-hidden
-              className="absolute left-0 right-0 top-7 hidden h-px lg:block"
-              style={{
-                background:
-                  'linear-gradient(to right, transparent, var(--jsm-line) 12%, var(--jsm-line) 88%, transparent)',
-              }}
+              className="absolute left-[12%] right-[12%] top-7 hidden h-px lg:block"
+              style={{ background: 'var(--jsm-line)' }}
             />
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {PROCESS.map((s, i) => (
