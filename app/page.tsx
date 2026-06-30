@@ -2,22 +2,27 @@ import Link from 'next/link';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getListedProducts, type ProductRow } from '@/lib/supabase/product-files';
 
-import HeroField from './components/deepfield/HeroField';
 import ShowcaseGrid from './components/deepfield/ShowcaseGrid';
 import ScrollReveal from './components/deepfield/ScrollReveal';
 import CountUp from './components/deepfield/CountUp';
+import MockWindow from './components/mock/MockWindow';
+import { DashboardMock } from './components/mock/screens';
 import { SHOWCASE_SLOTS } from '@/lib/showcase';
 
-// 쟁승메이드 메인 — Deep Field 다크 캔버스 (서버 컴포넌트)
-// PublicShell이 TopNav(h-16, 다크 인지)·푸터(navy)·main 배경(라이트)을 제공한다.
-// 이 페이지는 자기 풀-블리드 다크 배경을 소유하여 main의 라이트 배경을 덮는다.
-// 히어로를 -mt-16 + pt-16으로 끌어올려 pt-16로 인한 상단 16px 라이트 띠를 제거한다.
+// 쟁승메이드 메인 — 라이트 고craft (서버 컴포넌트).
+// PublicShell이 단일 라이트 TopNav(h-16)·navy 푸터·main(라이트 --jsm-bg, pt-16)을 제공한다.
+// 섹션은 surface(#fff) ↔ surface-alt(#f1f5f9) 교차로 구분하고, 히어로의 제품 목업이 유일한 강조면.
 
-// 소프트웨어 진열 섹션이 DB 조회를 포함하므로 항상 최신 목록을 보여준다.
 export const dynamic = 'force-dynamic';
 
 const KOR_TIGHT = { letterSpacing: '-0.02em' } as const;
 const KOR_BODY = { letterSpacing: '-0.01em' } as const;
+
+const TRUST = [
+  { v: '15+', t: '직접 운영 중인 실서비스' },
+  { v: '24/7', t: '무중단 운영' },
+  { v: '원스톱', t: '기획 → 배포 단독 진행' },
+];
 
 const PROCESS = [
   { n: '01', t: '무료 상담', d: '요구사항을 함께 정리하고 실현 가능성을 점검합니다.' },
@@ -63,6 +68,17 @@ function ArrowRight() {
   );
 }
 
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
+      style={{ color: 'var(--jsm-accent)' }}
+    >
+      {children}
+    </p>
+  );
+}
+
 async function loadFeaturedProducts(): Promise<ProductRow[]> {
   try {
     const all = await getListedProducts(createAdminClient());
@@ -78,62 +94,47 @@ export default async function Home() {
   const hasProducts = featuredProducts.length > 0;
 
   return (
-    // 풀-블리드 다크 캔버스 — main의 라이트 배경을 덮는다.
-    <div style={{ background: 'var(--jsm-dark-bg)', color: 'var(--jsm-dark-ink)' }}>
+    <>
       {/* ─────────────────── 1. HERO ─────────────────── */}
-      {/* -mt-16 pt-16: 고정 헤더 아래로 끌어올려 상단 라이트 띠 제거 + 풀 뷰포트 확보 */}
-      <section className="relative -mt-16 flex min-h-[100svh] items-center overflow-hidden">
-        <HeroField className="absolute inset-0" />
-        {/* 콘텐츠 가독성용 스크림 — 좌측 앵커 다크(텍스트 컬럼 받침) + 상하 비네트.
-            텍스트는 좌측 정렬(max-w-4xl)이므로 좌→우 어둠 그라데이션으로 글자 뒤를 항상 어둡게 깔고,
-            우측은 파티클 필드가 비치게 둔다. 모바일(좁은 폭)에선 좌측 스크림이 거의 전체를 덮어 가독성 확보. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: [
-              'linear-gradient(to right, rgba(7,13,26,0.94) 0%, rgba(7,13,26,0.80) 34%, rgba(7,13,26,0.34) 64%, rgba(7,13,26,0) 100%)',
-              'linear-gradient(to bottom, rgba(7,13,26,0.50) 0%, rgba(7,13,26,0) 26%, rgba(7,13,26,0) 64%, rgba(7,13,26,0.82) 100%)',
-            ].join(','),
-          }}
-        />
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pt-28 pb-24 lg:px-8 lg:pt-32">
-          <div className="max-w-4xl">
+      <section style={{ background: 'var(--jsm-surface)' }}>
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 pt-20 pb-16 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:pt-28 lg:pb-24">
+          {/* 좌 — 텍스트 */}
+          <div>
             <span
-              className="mb-7 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em]"
-              style={{ color: 'var(--jsm-accent-bright)' }}
+              className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em]"
+              style={{ color: 'var(--jsm-accent)' }}
             >
               <span
                 className="inline-block h-1 w-1 rounded-full"
-                style={{ background: 'var(--jsm-accent-bright)' }}
+                style={{ background: 'var(--jsm-accent)' }}
               />
-              외주 개발 · 완성 소프트웨어
+              outsourcing · software
             </span>
             <h1
-              className="font-bold break-keep"
+              className="mt-6 font-extrabold break-keep"
               style={{
-                color: 'var(--jsm-dark-ink)',
-                fontSize: 'clamp(2.6rem, 8vw, 5.75rem)',
-                lineHeight: 1.04,
-                letterSpacing: '-0.04em',
+                color: 'var(--jsm-ink)',
+                fontSize: 'clamp(2.4rem, 7vw, 4rem)',
+                lineHeight: 1.08,
+                letterSpacing: '-0.035em',
               }}
             >
               생각을
               <br />
               동작하는 소프트웨어로
-              <span style={{ color: 'var(--jsm-accent-bright)' }}>.</span>
+              <span style={{ color: 'var(--jsm-accent)' }}>.</span>
             </h1>
             <p
-              className="mt-8 max-w-2xl break-keep text-lg leading-relaxed lg:text-xl"
-              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+              className="mt-7 max-w-xl break-keep text-lg leading-relaxed"
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
             >
               24시간 돌아가는 실서비스를 직접 설계하고 운영합니다. 외주 개발도, 완성
               소프트웨어도 — 같은 손으로.
             </p>
-            <div className="mt-11 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/outsourcing#contact"
-                className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-semibold text-white transition-transform duration-200 hover:translate-y-[-1px]"
+                className="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 font-semibold text-white transition-colors duration-200 hover:bg-[var(--jsm-accent-hover)]"
                 style={{ background: 'var(--jsm-accent)', ...KOR_BODY }}
               >
                 프로젝트 문의
@@ -141,10 +142,10 @@ export default async function Home() {
               </Link>
               <Link
                 href="/products"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border px-6 py-3.5 font-semibold transition-colors duration-200 hover:bg-[var(--jsm-dark-surface)]"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border px-6 py-3.5 font-semibold transition-colors duration-200 hover:bg-[var(--jsm-surface-alt)]"
                 style={{
-                  color: 'var(--jsm-dark-ink)',
-                  borderColor: 'var(--jsm-dark-line)',
+                  color: 'var(--jsm-ink)',
+                  borderColor: 'var(--jsm-line)',
                   ...KOR_BODY,
                 }}
               >
@@ -152,54 +153,134 @@ export default async function Home() {
               </Link>
             </div>
           </div>
+
+          {/* 우 — 제품 목업 (유일한 강조면) */}
+          <div className="lg:pl-4">
+            <MockWindow title="stock-report.app">
+              <DashboardMock />
+            </MockWindow>
+          </div>
         </div>
 
-        {/* 스크롤 큐 — 가는 세로선 + 점 미세 바운스 (motion-safe 가드는 CSS) */}
-        <div
-          aria-hidden
-          className="absolute bottom-7 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2"
-        >
-          <span
-            className="block h-9 w-px"
-            style={{
-              background:
-                'linear-gradient(to bottom, transparent, var(--jsm-dark-line))',
-            }}
-          />
-          <span
-            className="df-scroll-dot block h-1.5 w-1.5 rounded-full"
-            style={{ background: 'var(--jsm-accent-bright)' }}
-          />
+        {/* 신뢰 스트립 */}
+        <div className="mx-auto max-w-6xl px-6 pb-16 lg:px-8 lg:pb-20">
+          <div
+            className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border sm:grid-cols-3"
+            style={{ borderColor: 'var(--jsm-line)', background: 'var(--jsm-line)' }}
+          >
+            {TRUST.map((s) => (
+              <div
+                key={s.v}
+                className="flex items-baseline gap-3 px-6 py-5"
+                style={{ background: 'var(--jsm-surface)' }}
+              >
+                <span
+                  className="text-2xl font-bold"
+                  style={{ color: 'var(--jsm-accent)', letterSpacing: '-0.03em' }}
+                >
+                  {s.v}
+                </span>
+                <span className="break-keep text-sm" style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}>
+                  {s.t}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ─────────────────── 2. SHOWCASE ─────────────────── */}
-      <section className="border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
+      {/* ─────────────────── 2. 2축 소개 ─────────────────── */}
+      <section style={{ background: 'var(--jsm-surface-alt)' }}>
+        <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
           <ScrollReveal>
-            <p
-              className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
-              style={{ color: 'var(--jsm-accent-bright)' }}
-            >
-              showcase
-            </p>
+            <Eyebrow>what we do</Eyebrow>
             <h2
-              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.75rem] lg:leading-[1.12]"
-              style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
+              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.6rem] lg:leading-[1.12]"
+              style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.03em' }}
+            >
+              두 가지 방식으로 도와드립니다
+            </h2>
+          </ScrollReveal>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {[
+              {
+                n: '01',
+                k: 'outsourcing',
+                t: '맞춤 외주 개발',
+                d: '웹 서비스·업무 자동화·API·봇·AI 연동까지. 기획부터 납품과 30일 하자보수까지 단독으로 책임집니다.',
+                href: '/outsourcing',
+                cta: '의뢰 시작',
+              },
+              {
+                n: '02',
+                k: 'software',
+                t: '완성 소프트웨어 구매',
+                d: '직접 운영하며 검증한 도구를 계좌이체로 가져가세요. 입금 확인 즉시 마이페이지에서 다운로드합니다.',
+                href: '/products',
+                cta: '제품 보기',
+              },
+            ].map((a, i) => (
+              <ScrollReveal key={a.k} delay={i * 100}>
+                <Link
+                  href={a.href}
+                  className="group flex h-full flex-col rounded-2xl border p-8 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-[var(--jsm-accent)] hover:shadow-[0_24px_60px_-32px_rgba(15,23,42,0.4)] lg:p-10"
+                  style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
+                >
+                  <span
+                    className="font-mono text-[11px] uppercase tracking-[0.18em]"
+                    style={{ color: 'var(--jsm-accent)' }}
+                  >
+                    {a.n} · {a.k}
+                  </span>
+                  <h3
+                    className="mt-4 break-keep text-xl font-bold lg:text-2xl"
+                    style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+                  >
+                    {a.t}
+                  </h3>
+                  <p
+                    className="mt-3 flex-1 break-keep leading-relaxed"
+                    style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+                  >
+                    {a.d}
+                  </p>
+                  <span
+                    className="mt-6 inline-flex items-center gap-1.5 font-semibold transition-transform duration-300 group-hover:translate-x-1"
+                    style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
+                  >
+                    {a.cta}
+                    <ArrowRight />
+                  </span>
+                </Link>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────── 3. SHOWCASE ─────────────────── */}
+      <section style={{ background: 'var(--jsm-surface)' }}>
+        <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
+          <ScrollReveal>
+            <Eyebrow>showcase</Eyebrow>
+            <h2
+              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.6rem] lg:leading-[1.12]"
+              style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.03em' }}
             >
               이런 걸 만들어 드립니다
             </h2>
           </ScrollReveal>
 
-          <div className="mt-14">
+          <div className="mt-12">
             <ShowcaseGrid slots={SHOWCASE_SLOTS} variant="home" />
           </div>
 
           <div className="mt-10 flex justify-end">
             <Link
               href="/outsourcing#showcase"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:opacity-80"
-              style={{ color: 'var(--jsm-accent-bright)', ...KOR_BODY }}
+              className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-[var(--jsm-accent-hover)]"
+              style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
             >
               전체 레퍼런스
               <ArrowRight />
@@ -208,135 +289,48 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ─────────────────── 3. PROCESS ─────────────────── */}
-      <section className="border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
+      {/* ─────────────────── 4. 운영 실증 ─────────────────── */}
+      <section style={{ background: 'var(--jsm-surface-alt)' }}>
+        <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
           <ScrollReveal>
-            <p
-              className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
-              style={{ color: 'var(--jsm-accent-bright)' }}
-            >
-              process
-            </p>
+            <Eyebrow>in production</Eyebrow>
             <h2
-              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.75rem] lg:leading-[1.12]"
-              style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
-            >
-              상담부터 납품까지, 흐름이 분명합니다
-            </h2>
-          </ScrollReveal>
-
-          <div className="relative mt-14">
-            {/* 단계 연결선 — draw 라인 (데스크톱 가로 관통) */}
-            <ScrollReveal
-              variant="draw"
-              className="absolute left-0 right-0 top-7 hidden lg:block"
-            >
-              <span
-                className="block h-px w-full"
-                style={{
-                  background:
-                    'linear-gradient(to right, transparent, var(--jsm-dark-line) 12%, var(--jsm-dark-line) 88%, transparent)',
-                }}
-              />
-            </ScrollReveal>
-
-            <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4 lg:gap-6 lg:bg-transparent">
-              {PROCESS.map((s, i) => (
-                <ScrollReveal key={s.n} delay={i * 100}>
-                  <div
-                    className="relative h-full rounded-2xl border p-7 lg:p-8"
-                    style={{
-                      background: 'var(--jsm-dark-surface)',
-                      borderColor: 'var(--jsm-dark-line)',
-                    }}
-                  >
-                    <span
-                      className="relative z-10 inline-flex h-14 w-14 items-center justify-center rounded-full font-mono text-sm font-bold"
-                      style={{
-                        color: 'var(--jsm-accent-bright)',
-                        background: 'var(--jsm-dark-bg)',
-                        boxShadow: 'inset 0 0 0 1px var(--jsm-dark-line)',
-                      }}
-                    >
-                      {s.n}
-                    </span>
-                    <h3
-                      className="mt-5 break-keep text-lg font-bold"
-                      style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
-                    >
-                      {s.t}
-                    </h3>
-                    <p
-                      className="mt-2 break-keep text-sm leading-relaxed"
-                      style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
-                    >
-                      {s.d}
-                    </p>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────── 4. PROOF ─────────────────── */}
-      <section className="border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
-          <ScrollReveal>
-            <p
-              className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
-              style={{ color: 'var(--jsm-accent-bright)' }}
-            >
-              in production
-            </p>
-            <h2
-              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.75rem] lg:leading-[1.12]"
-              style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
+              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.6rem] lg:leading-[1.12]"
+              style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.03em' }}
             >
               데모가 아니라 매일 돌아가는 시스템
             </h2>
             <p
               className="mt-4 max-w-xl break-keep leading-relaxed"
-              style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+              style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
             >
               직접 개발하고 운영 중인 실서비스입니다. 같은 깊이로 의뢰하신 프로젝트를 만듭니다.
             </p>
           </ScrollReveal>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
             {PROOF.map((p, i) => (
               <ScrollReveal key={p.t} delay={i * 100}>
                 <div
                   className="flex h-full flex-col rounded-2xl border p-7"
-                  style={{
-                    background: 'var(--jsm-dark-surface)',
-                    borderColor: 'var(--jsm-dark-line)',
-                  }}
+                  style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
                 >
                   <span
                     className="mb-5 inline-flex items-center gap-1.5 self-start rounded-full px-2.5 py-1 text-[11px] font-semibold"
-                    style={{
-                      color: 'var(--jsm-accent-bright)',
-                      background: 'rgba(96,165,250,0.12)',
-                    }}
+                    style={{ color: 'var(--jsm-accent)', background: 'var(--jsm-accent-soft)' }}
                   >
-                    <span
-                      className="h-1.5 w-1.5 rounded-full"
-                      style={{ background: 'var(--jsm-accent-bright)' }}
-                    />
+                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--jsm-accent)' }} />
                     직접 개발·운영 중
                   </span>
                   <h3
                     className="break-keep text-lg font-bold"
-                    style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
+                    style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
                   >
                     {p.t}
                   </h3>
                   <p
                     className="mt-2.5 flex-1 break-keep text-sm leading-relaxed"
-                    style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+                    style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
                   >
                     {p.d}
                   </p>
@@ -345,11 +339,7 @@ export default async function Home() {
                       <span
                         key={tag}
                         className="rounded px-2.5 py-1 text-xs"
-                        style={{
-                          color: 'var(--jsm-dark-soft)',
-                          background: 'rgba(148,163,184,0.08)',
-                          ...KOR_BODY,
-                        }}
+                        style={{ color: 'var(--jsm-ink-soft)', background: 'var(--jsm-surface-alt)', ...KOR_BODY }}
                       >
                         {tag}
                       </span>
@@ -361,50 +351,32 @@ export default async function Home() {
           </div>
 
           {/* 스탯 3종 — 카운트업 */}
-          <ScrollReveal className="mt-14">
+          <ScrollReveal className="mt-12">
             <div
               className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border sm:grid-cols-3"
-              style={{ borderColor: 'var(--jsm-dark-line)', background: 'var(--jsm-dark-line)' }}
+              style={{ borderColor: 'var(--jsm-line)', background: 'var(--jsm-line)' }}
             >
-              <div className="px-8 py-10" style={{ background: 'var(--jsm-dark-bg)' }}>
-                <p
-                  className="text-4xl font-bold lg:text-5xl"
-                  style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
-                >
+              <div className="px-8 py-10" style={{ background: 'var(--jsm-surface)' }}>
+                <p className="text-4xl font-bold lg:text-5xl" style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.03em' }}>
                   <CountUp to={15} suffix="+" />
                 </p>
-                <p
-                  className="mt-2 break-keep text-sm"
-                  style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
-                >
+                <p className="mt-2 break-keep text-sm" style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}>
                   직접 운영 중인 실서비스
                 </p>
               </div>
-              <div className="px-8 py-10" style={{ background: 'var(--jsm-dark-bg)' }}>
-                <p
-                  className="text-4xl font-bold lg:text-5xl"
-                  style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
-                >
+              <div className="px-8 py-10" style={{ background: 'var(--jsm-surface)' }}>
+                <p className="text-4xl font-bold lg:text-5xl" style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.03em' }}>
                   24/7
                 </p>
-                <p
-                  className="mt-2 break-keep text-sm"
-                  style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
-                >
+                <p className="mt-2 break-keep text-sm" style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}>
                   무중단 운영
                 </p>
               </div>
-              <div className="px-8 py-10" style={{ background: 'var(--jsm-dark-bg)' }}>
-                <p
-                  className="text-4xl font-bold lg:text-5xl"
-                  style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
-                >
+              <div className="px-8 py-10" style={{ background: 'var(--jsm-surface)' }}>
+                <p className="text-4xl font-bold lg:text-5xl" style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.03em' }}>
                   원스톱
                 </p>
-                <p
-                  className="mt-2 break-keep text-sm"
-                  style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
-                >
+                <p className="mt-2 break-keep text-sm" style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}>
                   기획 → 배포 단독 진행
                 </p>
               </div>
@@ -413,32 +385,86 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ─────────────────── 5. SOFTWARE + CTA ─────────────────── */}
-      {/* Phase 2: products 테이블 기반 동적 진열. 0개이면 출시 준비 중 폴백. */}
-      <section className="border-t" style={{ borderColor: 'var(--jsm-dark-line)' }}>
-        <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8 lg:py-32">
+      {/* ─────────────────── 5. PROCESS ─────────────────── */}
+      <section style={{ background: 'var(--jsm-surface)' }}>
+        <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
+          <ScrollReveal>
+            <Eyebrow>process</Eyebrow>
+            <h2
+              className="max-w-2xl break-keep text-3xl font-bold lg:text-[2.6rem] lg:leading-[1.12]"
+              style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.03em' }}
+            >
+              상담부터 납품까지, 흐름이 분명합니다
+            </h2>
+          </ScrollReveal>
+
+          <div className="relative mt-12">
+            {/* 단계 연결선 (데스크톱) */}
+            <span
+              aria-hidden
+              className="absolute left-0 right-0 top-7 hidden h-px lg:block"
+              style={{
+                background:
+                  'linear-gradient(to right, transparent, var(--jsm-line) 12%, var(--jsm-line) 88%, transparent)',
+              }}
+            />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {PROCESS.map((s, i) => (
+                <ScrollReveal key={s.n} delay={i * 100}>
+                  <div
+                    className="relative h-full rounded-2xl border p-7 lg:p-8"
+                    style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
+                  >
+                    <span
+                      className="relative z-10 inline-flex h-14 w-14 items-center justify-center rounded-full font-mono text-sm font-bold"
+                      style={{
+                        color: 'var(--jsm-accent)',
+                        background: 'var(--jsm-surface)',
+                        boxShadow: 'inset 0 0 0 1px var(--jsm-line)',
+                      }}
+                    >
+                      {s.n}
+                    </span>
+                    <h3
+                      className="mt-5 break-keep text-lg font-bold"
+                      style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
+                    >
+                      {s.t}
+                    </h3>
+                    <p
+                      className="mt-2 break-keep text-sm leading-relaxed"
+                      style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
+                    >
+                      {s.d}
+                    </p>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────── 6. 완성 SW + CTA ─────────────────── */}
+      <section style={{ background: 'var(--jsm-surface-alt)' }}>
+        <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
           {hasProducts ? (
             <>
               <ScrollReveal>
                 <div className="flex items-end justify-between">
                   <div>
-                    <p
-                      className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
-                      style={{ color: 'var(--jsm-accent-bright)' }}
-                    >
-                      software
-                    </p>
+                    <Eyebrow>software</Eyebrow>
                     <h2
-                      className="break-keep text-3xl font-bold lg:text-[2.75rem] lg:leading-[1.12]"
-                      style={{ color: 'var(--jsm-dark-ink)', letterSpacing: '-0.03em' }}
+                      className="break-keep text-3xl font-bold lg:text-[2.6rem] lg:leading-[1.12]"
+                      style={{ color: 'var(--jsm-ink)', letterSpacing: '-0.03em' }}
                     >
                       바로 쓰는 완성 소프트웨어
                     </h2>
                   </div>
                   <Link
                     href="/products"
-                    className="hidden shrink-0 items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:opacity-80 sm:inline-flex"
-                    style={{ color: 'var(--jsm-accent-bright)', ...KOR_BODY }}
+                    className="hidden shrink-0 items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-[var(--jsm-accent-hover)] sm:inline-flex"
+                    style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
                   >
                     전체 보기
                     <ArrowRight />
@@ -446,14 +472,13 @@ export default async function Home() {
                 </div>
               </ScrollReveal>
 
-              <div className="mt-14 grid gap-6 md:grid-cols-3">
+              <div className="mt-12 grid gap-6 md:grid-cols-3">
                 {featuredProducts.map((p, i) => (
                   <ScrollReveal key={p.id} delay={i * 100}>
-                    {/* 라이트 카드가 다크 위에 떠 있는 대비 */}
                     <Link
                       href={`/products/${p.id}`}
-                      className="group flex h-full flex-col rounded-2xl p-7 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:translate-y-[-2px]"
-                      style={{ background: 'var(--jsm-surface)' }}
+                      className="group flex h-full flex-col rounded-2xl border p-7 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-[var(--jsm-accent)] hover:shadow-[0_24px_60px_-32px_rgba(15,23,42,0.4)]"
+                      style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
                     >
                       <h3
                         className="break-keep text-lg font-bold"
@@ -495,7 +520,7 @@ export default async function Home() {
                 <Link
                   href="/products"
                   className="inline-flex items-center gap-1.5 text-sm font-semibold"
-                  style={{ color: 'var(--jsm-accent-bright)', ...KOR_BODY }}
+                  style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
                 >
                   전체 보기
                   <ArrowRight />
@@ -506,38 +531,26 @@ export default async function Home() {
             <ScrollReveal>
               <div
                 className="rounded-2xl border px-8 py-14 text-center lg:px-14 lg:py-16"
-                style={{
-                  background: 'var(--jsm-dark-surface)',
-                  borderColor: 'var(--jsm-dark-line)',
-                }}
+                style={{ background: 'var(--jsm-surface)', borderColor: 'var(--jsm-line)' }}
               >
-                <p
-                  className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em]"
-                  style={{ color: 'var(--jsm-accent-bright)' }}
-                >
-                  coming soon
-                </p>
+                <Eyebrow>coming soon</Eyebrow>
                 <h2
                   className="break-keep text-2xl font-bold lg:text-3xl"
-                  style={{ color: 'var(--jsm-dark-ink)', ...KOR_TIGHT }}
+                  style={{ color: 'var(--jsm-ink)', ...KOR_TIGHT }}
                 >
                   검증된 완성 소프트웨어를 준비하고 있습니다
                 </h2>
                 <p
                   className="mx-auto mt-4 max-w-xl break-keep leading-relaxed"
-                  style={{ color: 'var(--jsm-dark-soft)', ...KOR_BODY }}
+                  style={{ color: 'var(--jsm-ink-soft)', ...KOR_BODY }}
                 >
                   직접 운영하며 다듬은 도구를 하나씩 다운로드 상품으로 공개할 예정입니다. 출시
                   소식을 가장 먼저 받아보세요.
                 </p>
                 <Link
                   href="/outsourcing#contact"
-                  className="mt-8 inline-flex items-center justify-center gap-2 rounded-lg border px-6 py-3.5 font-semibold transition-colors duration-200 hover:bg-[var(--jsm-dark-surface)]"
-                  style={{
-                    color: 'var(--jsm-dark-ink)',
-                    borderColor: 'var(--jsm-dark-line)',
-                    ...KOR_BODY,
-                  }}
+                  className="mt-8 inline-flex items-center justify-center gap-2 rounded-lg border px-6 py-3.5 font-semibold transition-colors duration-200 hover:bg-[var(--jsm-surface-alt)]"
+                  style={{ color: 'var(--jsm-ink)', borderColor: 'var(--jsm-line)', ...KOR_BODY }}
                 >
                   출시 소식 받기
                   <ArrowRight />
@@ -546,22 +559,13 @@ export default async function Home() {
             </ScrollReveal>
           )}
 
-          {/* 최종 CTA 밴드 — accent bg */}
-          <ScrollReveal className="mt-24 lg:mt-32">
+          {/* 최종 CTA 밴드 — 평면 navy (사이트 유일 다크면) */}
+          <ScrollReveal className="mt-20 lg:mt-28">
             <div
-              className="relative overflow-hidden rounded-3xl px-8 py-16 lg:px-16 lg:py-20"
-              style={{ background: 'var(--jsm-accent)' }}
+              className="rounded-3xl px-8 py-16 lg:px-16 lg:py-20"
+              style={{ background: 'var(--jsm-navy)' }}
             >
-              {/* 광원 — radial 허용 */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  backgroundImage:
-                    'radial-gradient(60% 80% at 85% 0%, rgba(96,165,250,0.45) 0%, transparent 55%)',
-                }}
-              />
-              <div className="relative max-w-3xl">
+              <div className="max-w-3xl">
                 <h2
                   className="break-keep text-3xl font-bold leading-tight text-white lg:text-[2.5rem]"
                   style={KOR_TIGHT}
@@ -569,7 +573,7 @@ export default async function Home() {
                   프로젝트, 이야기부터 시작하세요
                 </h2>
                 <p
-                  className="mt-5 max-w-2xl break-keep text-lg leading-relaxed text-white/80"
+                  className="mt-5 max-w-2xl break-keep text-lg leading-relaxed text-white/70"
                   style={KOR_BODY}
                 >
                   아이디어 단계여도 괜찮습니다. 무료 상담에서 방향을 함께 잡아드립니다.
@@ -577,7 +581,7 @@ export default async function Home() {
                 <Link
                   href="/outsourcing#contact"
                   className="mt-9 inline-flex items-center justify-center gap-2 rounded-lg bg-white px-7 py-4 font-semibold transition-transform duration-200 hover:translate-y-[-1px]"
-                  style={{ color: 'var(--jsm-accent)', ...KOR_BODY }}
+                  style={{ color: 'var(--jsm-navy)', ...KOR_BODY }}
                 >
                   무료 상담 신청
                   <ArrowRight />
@@ -587,6 +591,6 @@ export default async function Home() {
           </ScrollReveal>
         </div>
       </section>
-    </div>
+    </>
   );
 }
